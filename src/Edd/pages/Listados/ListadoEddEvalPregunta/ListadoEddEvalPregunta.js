@@ -274,7 +274,7 @@ export default function ListadoEDDEvalPregunta() {
                 <th>Evaluación</th>
                 <th>Competencia</th>
                 <th>Tipo respuesta</th>
-                <th>Obligatorio (si o no)</th>
+                <th>Obligatorio</th>
 
                 <th>Operaciones</th>
               </tr>
@@ -287,6 +287,9 @@ export default function ListadoEDDEvalPregunta() {
                   <td>{idEDDEvalPregunta.ordenPregunta}</td>
                   <td>{idEDDEvalPregunta.nomEvaluacion}</td>
                   <td>{idEDDEvalPregunta.nomCompetencia}</td>
+                  <td>{idEDDEvalPregunta.tipoResp}</td>
+                  <td>{idEDDEvalPregunta.preguntaObligatoria}</td>
+
                   <td></td>
                   <td></td>
 

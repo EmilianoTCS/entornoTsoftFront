@@ -20,6 +20,10 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   const [nomRol, setnomRol] = useState("");
   const [telefonoEmpleado, settelefonoEmpleado] = useState("");
 
+  const [idSubsistema, setidSubsistema] = useState("");
+
+  const [listSubsistema, setlistSubsistema] = useState([""]);
+
   const [listPais, setlistPais] = useState([""]);
   const [listCargo, setlistCargo] = useState([""]);
   const [listArea, setlistArea] = useState([""]);
@@ -34,6 +38,13 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   const handleClose = () => cambiarEstado(false);
 
   // ----------------------FUNCIONES----------------------------
+  function obtenerSubsistema() {
+    const url = "pages/auxiliares/listadoSubsistemaForms.php";
+    const operationUrl = "listados";
+    getDataService(url, operationUrl).then((response) =>
+      setlistSubsistema(response)
+    );
+  }
 
   function obtenerPais() {
     const url = "pages/auxiliares/listadoPaisForms.php";
@@ -76,11 +87,13 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
       tipoUsuario: tipoUsuario,
       nomRol: nomRol,
       telefonoEmpleado: telefonoEmpleado,
+      idSubsistema: idSubsistema,
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarEmpleados(empleado);console.log(response);
+      TopAlerts("successCreated");
+      actualizarEmpleados(empleado);
+      console.log(response);
     });
   }
 
@@ -93,6 +106,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
     obtenerCargo();
     obtenerArea();
     obtenerNomRol();
+    obtenerSubsistema();
   }, []);
 
   // ----------------------RENDER----------------------------
@@ -103,8 +117,8 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
           <Modal.Title>Crear Colaborador</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={SendData}>
-
+          <form onSubmit={SendData} > 
+            <div className="izquierda" style={{ width: 220 }}>
               <div>
                 <label htmlFor="input_nombreDelEmpleado">Nombre:</label>
                 <input
@@ -124,7 +138,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
               <div>
                 <label htmlFor="input_Correo">Correo:</label>
                 <input
-                 style={{ textTransform: "uppercase" }}
+                  style={{ textTransform: "uppercase" }}
                   placeholder="Escriba el correo del empleado"
                   type="email"
                   className="form-control"
@@ -139,7 +153,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
               <div>
                 <label htmlFor="input_Usuario">Usuario del colaborador:</label>
                 <input
-                 style={{ textTransform: "uppercase" }}
+                  style={{ textTransform: "uppercase" }}
                   placeholder="Escriba el correo del usuario a loguear"
                   type="text"
                   className="form-control"
@@ -235,7 +249,8 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                   ))}
                 </select>
               </div>
-
+            </div>
+            <div className="derecha" style={{ width: 235 }}>
               <div className="form-group">
                 <label htmlFor="input_TipoDeUsuario">Tipo de usuario: </label>
                 <select
@@ -275,13 +290,35 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                   ))}
                 </select>
               </div>
+              <div className="form-group" >
+                <label htmlFor="input_RolUsuario">Activar subsistema: </label>
+                <select
+                  ismul
+                  required
+                  className="form-control"
+                  name="input_RolUsuario"
+                  id="input_RolUsuario"
+                  placeholder="Seleccione el subsistema"
+                  onChange={({ target }) => setidSubsistema(target.value)}
+                >
+                  <option hidden value="">
+                    Desplegar lista
+                  </option>
 
+                  {listSubsistema.map((valor) => (
+                    <option value={valor.idSubsistema}>{valor.nomSubsistema}</option>
+                  ))}
+                </select>
+              </div>
+
+            </div>
 
             <Button
               variant="secondary"
               type="submit"
               id="btn_registrar"
               value="Registrar"
+              // className="registrarAbajo"
             >
               Registrar
             </Button>

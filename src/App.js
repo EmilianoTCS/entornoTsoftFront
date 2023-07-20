@@ -33,6 +33,8 @@ import ListadoEDDEvalRespPreg from "./Edd/pages/Listados/ListadoEddEvalRespPreg/
 import ListadoEddEvalProyEmp from "./Edd/pages/Listados/ListadoEddEvalProyEmp/ListadoEddEvalProyEmp";
 import ListadoEddEvalProyResp from "./Edd/pages/Listados/ListadoEddEvalProyResp/ListadoEddEvalProyResp";
 import ListadoEDDEvaluacion from "./Edd/pages/Listados/ListadoEddEvaluacion/ListadoEddEvaluacion";
+import FormAnalistas from "./Edd/pages/Formularios/FormAnalistas"
+import FormReferentes from "./Edd/pages/Formularios/FormReferentes";
 
 function App() {
   return (
@@ -144,6 +146,11 @@ function App() {
             <Route
               element={<ListadoEDDEvaluacion />}
               path="/listadoEddEvaluacion/:params"
+            ></Route>
+            <Route element={<FormAnalistas />} path="/FormularioAnEDD"></Route>
+            <Route
+              element={<FormReferentes />}
+              path="/FormularioRefEDD"
             ></Route>
 
             {/* ------------------------------------------------------------------------------------------ */}

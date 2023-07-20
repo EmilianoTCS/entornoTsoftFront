@@ -34,10 +34,12 @@ export default function ListadoEDDEvalProyEmp() {
   const nombreTabla = "eddevalproyemp";
 
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState(params.params);
-  const [idEDDProyEmp, setidEDDProyEmp] = useState(params.params);
+  const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState(params.params);
+  const [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState(params.params);
 
+  const [listEDDProyEmpEvaluador, setlistEDDProyEmpEvaluador] = useState([""]);
+  const [listEDDProyEmpEvaluado, setlistEDDProyEmpEvaluado] = useState([""]);
   const [listEDDEvaluacion, setlistEDDEvaluacion] = useState([""]);
-  const [listEDDProyEmp, setlistEDDProyEmp] = useState([""]);
 
   function obtenerEvaluacion() {
     const url = "pages/auxiliares/listadoEddEvaluacion.php";
@@ -46,11 +48,20 @@ export default function ListadoEDDEvalProyEmp() {
       setlistEDDEvaluacion(response)
     );
   }
-  function obtenerProyEmp() {
+  function obtenerEvaluado() {
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyEmp(response)
+    setlistEDDProyEmpEvaluador(response)
+    );
+  }
+
+
+  function obtenerEvaluador() {
+    const url = "pages/auxiliares/listadoEddProyEmp.php";
+    const operationUrl = "listados";
+    getDataService(url, operationUrl).then((response) =>
+    setlistEDDProyEmpEvaluado(response)
     );
   }
 
@@ -83,9 +94,10 @@ export default function ListadoEDDEvalProyEmp() {
     function () {
       handleChangePaginador();
       obtenerEvaluacion();
-      obtenerProyEmp()
+      obtenerEvaluador();
+      obtenerEvaluado()
     },
-    [num_boton, cantidadPorPagina, idEDDEvaluacion,idEDDProyEmp]
+    [num_boton, cantidadPorPagina, idEDDEvaluacion,idEDDProyEmpEvaluador,idEDDProyEmpEvaluado]
   );
 
   //PAGINADOR ---------------------
@@ -96,7 +108,8 @@ export default function ListadoEDDEvalProyEmp() {
     var data = {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
-      idEDDProyEmp: idEDDProyEmp,
+      idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
+      idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
       idEDDEvaluacion: idEDDEvaluacion,
     };console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
@@ -176,7 +189,7 @@ export default function ListadoEDDEvalProyEmp() {
                 ))}
               </select>
             </div>
-            <div className="form-group" id="btn2">
+            {/* <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Proyecto-colaborador: </label>
               <select
                 required
@@ -201,7 +214,7 @@ export default function ListadoEDDEvalProyEmp() {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
 
           <InsertarEDDEvalProyEmp
@@ -225,7 +238,13 @@ export default function ListadoEDDEvalProyEmp() {
                 <th>ID</th>
                 <th>Evaluación</th>
                 <th>Proyecto</th> 
-                <th>Colaborador</th>
+                <th>Evaluador</th>
+                <th>Evaluado</th>
+
+              
+                <th>Respondida</th>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
                 <th>Operaciones</th>
               </tr>
             </thead>
@@ -235,7 +254,14 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.idEDDEvalProyEmp}</td>
                   <td>{EDDEvalProyEmp.nomEvaluacion}</td>
                   <td>{EDDEvalProyEmp.nomProyecto}</td>
-                  <td>{EDDEvalProyEmp.nomEmpleado}</td>
+                  <td>{EDDEvalProyEmp.nomEmpleadoEvaluador}</td>
+                  <td>{EDDEvalProyEmp.nomEmpleadoEvaluado}</td>
+
+                  <td>{EDDEvalProyEmp.evalRespondida}</td>
+                  <td>{EDDEvalProyEmp.fechaIni}</td>
+                  <td>{EDDEvalProyEmp.fechaFin}</td>
+
+
 
                   <td>
                   <button

@@ -1,3 +1,15 @@
+.derecha{
+float: right;
+}
+
+.izquierda{
+float: left;
+}
+
+/* .registrarAbajo{
+    margin-bottom: 30em;
+} */
+
 #containerFormRamo{
     transform: translate(-50%, -50%);
     position: absolute;

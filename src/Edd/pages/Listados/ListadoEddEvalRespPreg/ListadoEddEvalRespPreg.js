@@ -82,9 +82,9 @@ export default function ListadoEDDEvalRespPreg() {
     function () {
       handleChangePaginador();
       obtenerEDDEvalPregunta();
-      obtenerEvaluacion()
+      // obtenerEvaluacion()
     },
-    [num_boton, cantidadPorPagina,idEDDEvalPregunta,idEDDEvaluacion]
+    [num_boton, cantidadPorPagina,idEDDEvalPregunta]
     
   );
 
@@ -97,9 +97,9 @@ export default function ListadoEDDEvalRespPreg() {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
       idEDDEvalPregunta: idEDDEvalPregunta,
-      idEvaluacion:idEDDEvaluacion
+      idEvaluacion:0
 
-    };
+    };console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
@@ -177,7 +177,7 @@ export default function ListadoEDDEvalRespPreg() {
                 ))}
               </select>
             </div>
-            <div className="form-group" id="btn2">
+            {/* <div className="form-group" id="btn2">
                 <label htmlFor="input_CantidadR">Evaluación: </label>
                 <select
                   required
@@ -202,7 +202,7 @@ export default function ListadoEDDEvalRespPreg() {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
           </div>
 
           <InsertarEDDEvalRespPreg

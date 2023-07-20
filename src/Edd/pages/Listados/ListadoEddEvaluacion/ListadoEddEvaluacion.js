@@ -65,7 +65,8 @@ export default function ListadoEDDEvaluacion() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          // TopAlerts("successEdited");
+          console.log(response);
         });
       }
     });

@@ -22,10 +22,13 @@ const EditarEddEvalProyEmp = ({
   const [fechaFin, setfechaFin] = useState("");
 
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState("");
-  const [idEDDProyEmp, setidEDDProyEmp] = useState("");
+  const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState("");
+  const [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState("");
+
+  const [listEDDProyEmpEvaluador, setlistEDDProyEmpEvaluador] = useState([""]);
+  const [listEDDProyEmpEvaluado, setlistEDDProyEmpEvaluado] = useState([""]);
 
   const [listEDDEvaluacion, setlistEDDEvaluacion] = useState([""]);
-  const [listEDDProyectoEmpleado, setlistEDDProyectoEmpleado] = useState([""]);
 
   const [responseID, setResponseID] = useState([""]);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -35,20 +38,33 @@ const EditarEddEvalProyEmp = ({
 
   const handleClose = () => {
     cambiarEstado(false);
+    setidEDDEvaluacion(responseID[0].idEDDEvaluacion);
+
     setfechaIni(responseID[0].fechaIni);
     setfechaFin(responseID[0].fechaFin);
     setidEDDEvaluacion(responseID[0].idEDDEvaluacion);
-    setidEDDProyEmp(responseID[0].idEDDProyEmp);
+    setidEDDProyEmpEvaluador(responseID[0].idEDDProyEmpEvaluador);
+    setidEDDProyEmpEvaluado(responseID[0].idEDDProyEmpEvaluado);
+
     setevalRespondida(responseID[0].evalRespondida);
 
   };
 
   // ----------------------FUNCIONES----------------------------
-  function obtenerProyectoEmpleado() {
+  function obtenerEvaluado() {
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyectoEmpleado(response)
+    setlistEDDProyEmpEvaluador(response)
+    );
+  }
+
+
+  function obtenerEvaluador() {
+    const url = "pages/auxiliares/listadoEddProyEmp.php";
+    const operationUrl = "listados";
+    getDataService(url, operationUrl).then((response) =>
+    setlistEDDProyEmpEvaluado(response)
     );
   }
   function obtenerEvaluacion() {
@@ -66,11 +82,14 @@ const EditarEddEvalProyEmp = ({
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
+      setidEDDEvaluacion(response[0].idEDDEvaluacion);
 
       setfechaIni(response[0].fechaIni);
       setfechaFin(response[0].fechaFin);
       setidEDDEvaluacion(response[0].idEDDEvaluacion);
-      setidEDDProyEmp(response[0].idEDDProyEmp);
+      setidEDDProyEmpEvaluado(response[0].idEDDProyEmpEvaluado);
+      setidEDDProyEmpEvaluador(response[0].idEDDProyEmpEvaluador);
+
       setevalRespondida(response[0].evalRespondida);
     });
   }, [idEDDEvalProyEmp]);
@@ -83,15 +102,18 @@ const EditarEddEvalProyEmp = ({
       usuarioModificacion: userData.usuario,
       idEDDEvalProyEmp: idEDDEvalProyEmp,
       evalRespondida:
-        evalRespondida === "" ? responseID[0].evalRespondida : evalRespondida,
+        evalRespondida === "" ? responseID[0].evalRespondida : 0,
       fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
       fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
       idEDDEvaluacion:
         idEDDEvaluacion === ""
           ? responseID[0].idEDDEvaluacion
           : idEDDEvaluacion,
-          idEDDProyEmp:
-          idEDDProyEmp === "" ? responseID[0].idEDDProyEmp : idEDDProyEmp,
+          idEDDProyEmpEvaluado:
+          idEDDProyEmpEvaluado === "" ? responseID[0].idEDDProyEmpEvaluado : idEDDProyEmpEvaluado,
+
+          idEDDProyEmpEvaluador:
+          idEDDProyEmpEvaluador === "" ? responseID[0].idEDDProyEmpEvaluador : idEDDProyEmpEvaluador,
 
       isActive: true,
     };
@@ -116,7 +138,8 @@ const EditarEddEvalProyEmp = ({
       if (idEDDEvalProyEmp !== null) {
         getData();
         obtenerEvaluacion();
-        obtenerProyectoEmpleado();
+        obtenerEvaluado();
+        obtenerEvaluador()
       }
     },
     [idEDDEvalProyEmp]
@@ -127,7 +150,7 @@ const EditarEddEvalProyEmp = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-        <Modal.Title>Editar evaluación al <br></br>proyecto - empleado</Modal.Title>
+        <Modal.Title>Editar evaluación al <br></br>proyecto - colaborador</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
@@ -152,24 +175,72 @@ const EditarEddEvalProyEmp = ({
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="input_proyemp">Proyecto - Empleado: </label>
+              <label htmlFor="input_proyemp">Proyecto - Evaluador: </label>
               <select
                 required
                 className="form-control"
                 name="input_proyemp"
                 id="input_proyemp"
-                placeholder="Seleccione la Proyecto + Empleado"
-                onChange={({ target }) => setidEDDProyEmp(target.value)}
+                placeholder="Seleccione la Proyecto + Evaluador"
+                onChange={({ target }) => setidEDDProyEmpEvaluador(target.value)}
               >
-                {listEDDProyectoEmpleado.map((valor) => (
+                {listEDDProyEmpEvaluador.map((valor) => (
                   <option
-                    selected={valor.idEDDProyEmp === idEDDProyEmp ? "selected" : ""}
+                    selected={valor.idEDDProyEmp === idEDDProyEmpEvaluador ? "selected" : ""}
                     value={valor.idEDDProyEmp}
                   >
                     {valor.nomProyEmp}
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="input_proyemp">Proyecto - Evaluado: </label>
+              <select
+                required
+                className="form-control"
+                name="input_proyemp"
+                id="input_proyemp"
+                placeholder="Seleccione la Proyecto + Evaluado"
+                onChange={({ target }) => setidEDDProyEmpEvaluado(target.value)}
+              >
+                {listEDDProyEmpEvaluado.map((valor) => (
+                  <option
+                    selected={valor.idEDDProyEmp === idEDDProyEmpEvaluado ? "selected" : ""}
+                    value={valor.idEDDProyEmp}
+                  >
+                    {valor.nomProyEmp}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="input_fechaI">Fecha inicio:</label>
+              <input
+                style={{ textTransform: "uppercase" }}
+                placeholder="Fecha inicio"
+                type="datetime-local"
+                className="form-control"
+                name="input_fechaI"
+                id="input_fechaI"
+                value={fechaIni || ""}
+                onChange={({ target }) => setfechaIni(target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="input_fechaF">Fecha fin:</label>
+              <input
+                style={{ textTransform: "uppercase" }}
+                placeholder="Fecha fin"
+                type="datetime-local"
+                className="form-control"
+                name="input_fechaF"
+                id="input_fechaF"
+                value={fechaFin || ""}
+                onChange={({ target }) => setfechaFin(target.value)}
+                required
+              />
             </div>
            
             <Button
