@@ -291,7 +291,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                 </select>
               </div>
               <div className="form-group" >
-                <label htmlFor="input_RolUsuario">Activar subsistema: </label>
+                <label htmlFor="input_RolUsuario">Activar subsistema : </label>
                 <select
                   ismul
                   required
