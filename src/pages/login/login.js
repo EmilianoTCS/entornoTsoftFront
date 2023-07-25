@@ -5,8 +5,6 @@ import  Alert from "react-bootstrap/Alert";
 import { AuthContext } from "../../context/AuthContext";
 import { useEffect } from "react";
 
-
-
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -18,10 +16,10 @@ export default function Login() {
 
   useEffect(() => {
     if (isLogged) {
-      if (nomRol === "administrador" || nomRol === "capital_humano") {
+      if (nomRol === "administrador" || nomRol === "people") {
         navigate("/home");
-      } else if (nomRol === "colaborador") {
-        navigate("/homeColaboradores");
+      } else if (nomRol === "alumno") {
+        navigate("/home");
       }
     }
   }, [isLogged, navigate, nomRol]);

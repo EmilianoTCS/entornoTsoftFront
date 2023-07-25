@@ -5,7 +5,7 @@ import { Navigate, Outlet } from "react-router-dom";
 
 export const PrivateRoute = ({
   children,
-  redirectTo = "/homeColaboradores",
+  redirectTo = "/home",
 }) => {
   const { isLoading, isLogged } = useContext(AuthContext);
   const userData = JSON.parse(localStorage.getItem("userData"))
@@ -15,13 +15,15 @@ export const PrivateRoute = ({
   if (isLogged) {
     if (
       userData.nomRol === "administrador" ||
-      userData.nomRol === "capital_humano"
+      userData.nomRol === "people" ||
+      userData.nomRol === "alumno"
+
     ) {
       return children ? children : <Outlet></Outlet>;
     } else if (
       userData.nomRol === null ||
-      userData.nomRol === "" ||
-      userData.nomRol === "colaborador"
+      userData.nomRol === "" 
+      //|| userData.nomRol === "alumno"
     ) {
       return <Navigate to={redirectTo}></Navigate>;
     }

@@ -105,9 +105,11 @@ export default function SideBar(props) {
                       id="li_home"
                       to={
                         userData.nomRol === "administrador" ||
-                        userData.nomRol === "capital_humano"
+                        userData.nomRol === "people" ||
+                        userData.nomRol === "alumno"
+
                           ? "/home"
-                          : "/homeColaboradores"
+                          : "/homeColaborador"
                       }
                     >
                       <button id="buttonSidebar">
@@ -143,7 +145,8 @@ export default function SideBar(props) {
                     onClick={handleChangeAcademia}
                     className={
                       userData.nomRol === "administrador" ||
-                      userData.nomRol === "capital_humano"
+                      userData.nomRol === "people"||
+                      userData.nomRol === "alumno"
                         ? ""
                         : "private"
                     }
@@ -193,7 +196,9 @@ export default function SideBar(props) {
                     onClick={handleChangeEvaluaciones}
                     className={
                       userData.nomRol === "administrador" ||
-                      userData.nomRol === "capital_humano"
+                      userData.nomRol === "people" ||
+                      userData.nomRol === "alumno"
+
                         ? ""
                         : "private"
                     }
@@ -245,12 +250,12 @@ export default function SideBar(props) {
                       </li>
                       {/* --------------------------------------------------- */}
                       <li id="textLeftSelect">
-                        {/* <Link to="/listadoEddEvaluacion/0"> */}
+                        <Link to="/listadoEvaluacionesPendientes">
                         <button id="submenuSidebar">
                           <ImBook id="icons" />
-                          Eval asiganada(Responder User)
+                          Formulario evaluaciones (Solo Usuario)
                         </button>
-                        {/* </Link> */}
+                        </Link>
                       </li>
                       {/* --------------------------------------------------- */}
                       <li id="textLeftSelect">

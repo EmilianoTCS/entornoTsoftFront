@@ -101,7 +101,7 @@ export default function ListadoEDDEvalPregunta() {
       obtenerEDDEvaluacion();
       obtenerEDDEvalPregunta()
     },
-    [num_boton, cantidadPorPagina, , idEDDEvaluacion,idEDDEvalPregunta,idEDDEvalCompetencia]
+    [num_boton, cantidadPorPagina,idEDDEvaluacion,idEDDEvalPregunta,idEDDEvalCompetencia]
 
     
   );

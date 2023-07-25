@@ -82,9 +82,9 @@ export default function ListadoEDDProyEmp() {
     function () {
       handleChangePaginador();
       obtenerProyecto();
-      obtenerEmpleado();
+      // obtenerEmpleado();
     },
-    [num_boton, cantidadPorPagina,idEmpleado,idProyecto]
+    [num_boton, cantidadPorPagina,idProyecto]
   );
 
   //PAGINADOR ---------------------
@@ -95,7 +95,7 @@ export default function ListadoEDDProyEmp() {
     var data = {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
-      idEmpleado:idEmpleado,
+      idEmpleado:0,
       idProyecto:idProyecto,
     };
     console.log(data);
@@ -167,7 +167,7 @@ export default function ListadoEDDProyEmp() {
               ))}
               </select>
             </div>
-            <div className="form-group" id="btn2">
+            {/* <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Colaborador: </label>
               <select
                 required
@@ -185,7 +185,7 @@ export default function ListadoEDDProyEmp() {
                 </option>
               ))}
               </select>
-            </div>
+            </div> */}
           </div>
         
           <InsertarEDDProyEmp

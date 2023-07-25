@@ -15,6 +15,7 @@ const AuthState = (props) => {
     statusConected: false,
     privateAccess: false,
     nomRol: null,
+    idEmpleado: null,
   });
 
   const checkAuth = () => {
@@ -36,6 +37,7 @@ const AuthState = (props) => {
           token: null,
           statusConected: false,
           nomRol: null,
+          idEmpleado: null,
         })
       );
     }
@@ -53,6 +55,7 @@ const AuthState = (props) => {
           error: false,
           token: response[0].token,
           nomRol: response[0].nomRol,
+          idEmpleado: response[0].idEmpleado,
         });
         if (response[0].error) setAuth({ error: true });
       })
@@ -67,6 +70,7 @@ const AuthState = (props) => {
     setAuth({
       isLogged: false,
       username: null,
+      idEmpleado: null,
       isLoading: false,
       error: false,
       token: null,
@@ -89,6 +93,7 @@ const AuthState = (props) => {
         isLoading: auth.isLoading,
         hasError: auth.error,
         nomRol: auth.nomRol,
+        idEmpleado: auth.idEmpleado,
         login: login,
         logout: logout,
         checkAuth: checkAuth,

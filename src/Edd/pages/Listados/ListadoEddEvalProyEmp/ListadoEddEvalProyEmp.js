@@ -34,8 +34,12 @@ export default function ListadoEDDEvalProyEmp() {
   const nombreTabla = "eddevalproyemp";
 
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState(params.params);
-  const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState(params.params);
-  const [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState(params.params);
+  const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState(
+    params.params
+  );
+  const [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState(
+    params.params
+  );
 
   const [listEDDProyEmpEvaluador, setlistEDDProyEmpEvaluador] = useState([""]);
   const [listEDDProyEmpEvaluado, setlistEDDProyEmpEvaluado] = useState([""]);
@@ -49,25 +53,24 @@ export default function ListadoEDDEvalProyEmp() {
     );
   }
   function obtenerEvaluado() {
-    const url = "pages/auxiliares/listadoEddProyEmp.php";
+    const url = "pages/auxiliares/listadoEddEvalProyEmp.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyEmpEvaluador(response)
+      setlistEDDProyEmpEvaluador(response)
     );
   }
-
 
   function obtenerEvaluador() {
-    const url = "pages/auxiliares/listadoEddProyEmp.php";
+    const url = "pages/auxiliares/listadoEddEvalProyEmp.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyEmpEvaluado(response)
+      setlistEDDProyEmpEvaluado(response)
     );
   }
 
-    function insertarEDDEvalProyEmp() {
-      setIsActiveInsertEDDEvalProyEmp(!isActiveInsertEDDEvalProyEmp);
-    }
+  function insertarEDDEvalProyEmp() {
+    setIsActiveInsertEDDEvalProyEmp(!isActiveInsertEDDEvalProyEmp);
+  }
   function editarEDDEvalProyEmp(ID) {
     setIsActiveEditEDDEvalProyEmp(!isActiveEditEDDEvalProyEmp);
     setidEDDEvalProyEmp(ID);
@@ -95,9 +98,16 @@ export default function ListadoEDDEvalProyEmp() {
       handleChangePaginador();
       obtenerEvaluacion();
       obtenerEvaluador();
-      obtenerEvaluado()
+      obtenerEvaluado();
+      console.log(userData.idEmpleado);
     },
-    [num_boton, cantidadPorPagina, idEDDEvaluacion,idEDDProyEmpEvaluador,idEDDProyEmpEvaluado]
+    [
+      num_boton,
+      cantidadPorPagina,
+      idEDDEvaluacion,
+      idEDDProyEmpEvaluador,
+      idEDDProyEmpEvaluado,
+    ]
   );
 
   //PAGINADOR ---------------------
@@ -105,17 +115,29 @@ export default function ListadoEDDEvalProyEmp() {
   function handleChangePaginador() {
     var url = "pages/listados/listadoEddEvalProyEmp.php";
     var operationUrl = "listadoEddEvalProyEmp";
-    var data = {
-      num_boton: num_boton,
-      cantidadPorPagina: cantidadPorPagina,
-      idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
-      idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
-      idEDDEvaluacion: idEDDEvaluacion,
-    };console.log(data);
+    
+    if (userData.nomRol === "alumno") {
+      var data = {
+        idEDDProyEmpEvaluador: userData.idEmpleado,
+        num_boton: num_boton,
+        cantidadPorPagina: cantidadPorPagina,
+        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
+        idEDDEvaluacion: idEDDEvaluacion,
+      };
+    } else
+      var data = {
+        num_boton: num_boton,
+        cantidadPorPagina: cantidadPorPagina,
+        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
+        idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
+        idEDDEvaluacion: idEDDEvaluacion,
+      };
+    console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
-      setEDDEvalProyEmp(datos.datos);console.log(data);
+      setEDDEvalProyEmp(datos.datos);
+      console.log(data);
     });
   }
 
@@ -128,7 +150,9 @@ export default function ListadoEDDEvalProyEmp() {
       <br></br>
       <Container id="fondoTabla">
         <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de evaluaciones asociadas al proyecto-colaborador</h1>
+          <h1 id="TitlesPages">
+            Listado de evaluaciones asociadas al proyecto-colaborador
+          </h1>
           <h6 style={{ color: "gray" }}>
             EDD {"->"} Listado de evaluaciones asociadas al proyecto-colaborador
           </h6>
@@ -136,9 +160,8 @@ export default function ListadoEDDEvalProyEmp() {
 
           <div id="selectPaginador">
             <Button id="btn" onClick={insertarEDDEvalProyEmp}>
-            Asociar evaluación al proyecto - colaborador
+              Asociar evaluación al proyecto - colaborador
             </Button>
-
             <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadRegistros">
                 Cantidad registros:
@@ -185,6 +208,58 @@ export default function ListadoEDDEvalProyEmp() {
                     value={valor.idEDDEvaluacion}
                   >
                     {valor.nomEvaluacion}
+                  </option>
+                ))}
+              </select>
+            </div>{" "}
+            <div className="form-group" id="btn2">
+              <label htmlFor="input_CantidadR">Evaluador: </label>
+              <select
+                required
+                type="text"
+                className="form-control"
+                onChange={({ target }) => {
+                  setidEDDProyEmpEvaluador(target.value);
+                  setNumBoton(1);
+                }}
+              >
+                <option value="">Todos</option>
+                {listEDDProyEmpEvaluador.map((valor) => (
+                  <option
+                    selected={
+                      valor.idEDDProyEmpEvaluador === idEDDProyEmpEvaluador
+                        ? "selected"
+                        : ""
+                    }
+                    value={valor.idEDDProyEmpEvaluador}
+                  >
+                    {valor.nomEvalEmpEvaluador}
+                  </option>
+                ))}
+              </select>
+            </div>{" "}
+            <div className="form-group" id="btn2">
+              <label htmlFor="input_CantidadR">Evaluado: </label>
+              <select
+                required
+                type="text"
+                className="form-control"
+                onChange={({ target }) => {
+                  setidEDDProyEmpEvaluado(target.value);
+                  setNumBoton(1);
+                }}
+              >
+                <option value="">Todos</option>
+                {listEDDProyEmpEvaluado.map((valor) => (
+                  <option
+                    selected={
+                      valor.idEDDProyEmpEvaluado === idEDDProyEmpEvaluado
+                        ? "selected"
+                        : ""
+                    }
+                    value={valor.idEDDProyEmpEvaluado}
+                  >
+                    {valor.nomEvalEmpEvaluado}
                   </option>
                 ))}
               </select>
@@ -237,11 +312,10 @@ export default function ListadoEDDEvalProyEmp() {
               <tr>
                 <th>ID</th>
                 <th>Evaluación</th>
-                <th>Proyecto</th> 
+                <th>Proyecto</th>
                 <th>Evaluador</th>
                 <th>Evaluado</th>
 
-              
                 <th>Respondida</th>
                 <th>Fecha inicio</th>
                 <th>Fecha fin</th>
@@ -261,20 +335,16 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.fechaIni}</td>
                   <td>{EDDEvalProyEmp.fechaFin}</td>
 
-
-
                   <td>
-                  <button
-                        data-title="Editar evaluación de proyecto - colaborador"
-                        id="OperationBtns"
-                        onClick={() =>
-                          editarEDDEvalProyEmp(
-                            EDDEvalProyEmp.idEDDEvalProyEmp
-                          )
-                        }
-                      >
-                        <RiEditBoxFill id="icons" />
-                      </button>
+                    <button
+                      data-title="Editar evaluación de proyecto - colaborador"
+                      id="OperationBtns"
+                      onClick={() =>
+                        editarEDDEvalProyEmp(EDDEvalProyEmp.idEDDEvalProyEmp)
+                      }
+                    >
+                      <RiEditBoxFill id="icons" />
+                    </button>
 
                     <button
                       data-title="Desactivar evaluación de proyecto - colaborador"
