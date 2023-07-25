@@ -292,8 +292,8 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label htmlFor="input_RolUsuario">Activar subsistema: </label>
+              <div className="form-group" >
+                <label htmlFor="input_RolUsuario">Activar subsistema : </label>
                 <select
                   // isMulti
                   required
