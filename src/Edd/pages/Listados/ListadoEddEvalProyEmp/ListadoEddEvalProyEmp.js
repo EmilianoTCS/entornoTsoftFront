@@ -8,6 +8,7 @@ import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillKeyFill, BsFillTrashFill } from "react-icons/bs";
+import { AiFillBook } from "react-icons/ai";
 
 import "../TablasStyles.css";
 import InsertarEDDEvalProyEmp from "../../templates/form/Insertar/InsertarEddEvalProyEmp";
@@ -211,7 +212,7 @@ export default function ListadoEDDEvalProyEmp() {
                   </option>
                 ))}
               </select>
-            </div>{" "}
+            </div>
             <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Evaluador: </label>
               <select
@@ -319,6 +320,8 @@ export default function ListadoEDDEvalProyEmp() {
                 <th>Respondida</th>
                 <th>Fecha inicio</th>
                 <th>Fecha fin</th>
+                <th>Total en min</th>
+
                 <th>Operaciones</th>
               </tr>
             </thead>
@@ -334,8 +337,8 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.evalRespondida}</td>
                   <td>{EDDEvalProyEmp.fechaIni}</td>
                   <td>{EDDEvalProyEmp.fechaFin}</td>
-
-                  <td>
+                  <td>{EDDEvalProyEmp.tiempoTotalEnMin}</td>
+                  <td align="center">
                     <button
                       data-title="Editar evaluación de proyecto - colaborador"
                       id="OperationBtns"
@@ -345,7 +348,11 @@ export default function ListadoEDDEvalProyEmp() {
                     >
                       <RiEditBoxFill id="icons" />
                     </button>
-
+                    <Link to={`/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvalProyEmp}`}>
+                      <button data-title="Evaluacion relacionada" id="OperationBtns">
+                        <AiFillBook id="icons" />
+                      </button>
+                    </Link>
                     <button
                       data-title="Desactivar evaluación de proyecto - colaborador"
                       onClick={() =>

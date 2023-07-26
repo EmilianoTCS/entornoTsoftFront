@@ -169,7 +169,7 @@ export default function ListadoEDDEvalPregunta() {
                 <option value="100">100</option>
               </select>
             </div>
-            <div className="form-group" id="btn2" style={{width:200}}>
+            {/* <div className="form-group" id="btn2" style={{width:200}}>
               <label htmlFor="input_CantidadR">Pregunta: </label>
               <select
                 required
@@ -195,7 +195,7 @@ export default function ListadoEDDEvalPregunta() {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Evaluación: </label>
               <select
@@ -275,7 +275,6 @@ export default function ListadoEDDEvalPregunta() {
                 <th>Competencia</th>
                 <th>Tipo respuesta</th>
                 <th>Obligatorio</th>
-
                 <th>Operaciones</th>
               </tr>
             </thead>
@@ -289,9 +288,6 @@ export default function ListadoEDDEvalPregunta() {
                   <td>{idEDDEvalPregunta.nomCompetencia}</td>
                   <td>{idEDDEvalPregunta.tipoResp}</td>
                   <td>{idEDDEvalPregunta.preguntaObligatoria}</td>
-
-                  <td></td>
-                  <td></td>
 
                   <td align="center">
                     <button

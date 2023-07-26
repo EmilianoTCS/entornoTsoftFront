@@ -8,6 +8,8 @@ import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillKeyFill,BsFillTrashFill } from "react-icons/bs";
+import { AiFillBook } from "react-icons/ai";
+
 
 import "../TablasStyles.css";
 import InsertarEDDProyEmp from "../../templates/form/Insertar/InsertarEddProyEmp";
@@ -229,6 +231,12 @@ export default function ListadoEDDProyEmp() {
                       <RiEditBoxFill id="icons" />
                     </button>
                     
+                    <Link to={`/listadoEddEvalProyEmp/${EDDProyEmp.idEDDProyEmp}`}>
+                      <button data-title="Evaluaciones relacionadas" id="OperationBtns">
+                        <AiFillBook id="icons" />
+                      </button>
+                    </Link>
+
                     <button
                       data-title="Desactivar proyecto - colaborador"
                       onClick={() => desactivar(EDDProyEmp.idEDDProyEmp)}
