@@ -84,8 +84,7 @@ export default function FormularioEvaluacion() {
               <td>
                 {idEDDEvalPregunta.ordenPregunta}.
                 {idEDDEvalPregunta.nomPregunta}
-                {idEDDEvalPregunta.nomCompetencia} -
-                {idEDDEvalPregunta.preguntaObligatoria === 1 ? '*' : ''}
+                {idEDDEvalPregunta.nomCompetencia}  - {idEDDEvalPregunta.preguntaObligatoria === '1' ? <a style={{color:'red'}}>*</a> : <a></a>}
               </td>
             </tr>
           ))}
