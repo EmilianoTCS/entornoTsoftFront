@@ -348,7 +348,7 @@ export default function ListadoEDDEvalProyEmp() {
                     >
                       <RiEditBoxFill id="icons" />
                     </button>
-                    <Link to={`/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvalProyEmp}`}>
+                    <Link to={`/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}`}>
                       <button data-title="Evaluacion relacionada" id="OperationBtns">
                         <AiFillBook id="icons" />
                       </button>

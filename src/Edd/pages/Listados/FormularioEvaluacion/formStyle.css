@@ -1,76 +1,99 @@
-#fondo{
-    background-image:url("/public/rose-petals.svg");
-    background-repeat: repeat;
-    background-attachment: fixed;
-    background-size: cover;
+.bntRegistrar{
+margin-bottom: 1em;
+}
+#fondoTabla1 {
+  background-color: #fff;
 }
 
-p{
-    font-size: 22px;
+#TablaEncabezado {
+  background-color: #e10b1c;
+  width: 100%;
+  border: 12px solid rgb(255, 255, 255);
+  
+}
+#encabezadoRight{
+text-align: right;
 }
 
-#containerStyle{
-    width: 60%;
-    font-size: 20px;
-    
+#encabezadoEnd{
+text-align: left;
+width: auto;
 }
 
-#textStyle{
-    color: #fff;
-    background-color: #272727;
-    padding: 1em;
-    border-radius: 10px 10px 0 0;
+#title{
+color: #fff;
+white-space: nowrap;
 }
 
-#formStyle{
-    margin-bottom: 40px;
+#fondo {
+  background-image: url("/public/rose-petals.svg");
+  background-repeat: repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
-
-#pruebaFondo{
-    background-color: #fff;
-    padding: 2em;
-    border-radius: 0 0 10px 10px;
+p {
+  font-size: 22px;
 }
 
-#widhtStyle{
-    width: 95%;
+#containerStyle {
+  width: 60%;
+  font-size: 20px;
 }
 
-#checkStyle{
-    width: 95%;
-    padding: 0.5em;
+#textStyle {
+  color: #fff;
+  background-color: #272727;
+  padding: 1em;
+  border-radius: 10px 10px 0 0;
 }
 
-#fontSizeQuest{
-    font-size: 23px;
+#formStyle {
+  margin-bottom: 40px;
 }
 
+#pruebaFondo {
+  background-color: #fff;
+  padding: 2em;
+  border-radius: 0 0 10px 10px;
+}
+
+#widhtStyle {
+  width: 95%;
+}
+
+#checkStyle {
+  width: 95%;
+  padding: 0.5em;
+}
+
+#fontSizeQuest {
+  font-size: 23px;
+}
 
 .isRequired::after {
-    content: "*";
-    margin-left: 3px;
-    color: red;
-    font-weight: bold;
-  }
+  content: "*";
+  margin-left: 3px;
+  color: red;
+  font-weight: bold;
+}
 
 #enviar {
-font-family: "Roboto Slab", serif;
-position: relative;
-margin-left: 62px;
-top: 20px;
-font-size: 15pt;
-background-color: #e10b1c;
-color: #fff;
-font-weight: 500;
-border: solid #e10b1c 1px;
-padding: 10px 20px;
-border-radius: 8px;
-cursor: pointer;
+  font-family: "Roboto Slab", serif;
+  position: relative;
+  margin-left: 62px;
+  top: 20px;
+  font-size: 15pt;
+  background-color: #e10b1c;
+  color: #fff;
+  font-weight: 500;
+  border: solid #e10b1c 1px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
 }
 #enviar:hover {
-color: #e10b1c;
-font-weight: 700;
-background-color: #fff;
-
+  color: #e10b1c;
+  font-weight: 700;
+  background-color: #fff;
 }

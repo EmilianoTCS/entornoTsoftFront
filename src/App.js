@@ -160,7 +160,7 @@ function App() {
             ></Route>
                         <Route
               element={<FormularioEvaluacion/>}
-              path="/listadoRespPregEvaluaciones/:params"
+              path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado"
             ></Route>
 
 
