@@ -124,6 +124,7 @@ export default function FormularioEvaluacion() {
   var auxEncabezado = "0";
   var auxDesc = "0";
 
+
   return userData.statusConected || userData !== null ? (
     <>
       <Header></Header>
@@ -207,7 +208,7 @@ export default function FormularioEvaluacion() {
                                   className="form-control"
                                   id="idEDDEvalPregunta.idEvalPregunta"
                                   placeholder="Escriba su respuesta"
-                                  required
+                                  required = {idEDDEvalPregunta.preguntaObligatoria === "1"}
                                   onChange={({ target }) => {
                                     let respuestaTexto = target.value;
 
@@ -263,7 +264,7 @@ export default function FormularioEvaluacion() {
                                   type="radio"
                                   name={idEDDEvalPregunta.nomPregunta}
                                   value={idEDDEvalPregunta.nomRespPreg}
-                                  required
+                                  required = {idEDDEvalPregunta.preguntaObligatoria === "1"}
                                   id="inputNomRespuesta"
                                   style={{ width: "4em" }}
                                   onChange={({ target }) => {
@@ -309,7 +310,7 @@ export default function FormularioEvaluacion() {
                                 type="radio"
                                 name={idEDDEvalPregunta.nomPregunta}
                                 value={idEDDEvalPregunta.nomRespPreg}
-                                required
+                                required = {idEDDEvalPregunta.preguntaObligatoria === "1"}
                                 id="inputNomRespuesta"
                                 style={{ width: "4em" }}
                                 onChange={({ target }) => {
