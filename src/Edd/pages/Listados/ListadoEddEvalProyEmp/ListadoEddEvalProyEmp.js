@@ -20,7 +20,7 @@ import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
 
 export default function ListadoEDDEvalProyEmp() {
-  const [, params] = useRoute("/listadoEDDEvalProyEmp/:params");
+  const [, params] = useRoute("/listadoEDDEvalProyEmp/:idProyecto");
 
   const [EDDEvalProyEmp, setEDDEvalProyEmp] = useState([""]);
   const [isActiveInsertEDDEvalProyEmp, setIsActiveInsertEDDEvalProyEmp] =
@@ -34,17 +34,29 @@ export default function ListadoEDDEvalProyEmp() {
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
   const nombreTabla = "eddevalproyemp";
 
-  const [idEDDEvaluacion, setidEDDEvaluacion] = useState(params.params);
+  const [idEDDEvaluacion, setidEDDEvaluacion] = useState('');
   const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState(
-    params.params
+    ''
   );
+
+  const [idProyecto, setidProyecto] = useState(params.idProyecto);
+
+  const [listProyecto, setlistProyecto] = useState([""]);
   const [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState(
-    params.params
+    ''
   );
 
   const [listEDDProyEmpEvaluador, setlistEDDProyEmpEvaluador] = useState([""]);
   const [listEDDProyEmpEvaluado, setlistEDDProyEmpEvaluado] = useState([""]);
   const [listEDDEvaluacion, setlistEDDEvaluacion] = useState([""]);
+
+  function obtenerProyecto() {
+    const url = "pages/auxiliares/listadoProyectoForms.php";
+    const operationUrl = "listados";
+    getDataService(url, operationUrl).then((response) =>
+      setlistProyecto(response)
+    );
+  }
 
   function obtenerEvaluacion() {
     const url = "pages/auxiliares/listadoEddEvaluacion.php";
@@ -100,7 +112,7 @@ export default function ListadoEDDEvalProyEmp() {
       obtenerEvaluacion();
       obtenerEvaluador();
       obtenerEvaluado();
-      console.log(userData.idEmpleado);
+      obtenerProyecto();
     },
     [
       num_boton,
@@ -108,6 +120,7 @@ export default function ListadoEDDEvalProyEmp() {
       idEDDEvaluacion,
       idEDDProyEmpEvaluador,
       idEDDProyEmpEvaluado,
+      idProyecto,
     ]
   );
 
@@ -116,7 +129,7 @@ export default function ListadoEDDEvalProyEmp() {
   function handleChangePaginador() {
     var url = "pages/listados/listadoEddEvalProyEmp.php";
     var operationUrl = "listadoEddEvalProyEmp";
-    
+
     if (userData.nomRol === "alumno") {
       var data = {
         idEDDProyEmpEvaluador: userData.idEmpleado,
@@ -124,6 +137,7 @@ export default function ListadoEDDEvalProyEmp() {
         cantidadPorPagina: cantidadPorPagina,
         idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
         idEDDEvaluacion: idEDDEvaluacion,
+        idProyecto: idProyecto,
       };
     } else
       var data = {
@@ -132,6 +146,7 @@ export default function ListadoEDDEvalProyEmp() {
         idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
         idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
         idEDDEvaluacion: idEDDEvaluacion,
+        idProyecto, idProyecto,
       };
     console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
@@ -142,6 +157,8 @@ export default function ListadoEDDEvalProyEmp() {
     });
   }
 
+
+
   //PAGINADOR ---------------------
 
   return userData.statusConected || userData !== null ? (
@@ -151,6 +168,13 @@ export default function ListadoEDDEvalProyEmp() {
       <br></br>
       <Container id="fondoTabla">
         <div id="containerTablas">
+          <a
+            type="submit"
+            id="btnAtras"
+            value="Registrar"
+            href="javascript: history.go(-1)">Volver
+          </a>
+
           <h1 id="TitlesPages">
             Listado de evaluaciones asociadas al proyecto-colaborador
           </h1>
@@ -188,6 +212,28 @@ export default function ListadoEDDEvalProyEmp() {
               </select>
             </div>
             <div className="form-group" id="btn2">
+              <label htmlFor="input_CantidadR">Proyecto: </label>
+              <select
+                required
+                type="text"
+                className="form-control"
+                onChange={({ target }) => {
+                  setidProyecto(target.value); setNumBoton(1);
+                  history.pushState(null, null, `/listadoEDDEvalProyEmp/${target.value}`);
+                }}
+              >
+                <option value="0">Todos</option>
+                {listProyecto.map((valor) => (
+                  <option
+                    selected={(valor.idEDDProyecto === idProyecto ? "selected" : "")}
+                    value={valor.idEDDProyecto}
+                  >
+                    {valor.nomProyecto}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Evaluación: </label>
               <select
                 required
@@ -264,7 +310,7 @@ export default function ListadoEDDEvalProyEmp() {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             {/* <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Proyecto-colaborador: </label>
               <select
@@ -333,7 +379,6 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.nomProyecto}</td>
                   <td>{EDDEvalProyEmp.nomEmpleadoEvaluador}</td>
                   <td>{EDDEvalProyEmp.nomEmpleadoEvaluado}</td>
-
                   <td>{EDDEvalProyEmp.evalRespondida}</td>
                   <td>{EDDEvalProyEmp.fechaIni}</td>
                   <td>{EDDEvalProyEmp.fechaFin}</td>
@@ -348,11 +393,21 @@ export default function ListadoEDDEvalProyEmp() {
                     >
                       <RiEditBoxFill id="icons" />
                     </button>
-                    <Link to={`/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}`}>
-                      <button data-title="Evaluacion relacionada" id="OperationBtns">
-                        <AiFillBook id="icons" />
-                      </button>
-                    </Link>
+
+                    {EDDEvalProyEmp.evalRespondida === 'NO' ? (
+                      <Link to={`/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}`}>
+                        <button data-title="Evaluacion relacionada" id="OperationBtns">
+                          <AiFillBook id="icons" />
+                        </button>
+                      </Link>
+                    ) : (
+                      <Link to={`/listadoEvalResp/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}`}>
+                        <button data-title="Evaluacion relacionada" id="OperationBtns">
+                          <AiFillBook id="icons" />
+                        </button>
+                      </Link>
+                    )}
+
                     <button
                       data-title="Desactivar evaluación de proyecto - colaborador"
                       onClick={() =>

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table } from "react-bootstrap";
-import { Navigate,Link } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { useRoute } from "wouter";
 
 import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
-import { BsFillKeyFill,BsFillTrashFill } from "react-icons/bs";
+import { BsFillKeyFill, BsFillTrashFill } from "react-icons/bs";
 import { AiFillBook } from "react-icons/ai";
 
 
@@ -34,7 +34,7 @@ export default function ListadoEDDProyEmp() {
   const nombreTabla = "eddproyemp";
 
   const [idProyecto, setidProyecto] = useState(params.params);
-  const [idEmpleado, setidEmpleado] = useState(params.params);
+  const [idEmpleado, setidEmpleado] = useState(0);
 
   const [listProyecto, setlistProyecto] = useState([""]);
 
@@ -44,14 +44,14 @@ export default function ListadoEDDProyEmp() {
     const url = "pages/auxiliares/listadoProyectoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistProyecto(response)
+      setlistProyecto(response)
     );
   }
   function obtenerEmpleado() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEmpleado(response)
+      setlistEmpleado(response)
     );
   }
 
@@ -84,9 +84,9 @@ export default function ListadoEDDProyEmp() {
     function () {
       handleChangePaginador();
       obtenerProyecto();
-      // obtenerEmpleado();
+      obtenerEmpleado();
     },
-    [num_boton, cantidadPorPagina,idProyecto]
+    [num_boton, cantidadPorPagina, idProyecto, idEmpleado]
   );
 
   //PAGINADOR ---------------------
@@ -97,8 +97,9 @@ export default function ListadoEDDProyEmp() {
     var data = {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
-      idEmpleado:0,
-      idProyecto:idProyecto,
+      idEmpleado: 0,
+      idProyecto: idProyecto,
+      idEmpleado: idEmpleado
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
@@ -117,8 +118,15 @@ export default function ListadoEDDProyEmp() {
       <br></br>
       <Container id="fondoTabla">
         <div id="containerTablas">
+          <a
+            type="submit"
+            id="btnAtras"
+            value="Registrar"
+            href="javascript: history.go(-1)">Volver atrás</a>
+
+
           <h1 id="TitlesPages">Listado de proyectos - colaboradores</h1>
-          <h6 style={{color:'gray'}}>EDD {'->'} Listado de proyectos - colaboradores</h6>
+          <h6 style={{ color: 'gray' }}>EDD {'->'} Listado de proyectos - colaboradores</h6>
           <br></br>
 
           <div id="selectPaginador">
@@ -156,40 +164,40 @@ export default function ListadoEDDProyEmp() {
                 required
                 type="text"
                 className="form-control"
-                onChange={({ target }) => {setidProyecto(target.value);setNumBoton(1);}}
+                onChange={({ target }) => { setidProyecto(target.value); setNumBoton(1); }}
               >
                 <option value="">Todos</option>
                 {listProyecto.map((valor) => (
                   <option
-                  selected={(valor.idEDDProyecto === idProyecto ? "selected" : "")}
-                  value={valor.idEDDProyecto}
-                >
-                  {valor.nomProyecto}
-                </option>
-              ))}
+                    selected={(valor.idEDDProyecto === idProyecto ? "selected" : "")}
+                    value={valor.idEDDProyecto}
+                  >
+                    {valor.nomProyecto}
+                  </option>
+                ))}
               </select>
             </div>
-            {/* <div className="form-group" id="btn2">
+            <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Colaborador: </label>
               <select
                 required
                 type="text"
                 className="form-control"
-                onChange={({ target }) => {setidEmpleado(target.value);setNumBoton(1);}}
+                onChange={({ target }) => { setidEmpleado(target.value); setNumBoton(1); }}
               >
                 <option value="">Todos</option>
                 {listEmpleado.map((valor) => (
                   <option
-                  selected={(valor.idEmpleado === idEmpleado ? "selected" : "")}
-                  value={valor.idEmpleado}
-                >
-                  {valor.nomEmpleado}
-                </option>
-              ))}
+                    selected={(valor.idEmpleado === idEmpleado ? "selected" : "")}
+                    value={valor.idEmpleado}
+                  >
+                    {valor.nomEmpleado}
+                  </option>
+                ))}
               </select>
-            </div> */}
+            </div>
           </div>
-        
+
           <InsertarEDDProyEmp
             isActiveEDDProyEmp={isActiveInsertEDDProyEmp}
             cambiarEstado={setIsActiveInsertEDDProyEmp}
@@ -203,7 +211,7 @@ export default function ListadoEDDProyEmp() {
             setEDDProyEmp={setEDDProyEmp}
             EDDProyEmp={EDDProyEmp}
             nombreTabla={nombreTabla}
-          ></EditarEDDProyEmp> 
+          ></EditarEDDProyEmp>
 
           <Table id="mainTable" hover responsive>
             <thead>
@@ -230,12 +238,13 @@ export default function ListadoEDDProyEmp() {
                     >
                       <RiEditBoxFill id="icons" />
                     </button>
-                    
-                    <Link to={`/listadoEddEvalProyEmp/${EDDProyEmp.idEDDProyEmp}`}>
-                      <button data-title="Evaluaciones relacionadas" id="OperationBtns">
+
+                    <Link to={`/listadoEddEvalProyEmp/${EDDProyEmp.idProyecto}`}>
+                      <button disabled={idProyecto || idEmpleado == 'empty / vacio'} data-title="Evaluaciones relacionadas" id="OperationBtns">
                         <AiFillBook id="icons" />
                       </button>
-                    </Link>
+                    </Link >
+
 
                     <button
                       data-title="Desactivar proyecto - colaborador"

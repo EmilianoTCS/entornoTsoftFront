@@ -69,7 +69,6 @@ export default function FormularioEvaluacion() {
   function ConfirmAlertEnvio() {
     if (loadedData) {
       Swal.fire({
-        title: "IMPORTANTE",
         html: `
         <p>Gracias por llenar el formulario.</p>
         `,
@@ -124,13 +123,21 @@ export default function FormularioEvaluacion() {
   var auxEncabezado = "0";
   var auxDesc = "0";
 
-
   return userData.statusConected || userData !== null ? (
     <>
       <Header></Header>
       <form onSubmit={SendData}>
+      <a
+                style={{ margin: '10px' }}
+                type="submit"
+                id="btnAtras"
+                value="Registrar"
+                href="javascript: history.go(-1)">Volver
+            </a>
         <Container id="textStyle">
+          
           <div class="container">
+            
             <div class="row">
               <div class="col" id="title">
 
@@ -166,6 +173,7 @@ export default function FormularioEvaluacion() {
 
         </Container>
         <Container id="fondoTabla1">
+
           <br></br>
           <h1>Formulario de evaluación</h1>
           <Table>

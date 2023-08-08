@@ -1,13 +1,22 @@
-#btn{
-    background-color: #e10b1c;
-    margin-left: 10px;
-    border: none;
-    border:#e10b1c solid 1px;
-    
+
+
+#btn {
+  background-color: #e10b1c;
+  margin-left: 10px;
+  border: none;
+  border: #e10b1c solid 1px;
 }
 
-#btn:hover{
-    background-color: #ffffff;
-    color: #e10b1c;
+#btn:hover {
+  background-color: #ffffff;
+  color: #e10b1c;
+}
 
+#btnAtras {
+  background-color: #e10b1c;
+  border: #e10b1c solid 1px;
+  border-radius: 3px;
+  color: white;
+  text-decoration: none;
+  padding: 6px;
 }

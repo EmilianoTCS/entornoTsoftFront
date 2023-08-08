@@ -211,9 +211,9 @@ export default function SideBar(props) {
                       id="COE_Academia"
                       className={isToggledEvaluaciones ? "active" : ""}
                     >
-                      {/* --------------------------------------------------- */}
+                      {/* ----------------------FORMS QUE NO SE USAN----------------------------- */}
 
-                      <li id="textLeftSelect">
+                      {/* <li id="textLeftSelect">
                         <Link to="/FormularioAnEDD">
                           <button id="submenuSidebar">
                             <ImBook id="icons" />
@@ -228,7 +228,7 @@ export default function SideBar(props) {
                             Referente
                           </button>
                         </Link>
-                      </li>
+                      </li> */}
                       {/* --------------------------------------------------- */}
 
                       <li id="textLeftSelect">

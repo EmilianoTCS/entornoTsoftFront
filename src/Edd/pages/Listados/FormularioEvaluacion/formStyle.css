@@ -1,5 +1,17 @@
-.bntRegistrar{
-margin-bottom: 1em;
+#pregunta {
+  color: black;
+  font-size: 17px;
+  padding-bottom: 10px;
+}
+
+#respuesta {
+  font-size: 16px;
+}
+
+/* ---------------------- */
+
+.bntRegistrar {
+  margin-bottom: 1em;
 }
 #fondoTabla1 {
   background-color: #fff;
@@ -9,20 +21,18 @@ margin-bottom: 1em;
   background-color: #e10b1c;
   width: 100%;
   border: 12px solid rgb(255, 255, 255);
-  
 }
-#encabezadoRight{
-text-align: right;
-}
-
-#encabezadoEnd{
-text-align: left;
-width: auto;
+#encabezadoRight {
+  text-align: right;
 }
 
-#title{
-color: #fff;
-white-space: nowrap;
+#encabezadoEnd {
+  white-space: pre-line;
+}
+
+#title {
+  color: #fff;
+  white-space: nowrap;
 }
 
 #fondo {
@@ -43,7 +53,7 @@ p {
 
 #textStyle {
   color: #fff;
-  background-color: #272727;
+  background-color: #e10b1c;
   padding: 1em;
   border-radius: 10px 10px 0 0;
 }

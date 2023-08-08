@@ -37,6 +37,7 @@ import FormAnalistas from "./Edd/pages/Formularios/FormAnalistas";
 import FormReferentes from "./Edd/pages/Formularios/FormReferentes";
 import ListadoEvaluacionesPendientes from "./Edd/pages/Listados/EvaluacionesPendientes/EvaluacionesPendientes";
 import FormularioEvaluacion from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacion";
+import FormularioEvaluacionRespondida from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacionRespondido";
 
 function App() {
   return (
@@ -139,7 +140,7 @@ function App() {
             ></Route>
             <Route
               element={<ListadoEddEvalProyEmp />}
-              path="/listadoEddEvalProyEmp/:params"
+              path="/listadoEddEvalProyEmp/:idProyecto"
             ></Route>
             <Route
               element={<ListadoEddEvalProyResp />}
@@ -162,7 +163,10 @@ function App() {
               element={<FormularioEvaluacion/>}
               path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado"
             ></Route>
-
+                        <Route
+              element={<FormularioEvaluacionRespondida/>}
+              path="/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado"
+            ></Route>
 
             {/* ------------------------------------------------------------------------------------------ */}
           </Route>
