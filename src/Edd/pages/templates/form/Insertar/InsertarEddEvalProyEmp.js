@@ -15,8 +15,6 @@ const InsertarEDDEvalProyEmp = ({
 }) => {
   // ----------------------CONSTANTES----------------------------
   const [evalRespondida, setevalRespondida] = useState("");
-  const [fechaIni, setfechaIni] = useState("");
-  const [fechaFin, setfechaFin] = useState("");
 
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState("");
   const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState("");
@@ -41,7 +39,7 @@ const InsertarEDDEvalProyEmp = ({
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyEmpEvaluador(response)
+    setlistEDDProyEmpEvaluado(response)
     );
   }
 
@@ -50,7 +48,7 @@ const InsertarEDDEvalProyEmp = ({
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyEmpEvaluado(response)
+    setlistEDDProyEmpEvaluador(response)
     );
   }
   function obtenerEvaluacion() {
@@ -62,22 +60,20 @@ const InsertarEDDEvalProyEmp = ({
   }
 
   function SendData(e) {
-    e.preventDefault();
+    // e.preventDefault();
     const url = "pages/insertar/insertarEddEvalProyEmp.php";
     const operationUrl = "insertarEddEvalProyEmp";
     var data = {
       usuarioCreacion: userData.usuario,
       evalRespondida: 0,
-      fechaIni: fechaIni,
-      fechaFin: fechaFin,
-      idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
+      idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
       idEDDEvaluacion:idEDDEvaluacion,
       isActive: true,
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts("successCreated");
+      TopAlerts("successCreated");
       actualizarEDDEvalProyEmp(EDDEvalProyEmp);
       console.log(response);
     });
@@ -130,25 +126,6 @@ const InsertarEDDEvalProyEmp = ({
                 className="form-control"
                 name="input_proyemp"
                 id="input_proyemp"
-                placeholder="Seleccione la Proyecto + Evaluador"
-                onChange={({ target }) => setidEDDProyEmpEvaluador(target.value)}
-              >
-                <option hidden value="">
-                  Desplegar lista
-                </option>
-
-                {listEDDProyEmpEvaluador.map((valor) => (
-                  <option value={valor.idEDDProyEmp}>{valor.nomProyEmp}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="input_proyemp">Proyecto - Evaluado: </label>
-              <select
-                required
-                className="form-control"
-                name="input_proyemp"
-                id="input_proyemp"
                 placeholder="Seleccione la Proyecto + Evaluado"
                 onChange={({ target }) => setidEDDProyEmpEvaluado(target.value)}
               >
@@ -161,32 +138,27 @@ const InsertarEDDEvalProyEmp = ({
                 ))}
               </select>
             </div>
-            <div>
-              <label htmlFor="input_fechaI">Fecha inicio:</label>
-              <input
-                style={{ textTransform: "uppercase" }}
-                placeholder="Fecha inicio"
-                type="datetime-local"
-                className="form-control"
-                name="input_fechaI"
-                id="input_fechaI"
-                onChange={({ target }) => setfechaIni(target.value)}
+            <div className="form-group">
+            <label htmlFor="input_proyemp">Proyecto - Evaluado: </label>
+              <select
                 required
-              />
-            </div>
-            <div>
-              <label htmlFor="input_fechaF">Fecha fin:</label>
-              <input
-                style={{ textTransform: "uppercase" }}
-                placeholder="Fecha fin"
-                type="datetime-local"
                 className="form-control"
-                name="input_fechaF"
-                id="input_fechaF"
-                onChange={({ target }) => setfechaFin(target.value)}
-                required
-              />
+                name="input_proyemp"
+                id="input_proyemp"
+                placeholder="Seleccione la Proyecto + Evaluador"
+                onChange={({ target }) => setidEDDProyEmpEvaluador(target.value)}
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+
+                {listEDDProyEmpEvaluador.map((valor) => (
+                  <option value={valor.idEDDProyEmp}>{valor.nomProyEmp}</option>
+                ))}
+              </select>
             </div>
+           
+
 
             <Button
               variant="secondary"

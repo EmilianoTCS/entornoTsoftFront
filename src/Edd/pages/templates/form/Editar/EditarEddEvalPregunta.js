@@ -18,6 +18,8 @@ const editarEDDEvalPregunta = ({
   // ----------------------CONSTANTES----------------------------
   const [nomPregunta, setnomPregunta] = useState("");
   const [ordenPregunta, setordenPregunta] = useState("");
+  const [tipoResp, settipoResp] = useState([""]);
+  const [preguntaObligatoria, setpreguntaObligatoria] = useState([""]);
 
   const [idEDDEvalCompetencia, setidEDDEvalCompetencia] = useState([""]);
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState([""]);
@@ -35,6 +37,8 @@ const editarEDDEvalPregunta = ({
     cambiarEstado(false);
     setnomPregunta(responseID[0].nomPregunta);
     setordenPregunta(responseID[0].ordenPregunta);
+    settipoResp(responseID[0].tipoResp);
+    setpreguntaObligatoria(responseID[0].preguntaObligatoria);
 
     setidEDDEvalCompetencia(responseID[0].idEDDEvalCompetencia);
     setidEDDEvaluacion(responseID[0].idEDDEvaluacion);
@@ -67,6 +71,9 @@ const editarEDDEvalPregunta = ({
       setResponseID(response);
       setnomPregunta(response[0].nomPregunta);
       setordenPregunta(response[0].ordenPregunta);
+      settipoResp(response[0].tipoResp);
+      setpreguntaObligatoria(response[0].preguntaObligatoria);
+
 
       setidEDDEvalCompetencia(response[0].idEDDEvalCompetencia);
       setidEDDEvaluacion(response[0].idEDDEvaluacion);
@@ -83,6 +90,9 @@ const editarEDDEvalPregunta = ({
       idEDDEvalPregunta: idEDDEvalPregunta,
       nomPregunta: nomPregunta === "" ? responseID[0].nomPregunta : nomPregunta,
       ordenPregunta: ordenPregunta === "" ? responseID[0].ordenPregunta : ordenPregunta,
+      tipoResp: tipoResp === "" ? responseID[0].tipoResp : tipoResp,
+      preguntaObligatoria: preguntaObligatoria === "" ? responseID[0].preguntaObligatoria : preguntaObligatoria,
+      
       idEDDEvalCompetencia: idEDDEvalCompetencia === "" ? responseID[0].idEDDEvalCompetencia : idEDDEvalCompetencia,
       idEDDEvaluacion: idEDDEvaluacion === "" ? responseID[0].idEDDEvaluacion : idEDDEvaluacion,
       isActive: true,
@@ -191,6 +201,44 @@ const editarEDDEvalPregunta = ({
                     {valor.nomCompetencia}
                   </option>
                 ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="input_TipRESP">Tipo de respuesta: </label>
+              <select
+                required
+                className="form-control"
+                name="input_TipRESP"
+                id="input_TipRESP"
+                value={tipoResp || ""}
+                onChange={({ target }) => settipoResp(target.value)}
+              >
+                <option value="A">
+                ALTERNATIVA
+                </option>                
+                <option value="T">
+                TEXTO
+                </option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="input_comp">Pregunta obligatoria: </label>
+              <select
+                required
+                className="form-control"
+                name="input_comp"
+                id="input_comp"
+                value={preguntaObligatoria || ""}
+                onChange={({ target }) => setpreguntaObligatoria(target.value)}
+              >
+                <option value="1">
+                  SI
+                </option>                
+                <option value="0">
+                  NO
+                </option>
               </select>
             </div>
 

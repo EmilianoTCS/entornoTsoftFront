@@ -118,11 +118,12 @@ export default function ListadoEDDProyEmp() {
       <br></br>
       <Container id="fondoTabla">
         <div id="containerTablas">
-          <a
+        <a
             type="submit"
             id="btnAtras"
             value="Registrar"
-            href="javascript: history.go(-1)">Volver atrás</a>
+            href="/listadoEddProyecto/0">Volver
+          </a>
 
 
           <h1 id="TitlesPages">Listado de proyectos - colaboradores</h1>
@@ -239,11 +240,14 @@ export default function ListadoEDDProyEmp() {
                       <RiEditBoxFill id="icons" />
                     </button>
 
-                    <Link to={`/listadoEddEvalProyEmp/${EDDProyEmp.idProyecto}`}>
-                      <button disabled={idProyecto || idEmpleado == 'empty / vacio'} data-title="Evaluaciones relacionadas" id="OperationBtns">
-                        <AiFillBook id="icons" />
-                      </button>
-                    </Link >
+
+
+                      <Link to={EDDProyEmp.idProyecto !== 'empty / vacio' ? `/listadoEddEvalProyEmp/${EDDProyEmp.idProyecto}`: ''}>
+                        <button disabled={EDDProyEmp.nomProyecto !== 'empty / vacio' ? false : true} data-title="Evaluaciones relacionadas" id="OperationBtns">
+                          <AiFillBook id="icons" />
+                        </button>
+                      </Link >
+
 
 
                     <button

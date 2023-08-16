@@ -192,6 +192,8 @@ export default function ListadoEDDEvaluacion() {
                 <th>Tipo evaluación</th>
                 <th>Inicio vigencia</th>
                 <th>Fin vigencia</th>
+                <th>Vigencia</th>
+
                 <th>Operaciones</th>
               </tr>
             </thead>
@@ -203,6 +205,8 @@ export default function ListadoEDDEvaluacion() {
                   <td>{EDDEvaluacion.tipoEvaluacion}</td>
                   <td>{EDDEvaluacion.fechaIni}</td>
                   <td>{EDDEvaluacion.fechaFin}</td>
+                  <td>Hacer Front</td>
+
                   <td>
                     <button
                       data-title="Editar evaluación"

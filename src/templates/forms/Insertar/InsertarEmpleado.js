@@ -266,10 +266,10 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                   <option hidden value="">
                     Desplegar lista
                   </option>
-                  <option value="empleado">Colaborador</option>
-                  <option value="alumno">Alumno</option>
-                  <option value="people">People</option>
-                  <option value="adminstrador">Administrador</option>
+                  <option value="EMPLEADO">EMPLEADO</option>
+                  <option value="ALUMNO">ALUMNO</option>
+                  <option value="RELATOR">RELATOR</option>
+                  <option value="PEOPLE">PEOPLE</option>
                 </select>
               </div>
 
@@ -292,7 +292,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                   ))}
                 </select>
               </div>
-              <div className="form-group" >
+              {/* <div className="form-group" >
                 <label htmlFor="input_RolUsuario">Activar subsistema : </label>
                 <select
                   // isMulti
@@ -317,7 +317,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                     </option>
                   ))} 
                 </select>
-              </div>
+              </div> */}
             </div>
 
             <Button

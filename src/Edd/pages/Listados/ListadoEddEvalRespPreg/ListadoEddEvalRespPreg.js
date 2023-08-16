@@ -43,7 +43,7 @@ export default function ListadoEDDEvalRespPreg() {
     const url = "pages/auxiliares/listadoEddEvalPregunta.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDEvalPregunta(response)
+      setlistEDDEvalPregunta(response)
     );
   }
   function obtenerEvaluacion() {
@@ -84,8 +84,8 @@ export default function ListadoEDDEvalRespPreg() {
       obtenerEDDEvalPregunta();
       // obtenerEvaluacion()
     },
-    [num_boton, cantidadPorPagina,idEDDEvalPregunta]
-    
+    [num_boton, cantidadPorPagina, idEDDEvalPregunta]
+
   );
 
   //PAGINADOR ---------------------
@@ -97,13 +97,13 @@ export default function ListadoEDDEvalRespPreg() {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
       idEDDEvalPregunta: idEDDEvalPregunta,
-      idEvaluacion:0
+      idEvaluacion: 0
 
-    };console.log(data);
+    }; console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
-      setEDDEvalRespPreg(datos.datos);console.log(data);
+      setEDDEvalRespPreg(datos.datos); console.log(data);
     });
   }
 
@@ -114,8 +114,16 @@ export default function ListadoEDDEvalRespPreg() {
       <Header></Header>
       <br></br>
       <br></br>
+
       <Container id="fondoTabla">
+      
         <div id="containerTablas">
+        <a
+            type="submit"
+            id="btnAtras"
+            value="Registrar"
+            href="/listadoEddEvalPregunta/0">Volver
+          </a>
           <h1 id="TitlesPages">Listado de respuestas de preguntas de evaluaciones</h1>
           <h6 style={{ color: "gray" }}>
             EDD {"->"} Listado de respuestas de preguntas de evaluaciones
@@ -151,7 +159,7 @@ export default function ListadoEDDEvalRespPreg() {
                 <option value="100">100</option>
               </select>
             </div>
-            <div className="form-group" id="btn2" style={{width:200}}>
+            <div className="form-group" id="btn2" style={{ width: 200 }}>
               <label htmlFor="input_CantidadR">Pregunta: </label>
               <select
                 required
@@ -162,7 +170,8 @@ export default function ListadoEDDEvalRespPreg() {
                   setNumBoton(1);
                 }}
               >
-                <option value="">Todos</option>
+                <option value=""
+                >Todos</option>
                 {listEDDEvalPregunta.map((valor) => (
                   <option
                     selected={
@@ -218,7 +227,7 @@ export default function ListadoEDDEvalRespPreg() {
             setEDDEvalRespPreg={setEDDEvalRespPreg}
             EDDEvalRespPreg={EDDEvalRespPreg}
             nombreTabla={nombreTabla}
-          ></EditarEDDEvalRespPreg> 
+          ></EditarEDDEvalRespPreg>
 
           <Table id="mainTable" hover responsive>
             <thead>

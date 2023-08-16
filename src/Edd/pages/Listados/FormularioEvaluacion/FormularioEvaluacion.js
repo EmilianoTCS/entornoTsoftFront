@@ -13,7 +13,7 @@ import logo from "./logo/tsoft.png";
 import Swal from "sweetalert2";
 
 export default function FormularioEvaluacion() {
-  const [, params] = useRoute("/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado");
+  const [, params] = useRoute("/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador");
 
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
   const [idEDDEvalNomPregunta, setidEDDEvalNomPregunta] = useState(""); //Almacena el listado de preguntas procesado
@@ -21,6 +21,7 @@ export default function FormularioEvaluacion() {
   var respuestasAEnviar = [];
   const idEDDEvaluacion = params.idEvaluacion;
   const idEDDProyEmpEvaluado = params.idEDDProyEmpEvaluado;
+  const idEDDProyEmpEvaluador = params.idEDDProyEmpEvaluador;
   const [fechaInicioExamen, setfechaInicioExamen] = useState("");
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
@@ -29,9 +30,10 @@ export default function FormularioEvaluacion() {
     var operationUrl = "listadoRespPregEvaluaciones";
     var data = {
       idEvaluacion: idEDDEvaluacion,
-      idEmpleado: userData.idEmpleado,
+      idEmpleado: idEDDProyEmpEvaluador,
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado
     };
+    console.log("getdata",data);
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);
       setLoadedData(true); //Cambio el estado del booleano
@@ -104,10 +106,12 @@ export default function FormularioEvaluacion() {
         fechaFinExamen: fechaFin,
         idEDDEvaluacion: idEDDEvaluacion,
         usuarioCreacion: userData.usuario,
+
       },
-    };
+    }; 
+    // console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log("respuestaServer:", response);
+      // console.log("respuestaServer:", response);
       ConfirmAlertEnvio();
     });
   }
@@ -119,6 +123,7 @@ export default function FormularioEvaluacion() {
     [idEDDEvaluacion, loadedData]
   );
 
+  
   var auxIdPregunta = "0";
   var auxEncabezado = "0";
   var auxDesc = "0";
@@ -127,17 +132,17 @@ export default function FormularioEvaluacion() {
     <>
       <Header></Header>
       <form onSubmit={SendData}>
-      <a
-                style={{ margin: '10px' }}
+        <a
+                style={{ margin: '10px' ,marginTop:'15px',marginLeft:'60px'}}
                 type="submit"
-                id="btnAtras"
-                value="Registrar"
-                href="javascript: history.go(-1)">Volver
-            </a>
+          id="btnAtras"
+          value="Registrar"
+          href="javascript: history.go(-1)">Volver
+        </a>
         <Container id="textStyle">
-          
+
           <div class="container">
-            
+
             <div class="row">
               <div class="col" id="title">
 
@@ -205,18 +210,20 @@ export default function FormularioEvaluacion() {
                             <tr>
                               <td></td>
                               <td>
-                                {/* <input type="text" name='{map.idEDDEvalPregunta.idEDDEvalPregunta}' maxLength="200" value="" required/> */}
-                                <input
+                                
+                                <textarea
                                   maxLength="500"
-                                  type="text"
+                                  type="textarea"
                                   style={{
                                     textTransform: "uppercase",
                                     width: "50em",
                                   }}
+                                  rows="3"
+                                  cols="50"
                                   className="form-control"
                                   id="idEDDEvalPregunta.idEvalPregunta"
                                   placeholder="Escriba su respuesta"
-                                  required = {idEDDEvalPregunta.preguntaObligatoria === "1"}
+                                  required={idEDDEvalPregunta.preguntaObligatoria === "1"}
                                   onChange={({ target }) => {
                                     let respuestaTexto = target.value;
 
@@ -238,7 +245,7 @@ export default function FormularioEvaluacion() {
                                       }
                                     );
                                   }}
-                                ></input>
+                                ></textarea>
                               </td>
                             </tr>
                           </table>
@@ -272,9 +279,9 @@ export default function FormularioEvaluacion() {
                                   type="radio"
                                   name={idEDDEvalPregunta.nomPregunta}
                                   value={idEDDEvalPregunta.nomRespPreg}
-                                  required = {idEDDEvalPregunta.preguntaObligatoria === "1"}
+                                  required={idEDDEvalPregunta.preguntaObligatoria === "1"}
                                   id="inputNomRespuesta"
-                                  style={{ width: "4em" }}
+                                  style={{ width: "4em",textTransform: "uppercase"}}
                                   onChange={({ target }) => {
                                     let respuestaTexto = target.value;
 
@@ -318,9 +325,9 @@ export default function FormularioEvaluacion() {
                                 type="radio"
                                 name={idEDDEvalPregunta.nomPregunta}
                                 value={idEDDEvalPregunta.nomRespPreg}
-                                required = {idEDDEvalPregunta.preguntaObligatoria === "1"}
+                                required={idEDDEvalPregunta.preguntaObligatoria === "1"}
                                 id="inputNomRespuesta"
-                                style={{ width: "4em" }}
+                                style={{ width: "4em",textTransform: "uppercase"}}
                                 onChange={({ target }) => {
                                   let respuestaTexto = target.value;
 

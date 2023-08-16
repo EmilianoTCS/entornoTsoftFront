@@ -226,8 +226,6 @@ ul li ul li:hover a {
     height:85% ;
     margin-top: 60px;
   }
-
-
 }
 
 /* 
@@ -248,8 +246,6 @@ ul li ul li:hover a {
 
 /*Boton abrir sidebar*/
 .buttonStyleOpen {
-  right: 0;
-  top: 0;
   border: none;
   background: #e10b1c;
   color: white;
@@ -258,11 +254,14 @@ ul li ul li:hover a {
   justify-content: flex-end;
   padding: 8px;
   border: solid #e10b1c 1px;
+  position: fixed;
+  left: 0;
 }
 
 .buttonStyleOpen:hover {
   color: #e10b1c;
   background-color: white;
+  
 }
 
 /*Boton cerrar sidebar*/

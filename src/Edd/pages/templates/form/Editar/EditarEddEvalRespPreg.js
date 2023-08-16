@@ -41,14 +41,14 @@ const EditarEDDEvalRespPreg = ({
     const url = "pages/auxiliares/listadoEddEvalPregunta.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDEvalPregunta(response)
+      setlistEDDEvalPregunta(response)
     );
   }
 
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idEDDEvalRespPreg, nombreTabla: nombreTabla};
+    var data = { idRegistro: idEDDEvalRespPreg, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -69,12 +69,12 @@ const EditarEDDEvalRespPreg = ({
       nomRespPreg: nomRespPreg === "" ? responseID[0].nomRespPreg : nomRespPreg,
       ordenRespPreg: ordenRespPreg === "" ? responseID[0].ordenRespPreg : ordenRespPreg,
       idEDDEvalPregunta: idEDDEvalPregunta === "" ? responseID[0].idEDDEvalPregunta : idEDDEvalPregunta,
-      isActive:true,
+      isActive: true,
     };
-console.log(data);
+    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
       TopAlerts('successEdited');
-      actualizarEDDEvalRespPreg(EDDEvalRespPreg);console.log(response);
+      actualizarEDDEvalRespPreg(EDDEvalRespPreg); console.log(response);
     });
 
     function actualizarEDDEvalRespPreg(EDDEvalRespPreg) {
@@ -100,13 +100,13 @@ console.log(data);
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-        <Modal.Title>Editar respuesta de pregunta</Modal.Title>
+          <Modal.Title>Editar respuesta de pregunta</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-         
-            
-          <div className="form-group">
+
+
+            <div className="form-group">
               <label htmlFor="input_EvalPregunta">Pregunta: </label>
               <select
                 required
@@ -125,7 +125,7 @@ console.log(data);
                   </option>
                 ))}
               </select>
-            </div> 
+            </div>
             <div>
               <label htmlFor="input_Orden">Orden:</label>
               <input
@@ -141,20 +141,39 @@ console.log(data);
                 required
               />
             </div>
-<div>
-              <label htmlFor="input_nombreDelEDDEvalRespPreg">Respuesta:</label>
-              <input
-               style={{ textTransform: "uppercase" }}
-                placeholder="Escriba nombre RespPreg"
-                type="text"
-                className="form-control"
-                name="input_nombreDelEDDEvalRespPreg"
-                id="input_nombreDelEDDEvalRespPreg"
-                value={nomRespPreg || ""}
-                maxLength="50"
-                onChange={({ target }) => setnomRespPreg(target.value)}
+
+            <div className="form-group">
+              <label htmlFor="input_TipRESP">Respuesta: </label>
+              <select
                 required
-              />
+                className="form-control"
+                name="input_TipRESP"
+                id="input_TipRESP"
+                onChange={({ target }) => setnomRespPreg(target.value)}
+              >
+                <option hidden value="">
+                  {nomRespPreg}
+                </option>
+
+                <option value="<TEXTO>">
+                  TIPO TEXTO
+                </option>
+                <option disabled>
+                  --ALTERNATIVAS--
+                </option>
+                <option value="MUY BUENO">
+                  MUY BUENO
+                </option>
+                <option value="BUENO">
+                  BUENO
+                </option><option value="MEDIO">
+                  MEDIO
+                </option>
+                <option value="NO SATISFACTORIO">
+                  NO SATISFACTORIO
+                </option>
+
+              </select>
             </div>
 
             <Button

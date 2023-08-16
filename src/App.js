@@ -38,6 +38,7 @@ import FormReferentes from "./Edd/pages/Formularios/FormReferentes";
 import ListadoEvaluacionesPendientes from "./Edd/pages/Listados/EvaluacionesPendientes/EvaluacionesPendientes";
 import FormularioEvaluacion from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacion";
 import FormularioEvaluacionRespondida from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacionRespondido";
+import HomePageEDD from "../src/Edd/pages/home/HomepageEDD";
 
 function App() {
   return (
@@ -110,6 +111,7 @@ function App() {
             {/* ------------------------------------------------------------------------------------------ */}
 
             {/* EDD */}
+            <Route element={<HomePageEDD />} path="/homePageEDD"></Route>
             <Route
               element={<ListadoEddProyecto />}
               path="/listadoEddProyecto/:params"
@@ -156,16 +158,16 @@ function App() {
               path="/FormularioRefEDD"
             ></Route>
             <Route
-              element={<ListadoEvaluacionesPendientes/>}
+              element={<ListadoEvaluacionesPendientes />}
               path="/listadoEvaluacionesPendientes"
             ></Route>
-                        <Route
-              element={<FormularioEvaluacion/>}
-              path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado"
+            <Route
+              element={<FormularioEvaluacion />}
+              path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
             ></Route>
-                        <Route
-              element={<FormularioEvaluacionRespondida/>}
-              path="/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado"
+            <Route
+              element={<FormularioEvaluacionRespondida />}
+              path="/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
             ></Route>
 
             {/* ------------------------------------------------------------------------------------------ */}

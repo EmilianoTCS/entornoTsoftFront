@@ -48,7 +48,7 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-    //   TopAlerts('successCreated');
+      TopAlerts('successCreated');
       actualizarEDDEvalRespPreg(EDDEvalRespPreg);console.log(response);
     });
   }
@@ -106,19 +106,39 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
               />
             </div>
             
-            <div>
-              <label htmlFor="input_nombreDelEDDEvalRespPreg">Respuesta:</label>
-              <input
-               style={{ textTransform: "uppercase" }}
-                placeholder="Escriba respuesta"
-                type="text"
-                className="form-control"
-                name="input_nombreDelEDDEvalRespPreg"
-                id="input_nombreDelEDDEvalRespPreg"
-                maxLength="50"
-                onChange={({ target }) => setnomRespPreg(target.value)}
+
+            <div className="form-group">
+              <label htmlFor="input_TipRESP">Respuesta: </label>
+              <select
                 required
-              />
+                className="form-control"
+                name="input_TipRESP"
+                id="input_TipRESP"
+                onChange={({ target }) => setnomRespPreg(target.value)}
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+
+                <option value="<TEXTO>">
+                  TIPO TEXTO
+                </option>
+                <option disabled>
+                  ALTERNATIVAS
+                </option>
+                <option value="MUY BUENO">
+                  MUY BUENO
+                </option>
+                <option value="BUENO">
+                  BUENO
+                </option><option value="MEDIO">
+                  MEDIO
+                </option>
+                <option value="NO SATISFACTORIO">
+                  NO SATISFACTORIO
+                </option>
+
+              </select>
             </div>
             <Button
               variant="secondary"

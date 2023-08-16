@@ -134,6 +134,12 @@ export default function ListadoEDDEvalPregunta() {
       <br></br>
       <Container id="fondoTabla">
         <div id="containerTablas">
+        <a
+            type="submit"
+            id="btnAtras"
+            value="Registrar"
+            href="/listadoEddEvaluacion/0">Volver
+          </a>
           <h1 id="TitlesPages"> Listado de preguntas de evaluaciones</h1>
           <h6 style={{ color: "gray" }}>
             EDD {"->"} Listado de preguntas de evaluaciones
@@ -286,8 +292,15 @@ export default function ListadoEDDEvalPregunta() {
                   <td>{idEDDEvalPregunta.ordenPregunta}</td>
                   <td>{idEDDEvalPregunta.nomEvaluacion}</td>
                   <td>{idEDDEvalPregunta.nomCompetencia}</td>
-                  <td>{idEDDEvalPregunta.tipoResp}</td>
+                  <td>
+                    {idEDDEvalPregunta.tipoResp === 'A' ? (
+                      <td>ALTERNATIVA</td>
+                    ) : (
+                      <td>TEXTO</td>
+                    )}
+                  </td>
                   <td>{idEDDEvalPregunta.preguntaObligatoria}</td>
+                  
 
                   <td align="center">
                     <button

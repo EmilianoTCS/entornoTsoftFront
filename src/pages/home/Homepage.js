@@ -21,7 +21,8 @@ export default function HomePage() {
     <div>
       <Header></Header>
       <div>
-        <div id="container_cards">
+        <h4 style={{color:'white'}}>Home</h4>
+        {/* <div id="container_cards">
           {cards.map((singleCard) => (
             <>
               <Card id="coe_carta">
@@ -29,7 +30,7 @@ export default function HomePage() {
                   <Card.Text>Cursos</Card.Text>
                   <Card.Title style={{ fontSize: "50pt" }}>
                     38
-                    {/* {singleCard.totalCursos} */}
+                    {singleCard.totalCursos}
                   </Card.Title>
                   <Card.Text>Total</Card.Text>
                 </Card.Body>
@@ -41,7 +42,7 @@ export default function HomePage() {
                   </Card.Text>
                   <Card.Title style={{ fontSize: "50pt" }}>
                     55
-                    {/* {singleCard.totalColaboradores} */}
+                    {singleCard.totalColaboradores}
                   </Card.Title>
                   <Card.Text>Total</Card.Text>
                 </Card.Body>
@@ -51,7 +52,7 @@ export default function HomePage() {
                   <Card.Text>Cursos</Card.Text>
                   <Card.Title style={{ fontSize: "50pt" }}>
                     23
-                    {/* {singleCard.totalFinalizados} */}
+                    {singleCard.totalFinalizados}
                   </Card.Title>
                   <Card.Text>Finalizados</Card.Text>
                 </Card.Body>
@@ -61,7 +62,7 @@ export default function HomePage() {
                   <Card.Text>Porcentaje</Card.Text>
                   <Card.Title style={{ fontSize: "50pt" }}>
                     73
-                    {/* {singleCard.porcentajeFinalizados} */}
+                    {singleCard.porcentajeFinalizados}
                   </Card.Title>
                   <Card.Text>Finalizados</Card.Text>
                 </Card.Body>
@@ -71,7 +72,7 @@ export default function HomePage() {
                   <Card.Text>Cursos</Card.Text>
                   <Card.Title style={{ fontSize: "50pt" }}>
                     18
-                    {/* {singleCard.totalActivos} */}
+                    {singleCard.totalActivos}
                   </Card.Title>
                   <Card.Text>Activos</Card.Text>
                 </Card.Body>
@@ -80,7 +81,7 @@ export default function HomePage() {
                 <Card.Body>
                   <Card.Text>Cursos</Card.Text>
                   <Card.Title style={{ fontSize: "50pt" }}>
-                    {/* {singleCard.totalPendientes}*/}14
+                    {singleCard.totalPendientes}14
                   </Card.Title>
                   <Card.Text>Pendientes</Card.Text>
                 </Card.Body>
@@ -104,12 +105,12 @@ export default function HomePage() {
             <Card.Text>COMUNICACIÓN</Card.Text>
             <Card.Title style={{ fontSize: "30pt" }}>
             <div class="flechaAbajo1"></div>
-              {/* {singleCard.totalPendientes}*/}37
+              {/* {singleCard.totalPendientes}37
             </Card.Title>
           </div>
-        </div>
+        </div>*/}
 
-        <div
+        {/* <div
           class="card text-center"
           style={{
             width: "18rem",
@@ -121,12 +122,12 @@ export default function HomePage() {
             <Card.Text>INTELIGENCIA EMOCIONAL</Card.Text>
             <Card.Title style={{ fontSize: "30pt" }}>
             <div class="flechaAbajo2"></div>
-              {/* {singleCard.totalPendientes}*/}71
+              {singleCard.totalPendientes}71
             </Card.Title>
           </div>
-        </div>
+        </div> */}
 
-        <div
+        {/* <div
           class="card text-center"
           style={{
             width: "18rem",
@@ -138,11 +139,11 @@ export default function HomePage() {
             <Card.Text>GESTION</Card.Text>
             <Card.Title style={{ fontSize: "30pt" }}>
             <div class="flechaAbajo3"></div>
-              {/* {singleCard.totalPendientes}*/}14
+              {singleCard.totalPendientes}14
             </Card.Title>
           </div>
-        </div>
-        <div
+        </div> */}
+        {/* <div
           class="card text-center"
           style={{
             width: "18rem",
@@ -153,14 +154,14 @@ export default function HomePage() {
           <div class="card-body">
             <Card.Text>LIDERAZGO CUALITATIVO</Card.Text>
             <Card.Title style={{ fontSize: "30pt" }}>
-              {/* {singleCard.totalPendientes}*/}55
+              {singleCard.totalPendientes}55
             </Card.Title>
           </div>
-        </div>
-      </div>
+        </div> */}
+      </div> 
 
 {/* ----------------------------------------------------------------------------------------------- */}
-<div id="barraDerecha">
+{/* <div id="barraDerecha">
         <h3>COMPETENCIAS EVALUADAS</h3>
         <div
           class="card text-center"
@@ -174,7 +175,7 @@ export default function HomePage() {
             <Card.Text>COMUNICACIÓN</Card.Text>
             <Card.Title style={{ fontSize: "30pt" }}>
             <div class="flechaArriba1"></div>
-              {/* {singleCard.totalPendientes}*/}37
+              {singleCard.totalPendientes}37
             </Card.Title>
           </div>
         </div>
@@ -190,7 +191,7 @@ export default function HomePage() {
           <div class="card-body">
             <Card.Text>INTELIGENCIA EMOCIONAL</Card.Text>
             <Card.Title style={{ fontSize: "30pt" }}>
-              {/* {singleCard.totalPendientes}*/}71
+              {singleCard.totalPendientes}71
             </Card.Title>
           </div>
         </div>
@@ -206,7 +207,7 @@ export default function HomePage() {
           <div class="card-body">
             <Card.Text>GESTION</Card.Text>
             <Card.Title style={{ fontSize: "30pt" }}>
-              {/* {singleCard.totalPendientes}*/}14
+              {singleCard.totalPendientes}14
             </Card.Title>
           </div>
         </div>
@@ -221,11 +222,11 @@ export default function HomePage() {
           <div class="card-body">
             <Card.Text>LIDERAZGO CUALITATIVO</Card.Text>
             <Card.Title style={{ fontSize: "30pt" }}>
-              {/* {singleCard.totalPendientes}*/}55
+              {singleCard.totalPendientes}55
             </Card.Title>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* ----------------------------------------------------------------------------------------------- */}
   {/* <div id="barraMedio2">
         <div

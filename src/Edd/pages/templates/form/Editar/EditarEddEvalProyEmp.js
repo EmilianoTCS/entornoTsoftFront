@@ -18,8 +18,6 @@ const EditarEddEvalProyEmp = ({
   // ----------------------CONSTANTES----------------------------
   
   const [evalRespondida, setevalRespondida] = useState("");
-  const [fechaIni, setfechaIni] = useState("");
-  const [fechaFin, setfechaFin] = useState("");
 
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState("");
   const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState("");
@@ -40,8 +38,6 @@ const EditarEddEvalProyEmp = ({
     cambiarEstado(false);
     setidEDDEvaluacion(responseID[0].idEDDEvaluacion);
 
-    setfechaIni(responseID[0].fechaIni);
-    setfechaFin(responseID[0].fechaFin);
     setidEDDEvaluacion(responseID[0].idEDDEvaluacion);
     setidEDDProyEmpEvaluador(responseID[0].idEDDProyEmpEvaluador);
     setidEDDProyEmpEvaluado(responseID[0].idEDDProyEmpEvaluado);
@@ -55,7 +51,7 @@ const EditarEddEvalProyEmp = ({
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyEmpEvaluador(response)
+    setlistEDDProyEmpEvaluado(response)
     );
   }
 
@@ -64,7 +60,7 @@ const EditarEddEvalProyEmp = ({
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyEmpEvaluado(response)
+    setlistEDDProyEmpEvaluador(response)
     );
   }
   function obtenerEvaluacion() {
@@ -83,9 +79,6 @@ const EditarEddEvalProyEmp = ({
       console.log(response);
       setResponseID(response);
       setidEDDEvaluacion(response[0].idEDDEvaluacion);
-
-      setfechaIni(response[0].fechaIni);
-      setfechaFin(response[0].fechaFin);
       setidEDDEvaluacion(response[0].idEDDEvaluacion);
       setidEDDProyEmpEvaluado(response[0].idEDDProyEmpEvaluado);
       setidEDDProyEmpEvaluador(response[0].idEDDProyEmpEvaluador);
@@ -95,7 +88,7 @@ const EditarEddEvalProyEmp = ({
   }, [idEDDEvalProyEmp]);
 
   function SendData(e) {
-    e.preventDefault();
+    // e.preventDefault();
     var url = "pages/editar/editarEddEvalProyEmp.php";
     var operationUrl = "editarEddEvalProyEmp";
     var data = {
@@ -103,8 +96,6 @@ const EditarEddEvalProyEmp = ({
       idEDDEvalProyEmp: idEDDEvalProyEmp,
       evalRespondida:
         evalRespondida === "" ? responseID[0].evalRespondida : 0,
-      fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
-      fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
       idEDDEvaluacion:
         idEDDEvaluacion === ""
           ? responseID[0].idEDDEvaluacion
@@ -119,7 +110,7 @@ const EditarEddEvalProyEmp = ({
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts("successEdited");
+      TopAlerts("successEdited");
       actualizarEDDEvalProyEmp(EDDEvalProyEmp);console.log(response);
     });
 
@@ -214,34 +205,7 @@ const EditarEddEvalProyEmp = ({
                 ))}
               </select>
             </div>
-            <div>
-              <label htmlFor="input_fechaI">Fecha inicio:</label>
-              <input
-                style={{ textTransform: "uppercase" }}
-                placeholder="Fecha inicio"
-                type="datetime-local"
-                className="form-control"
-                name="input_fechaI"
-                id="input_fechaI"
-                value={fechaIni || ""}
-                onChange={({ target }) => setfechaIni(target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="input_fechaF">Fecha fin:</label>
-              <input
-                style={{ textTransform: "uppercase" }}
-                placeholder="Fecha fin"
-                type="datetime-local"
-                className="form-control"
-                name="input_fechaF"
-                id="input_fechaF"
-                value={fechaFin || ""}
-                onChange={({ target }) => setfechaFin(target.value)}
-                required
-              />
-            </div>
+            
            
             <Button
               variant="secondary"

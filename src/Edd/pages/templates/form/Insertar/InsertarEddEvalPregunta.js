@@ -16,9 +16,13 @@ const InsertarEDDEvalPregunta = ({
   // ----------------------CONSTANTES----------------------------
   const [nomPregunta, setnomPregunta] = useState("");
   const [ordenPregunta, setordenPregunta] = useState("");
+  const [tipoResp, settipoResp] = useState([""]);
+  const [preguntaObligatoria, setpreguntaObligatoria] = useState([""]);
+
 
   const [idEDDEvalCompetencia, setidEDDEvalCompetencia] = useState([""]);
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState([""]);
+
 
   const [listEDDEvaluacion, setlistEDDEvaluacion] = useState([""]);
   const [listEDDEvalCompetencia, setlistEDDEvalCompetencia] = useState([""]);
@@ -49,7 +53,7 @@ const InsertarEDDEvalPregunta = ({
   }
 
   function SendData(e) {
-    e.preventDefault();
+    // e.preventDefault();
     const url = "pages/insertar/insertarEddEvalPregunta.php";
     const operationUrl = "insertarEddEvalPregunta";
     var data = {
@@ -58,11 +62,13 @@ const InsertarEDDEvalPregunta = ({
       ordenPregunta: ordenPregunta,
       idEDDEvalCompetencia: idEDDEvalCompetencia,
       idEDDEvaluacion: idEDDEvaluacion,
+      tipoResp: tipoResp,
+      preguntaObligatoria: preguntaObligatoria,
       isActive: true,
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts("successCreated");
+      TopAlerts("successCreated");
       actualizarEDDEvalPregunta(EDDEvalPregunta);
       console.log(response);
     });
@@ -86,7 +92,7 @@ const InsertarEDDEvalPregunta = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div className="form-group">
+            <div className="form-group">
               <label htmlFor="input_eval">Evaluación: </label>
               <select
                 required
@@ -136,7 +142,7 @@ const InsertarEDDEvalPregunta = ({
               />
             </div>
 
-            
+
             <div className="form-group">
               <label htmlFor="input_comp">Competencia: </label>
               <select
@@ -144,7 +150,7 @@ const InsertarEDDEvalPregunta = ({
                 className="form-control"
                 name="input_comp"
                 id="input_comp"
-                placeholder="Seleccione la Competencia"
+                placeholder="Seleccione la competencia"
                 onChange={({ target }) => setidEDDEvalCompetencia(target.value)}
               >
                 <option hidden value="">
@@ -156,6 +162,50 @@ const InsertarEDDEvalPregunta = ({
                     {valor.nomCompetencia}
                   </option>
                 ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="input_TipRESP">Tipo de respuesta: </label>
+              <select
+                required
+                className="form-control"
+                name="input_TipRESP"
+                id="input_TipRESP"
+                onChange={({ target }) => settipoResp(target.value)}
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+
+                <option value="A">
+                  ALTERNATIVA
+                </option>                
+                <option value="T">
+                  TEXTO
+                </option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="input_comp">Pregunta obligatoria: </label>
+              <select
+                required
+                className="form-control"
+                name="input_comp"
+                id="input_comp"
+                onChange={({ target }) => setpreguntaObligatoria(target.value)}
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+
+                <option value="1">
+                  SI
+                </option>                
+                <option value="0">
+                  NO
+                </option>
               </select>
             </div>
 

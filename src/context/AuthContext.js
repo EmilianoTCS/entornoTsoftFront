@@ -16,6 +16,7 @@ const AuthState = (props) => {
     privateAccess: false,
     nomRol: null,
     idEmpleado: null,
+    nomEmpleado: null,
   });
 
   const checkAuth = () => {
@@ -38,6 +39,7 @@ const AuthState = (props) => {
           statusConected: false,
           nomRol: null,
           idEmpleado: null,
+          nomEmpleado: null,
         })
       );
     }
@@ -56,6 +58,7 @@ const AuthState = (props) => {
           token: response[0].token,
           nomRol: response[0].nomRol,
           idEmpleado: response[0].idEmpleado,
+          nomEmpleado: response[0].nomEmpleado,
         });
         if (response[0].error) setAuth({ error: true });
       })
@@ -76,6 +79,7 @@ const AuthState = (props) => {
       token: null,
       statusConected: false,
       privateAccess: false,
+      nomEmpleado: null,
     });
     //limpiar el localstorage
     localStorage.removeItem("userData");
@@ -94,6 +98,7 @@ const AuthState = (props) => {
         hasError: auth.error,
         nomRol: auth.nomRol,
         idEmpleado: auth.idEmpleado,
+        nomEmpleado: auth.nomEmpleado,
         login: login,
         logout: logout,
         checkAuth: checkAuth,
