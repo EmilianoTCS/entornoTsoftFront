@@ -16,6 +16,8 @@ export default function HomePageEDD() {
 
   const [loadedDataResumenEval, setLoadedDataResumenEval] = useState(false);
   const [loadedDataCompetencias, setLoadedDataCompetencias] = useState(false);
+  const [loadedDataRango, setLoadedDataRango] = useState(false);
+  const [loadedDataColor, setLoadedDataColor] = useState(false);
 
   function GetDataResumenEval() {
     var url = "pages/listados/listadoResumenEval.php";
@@ -50,7 +52,8 @@ export default function HomePageEDD() {
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setListConfigCompColorFlechas(data);
-      console.log("configColor", data);
+      setLoadedDataColor(true)
+      // console.log("configColor", data);
     });
   }
 
@@ -63,7 +66,8 @@ export default function HomePageEDD() {
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setListConfigCompRangoFlechas(data);
-      console.log("configRango", data);
+      // console.log("configRango", data);
+      setLoadedDataRango(true)
     });
   }
 
@@ -97,49 +101,53 @@ export default function HomePageEDD() {
   //   });
   // }
 
-  function ArrowsTemplate({ porcAprobComp }) {
-    var auxRango = "0";
-    var auxColor = "0";
-    var varRango = "";
-    var varColor = "";
-    let listColor = listConfigCompColorFlechas.map((orden) => orden).reverse();
-    let listRango = listConfigCompRangoFlechas.map((orden) => orden).reverse();
+  // function ArrowsTemplate({ porcAprobComp }) {
+  //   var auxRango = "0"; //posiciones
+  //   var auxColor = "0"; //posiciones
+  //   var varRango = ""; //arriba / abajo /dato visible
+  //   var varColor = ""; //color /dato visible
+  //   let listColor = listConfigCompColorFlechas.map((orden) => orden).reverse();
+  //   let listRango = listConfigCompRangoFlechas.map((orden) => orden).reverse();
 
-    listColor.map((color) => {
-      if (auxColor === "0") {
-        if (eval(porcAprobComp + color.datoNoVisible)) {
-          varColor = color.datoVisible;
-          auxColor = "1";
-        }
-      }
-    });
+  //   listRango.map((rango) => {
+  //     if (auxRango === "0") {
+  //       console.log("result", eval(porcAprobComp + rango.datoNoVisible));
+  //       if (eval(porcAprobComp + rango.datoNoVisible)) {
+  //         varRango = rango.datoVisible;
+  //         auxRango = "1";
+  //       }
+  //     }
+  //   });
 
-    listRango.map((rango) => {
-      if (auxRango === "0") {
-        if (eval(porcAprobComp + rango.datoNoVisible)) {
-          varRango = rango.datoVisible;
-          auxRango = "1";
-        }
-      }
-    });
+  //   listColor.map((color1) => {
+  //     if (auxColor === "0") {
+  //       if (eval(porcAprobComp + color1.datoNoVisible)) { //eval string con signo de operaciones, lo tranforma a una operación
+  //         varColor = color1.datoVisible;
+  //         auxColor = "1";
+  //       }
+  //     };
+  //   });
 
-    return (
-      <>
-        <div
-          style={
-            varRango === "ARRIBA"
-              ? {
-                  borderColor: `transparent transparent ${varColor} transparent`,
-                }
-              : {
-                  borderColor: `${varColor} transparent transparent  transparent`,
-                }
-          }
-          className={varRango === "ARRIBA" ? "flechaArriba" : "flechaAbajo"}
-        ></div>
-      </>
-    );
-  }
+
+
+  //   return (
+  //     <>
+  //       <div
+  //         style={
+  //           varRango === "ARRIBA"
+  //             ? {
+  //               borderColor: `transparent transparent ${varColor} transparent`,
+  //             }
+  //             : {
+  //               borderColor: `${varColor} transparent transparent  transparent`,
+  //             }
+  //         }
+  //         className={varRango === "ARRIBA" ? "flechaArriba" : "flechaAbajo"}
+  //       >
+  //       </div>
+  //     </>
+  //   );
+  // }
 
   function CompetenciasResumen() {
     if (loadedDataCompetencias) {
@@ -154,10 +162,10 @@ export default function HomePageEDD() {
                   >
                     {item.nomCompetencia}
 
-                    <div style={{ fontSize: "15pt", alignItems: "center" }}>
+                    {/* <div style={{ fontSize: "15pt", alignItems: "center" }}>
                       <ArrowsTemplate porcAprobComp={item.porcAprobComp} />
                       {item.porcAprobComp} %
-                    </div>
+                    </div> */}
                   </Card.Title>
                 </Card.Body>
               </Card>
@@ -227,6 +235,89 @@ export default function HomePageEDD() {
       return <h1>Loading</h1>;
     }
   }
+
+  function BodyResumen2() {
+    if (loadedDataResumenEval) {
+      return (
+        <div id="bodyContainer">
+          <div id="container_cardsEDD">
+            <Card>
+              <Card.Body className="cardBody">
+                <Card.Text className="cardText">Satisfacción </Card.Text>
+                <Card.Title className="cardTitle">
+                  {listResumenEval[0].cantEvaluadoresTsoft}
+                </Card.Title>
+                <Card.Text className="cardText">general</Card.Text>
+              </Card.Body>
+            </Card>
+            <Card>
+              <Card.Body className="cardBody">
+                <Card.Text className="cardText">Analistas </Card.Text>
+                <Card.Title className="cardTitle">
+                  {listResumenEval[0].competenciasEvaluadas}
+                </Card.Title>
+                <Card.Text className="cardText">evaluados</Card.Text>
+              </Card.Body>
+            </Card>
+            <Card>
+              <Card.Body className="cardBody">
+                <Card.Text className="cardText">Competencias </Card.Text>
+                <Card.Title className="cardTitle">
+                  {listResumenEval[0].porcSatisfaccion}
+                </Card.Title>
+                <Card.Text className="cardText">evaluadas</Card.Text>
+              </Card.Body>
+            </Card>
+            <Card>
+              <Card.Body className="cardBody">
+                <Card.Text className="cardText">Satisfacción </Card.Text>
+                <Card.Title className="cardTitle">
+                  {listResumenEval[0].referentesEvaluados}
+                </Card.Title>
+                <Card.Text className="cardText">inge</Card.Text>
+              </Card.Body>
+            </Card>
+
+          </div>
+        </div>
+      );
+    } else {
+      return <h1>Loading</h1>;
+    }
+  }
+
+  function InfoExag2() {
+    if (loadedDataResumenEval) {
+      return (
+
+        <div>
+          <p style={{ marginLeft: '40px', color: 'white' }}>Nombre ...</p>
+          <div class="row" style={{ marginLeft: '30px' }}>
+            <div id="hexag" class="col-1">Nombre 55%</div>
+            <div id="hexag" class="col-1">Nombre 10%</div>
+          </div>
+
+          <div class="row" style={{ marginLeft: '30px' }}>
+            <div id="hexag" class="col-sm-1">Nombre 4%</div>
+            <div id="hexag" class="col-sm-1">Nombre 13%</div>
+          </div>
+
+          <div class="row" style={{ marginLeft: '30px' }}>
+            <div id="hexag" class="col-md-1">Nombre 33%</div>
+            <div id="hexag" class="col-md-1">Nombre 66%</div>
+          </div>
+
+          <div class="row" style={{ marginLeft: '30px' }}>
+            <div id="hexag" class="col-lg-1">Nombre 100%</div>
+            <div id="hexag" class="col-lg-1">Nombre 99%</div>
+          </div>
+        </div>
+      );
+    } else {
+      return <h1>Loading</h1>;
+    }
+  }
+
   useEffect(
     function () {
       GetDataResumenEval();
@@ -234,7 +325,7 @@ export default function HomePageEDD() {
       GetConfigCompColorFlechas();
       GetConfigCompRangoFlechas();
     },
-    [loadedDataCompetencias, loadedDataResumenEval]
+    [loadedDataCompetencias, loadedDataResumenEval, loadedDataRango, loadedDataColor]
   );
 
   return userData.statusConected || userData !== null ? (
@@ -252,6 +343,8 @@ export default function HomePageEDD() {
         <CompetenciasResumen></CompetenciasResumen>
 
       </div>
+
+
     </div>
   ) : (
     <Navigate to="/login"></Navigate>

@@ -270,11 +270,11 @@ export default function ListadoEDDEvalProyEmp() {
             </thead>
             <tbody>
               {EDDEvalProyEmp.map((EDDEvalProyEmp) => (
-              // if(userData.nomRol === 'alumno' && userData.nomEmpleado === {EDDEvalProyEmp.nomEmpleadoEvaluador})
-                <tr key={EDDEvalProyEmp.idEDDEvalProyEmp}>
+                // (userData.nomRol === 'alumno' && userData.nomEmpleado === EDDEvalProyEmp.nomEmpleadoEvaluador ? (
+                 <tr key={EDDEvalProyEmp.idEDDEvalProyEmp}>
                   <td>{EDDEvalProyEmp.idEDDEvalProyEmp}</td>
                   <td>{EDDEvalProyEmp.nomEvaluacion}</td>
-                  <td>{EDDEvalProyEmp.fechaInicioPeriodoEvaluacion}</td>
+                  <td>{EDDEvalProyEmp.fechaInicioPeriodoEvaluacion}</td> 
                   <td>{EDDEvalProyEmp.fechaFinPeriodoEvaluacion}</td>
                   <td>
                     {EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? (
@@ -322,7 +322,7 @@ export default function ListadoEDDEvalProyEmp() {
                     </button>
 
                     {userData.nomRol === "administrador" || "people" ? (
-                        EDDEvalProyEmp.evalRespondida === 'NO' ? (
+                      EDDEvalProyEmp.evalRespondida === 'NO' ? (
 
 
                         <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${EDDEvalProyEmp.idEDDProyEmpEvaluador}` : ''}>
@@ -343,7 +343,7 @@ export default function ListadoEDDEvalProyEmp() {
 
 
                         <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${userData.idEmpleado}` : ''}>
-                          <button data-title="Evaluacion relacionada" id="OperationBtns" disabled={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' && EDDEvalProyEmp.disponibilidadEvaluacion === '1' ?  false : true}>
+                          <button data-title="Evaluacion relacionada" id="OperationBtns" disabled={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' && EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? false : true}>
                             <AiFillBook id="icons" />
                           </button>
                         </Link>
@@ -368,6 +368,8 @@ export default function ListadoEDDEvalProyEmp() {
                     </button>
                   </td>
                 </tr>
+                // ) : (<></>))
+
               ))}
             </tbody>
           </Table>

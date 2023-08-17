@@ -105,8 +105,8 @@ export default function SideBar(props) {
                       id="li_home"
                       to={
                         userData.nomRol === "administrador" ||
-                        userData.nomRol === "people" ||
-                        userData.nomRol === "alumno"
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "alumno"
 
                           ? "/home"
                           : "/homeColaborador"
@@ -145,8 +145,8 @@ export default function SideBar(props) {
                     onClick={handleChangeAcademia}
                     className={
                       userData.nomRol === "administrador" ||
-                      userData.nomRol === "people"||
-                      userData.nomRol === "alumno"
+                        userData.nomRol === "people" ||
+                        userData.nomRol === "alumno"
                         ? ""
                         : "private"
                     }
@@ -196,8 +196,8 @@ export default function SideBar(props) {
                     onClick={handleChangeEvaluaciones}
                     className={
                       userData.nomRol === "administrador" ||
-                      userData.nomRol === "people" ||
-                      userData.nomRol === "alumno"
+                        userData.nomRol === "people" ||
+                        userData.nomRol === "alumno"
 
                         ? ""
                         : "private"
@@ -250,20 +250,38 @@ export default function SideBar(props) {
                       </li>
                       {/* --------------------------------------------------- */}
                       <li id="textLeftSelect">
+                        <Link to="/listadoEddEvalCompetencia">
+                          <button id="submenuSidebar">
+                            <ImBook id="icons" />
+                            Competencia
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
+                      {/* <li id="textLeftSelect">
                         <Link to="/listadoEvaluacionesPendientes">
-                        <button id="submenuSidebar">
-                          <ImBook id="icons" />
-                          Formulario evaluaciones (Solo Usuario)
-                        </button>
+                          <button id="submenuSidebar">
+                            <ImBook id="icons" />
+                            Formulario eval (Solo Usuario)
+                          </button>
+                        </Link>
+                      </li> */}
+                      {/* --------------------------------------------------- */}
+                      <li id="textLeftSelect">
+                        <Link to="/listadoServicios/0">
+                          <button id="submenuSidebar">
+                            <ImBook id="icons" />
+                            Servicios
+                          </button>
                         </Link>
                       </li>
                       {/* --------------------------------------------------- */}
                       <li id="textLeftSelect">
                         <Link to="/homePageEDD">
-                        <button id="submenuSidebar">
-                          <ImBook id="icons" />
-                          Dashboard
-                        </button>
+                          <button id="submenuSidebar">
+                            <ImBook id="icons" />
+                            Dashboard
+                          </button>
                         </Link>
                       </li>
                     </ul>
