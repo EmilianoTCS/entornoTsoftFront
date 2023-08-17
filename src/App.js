@@ -39,6 +39,7 @@ import ListadoEvaluacionesPendientes from "./Edd/pages/Listados/EvaluacionesPend
 import FormularioEvaluacion from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacion";
 import FormularioEvaluacionRespondida from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacionRespondido";
 import HomePageEDD from "../src/Edd/pages/home/HomepageEDD";
+import GraficosDashboard from "./Edd/pages/home/GraficosDashboard";
 
 function App() {
   return (
@@ -110,8 +111,10 @@ function App() {
             ></Route>
             {/* ------------------------------------------------------------------------------------------ */}
 
-            {/* EDD */}
+            {/* DASHBOARD */}
             <Route element={<HomePageEDD />} path="/homePageEDD"></Route>
+            <Route element={<GraficosDashboard />} path="/GraficosDashboard"></Route> 
+            {/* EDD */}
             <Route
               element={<ListadoEddProyecto />}
               path="/listadoEddProyecto/:params"

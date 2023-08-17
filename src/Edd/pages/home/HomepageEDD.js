@@ -4,6 +4,10 @@ import SendDataService from "../../../services/SendDataService";
 import Card from "react-bootstrap/Card";
 import { Navigate } from "react-router-dom";
 import "./homeEDD.css";
+import { Button } from "bootstrap";
+import "./GraficosDashboard"
+import { Link } from "react-router-dom";
+import { ImBook } from "react-icons/im";
 
 export default function HomePageEDD() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -111,7 +115,7 @@ export default function HomePageEDD() {
 
     listRango.map((rango) => {
       if (auxRango === "0") {
-        console.log("result", eval(porcAprobComp + rango.datoNoVisible),porcAprobComp , rango.datoNoVisible);
+        console.log("result", eval(porcAprobComp + rango.datoNoVisible), porcAprobComp, rango.datoNoVisible);
         if (eval(porcAprobComp + rango.datoNoVisible)) {  // eval(30 + > 80) --> eval 30 >= 80
           varRango = rango.datoVisible;
           auxRango = "1";
@@ -121,7 +125,7 @@ export default function HomePageEDD() {
 
     listColor.map((color1) => {
       if (auxColor === "0") {
-        if (eval(porcAprobComp + color1.datoNoVisible)) { 
+        if (eval(porcAprobComp + color1.datoNoVisible)) {
           varColor = color1.datoVisible;
           auxColor = "1";
         }
@@ -158,7 +162,7 @@ export default function HomePageEDD() {
               <Card>
                 <Card.Body className="cardBody">
                   <Card.Title
-                    style={{ display: "flex", justifyContent: "space-between", textTransform:'uppercase' }}
+                    style={{ display: "flex", justifyContent: "space-between", textTransform: 'uppercase' }}
                   >
                     {item.nomCompetencia}
 
@@ -236,87 +240,6 @@ export default function HomePageEDD() {
     }
   }
 
-  function BodyResumen2() {
-    if (loadedDataResumenEval) {
-      return (
-        <div id="bodyContainer">
-          <div id="container_cardsEDD">
-            <Card>
-              <Card.Body className="cardBody">
-                <Card.Text className="cardText">Satisfacción </Card.Text>
-                <Card.Title className="cardTitle">
-                  {listResumenEval[0].cantEvaluadoresTsoft}
-                </Card.Title>
-                <Card.Text className="cardText">general</Card.Text>
-              </Card.Body>
-            </Card>
-            <Card>
-              <Card.Body className="cardBody">
-                <Card.Text className="cardText">Analistas </Card.Text>
-                <Card.Title className="cardTitle">
-                  {listResumenEval[0].competenciasEvaluadas}
-                </Card.Title>
-                <Card.Text className="cardText">evaluados</Card.Text>
-              </Card.Body>
-            </Card>
-            <Card>
-              <Card.Body className="cardBody">
-                <Card.Text className="cardText">Competencias </Card.Text>
-                <Card.Title className="cardTitle">
-                  {listResumenEval[0].porcSatisfaccion}
-                </Card.Title>
-                <Card.Text className="cardText">evaluadas</Card.Text>
-              </Card.Body>
-            </Card>
-            <Card>
-              <Card.Body className="cardBody">
-                <Card.Text className="cardText">Satisfacción </Card.Text>
-                <Card.Title className="cardTitle">
-                  {listResumenEval[0].referentesEvaluados}
-                </Card.Title>
-                <Card.Text className="cardText">inge</Card.Text>
-              </Card.Body>
-            </Card>
-
-          </div>
-        </div>
-      );
-    } else {
-      return <h1>Loading</h1>;
-    }
-  }
-
-  function InfoExag2() {
-    if (loadedDataResumenEval) {
-      return (
-
-        <div>
-          <p style={{ marginLeft: '40px', color: 'white' }}>Nombre ...</p>
-          <div class="row" style={{ marginLeft: '30px' }}>
-            <div id="hexag" class="col-1">Nombre 55%</div>
-            <div id="hexag" class="col-1">Nombre 10%</div>
-          </div>
-
-          <div class="row" style={{ marginLeft: '30px' }}>
-            <div id="hexag" class="col-sm-1">Nombre 4%</div>
-            <div id="hexag" class="col-sm-1">Nombre 13%</div>
-          </div>
-
-          <div class="row" style={{ marginLeft: '30px' }}>
-            <div id="hexag" class="col-md-1">Nombre 33%</div>
-            <div id="hexag" class="col-md-1">Nombre 66%</div>
-          </div>
-
-          <div class="row" style={{ marginLeft: '30px' }}>
-            <div id="hexag" class="col-lg-1">Nombre 100%</div>
-            <div id="hexag" class="col-lg-1">Nombre 99%</div>
-          </div>
-        </div>
-      );
-    } else {
-      return <h1>Loading</h1>;
-    }
-  }
 
   useEffect(
     function () {
@@ -331,6 +254,12 @@ export default function HomePageEDD() {
   return userData.statusConected || userData !== null ? (
     <div>
       <Header></Header>
+      <Link to="/GraficosDashboard">
+        <button id="submenuSidebar">
+          <ImBook id="icons" />
+          Gráficos Dashboard
+        </button>
+      </Link>
       <BodyResumen></BodyResumen>
       <div
         style={{
@@ -342,7 +271,12 @@ export default function HomePageEDD() {
         <CompetenciasResumen></CompetenciasResumen>
         <CompetenciasResumen></CompetenciasResumen>
 
+        {/* <BodyResumen2 style={{ marginBottom: '100px' }}></BodyResumen2>
+          <InfoExag2></InfoExag2> */}
+
       </div>
+
+
 
 
     </div>
