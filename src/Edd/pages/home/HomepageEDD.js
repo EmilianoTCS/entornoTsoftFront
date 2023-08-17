@@ -101,53 +101,53 @@ export default function HomePageEDD() {
   //   });
   // }
 
-  // function ArrowsTemplate({ porcAprobComp }) {
-  //   var auxRango = "0"; //posiciones
-  //   var auxColor = "0"; //posiciones
-  //   var varRango = ""; //arriba / abajo /dato visible
-  //   var varColor = ""; //color /dato visible
-  //   let listColor = listConfigCompColorFlechas.map((orden) => orden).reverse();
-  //   let listRango = listConfigCompRangoFlechas.map((orden) => orden).reverse();
+  function ArrowsTemplate({ porcAprobComp }) {
+    var auxRango = "0"; //posiciones
+    var auxColor = "0"; //posiciones
+    var varRango = ""; //arriba / abajo /dato visible
+    var varColor = ""; //color /dato visible
+    let listColor = listConfigCompColorFlechas.map((orden) => orden).reverse();
+    let listRango = listConfigCompRangoFlechas.map((orden) => orden).reverse();
 
-  //   listRango.map((rango) => {
-  //     if (auxRango === "0") {
-  //       console.log("result", eval(porcAprobComp + rango.datoNoVisible));
-  //       if (eval(porcAprobComp + rango.datoNoVisible)) {
-  //         varRango = rango.datoVisible;
-  //         auxRango = "1";
-  //       }
-  //     }
-  //   });
+    listRango.map((rango) => {
+      if (auxRango === "0") {
+        console.log("result", eval(porcAprobComp + rango.datoNoVisible),porcAprobComp , rango.datoNoVisible);
+        if (eval(porcAprobComp + rango.datoNoVisible)) {  // eval(30 + > 80) --> eval 30 >= 80
+          varRango = rango.datoVisible;
+          auxRango = "1";
+        }
+      }
+    });
 
-  //   listColor.map((color1) => {
-  //     if (auxColor === "0") {
-  //       if (eval(porcAprobComp + color1.datoNoVisible)) { //eval string con signo de operaciones, lo tranforma a una operación
-  //         varColor = color1.datoVisible;
-  //         auxColor = "1";
-  //       }
-  //     };
-  //   });
+    listColor.map((color1) => {
+      if (auxColor === "0") {
+        if (eval(porcAprobComp + color1.datoNoVisible)) { 
+          varColor = color1.datoVisible;
+          auxColor = "1";
+        }
+      };
+    });
 
 
 
-  //   return (
-  //     <>
-  //       <div
-  //         style={
-  //           varRango === "ARRIBA"
-  //             ? {
-  //               borderColor: `transparent transparent ${varColor} transparent`,
-  //             }
-  //             : {
-  //               borderColor: `${varColor} transparent transparent  transparent`,
-  //             }
-  //         }
-  //         className={varRango === "ARRIBA" ? "flechaArriba" : "flechaAbajo"}
-  //       >
-  //       </div>
-  //     </>
-  //   );
-  // }
+    return (
+      <>
+        <div
+          style={
+            varRango === "ARRIBA"
+              ? {
+                borderColor: `transparent transparent ${varColor} transparent`,
+              }
+              : {
+                borderColor: `${varColor} transparent transparent  transparent`,
+              }
+          }
+          className={varRango === "ARRIBA" ? "flechaArriba" : "flechaAbajo"}
+        >
+        </div>
+      </>
+    );
+  }
 
   function CompetenciasResumen() {
     if (loadedDataCompetencias) {
@@ -158,14 +158,14 @@ export default function HomePageEDD() {
               <Card>
                 <Card.Body className="cardBody">
                   <Card.Title
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{ display: "flex", justifyContent: "space-between", textTransform:'uppercase' }}
                   >
                     {item.nomCompetencia}
 
-                    {/* <div style={{ fontSize: "15pt", alignItems: "center" }}>
+                    <div style={{ fontSize: "15pt", alignItems: "center" }}>
                       <ArrowsTemplate porcAprobComp={item.porcAprobComp} />
                       {item.porcAprobComp} %
-                    </div> */}
+                    </div>
                   </Card.Title>
                 </Card.Body>
               </Card>
