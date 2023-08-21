@@ -152,21 +152,29 @@ const EditarEDDProyEmp = ({
                 ))}
               </select>
             </div>
-            <div>
-            <label htmlFor="input_nombreDelcargo">Cargo en proyecto:</label>
-              <input
-                style={{ textTransform: "uppercase" }}
-                placeholder="Escriba nombre cargo en el proyecto"
-                type="text"
+
+            <div className="form-group">
+              <label htmlFor="input_nombreDelcargo">Cargo en proyecto: </label>
+              <select
+                required
                 className="form-control"
                 name="input_nombreDelcargo"
                 id="input_nombreDelcargo"
                 value={cargoEnProy || ""}
-                maxLength="15"
                 onChange={({ target }) => setcargoEnProy(target.value)}
-                required
-              />
+              >
+                <option value="Referente">
+                  REFERENTE
+                </option>
+                <option value="Colaborador">
+                  COLABORADOR
+                </option>                
+                
+              </select>
             </div>
+
+            
+           
             <Button
               variant="secondary"
               type="submit"

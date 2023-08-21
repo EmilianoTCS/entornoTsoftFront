@@ -311,6 +311,8 @@ export default function ListadoEDDEvalProyEmp() {
                   </td>
 
                   <td align="center">
+                    {EDDEvalProyEmp.evalRespondida === 'NO' ? 
+                    (
                     <button
                       data-title="Editar evaluación de proyecto - colaborador"
                       id="OperationBtns"
@@ -320,6 +322,19 @@ export default function ListadoEDDEvalProyEmp() {
                     >
                       <RiEditBoxFill id="icons" />
                     </button>
+                    ):(
+                      <button
+                      disabled
+                      data-title="Editar evaluación de proyecto - colaborador"
+                      id="OperationBtns"
+                      onClick={() =>
+                        editarEDDEvalProyEmp(EDDEvalProyEmp.idEDDEvalProyEmp
+                          )
+                      }
+                    >
+                      <RiEditBoxFill id="icons" />
+                    </button>)}
+                    
 
                     {userData.nomRol === "administrador" || "people" ? (
                       EDDEvalProyEmp.evalRespondida === 'NO' ? (

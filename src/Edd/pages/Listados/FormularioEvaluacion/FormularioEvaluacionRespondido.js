@@ -107,7 +107,7 @@ export default function FormularioEvaluacionRespondida() {
     <>
       <Header></Header>
       <div>
-        {" "}
+        
         <a
           style={{ margin: "10px", marginTop: "15px", marginLeft: "60px" }}
           type="submit"
@@ -118,6 +118,7 @@ export default function FormularioEvaluacionRespondida() {
           Volver
         </a>
         <Container id="textStyle">
+        {/* <img src={logoTsoft}/> &nbsp; <img width="200px" height="79px" src={idEDDEvalPregunta.logoFormulario}></img> */}
           {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
             if (auxEncabezado !== idEDDEvalPregunta.nomEvaluacion) {
               return (

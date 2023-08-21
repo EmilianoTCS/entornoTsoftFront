@@ -115,7 +115,7 @@ export default function HomePageEDD() {
 
     listRango.map((rango) => {
       if (auxRango === "0") {
-        console.log("result", eval(porcAprobComp + rango.datoNoVisible), porcAprobComp, rango.datoNoVisible);
+        // console.log("result", eval(porcAprobComp + rango.datoNoVisible), porcAprobComp, rango.datoNoVisible);
         if (eval(porcAprobComp + rango.datoNoVisible)) {  // eval(30 + > 80) --> eval 30 >= 80
           varRango = rango.datoVisible;
           auxRango = "1";
@@ -255,7 +255,7 @@ export default function HomePageEDD() {
     <div>
       <Header></Header>
       <Link to="/GraficosDashboard">
-        <button id="submenuSidebar">
+        <button id="submenuSidebar" >
           <ImBook id="icons" />
           Gráficos Dashboard
         </button>
@@ -267,17 +267,12 @@ export default function HomePageEDD() {
           justifyContent: "space-around",
           marginTop: "2%",
         }}
-      >
+      > 
+      {/* segun cuantos referentes sean mostrar informacion de sus competencias por columna */}
         <CompetenciasResumen></CompetenciasResumen>
-        <CompetenciasResumen></CompetenciasResumen>
-
-        {/* <BodyResumen2 style={{ marginBottom: '100px' }}></BodyResumen2>
-          <InfoExag2></InfoExag2> */}
-
+        
+        
       </div>
-
-
-
 
     </div>
   ) : (
