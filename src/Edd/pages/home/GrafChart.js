@@ -1,3 +1,5 @@
+import SendDataService from "../../../services/SendDataService";
+import React, { useEffect, useState } from "react";
 import { Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -22,56 +24,156 @@ ChartJS.register(
     Filler
 );
 
-var beneficios = [0, 56, 20, 36, 80, 40, 30, -20, 25, 30, 12, 60];
-var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-var otraLinea = [20, 25, 60, 65, 45, 10, 0, 25, 35, 7, 20, 25];
-
-var midata = {
-    labels: meses,
-    datasets: [ // Cada una de las líneas del gráfico
-        {
-            label: 'GENERAL',
-            data: beneficios,
-            tension: 0.5,
-            fill : true,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            pointRadius: 5,
-            pointBorderColor: 'rgba(255, 99, 132)',
-            pointBackgroundColor: 'rgba(255, 99, 132)',
-        },
-        {
-            label: 'INGE',
-            data: otraLinea,
-            borderColor: 'light blue',
-            backgroundColor: 'light blue',
-            pointRadius: 3,
-            pointBorderColor: 'light blue',
-            pointBackgroundColor: 'light blue',
-        },
-        {
-            label: 'RODRIGO',
-            data: [30, 30, 20, 45, 55, 30, 45, 65, 30, 30, 70, 30],
-            borderColor: 'green',
-            backgroundColor: 'green',
-            pointRadius: 3,
-            pointBorderColor: 'green',
-            pointBackgroundColor: 'green',
-        },
-    ],
-};
-
-var misoptions = {
-    scales : {
-        y : {
-            min : 0
-        },
-        x: {
-            ticks: { color: 'black'}
-        }
-    }
-};
 
 export default function GrafChart() {
-    return <Line data={midata} options={misoptions}/>
+    const [listCompetencias, setListCompetencias] = useState("");
+
+    function GetDataCompetencias() {
+        var url = "pages/listados/listadoCompetenciasEval.php";
+        var operationUrl = "listadoCompetenciasEval";
+        var data = {
+            idEvaluacion: 2,
+        };
+        SendDataService(url, operationUrl, data).then((data) => {
+            setListCompetencias(data);
+        });
+    }
+
+
+
+
+
+    
+
+    function Porcentajes() {
+        var list_eval_comp_porc = {};
+        var result_list = {};
+        var totalPorcentajesPorCompetencia = {};
+        let reversed = Object.values(listCompetencias).reverse()
+
+        console.log("listCompetencias",listCompetencias);
+        console.log("reversed",reversed);
+    
+        reversed.forEach(item => {
+            if (item.nomEvaluador in list_eval_comp_porc) {
+                if (item.nomCompetencia in list_eval_comp_porc[item.nomEvaluador]) {
+                    list_eval_comp_porc[item.nomEvaluador][item.nomCompetencia].push(item.porcAprobComp);
+                } else {
+                    list_eval_comp_porc[item.nomEvaluador][item.nomCompetencia] = [item.porcAprobComp];
+                }
+            } else {
+                list_eval_comp_porc[item.nomEvaluador] = {
+                    [item.nomCompetencia]: [item.porcAprobComp]
+                };
+            }
+    
+            if (item.nomCompetencia in totalPorcentajesPorCompetencia) {
+                totalPorcentajesPorCompetencia[item.nomCompetencia].push(item.porcAprobComp);
+            } else {
+                totalPorcentajesPorCompetencia[item.nomCompetencia] = [item.porcAprobComp];
+            }
+        });
+    
+        Object.keys(list_eval_comp_porc).forEach(evaluador => {
+            result_list[evaluador] = {};
+            Object.keys(list_eval_comp_porc[evaluador]).forEach(competencia => {
+                var porcentajes = list_eval_comp_porc[evaluador][competencia];
+                var suma = porcentajes.reduce((total, porcentaje) => total + parseFloat(porcentaje), 0);
+                var promedio = suma / porcentajes.length;
+                result_list[evaluador][competencia] = promedio;
+            });
+        });
+    
+        var totalPromediosPorCompetencia = {};
+        Object.keys(totalPorcentajesPorCompetencia).forEach(competencia => {
+            var porcentajes = totalPorcentajesPorCompetencia[competencia];
+            var suma = porcentajes.reduce((total, porcentaje) => total + parseFloat(porcentaje), 0);
+            var promedio = suma / porcentajes.length;
+            totalPromediosPorCompetencia[competencia] = promedio;
+        });
+    
+        // Agregar promedios generales por competencia a result_list
+        result_list['General'] = totalPromediosPorCompetencia;
+    
+        // console.log(result_list);
+    
+        return result_list;
+    }
+
+
+
+
+
+
+    
+    var fn = Porcentajes()
+    // console.log(fn);z
+    var predefinedColors = [
+        "Red", // Orange
+        "Blue", // Blue
+        "Green", // Green
+        "Pink", // Pink
+        "Cyan", // Cyan
+        "Magenta", // Magenta
+        // Agrega más colores según sea necesario
+    ];
+    
+    var evaluatorColorMap = {};
+    
+    var getColorForEvaluator = (evaluator) => {
+        if (!evaluatorColorMap[evaluator]) {
+            const currentIndex = Object.keys(evaluatorColorMap).length;
+            evaluatorColorMap[evaluator] = predefinedColors[currentIndex % predefinedColors.length];
+        }
+       
+        return evaluatorColorMap[evaluator];
+    };
+    // Create datasets with random colors
+    const datasets = Object.keys(fn).map((key) => {
+        const evaluatorColor = getColorForEvaluator(key);
+        return {
+            label: key.toUpperCase(),
+            data: Object.values(fn[key]),
+            fill: false,
+            // tension:0.2,
+            borderColor: evaluatorColor,
+            backgroundColor: evaluatorColor,
+            pointRadius: 3,
+            pointBorderColor: evaluatorColor,
+            pointBackgroundColor: evaluatorColor,
+        };
+    });
+
+    const competenciasLabels = Object.values(listCompetencias).reduce((labels, item) => {
+        if (!labels.includes(item.nomCompetencia)) {
+            labels.push(item.nomCompetencia);
+        }
+        return labels;
+    }, []);
+    
+    const midata = {
+        labels: competenciasLabels.reverse(),
+        datasets: datasets,
+    };
+
+    var misoptions = {
+        scales: {
+            y: {
+                min: 0
+            },
+            x: {
+                ticks: { color: 'black' }
+            }
+        }
+    };
+
+    useEffect(() => {
+        GetDataCompetencias();
+
+        evaluatorColorMap = {};
+    }, []);
+
+    return <Line data={midata} options={misoptions} >
+        <Porcentajes></Porcentajes>
+    </Line>
 }

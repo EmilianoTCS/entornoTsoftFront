@@ -62,7 +62,8 @@ padding-top: 1em;
 #submenuSidebar:hover {
   color: #ffffff;
   background-color: #e10b1c;
-  box-shadow: 0px 2px 20px 0px rgba(54, 52, 52, 0.81);}
+  box-shadow: 0px 2px 20px 0px rgba(54, 52, 52, 0.81);
+}
 
 #User_logo {
   width: 17%;

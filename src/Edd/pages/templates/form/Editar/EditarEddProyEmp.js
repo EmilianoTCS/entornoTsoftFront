@@ -26,15 +26,18 @@ const EditarEDDProyEmp = ({
 
   const [responseID, setResponseID] = useState([""]);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
+  const [reset, setReset] = useState(false);
+
   const listEDDProyEmp = EDDProyEmp;
 
   const show = isActiveEditEDDProyEmp;
 
   const handleClose = () => {
     cambiarEstado(false);
-    setcargoEnProy(responseID[0].cargoEnProy);
-    setidProyecto(responseID[0].idProyecto);
-    setidEmpleado(responseID[0].idEmpleado);
+    setcargoEnProy("");
+    setidProyecto("");
+    setidEmpleado("");
+    setReset(true)
   };
 
   // ----------------------FUNCIONES----------------------------
@@ -63,6 +66,7 @@ const EditarEDDProyEmp = ({
       setcargoEnProy(response[0].cargoEnProy);
       setidProyecto(response[0].idProyecto);
       setidEmpleado(response[0].idEmpleado);
+      setReset(true)
     });
   }, [idEDDProyEmp]);
 
@@ -100,7 +104,7 @@ const EditarEDDProyEmp = ({
         obtenerProyecto();
       }
     },
-    [idEDDProyEmp]
+    [idEDDProyEmp,reset]
   );
 
   // ----------------------RENDER----------------------------
@@ -160,13 +164,12 @@ const EditarEDDProyEmp = ({
                 className="form-control"
                 name="input_nombreDelcargo"
                 id="input_nombreDelcargo"
-                value={cargoEnProy || ""}
                 onChange={({ target }) => setcargoEnProy(target.value)}
               >
-                <option value="Referente">
+                <option value="Referente" selected={cargoEnProy.toUpperCase() === 'REFERENTE' ? true : ""}>
                   REFERENTE
                 </option>
-                <option value="Colaborador">
+                <option value="Colaborador" selected={cargoEnProy.toUpperCase() === 'COLABORADOR' ? true : ""}>
                   COLABORADOR
                 </option>                
                 

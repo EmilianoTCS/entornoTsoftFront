@@ -276,14 +276,14 @@ export default function SideBar(props) {
                         </Link>
                       </li>
                       {/* --------------------------------------------------- */}
-                      <li id="textLeftSelect">
+                      {/* <li id="textLeftSelect">
                         <Link to="/homePageEDD">
                           <button id="submenuSidebar">
                             <ImBook id="icons" />
                             Dashboard
                           </button>
                         </Link>
-                      </li>
+                      </li> */}
                     </ul>
                   </li>
                   {/* --------------------------------------------------- */}

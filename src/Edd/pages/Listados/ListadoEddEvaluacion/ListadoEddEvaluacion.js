@@ -7,8 +7,10 @@ import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
-import { BsFillTrashFill } from "react-icons/bs";
+import { BsFillTrashFill,BsMegaphoneFill } from "react-icons/bs";
 import { AiFillBook } from "react-icons/ai";
+import { ImHome } from "react-icons/im";
+
 
 import "../TablasStyles.css";
 import InsertarEDDEvaluacion from "../../templates/form/Insertar/InsertarEddEvaluacion";
@@ -77,7 +79,7 @@ export default function ListadoEDDEvaluacion() {
       handleChangePaginador();
       obtenerEvaluacion()
     },
-    [num_boton, cantidadPorPagina,idEvaluacion]
+    [num_boton, cantidadPorPagina, idEvaluacion]
   );
 
   //PAGINADOR ---------------------
@@ -94,7 +96,7 @@ export default function ListadoEDDEvaluacion() {
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
-      setEDDEvaluacion(datos.datos);console.log(data);
+      setEDDEvaluacion(datos.datos); console.log(data);
     });
   }
 
@@ -222,6 +224,28 @@ export default function ListadoEDDEvaluacion() {
                         <AiFillBook id="icons" />
                       </button>
                     </Link>
+
+                    {EDDEvaluacion.tipoEvaluacion !== 'COLABORADOR' ? (
+                      <Link to={`/homePageEDD/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
+                        <button data-title="Dashboard" id="OperationBtns">
+                          <ImHome id="icons" />
+                        </button>
+                      </Link>
+                    ) : (
+                      <Link to={`/GraficosDashboard/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
+                        <button data-title="Dashboard" id="OperationBtns">
+                          <ImHome id="icons" />
+                        </button>
+                      </Link>
+                    )
+                    }
+
+                    <Link to={`/ComentariosDashboard/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
+                      <button data-title="Comentarios Dashboard" id="OperationBtns">
+                        <BsMegaphoneFill id="icons" />
+                      </button>
+                    </Link>
+
                     <button
                       data-title="Desactivar evaluación"
                       onClick={() => desactivar(EDDEvaluacion.idEDDEvaluacion)}

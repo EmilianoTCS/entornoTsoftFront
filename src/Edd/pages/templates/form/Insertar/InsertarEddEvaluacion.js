@@ -80,20 +80,29 @@ const InsertarEDDEvaluacion = ({
                 required
               />
             </div>
-            <div>
-              <label htmlFor="input_nombreDelEDDEvaluacion">Tipo evaluación:</label>
-              <input
-                style={{ textTransform: "uppercase" }}
-                placeholder="Escriba tipo de evaluación"
-                type="text"
-                className="form-control"
-                name="input_nombreDelEDDEvaluacion"
-                id="input_nombreDelEDDEvaluacion"
-                maxLength="15"
-                onChange={({ target }) => settipoEvaluacion(target.value)}
+
+            <div className="form-group">
+              <label htmlFor="input_nombreDelcargo">Tipo evaluación: </label>
+              <select
                 required
-              />
+                className="form-control"
+                name="input_nombreDelcargo"
+                id="input_nombreDelcargo"
+                onChange={({ target }) => settipoEvaluacion(target.value)}
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+
+                <option value="Referente">
+                  REFERENTE
+                </option>
+                <option value="Colaborador">
+                  COLABORADOR
+                </option>   
+              </select>
             </div>
+           
             <div>
               <label htmlFor="input_fechaI">Fecha inicio vigencia:</label>
               <input

@@ -20,40 +20,41 @@ const EditarEDDEvaluacion = ({
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState("");
   const [tipoEvaluacion, settipoEvaluacion] = useState("");
+  const [reset, setReset] = useState(false);
 
   const [responseID, setResponseID] = useState([""]);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const listEDDEvaluacion = EDDEvaluacion;
+  var idEDDEvaluacion = idEDDEvaluacion
 
   const show = isActiveEditEDDEvaluacion;
 
   const handleClose = () => {
     cambiarEstado(false);
-    setfechaIni(responseID[0].fechaIni);
-    setfechaFin(responseID[0].fechaFin);
-    settipoEvaluacion(responseID[0].tipoEvaluacion);
-    setnomEvaluacion(responseID[0].nomEvaluacion);
+    setfechaIni("");
+    setfechaFin("");
+    settipoEvaluacion("");
+    setnomEvaluacion("");
+    setReset(true)
 
   };
 
   // ----------------------FUNCIONES----------------------------
-  const getData = useCallback(() => {
+  const getData = () => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idEDDEvaluacion, nombreTabla: nombreTabla};
+    var data = { idRegistro: idEDDEvaluacion, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
-
+      setReset(false)
       settipoEvaluacion(response[0].tipoEvaluacion);
       setfechaIni(response[0].fechaIni);
       setfechaFin(response[0].fechaFin);
       setnomEvaluacion(response[0].nomEvaluacion);
 
 
-
     });
-  }, [idEDDEvaluacion]);
+  };
 
   function SendData(e) {
     e.preventDefault();
@@ -66,12 +67,12 @@ const EditarEDDEvaluacion = ({
       tipoEvaluacion: tipoEvaluacion === "" ? responseID[0].tipoEvaluacion : tipoEvaluacion,
       fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
       fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
-      isActive:true,
+      isActive: true,
     };
-console.log(data);
+    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
       // TopAlerts('successEdited');
-      actualizarEDDEvaluacion(EDDEvaluacion);console.log(response);
+      actualizarEDDEvaluacion(EDDEvaluacion); console.log(response);
     });
 
     function actualizarEDDEvaluacion(EDDEvaluacion) {
@@ -88,7 +89,7 @@ console.log(data);
         getData();
       }
     },
-    [idEDDEvaluacion]
+    [idEDDEvaluacion, reset]
   );
 
   // ----------------------RENDER----------------------------
@@ -100,12 +101,12 @@ console.log(data);
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_nombreDelEDDEvaluacion">Evaluación:</label>
               <input
-               style={{ textTransform: "uppercase" }}
-               placeholder="Escriba nombre de la evaluación"
-               type="text"
+                style={{ textTransform: "uppercase" }}
+                placeholder="Escriba nombre de la evaluación"
+                type="text"
                 className="form-control"
                 name="input_nombreDelEDDEvaluacion"
                 id="input_nombreDelEDDEvaluacion"
@@ -115,21 +116,27 @@ console.log(data);
                 required
               />
             </div>
-            <div>
-              <label htmlFor="input_nombreDelEDDEvaluacion">Tipo evaluación:</label>
-              <input
-               style={{ textTransform: "uppercase" }}
-               placeholder="Escriba tipo de evaluación"
-               type="text"
-                className="form-control"
-                name="input_nombreDelEDDEvaluacion"
-                id="input_nombreDelEDDEvaluacion"
-                value={tipoEvaluacion || ""}
-                maxLength="15"
-                onChange={({ target }) => settipoEvaluacion(target.value)}
+            <div className="form-group">
+              <label htmlFor="input_nombreDelTipoEvaluacion">Tipo evaluación:</label>
+              <select
                 required
-              />
+                className="form-control"
+                name="input_nombreDelTipoEvaluacion"
+                id="input_nombreDelTipoEvaluacion"
+
+
+                onChange={({ target }) => settipoEvaluacion(target.value)}
+              >
+                <option value="Referente" selected={tipoEvaluacion.toUpperCase() === 'REFERENTE' ? true : ""}>
+                  REFERENTE
+                </option>
+                <option value="Colaborador" selected={tipoEvaluacion.toUpperCase() === 'COLABORADOR' ? true : ""}>
+                  COLABORADOR
+                </option>
+
+              </select>
             </div>
+
             <div>
               <label htmlFor="input_fechaI">Fecha inicio vigencia:</label>
               <input
@@ -158,7 +165,7 @@ console.log(data);
                 required
               />
             </div>
-            
+
             <Button
               variant="secondary"
               type="submit"

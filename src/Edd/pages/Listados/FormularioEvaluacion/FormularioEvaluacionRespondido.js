@@ -47,36 +47,64 @@ export default function FormularioEvaluacionRespondida() {
     e.preventDefault();
 
     if (
+
       inputVerEnDashboard === "0" ||
+
       idEDDEvalPregunta.verEnDashboard === null
+
     ) {
+
       const url = "pages/cambiarEstado/verEndashboard.php";
+
       const operationUrl = "verEnDashboard";
+
       var data = {
+
         idEmpleado: idEDDProyEmpEvaluador,
+
         idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
-        idEvaluacion: idEDDEvaluacion,
+
+        // idEvaluacion: idEDDEvaluacion,  
+
         idEDDEvalProyResp: idEDDEvalProyEmp,
+
         verEnDashboard: 1,
+
         ordenDashboard: inputOrdenDashboard,
+
       };
+
+      console.log(data);
 
       SendDataService(url, operationUrl, data).then((response) => {
-        console.log("response sv", response);
-        actualizarRespuesta(response[0]);
-      });
-    } else {
-      const url = "pages/cambiarEstado/verEndashboard.php";
-      const operationUrl = "verEnDashboard";
-      var data = {
-        idEmpleado: idEDDProyEmpEvaluador,
-        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
-        idEvaluacion: idEDDEvaluacion,
-        idEDDEvalProyResp: idEDDEvalProyEmp,
-        verEnDashboard: "",
-        ordenDashboard: "",
-      };
 
+        console.log("response sv", response);
+
+        actualizarRespuesta(response[0]);
+
+      });
+
+    } else {
+
+      const url = "pages/cambiarEstado/verEndashboard.php";
+
+      const operationUrl = "verEnDashboard";
+
+      var data = {
+
+        idEmpleado: idEDDProyEmpEvaluador,
+
+        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
+
+        // idEvaluacion: idEDDEvaluacion,
+
+        idEDDEvalProyResp: idEDDEvalProyEmp,
+
+        verEnDashboard: "",
+
+        ordenDashboard: "",
+
+      };
       SendDataService(url, operationUrl, data).then((response) => {
         console.log("response sv", response);
         actualizarRespuesta(response[0]);
@@ -107,7 +135,7 @@ export default function FormularioEvaluacionRespondida() {
     <>
       <Header></Header>
       <div>
-        
+
         <a
           style={{ margin: "10px", marginTop: "15px", marginLeft: "60px" }}
           type="submit"
@@ -118,7 +146,7 @@ export default function FormularioEvaluacionRespondida() {
           Volver
         </a>
         <Container id="textStyle">
-        {/* <img src={logoTsoft}/> &nbsp; <img width="200px" height="79px" src={idEDDEvalPregunta.logoFormulario}></img> */}
+          {/* <img src={logoTsoft}/> &nbsp; <img width="200px" height="79px" src={idEDDEvalPregunta.logoFormulario}></img> */}
           {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
             if (auxEncabezado !== idEDDEvalPregunta.nomEvaluacion) {
               return (
@@ -184,13 +212,13 @@ export default function FormularioEvaluacionRespondida() {
                               id="verEnDashboard"
                               value={
                                 idEDDEvalPregunta.verEnDashboard === "0" ||
-                                idEDDEvalPregunta.verEnDashboard === null
+                                  idEDDEvalPregunta.verEnDashboard === null
                                   ? "0"
                                   : "1"
                               }
                               defaultChecked={
                                 idEDDEvalPregunta.verEnDashboard === "1" ||
-                                idEDDEvalPregunta.verEnDashboard !== null
+                                  idEDDEvalPregunta.verEnDashboard !== null
                                   ? true
                                   : false
                               }
@@ -216,7 +244,7 @@ export default function FormularioEvaluacionRespondida() {
                               <br />
                             </>
                           </div>
-                          <Button type="submit">Sub</Button>
+                          <Button id="enviarFormRespondido" type="submit">Enviar</Button>
                         </form>
                       </Container>
 

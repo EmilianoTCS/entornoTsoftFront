@@ -1,3 +1,81 @@
+/* Comentarios */
+#title{
+font-size: 40px;
+color: rgb(255, 255, 255);
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.cardContainerComentario {
+  display: grid;
+  grid-template-columns: repeat(2, 40%); /* Dos columnas y se ajusta automáticamente */
+  gap: 20px; /* Espacio entre las tarjetas */
+
+}
+
+.cardColumnComentario {
+  flex: 1;
+  margin: 10px;
+  position: relative;
+}
+
+.columnTitle {
+  font-weight: bold;
+}
+
+.columnContent {
+  padding-left: 10px;
+}
+
+.nomEvaluadorCell {
+  background-color: #e10b1c;
+  border: #e10b1c 4px solid;
+  border-radius: 5px;
+  font-size: 15px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+/* -- */
+
+
+/* BOTONES */
+#BotonColab {
+  color: black;
+  font-weight: 600;
+  width: 100%;
+  border: none;
+  background-color: white;
+  text-decoration: none;
+  text-align: center;
+  padding-left: 60px;
+  margin-top: 3px;
+  height: 45px;
+  transition: background-color 116ms ease-out, color 300ms ease-out,
+    box-shadow 300ms ease-out;
+}
+
+#BotonColab:hover {
+  color: #ffffff;
+  background-color: #e10b1c;
+  box-shadow: 0px 2px 20px 0px rgba(54, 52, 52, 0.81);
+}
+
+/*  */
+.cardContainer {
+  display: flex;
+  flex-direction: 0;
+}
+
+.cardColumn {
+  flex-basis: calc(50% - 15px);
+  margin: 75px; /* Espacio entre las columnas */
+}
+
 #container_cardsEDD {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 230px));
@@ -5,16 +83,29 @@
   justify-content: center;
   gap: 5px;
   margin: 1% auto;
+  font-size: 20px;
 }
 
 .cardTitle {
-  font-size: 50pt;
+  font-size: 40pt;
 }
 .cardText {
   font-size: 20pt;
 }
 .cardBody {
   text-align: center;
+}
+.bodyResumen {
+  text-align: center;
+}
+.cardBody1 {
+  text-align: left;
+  margin-top: 6px;
+}
+#cards1-2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 @media screen and (max-width: 1465px) {
@@ -55,12 +146,12 @@
   border-top-width: 0px;
 }
 
-#hexag{
-    border: 3px solid rgb(0, 0, 0);
-    padding: 2.5em;
-    margin-left: 30px;
-    margin-bottom: 2px;
-    background-color: bisque;
-    text-align: center;
-    border-radius: 30px;
+#hexag {
+  border: 3px solid rgb(0, 0, 0);
+  padding: 2.5em;
+  margin-left: 30px;
+  margin-bottom: 2px;
+  background-color: bisque;
+  text-align: center;
+  border-radius: 30px;
 }

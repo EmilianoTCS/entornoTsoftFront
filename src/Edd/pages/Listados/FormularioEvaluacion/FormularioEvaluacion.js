@@ -109,9 +109,9 @@ export default function FormularioEvaluacion() {
 
       },
     }; 
-    // console.log(data);
+    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      // console.log("respuestaServer:", response);
+      console.log("respuestaServer:", response);
       ConfirmAlertEnvio();
     });
   }
