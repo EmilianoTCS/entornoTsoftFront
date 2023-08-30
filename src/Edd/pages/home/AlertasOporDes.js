@@ -4,8 +4,14 @@ import SendDataService from "../../../services/SendDataService";
 import Card from "react-bootstrap/Card";
 import { Navigate } from "react-router-dom";
 import "./homeEDD.css";
+import { useRoute } from "wouter";
 
 export default function AlertOpoDes() {
+  const [, params] = useRoute("/AlertasOporDes/:idEvaluacion/:nomEvaluacion");
+
+  const idEDDEvaluacion = params.idEvaluacion;
+  const nomEvaluacion = decodeURI(params.nomEvaluacion);
+
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [listResumenEval, setListResumenEval] = useState("");
   const [listCompetencias, setListCompetencias] = useState([""]);
@@ -66,7 +72,7 @@ export default function AlertOpoDes() {
   const [loadedDataConfigRef, setLoadedDataConfigRef] = useState(false);
 
 
- 
+
 
   // ---------------------  DECLARACIÓN DE FUNCIONES  ---------------------
 
@@ -88,7 +94,7 @@ export default function AlertOpoDes() {
     var url = "pages/listados/listadoCompetenciasEval.php";
     var operationUrl = "listadoCompetenciasEval";
     var data = {
-      idEvaluacion: 1,
+      idEvaluacion: idEDDEvaluacion,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setListCompetencias(data);
@@ -254,62 +260,68 @@ export default function AlertOpoDes() {
 
   //------------- DESTACABLES -------------
 
+  // REFERENTE
   function DestacablesReferentesTemplate() {
-    // Array donde almacenaremos los elementos a renderizar
-    const render = [];
+    if (tipoEvaluacion = "REFERENTE") {
+      // Array donde almacenaremos los elementos a renderizar
+      const render = [];
 
-    // Variables para el seguimiento del empleado actual y el cálculo de promedios
-    let auxEvaluado = "";
-    let contReg = 0;
-    let totalPorc = 0;
+      // Variables para el seguimiento del empleado actual y el cálculo de promedios
+      let auxEvaluado = "";
+      let contReg = 0;
+      let totalPorc = 0;
 
-    // Iteramos a través de los datos
-    listCompetencias.forEach((item, index) => {
-      // Si es el primer elemento, asignamos el nombre del empleado actual
-      if (index === 0) {
-        auxEvaluado = item.nomEmpleado;
-      }
-      // Comprobamos si el empleado cambió o si estamos en el último elemento
-      if (
-        auxEvaluado !== item.nomEmpleado ||
-        index === listCompetencias.length - 1
-      ) {
-        // Calculamos el promedio de porcentaje
-        const promedioPorc = totalPorc / contReg;
+      // Iteramos a través de los datos
+      listCompetencias.forEach((item, index) => {
 
-        // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
-        if (eval(promedioPorc + ConfigDestRef.datoNoVisible)) {
-          render.push(
-            <div key={index} id="bodyContainer">
-              <div id="container_cardsEDD">
-                <Card style={{ backgroundColor: ConfigDestRef.datoVisible }}>
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">Referentes</Card.Text>
-                    <Card.Title className="cardTitle">
-                      {promedioPorc.toFixed(2)}%
-                    </Card.Title>
-                    <Card.Text className="cardText">{auxEvaluado}</Card.Text>
-                  </Card.Body>
-                </Card>
+        // Si es el primer elemento, asignamos el nombre del empleado actual
+        if (index === 0) {
+          auxEvaluado = item.nomEmpleado;
+        }
+        // Comprobamos si el empleado cambió o si estamos en el último elemento
+        if (
+          auxEvaluado !== item.nomEmpleado ||
+          index === listCompetencias.length - 1
+        ) {
+          // Calculamos el promedio de porcentaje
+          const promedioPorc = totalPorc / contReg;
+
+          // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
+          if (eval(promedioPorc + ConfigDestRef.datoNoVisible)) {
+            render.push(
+              <div key={index} >
+                <div >      <br></br>
+
+                  <Card style={{ backgroundColor: ConfigDestRef.datoVisible }}>
+                    <Card.Body>
+                      <Card.Text className="letraAlertas">Referentes</Card.Text>
+                      <Card.Title className="letraAlertas">
+                        {promedioPorc.toFixed(2)}%
+                      </Card.Title>
+                      <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
+                    </Card.Body>
+                  </Card>
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
+
+          // Reiniciamos variables para el siguiente empleado
+          auxEvaluado = item.nomEmpleado;
+          contReg = 0;
+          totalPorc = 0;
         }
 
-        // Reiniciamos variables para el siguiente empleado
-        auxEvaluado = item.nomEmpleado;
-        contReg = 0;
-        totalPorc = 0;
-      }
+        // Sumamos el porcentaje actual y aumentamos el contador
+        totalPorc += parseFloat(item.porcAprobComp);
+        contReg++;
+      });
 
-      // Sumamos el porcentaje actual y aumentamos el contador
-      totalPorc += parseFloat(item.porcAprobComp);
-      contReg++;
-    });
-
-    // Devolvemos el array con los elementos renderizados
-    return render;
+      // Devolvemos el array con los elementos renderizados
+      return render;
+    }
   }
+  // COLABORADOR
   function DestacablesColaboradoresTemplate() {
     // Array donde almacenaremos los elementos a renderizar
     const render = [];
@@ -336,16 +348,17 @@ export default function AlertOpoDes() {
         // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
         if (eval(promedioPorc + ConfigDestColab.datoNoVisible)) {
           render.push(
-            <div key={index} id="bodyContainer">
-              <div id="container_cardsEDD">
-                <Card style={{ backgroundColor: ConfigDestColab.datoVisible }}>
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">Colaboradores</Card.Text>
+            <div key={index} >
+              <div >      <br></br>
 
-                    <Card.Title className="cardTitle">
+                <Card style={{ backgroundColor: ConfigDestColab.datoVisible }}>
+                  <Card.Body >
+                    <Card.Text className="letraAlertas">Colaboradores</Card.Text>
+
+                    <Card.Title className="letraAlertas">
                       {promedioPorc.toFixed(2)}%
                     </Card.Title>
-                    <Card.Text className="cardText">{auxEvaluado}</Card.Text>
+                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
                   </Card.Body>
                 </Card>
               </div>
@@ -393,20 +406,21 @@ export default function AlertOpoDes() {
         // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
         if (eval(promedioPorc + ConfigDestColabTsoft.datoNoVisible)) {
           render.push(
-            <div key={index} id="bodyContainer">
-              <div id="container_cardsEDD">
+            <div key={index} >
+              <div >      <br></br>
+
                 <Card
                   style={{ backgroundColor: ConfigDestColabTsoft.datoVisible }}
                 >
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">
+                  <Card.Body >
+                    <Card.Text className="letraAlertas">
                       Colaboradores Tsoft
                     </Card.Text>
 
-                    <Card.Title className="cardTitle">
+                    <Card.Title className="letraAlertas">
                       {promedioPorc.toFixed(2)}%
                     </Card.Title>
-                    <Card.Text className="cardText">{auxEvaluado}</Card.Text>
+                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
                   </Card.Body>
                 </Card>
               </div>
@@ -431,6 +445,7 @@ export default function AlertOpoDes() {
 
   //------------- OPORTUNIDADES -------------
 
+  // REFERENTE
   function OportunidadesReferentesTemplate() {
     // Crear un array para almacenar los componentes renderizados
     const render = [];
@@ -453,22 +468,23 @@ export default function AlertOpoDes() {
         if (competencias.length > 0) {
           // Agregar un componente Card al array render
           render.push(
-            <div key={index} id="bodyContainer">
-              <div id="container_cardsEDD">
+            <div key={index} >
+              <div >      <br></br>
+
                 <Card style={{ backgroundColor: ConfigOportRef.datoVisible }}>
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">
+                  <Card.Body >
+                    <Card.Text className="letra">
                       Referentes con oportunidad de mejora:
                     </Card.Text>
-                    <Card.Text className="cardText">
+                    <Card.Text className="letraCompetencias">
                       {competencias.map((competencia, index) => (
-                        <span key={index}>
+                        <span key={index} style={{ textAlign: 'left' }}>
                           {competencia}
                           <br /> {/* Agregar un salto de línea */}
                         </span>
                       ))}
                     </Card.Text>
-                    <Card.Text className="cardText">{auxEvaluado}</Card.Text>
+                    <Card.Text className="letra"><strong>{auxEvaluado}</strong></Card.Text>
                   </Card.Body>
                 </Card>
               </div>
@@ -497,6 +513,7 @@ export default function AlertOpoDes() {
     // Devolver el array de componentes renderizados
     return render;
   }
+  // COLABORADOR
   function OportunidadesColaboradoresTemplate() {
     // Crear un array para almacenar los componentes renderizados
     const render = [];
@@ -522,14 +539,15 @@ export default function AlertOpoDes() {
         if (competencias.length > 0) {
           // Agregar un componente Card al array render
           render.push(
-            <div key={index} id="bodyContainer">
-              <div id="container_cardsEDD">
+            <div key={index} >
+              <div >      <br></br>
+
                 <Card style={{ backgroundColor: ConfigOportColab.datoVisible }}>
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">
+                  <Card.Body >
+                    <Card.Text className="letra">
                       Colaboradores con oportunidad de mejora:
                     </Card.Text>
-                    <Card.Text className="cardText">
+                    <Card.Text className="letraCompetencias">
                       {competencias.map((competencia, index) => (
                         <span key={index}>
                           {competencia}
@@ -537,7 +555,7 @@ export default function AlertOpoDes() {
                         </span>
                       ))}
                     </Card.Text>
-                    <Card.Text className="cardText">{auxEvaluado}</Card.Text>
+                    <Card.Text className="letra"><strong>{auxEvaluado}</strong></Card.Text>
                   </Card.Body>
                 </Card>
               </div>
@@ -593,16 +611,17 @@ export default function AlertOpoDes() {
         if (competencias.length > 0) {
           // Agregar un componente Card al array render
           render.push(
-            <div key={index} id="bodyContainer">
-              <div id="container_cardsEDD">
+            <div key={index} >
+              <div >      <br></br>
+
                 <Card
                   style={{ backgroundColor: ConfigOportColabTsoft.datoVisible }}
                 >
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">
+                  <Card.Body >
+                    <Card.Text className="letra">
                       Colaboradores Tsoft con oportunidad de mejora:
                     </Card.Text>
-                    <Card.Text className="cardText">
+                    <Card.Text className="letraCompetencias">
                       {competencias.map((competencia, index) => (
                         <span key={index}>
                           {competencia}
@@ -610,7 +629,7 @@ export default function AlertOpoDes() {
                         </span>
                       ))}
                     </Card.Text>
-                    <Card.Text className="cardText">{auxEvaluado}</Card.Text>
+                    <Card.Text className="letra"><strong>{auxEvaluado}</strong></Card.Text>
                   </Card.Body>
                 </Card>
               </div>
@@ -652,6 +671,7 @@ export default function AlertOpoDes() {
 
   //------------- ALERTAS -------------
 
+  // REFERENTE
   function AlertasReferentesTemplate() {
     // Array donde almacenaremos los elementos a renderizar
     const render = [];
@@ -675,15 +695,16 @@ export default function AlertOpoDes() {
         // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
         if (eval(promedioPorc + ConfigAlertasRef.datoNoVisible)) {
           render.push(
-            <div key={index} id="bodyContainer">
-              <div id="container_cardsEDD">
+            <div key={index} >
+              <div >      <br></br>
+
                 <Card style={{ backgroundColor: ConfigAlertasRef.datoVisible }}>
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">Referentes</Card.Text>
-                    <Card.Title className="cardTitle">
+                  <Card.Body style={{ color: 'white' }} >
+                    <Card.Text className="letraAlertas">Referentes</Card.Text>
+                    <Card.Title className="letraAlertas">
                       {promedioPorc.toFixed(2)}%
                     </Card.Title>
-                    <Card.Text className="cardText">{auxEvaluado}</Card.Text>
+                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
                   </Card.Body>
                 </Card>
               </div>
@@ -705,6 +726,8 @@ export default function AlertOpoDes() {
     // Devolvemos el array con los elementos renderizados
     return render;
   }
+
+  // COLABORADOR
   function AlertasColaboradoresTemplate() {
     // Array donde almacenaremos los elementos a renderizar
     const render = [];
@@ -731,20 +754,22 @@ export default function AlertOpoDes() {
         // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
         if (eval(promedioPorc + ConfigAlertasColab.datoNoVisible)) {
           render.push(
-            <div key={index} id="bodyContainer">
-              <div id="container_cardsEDD">
+            <div key={index} >
+              <div >      <br></br>
+
                 <Card
                   style={{ backgroundColor: ConfigAlertasColab.datoVisible }}
                 >
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">Colaboradores</Card.Text>
+                  <Card.Body >
+                    <Card.Text className="letraAlertas">Colaboradores</Card.Text>
 
-                    <Card.Title className="cardTitle">
+                    <Card.Title className="letraAlertas">
                       {promedioPorc.toFixed(2)}%
                     </Card.Title>
-                    <Card.Text className="cardText">{auxEvaluado}</Card.Text>
+                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
                   </Card.Body>
-                </Card>
+                </Card>      <br></br>
+
               </div>
             </div>
           );
@@ -790,22 +815,23 @@ export default function AlertOpoDes() {
         // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
         if (eval(promedioPorc + ConfigAlertasColabTsoft.datoNoVisible)) {
           render.push(
-            <div key={index} id="bodyContainer">
-              <div id="container_cardsEDD">
+            <div key={index} >
+              <div >      <br></br>
+
                 <Card
                   style={{
                     backgroundColor: ConfigAlertasColabTsoft.datoVisible,
                   }}
                 >
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">
+                  <Card.Body >
+                    <Card.Text className="letraAlertas">
                       Colaboradores Tsoft
                     </Card.Text>
 
-                    <Card.Title className="cardTitle">
+                    <Card.Title className="letraAlertas">
                       {promedioPorc.toFixed(2)}%
                     </Card.Title>
-                    <Card.Text className="cardText">{auxEvaluado}</Card.Text>
+                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
                   </Card.Body>
                 </Card>
               </div>
@@ -829,10 +855,11 @@ export default function AlertOpoDes() {
   }
 
   //------------- COMPLEMENTARIAS -------------
+
   function PorcCompMenorTemplate() {
     // Array donde almacenaremos los elementos a renderizar
     const render = [];
-  
+
     // Ordenar los datos de competencias alfabéticamente
     const datosOrdenados = listCompetencias.slice().sort((a, b) => {
       if (a.nomCompetencia < b.nomCompetencia) {
@@ -843,58 +870,61 @@ export default function AlertOpoDes() {
       }
       return 0;
     });
-  
+
     // Variables para el seguimiento de la competencia actual y el cálculo de promedios
     let auxCompetencia = "";
     let contReg = 0;
     let totalPorc = 0;
     var porcMenor = 0;
     var compMenor = 0;
-  
+
     // Iteramos a través de los datos ordenados por competencia
     datosOrdenados.forEach((item, index) => {
       // Si es el primer elemento, asignamos el nombre de la competencia actual
       if (index === 0) {
         auxCompetencia = item.nomCompetencia;
       }
-  
+
       // Comprobamos si la competencia cambió o si estamos en el último elemento
       if (auxCompetencia !== item.nomCompetencia || index === datosOrdenados.length - 1) {
         // Calculamos el promedio de porcentaje
         const promedioPorc = totalPorc / contReg;
-  
+
         // Comparamos si el promedio es menor o igual al porcentaje menor registrado o si es el primer cálculo
         if (promedioPorc <= porcMenor || porcMenor === 0) {
           porcMenor = promedioPorc;
           compMenor = auxCompetencia;
         }
-        
+
         // Reiniciamos variables para la siguiente competencia
         auxCompetencia = item.nomCompetencia;
         contReg = 0;
         totalPorc = 0;
       }
-  
+
       // Sumamos el porcentaje actual y aumentamos el contador
       totalPorc += parseFloat(item.porcAprobComp);
       contReg++;
     });
-  
+
     // Agregamos los elementos al array render
     render.push(
-      <div id="bodyContainer">
+      <div >
         <div>
+          <br></br>
+
           <Card style={{ backgroundColor: ConfigOportColabTsoft.datoVisible }}>
-            <Card.Body className="cardBody">
-              <Card.Text className="cardText">Menor competencia</Card.Text>
-              <Card.Title className="cardTitle">{porcMenor}%</Card.Title>
-              <Card.Text className="cardText">{compMenor}</Card.Text>
+            <Card.Body >
+              <Card.Text className="letra">Menor competencia</Card.Text>
+              <Card.Title className="letra">{porcMenor.toFixed(2)}%</Card.Title>
+              <Card.Text className="letra">{compMenor}</Card.Text>
             </Card.Body>
-          </Card>
+          </Card>        <br></br>
+
         </div>
       </div>
     );
-  
+
     // Devolvemos el array con los elementos renderizados
     return render;
   }
@@ -920,14 +950,16 @@ export default function AlertOpoDes() {
     if (competenciasCumplidasArray.length > 0) {
       // Devolver el componente Card que muestra las competencias
       return (
-        <div id="bodyContainer">
-          <div id="container_cardsEDD">
+        <div >
+          <div >
+            <br></br>
+
             <Card style={{ backgroundColor: ConfigOportRef.datoVisible }}>
-              <Card.Body className="cardBody">
-                <Card.Text className="cardText">
+              <Card.Body >
+                <Card.Text className="letra">
                   Competencias bajo el 30%:
                 </Card.Text>
-                <Card.Text className="cardText">
+                <Card.Text className="letraCompetencias">
                   {competenciasCumplidasArray.map((competencia, index) => (
                     <div key={index}> - {competencia}</div>
                   ))}
@@ -946,18 +978,18 @@ export default function AlertOpoDes() {
   function DiferenciaPorcentajeTemplate() {
     // Array donde almacenaremos los elementos a renderizar
     const render = [];
-  
+
     // Objeto para almacenar los datos de cada empleado y su porcentaje
     const empleadosPorcentaje = {};
     const empleadosCantReg = {};
     var evaluado = "";
-  
+
     // Iteramos a través de los datos
     listCompetencias.forEach((item) => {
       const empleado = item.nomEvaluador;
       evaluado = item.nomEmpleado;
       const porcentaje = parseFloat(item.porcAprobComp);
-  
+
       // Si el empleado ya está en el objeto, sumamos el porcentaje al existente
       if (empleadosPorcentaje[empleado]) {
         empleadosPorcentaje[empleado] += porcentaje;
@@ -967,68 +999,71 @@ export default function AlertOpoDes() {
         empleadosCantReg[empleado] = 1;
       }
     });
-  
+
     // Calculamos el promedio de porcentaje para cada empleado
     Object.keys(empleadosPorcentaje).forEach((item) => {
       empleadosPorcentaje[item] =
         Math.round((empleadosPorcentaje[item] / empleadosCantReg[item]) * 100) /
         100;
     });
-  
+
     // Obtenemos las claves de los empleados con porcentajes calculados
     const empleadosPorcentajeKeys = Object.keys(empleadosPorcentaje);
     const numEmpleados = empleadosPorcentajeKeys.length;
-  
+
     // Iteramos a través de las combinaciones de empleados
     for (let index1 = 0; index1 < numEmpleados; index1++) {
       const empleado1 = empleadosPorcentajeKeys[index1];
-  
+
       for (let index2 = index1 + 1; index2 < numEmpleados; index2++) {
         const empleado2 = empleadosPorcentajeKeys[index2];
-  
+
         // Calculamos la diferencia de porcentaje entre los empleados
         const diferenciaPorcentajes =
           Math.abs(
             empleadosPorcentaje[empleado1] - empleadosPorcentaje[empleado2]
           );
-  
+
         // Obtenemos los porcentajes de los empleados
         const porcentajeEmpleado1 = empleadosPorcentaje[empleado1];
         const porcentajeEmpleado2 = empleadosPorcentaje[empleado2];
-  
+
         // Agregamos elementos al array render si se cumple la condición
         if (eval(diferenciaPorcentajes + ConfigAlertasDifRango.datoNoVisible)) {
           render.push(
-            <div key={index1} id="bodyContainer">
-              <div id="container_cardsEDD">
+            <div key={index1} >
+              <div >
+                <br></br>
+
                 <Card
                   style={{ backgroundColor: ConfigAlertasDifRango.datoVisible }}
                 >
-                  <Card.Body className="cardBody">
-                    <Card.Text className="cardText">
+                  <Card.Body >
+                    <Card.Text className="letra">
                       Diferencia de Porcentaje
                     </Card.Text>
-                    <Card.Text className="cardText">{evaluado}</Card.Text>
-                    <Card.Title className="cardTitle">
+                    <Card.Text className="letra">{evaluado}</Card.Text>
+                    <Card.Title className="letra">
                       {diferenciaPorcentajes.toFixed(2)}%
                     </Card.Title>
-                    <Card.Text className="cardText">
+                    <Card.Text className="letra">
                       {empleado1} ({porcentajeEmpleado1}%) vs {empleado2} (
                       {porcentajeEmpleado2}%)
                     </Card.Text>
                   </Card.Body>
                 </Card>
+
               </div>
             </div>
           );
         }
       }
     }
-  
+
     // Devolvemos el array con los elementos renderizados
     return render;
   }
-  
+
   //--------------------------
 
   //RENDER GENERAL
@@ -1042,52 +1077,28 @@ export default function AlertOpoDes() {
       GetConfigOportunidades();
       GetConfigAlertas();
     },
-    [loadedDataCompetencias, loadedDataResumenEval]
+    [loadedDataCompetencias, loadedDataResumenEval, idEDDEvaluacion, nomEvaluacion]
   );
 
   return userData.statusConected || userData !== null ? (
     <div>
       <Header></Header>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          marginTop: "2%",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            textAlign: "center",
-          }}
-        >
-          <h2>Destacables</h2>
+      <div id="columnGeneral">
+        <div id="column">
+          <h2 id="titleColor">Destacables</h2>
           <DestacablesReferentesTemplate></DestacablesReferentesTemplate>
           <DestacablesColaboradoresTemplate></DestacablesColaboradoresTemplate>
           <DestacablesColaboradoresTsoftTemplate></DestacablesColaboradoresTsoftTemplate>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            textAlign: "center",
-          }}
-        >
-          <h2>Oportunidades</h2>
+        <div id="column">
+          <h2 id="titleColor">Oportunidades</h2>
           <OportunidadesReferentesTemplate></OportunidadesReferentesTemplate>
           <OportunidadesColaboradoresTemplate></OportunidadesColaboradoresTemplate>
           <OportunidadesColaboradoresTsoftTemplate></OportunidadesColaboradoresTsoftTemplate>
           <PorcCompMenorTemplate></PorcCompMenorTemplate>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            textAlign: "center",
-          }}
-        >
-          <h2>Alertas</h2>
+        <div id="column">
+          <h2 id="titleColor">Alertas</h2>
           <DiferenciaPorcentajeTemplate></DiferenciaPorcentajeTemplate>
           <AlertasReferentesTemplate></AlertasReferentesTemplate>
           <AlertasColaboradoresTemplate></AlertasColaboradoresTemplate>
@@ -1095,19 +1106,6 @@ export default function AlertOpoDes() {
           <CompetenciasBajas> </CompetenciasBajas>
         </div>
       </div>
-
-      {/* <BodyResumen></BodyResumen>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          marginTop: "2%",
-        }}
-      >
-        <CompetenciasResumen></CompetenciasResumen>
-        <CompetenciasResumen></CompetenciasResumen>
-        <CompetenciasResumen></CompetenciasResumen>
-      </div> */}
     </div>
   ) : (
     <Navigate to="/login"></Navigate>

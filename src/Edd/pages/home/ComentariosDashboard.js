@@ -5,9 +5,6 @@ import Card from "react-bootstrap/Card";
 import { Navigate } from "react-router-dom";
 import "./homeEDD.css";
 import "./GraficosDashboard"
-import { Link } from "react-router-dom";
-import { ImBook } from "react-icons/im";
-import { Container } from 'react-bootstrap';
 import { useRoute } from "wouter";
 
 export default function ComentariosDashboard() {
@@ -117,10 +114,9 @@ export default function ComentariosDashboard() {
             </>
         );
     }
-
     function Comentarios() {
         var render = [];
-    
+
         listComentEval.forEach((item, index) => {
             render.push(
                 <Card className="cardColumnComentario" key={index}>
@@ -129,8 +125,8 @@ export default function ComentariosDashboard() {
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td><strong>{item.nomEvaluado.toUpperCase()}</strong></td>
-                                        <td>{item.respuesta}</td>
+                                        <td style={{width:'150px'}}><strong>{item.nomEvaluado.toUpperCase()}</strong></td>
+                                        <td align="justify" valign="top">{item.respuesta}</td>
                                     </tr>
                                     <tr>
                                         <td className="nomEvaluadorCell">{item.nomEvaluador}</td>
@@ -142,16 +138,25 @@ export default function ComentariosDashboard() {
                 </Card>
             );
         });
-    
-        const containerClassName = `cardContainerComentario ${render.length > 1 ? 'center' : ''}`;
-    
-        return (
-            <div className={containerClassName}>
-                {render}
-            </div>
-        );
-    }
 
+        if (listComentEval[0].codResp !== '00') {
+            return (<>
+                <Card className="cardColumnComentario">
+                    <Card.Body>
+                        <Card.Title>
+                            NO HAY COMENTARIOS DISPONIBLES
+                        </Card.Title>
+                    </Card.Body>
+                </Card>
+                </>)
+        } else {
+            return (
+                <div className="cardContainerComentario">
+                    {render}
+                </div>
+            );
+        }
+    }
 
 
     function CompetenciasResumen() {

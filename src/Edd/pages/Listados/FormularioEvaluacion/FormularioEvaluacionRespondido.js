@@ -20,8 +20,8 @@ export default function FormularioEvaluacionRespondida() {
   const idEDDEvaluacion = params.idEvaluacion;
   const idEDDProyEmpEvaluado = params.idEDDProyEmpEvaluado;
   const idEDDProyEmpEvaluador = params.idEDDProyEmpEvaluador;
-  const [inputVerEnDashboard, setInputVerEnDashboard] = useState();
-  const [inputOrdenDashboard, setInputOrdenDashboard] = useState();
+  const [inputVerEnDashboard, setInputVerEnDashboard] = useState("");
+  const [inputOrdenDashboard, setInputOrdenDashboard] = useState("");
   const [idEDDEvalProyEmp, setIdEDDEvalProyEmp] = useState();
   const [disableInputText, setDisableInputText] = useState(true);
 
@@ -39,72 +39,44 @@ export default function FormularioEvaluacionRespondida() {
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);
       setLoadedData(true); //Cambio el estado del booleano
+      console.log(data);
     });
   }
 
   //Habilita o deshabilita la visualización del registro en el dashboard
   function VerEnDashboard(e) {
     e.preventDefault();
+    console.log(inputVerEnDashboard);
+    console.log("inputOrdenDashboard", inputOrdenDashboard);
 
-    if (
-
-      inputVerEnDashboard === "0" ||
-
-      idEDDEvalPregunta.verEnDashboard === null
-
-    ) {
-
+    if (inputVerEnDashboard === "false") {
       const url = "pages/cambiarEstado/verEndashboard.php";
-
       const operationUrl = "verEnDashboard";
-
       var data = {
-
         idEmpleado: idEDDProyEmpEvaluador,
-
         idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
-
-        // idEvaluacion: idEDDEvaluacion,  
-
+        // idEvaluacion: idEDDEvaluacion,
         idEDDEvalProyResp: idEDDEvalProyEmp,
-
-        verEnDashboard: 1,
-
+        verEnDashboard: true,
         ordenDashboard: inputOrdenDashboard,
-
       };
-
+      SendDataService(url, operationUrl, data).then((response) => {
+        console.log("response sv", response);
+        actualizarRespuesta(response[0]);
+      });
+    } else {
+      const url = "pages/cambiarEstado/verEndashboard.php";
+      const operationUrl = "verEnDashboard";
+      var data = {
+        idEmpleado: idEDDProyEmpEvaluador,
+        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
+        // idEvaluacion: idEDDEvaluacion,
+        idEDDEvalProyResp: idEDDEvalProyEmp,
+        verEnDashboard: false,
+        ordenDashboard: null,
+      };
       console.log(data);
 
-      SendDataService(url, operationUrl, data).then((response) => {
-
-        console.log("response sv", response);
-
-        actualizarRespuesta(response[0]);
-
-      });
-
-    } else {
-
-      const url = "pages/cambiarEstado/verEndashboard.php";
-
-      const operationUrl = "verEnDashboard";
-
-      var data = {
-
-        idEmpleado: idEDDProyEmpEvaluador,
-
-        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
-
-        // idEvaluacion: idEDDEvaluacion,
-
-        idEDDEvalProyResp: idEDDEvalProyEmp,
-
-        verEnDashboard: "",
-
-        ordenDashboard: "",
-
-      };
       SendDataService(url, operationUrl, data).then((response) => {
         console.log("response sv", response);
         actualizarRespuesta(response[0]);
@@ -126,7 +98,7 @@ export default function FormularioEvaluacionRespondida() {
     function () {
       GetData();
     },
-    [idEDDEvaluacion, loadedData, idEDDEvalPregunta]
+    [idEDDEvaluacion, loadedData]
   );
   var auxEncabezado = "0";
   var auxOrden = "0";
@@ -135,7 +107,7 @@ export default function FormularioEvaluacionRespondida() {
     <>
       <Header></Header>
       <div>
-
+        
         <a
           style={{ margin: "10px", marginTop: "15px", marginLeft: "60px" }}
           type="submit"
@@ -146,7 +118,6 @@ export default function FormularioEvaluacionRespondida() {
           Volver
         </a>
         <Container id="textStyle">
-          {/* <img src={logoTsoft}/> &nbsp; <img width="200px" height="79px" src={idEDDEvalPregunta.logoFormulario}></img> */}
           {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
             if (auxEncabezado !== idEDDEvalPregunta.nomEvaluacion) {
               return (
@@ -201,26 +172,28 @@ export default function FormularioEvaluacionRespondida() {
 
                       <Container>
                         <form
-                          name={idEDDEvalPregunta.ordenPregunta}
-                          id={idEDDEvalPregunta.ordenPregunta}
+                          name={idEDDEvalPregunta.pregunta}
+                          key={idEDDEvalPregunta.pregunta}
                           onSubmit={VerEnDashboard}
                         >
                           <div>
-                            <label for="verEnDashboard">Habilitar</label>
+                            <label for="verEnDashboard">Habilitar &nbsp;</label>
                             <input
+                              name={idEDDEvalPregunta.pregunta}
                               type="checkbox"
-                              id="verEnDashboard"
+                              key={idEDDEvalPregunta.pregunta}
                               value={
-                                idEDDEvalPregunta.verEnDashboard === "0" ||
-                                  idEDDEvalPregunta.verEnDashboard === null
-                                  ? "0"
-                                  : "1"
+                                idEDDEvalPregunta.verEnDashboard === null ||
+                                idEDDEvalPregunta.verEnDashboard === "0"
+                                  ? false
+                                  : true
                               }
                               defaultChecked={
-                                idEDDEvalPregunta.verEnDashboard === "1" ||
-                                  idEDDEvalPregunta.verEnDashboard !== null
-                                  ? true
-                                  : false
+                                idEDDEvalPregunta.verEnDashboard === null ||
+                                idEDDEvalPregunta.verEnDashboard === "0" ||
+                                idEDDEvalPregunta.verEnDashboard === ""
+                                  ? false
+                                  : true
                               }
                               onChange={({ target }) => {
                                 setInputVerEnDashboard(target.value);
@@ -233,18 +206,22 @@ export default function FormularioEvaluacionRespondida() {
                           </div>
                           <div>
                             <>
+                            <h7>Orden de dashboard : &nbsp;</h7>
                               <input
                                 type="number"
-                                placeholder="Orden de dashboard"
-                                name={idEDDEvalPregunta.ordenPregunta}
+                                name={idEDDEvalPregunta.pregunta}
+                                defaultValue={idEDDEvalPregunta.ordenDashboard}
                                 onChange={({ target }) => {
                                   setInputOrdenDashboard(target.value);
+                                  setIdEDDEvalProyEmp(
+                                    idEDDEvalPregunta.idEDDEvalProyResp
+                                  );
                                 }}
                               ></input>
                               <br />
                             </>
                           </div>
-                          <Button id="enviarFormRespondido" type="submit">Enviar</Button>
+                          <Button type="submit" id="enviarFormRespondido">Enviar</Button>
                         </form>
                       </Container>
 

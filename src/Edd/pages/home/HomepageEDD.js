@@ -388,7 +388,8 @@ export default function HomePageEDD() {
               <Card.Body className="cardBody">
                 <Card.Text className="cardText">Tiempo</Card.Text>
                 <Card.Title className="cardTitle">
-                  {listResumenEval[0].tiempoPromedio}
+                  <span>{listResumenEval[0].tiempoPromedio}</span>
+                  <p className="porcentajeCard">min</p>
                 </Card.Title>
                 <Card.Text className="cardText">Promedio</Card.Text>
               </Card.Body>
@@ -418,20 +419,7 @@ export default function HomePageEDD() {
 
       <Header></Header>
       <h4 style={{ color: 'white' }}>Resumen evaluación : {nomEvaluacion}</h4>
-      <Container>
-        <Link to="/ComentariosDashboard">
-          <button id="BotonColab" >
-            <ImBook id="icons" />
-            Comentarios Dashboard
-          </button>
-        </Link>
-        <Link to="/AlertasOporDes">
-          <button id="BotonColab" >
-            <ImBook id="icons" />
-            Información
-          </button>
-        </Link>
-      </Container>
+
 
       <BodyResumen></BodyResumen>
       <div

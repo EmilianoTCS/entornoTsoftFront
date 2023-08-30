@@ -133,10 +133,12 @@ export default function GraficosDashboard() {
                             </Card.Body>
                         </Card>
                         <Card>
+
                             <Card.Body className="cardBody">
                                 <Card.Text className="cardText">Tiempo</Card.Text>
                                 <Card.Title className="cardTitle">
-                                    {listResumenEval[0].tiempoPromedio}
+                                    <span>{listResumenEval[0].tiempoPromedio}</span>
+                                    <p className="porcentajeCard">min</p>
                                 </Card.Title>
                                 <Card.Text className="cardText">Promedio</Card.Text>
                             </Card.Body>
@@ -278,11 +280,11 @@ export default function GraficosDashboard() {
         var list_proc_emp = {};
         var contador = 0;
         var render = [];
-    
+
         if (loadedDataCompetencias) {
             listCompetencias.forEach((item) => {
                 contador++;
-    
+
                 if (item.nomEvaluador in list_proc_emp) {
                     if (item.nomEmpleado in list_proc_emp[item.nomEvaluador]) {
                         list_proc_emp[item.nomEvaluador][item.nomEmpleado].push(item.porcAprobComp);
@@ -295,21 +297,21 @@ export default function GraficosDashboard() {
                     };
                 }
                 console.log(list_proc_emp);
-    
+
                 if (Object.keys(listCompetencias).length === contador) {
-                    render.push (
+                    render.push(
                         <div id="bodyContainer">
                             <div id="container_cardsCompResumen">
                                 {Object.keys(list_proc_emp).map((evaluador) => (
                                     <div key={evaluador}>
-                                        <h2 style={{color:'white'}}>Evaluador:<br></br> {evaluador}</h2>
+                                        <h2 style={{ color: 'white' }}>Evaluador:<br></br> {evaluador}</h2>
                                         {Object.keys(list_proc_emp[evaluador]).map((empleado) => {
                                             const porcentajes = list_proc_emp[evaluador][empleado];
                                             const suma = porcentajes.reduce((total, porcentaje) => total + parseFloat(porcentaje), 0);
                                             const promedio = suma / porcentajes.length;
-    
+
                                             return (
-                                                <Card key={empleado} style={{width:'400px'}}>
+                                                <Card key={empleado} style={{ width: '400px' }}>
                                                     <Card.Body className="cardBody1">
                                                         <Card.Title
                                                             style={{
@@ -323,7 +325,7 @@ export default function GraficosDashboard() {
                                                                     <div class="col cardBody1">
                                                                         {empleado}
                                                                     </div>
-    
+
                                                                     <div class="col-4">
                                                                         <div>
                                                                             <div style={{ fontSize: "15pt", alignItems: "center" }}>

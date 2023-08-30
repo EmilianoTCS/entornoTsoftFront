@@ -1,7 +1,52 @@
+/* Porcentaje Card */
+.porcentajeCard {
+  display: inline;
+  margin-left: 5px; /* Ajusta este valor según necesites */
+}
+/* ALERTAS DESTACADOS Y OPORTUNIDADES */
+#titleColor{
+  margin-top: 15px;
+color: #ffffff;
+}
+.letraCompetencias {
+  text-align: left;
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  text-transform: uppercase;
+}
+
+.letra {
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  text-transform: uppercase;
+}
+
+.letraAlertas {
+  font-size: 20px;
+  color: rgb(255, 255, 255);
+  text-transform: uppercase;
+}
+#columnGeneral {
+  display: grid;
+  grid-template-columns: repeat(
+    3,
+    35%
+  ); /* Dos columnas y se ajusta automáticamente */
+  margin: 0 100px;
+}
+#column {
+  display: flex;
+  flex: 1;
+  text-align: center;
+  flex-direction: column;
+  width: 80%;
+  
+}
+
 /* Comentarios */
-#title{
-font-size: 40px;
-color: rgb(255, 255, 255);
+#title {
+  font-size: 40px;
+  color: rgb(255, 255, 255);
 }
 .center {
   display: flex;
@@ -10,10 +55,15 @@ color: rgb(255, 255, 255);
   width: 100%;
 }
 
+
 .cardContainerComentario {
   display: grid;
-  grid-template-columns: repeat(2, 40%); /* Dos columnas y se ajusta automáticamente */
+  grid-template-columns: repeat(
+    2,
+    40%
+  ); /* Dos columnas y se ajusta automáticamente */
   gap: 20px; /* Espacio entre las tarjetas */
+  justify-content: center;
 
 }
 
@@ -21,7 +71,9 @@ color: rgb(255, 255, 255);
   flex: 1;
   margin: 10px;
   position: relative;
+  background-color: #a6a9ac;
 }
+
 
 .columnTitle {
   font-weight: bold;
@@ -29,6 +81,7 @@ color: rgb(255, 255, 255);
 
 .columnContent {
   padding-left: 10px;
+  
 }
 
 .nomEvaluadorCell {
@@ -39,9 +92,10 @@ color: rgb(255, 255, 255);
   position: absolute;
   bottom: 0;
   right: 0;
+  color: #ffffff;
+  
 }
 /* -- */
-
 
 /* BOTONES */
 #BotonColab {

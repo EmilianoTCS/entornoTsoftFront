@@ -7,9 +7,11 @@ import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
-import { BsFillTrashFill,BsMegaphoneFill } from "react-icons/bs";
+import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillBook } from "react-icons/ai";
-import { ImHome } from "react-icons/im";
+import { MdDashboard } from "react-icons/md";
+import { SiSubstack } from "react-icons/si";
+import { FaComments } from "react-icons/fa";
 
 
 import "../TablasStyles.css";
@@ -99,6 +101,30 @@ export default function ListadoEDDEvaluacion() {
       setEDDEvaluacion(datos.datos); console.log(data);
     });
   }
+
+  function ValidarFecha(fechaIni, fechaFin) {
+    const fechaActual = new Date().toLocaleDateString("es-GB"); // Obtiene la fecha actual como objeto de fecha
+    const fechaInicio = new Date(fechaIni).toLocaleDateString("es-GB");
+    const fechaFinal = new Date(fechaFin).toLocaleDateString("es-GB");
+
+    console.log("fechaActual", fechaActual);
+    console.log("fechaInicio", fechaInicio);
+    console.log("fechaFinal", fechaFinal);
+    var result = ""
+    // Si las fechas son válidas
+    if (fechaActual >= fechaInicio && fechaActual <= fechaFinal) {
+      result = 'SÍ';
+    } else {
+      result = 'NO';
+    }
+
+    return result;
+  }
+
+  // const resultado = ValidarFecha('2023-08-01', '2023-08-31');
+  // console.log(resultado); // Debería imprimir 'SÍ' o 'NO' según la fecha actual
+
+  // Ejemplo de uso
 
   //PAGINADOR ---------------------
 
@@ -207,7 +233,9 @@ export default function ListadoEDDEvaluacion() {
                   <td>{EDDEvaluacion.tipoEvaluacion}</td>
                   <td>{EDDEvaluacion.fechaIni}</td>
                   <td>{EDDEvaluacion.fechaFin}</td>
-                  <td>Hacer Front</td>
+                  <td>
+                    {ValidarFecha(EDDEvaluacion.fechaIni, EDDEvaluacion.fechaFin)}
+                  </td>
 
                   <td>
                     <button
@@ -227,22 +255,28 @@ export default function ListadoEDDEvaluacion() {
 
                     {EDDEvaluacion.tipoEvaluacion !== 'COLABORADOR' ? (
                       <Link to={`/homePageEDD/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
-                        <button data-title="Dashboard" id="OperationBtns">
-                          <ImHome id="icons" />
+                        <button data-title="Información referentes" id="OperationBtns">
+                          <MdDashboard id="icons" />
                         </button>
                       </Link>
                     ) : (
                       <Link to={`/GraficosDashboard/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
-                        <button data-title="Dashboard" id="OperationBtns">
-                          <ImHome id="icons" />
+                        <button data-title="Información colaboradores" id="OperationBtns">
+                          <MdDashboard id="icons" />
                         </button>
                       </Link>
                     )
                     }
 
                     <Link to={`/ComentariosDashboard/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
-                      <button data-title="Comentarios Dashboard" id="OperationBtns">
-                        <BsMegaphoneFill id="icons" />
+                      <button data-title="Comentarios" id="OperationBtns">
+                        <FaComments id="icons" />
+                      </button>
+                    </Link>
+
+                    <Link to={`/AlertasOporDes/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
+                      <button data-title="Desempeño" id="OperationBtns">
+                        <SiSubstack id="icons" />
                       </button>
                     </Link>
 

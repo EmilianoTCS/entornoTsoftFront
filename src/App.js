@@ -119,7 +119,7 @@ function App() {
             <Route element={<ComentariosDashboard />} path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion"></Route> 
 
             
-            <Route element={<AlertOpoDes />} path="/AlertasOporDes"></Route> 
+            <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion"></Route> 
             {/* EDD */}
             <Route
               element={<ListadoEddProyecto />}
