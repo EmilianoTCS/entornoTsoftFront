@@ -9,9 +9,7 @@ import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillBook } from "react-icons/ai";
-import { MdDashboard } from "react-icons/md";
-import { SiSubstack } from "react-icons/si";
-import { FaComments } from "react-icons/fa";
+
 
 
 import "../TablasStyles.css";
@@ -102,29 +100,24 @@ export default function ListadoEDDEvaluacion() {
     });
   }
 
-  function ValidarFecha(fechaIni, fechaFin) {
-    const fechaActual = new Date().toLocaleDateString("es-GB"); // Obtiene la fecha actual como objeto de fecha
-    const fechaInicio = new Date(fechaIni).toLocaleDateString("es-GB");
-    const fechaFinal = new Date(fechaFin).toLocaleDateString("es-GB");
 
-    console.log("fechaActual", fechaActual);
-    console.log("fechaInicio", fechaInicio);
-    console.log("fechaFinal", fechaFinal);
-    var result = ""
-    // Si las fechas son válidas
-    if (fechaActual >= fechaInicio && fechaActual <= fechaFinal) {
-      result = 'SÍ';
-    } else {
-      result = 'NO';
-    }
+  // function ValidarFecha(fechaIni, fechaFin) {
+  //   const fechaActual = new Date(); // Obtiene la fecha actual como objeto de fecha
+  //   const fechaInicio = fechaIni.split('/');
+  //   const fechaFinal = fechaFin.split('/');
+  //   var fechaActualAux = fechaActual.getFullYear() + '' + ((fechaActual.getMonth() + 1) > 9 ? (fechaActual.getMonth() + 1) : '0' + (fechaActual.getMonth() + 1)) + '' + fechaActual.getDate() + '';
+  //   var fechaInicioAux = fechaInicio[2] + fechaInicio[1] + fechaInicio[0];
+  //   var fechaFinalAux = fechaFinal[2] + fechaFinal[1] + fechaFinal[0];
+  //   var result = "";
+  //   // Si fecha actual está entre fechas de inicio y fin de vigencia de la evaluación, entonces está vigente.
+  //   if (fechaActualAux >= fechaInicioAux && fechaActualAux <= fechaFinalAux) {
+  //     result = 'SÍ';
+  //   } else {
+  //     result = 'NO';
+  //   };
+  //   return result;
+  // }
 
-    return result;
-  }
-
-  // const resultado = ValidarFecha('2023-08-01', '2023-08-31');
-  // console.log(resultado); // Debería imprimir 'SÍ' o 'NO' según la fecha actual
-
-  // Ejemplo de uso
 
   //PAGINADOR ---------------------
 
@@ -133,7 +126,7 @@ export default function ListadoEDDEvaluacion() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de evaluaciones</h1>
           <h6 style={{ color: "gray" }}>
@@ -234,7 +227,7 @@ export default function ListadoEDDEvaluacion() {
                   <td>{EDDEvaluacion.fechaIni}</td>
                   <td>{EDDEvaluacion.fechaFin}</td>
                   <td>
-                    {ValidarFecha(EDDEvaluacion.fechaIni, EDDEvaluacion.fechaFin)}
+                  {EDDEvaluacion.disponibilidadEvaluacion }
                   </td>
 
                   <td>
@@ -253,32 +246,7 @@ export default function ListadoEDDEvaluacion() {
                       </button>
                     </Link>
 
-                    {EDDEvaluacion.tipoEvaluacion !== 'COLABORADOR' ? (
-                      <Link to={`/homePageEDD/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
-                        <button data-title="Información referentes" id="OperationBtns">
-                          <MdDashboard id="icons" />
-                        </button>
-                      </Link>
-                    ) : (
-                      <Link to={`/GraficosDashboard/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
-                        <button data-title="Información colaboradores" id="OperationBtns">
-                          <MdDashboard id="icons" />
-                        </button>
-                      </Link>
-                    )
-                    }
-
-                    <Link to={`/ComentariosDashboard/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
-                      <button data-title="Comentarios" id="OperationBtns">
-                        <FaComments id="icons" />
-                      </button>
-                    </Link>
-
-                    <Link to={`/AlertasOporDes/${EDDEvaluacion.idEDDEvaluacion}/${EDDEvaluacion.nomEvaluacion}`}>
-                      <button data-title="Desempeño" id="OperationBtns">
-                        <SiSubstack id="icons" />
-                      </button>
-                    </Link>
+                    
 
                     <button
                       data-title="Desactivar evaluación"
@@ -298,7 +266,7 @@ export default function ListadoEDDEvaluacion() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

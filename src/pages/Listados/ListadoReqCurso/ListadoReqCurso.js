@@ -97,7 +97,7 @@ export default function ListadoReqCurso() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de requisitos cursos</h1>
           <h6 style={{color:'gray'}}>Factory Devops {'->'} Listado de requisitos cursos</h6>
@@ -208,7 +208,7 @@ export default function ListadoReqCurso() {
                num_boton={num_boton}
              ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

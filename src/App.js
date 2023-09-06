@@ -114,12 +114,12 @@ function App() {
             {/* ------------------------------------------------------------------------------------------ */}
 
             {/* DASHBOARD */}
-            <Route element={<HomePageEDD />} path="/homePageEDD/:idEvaluacion/:nomEvaluacion"></Route>
-            <Route element={<GraficosDashboard />} path="/GraficosDashboard/:idEvaluacion/:nomEvaluacion"></Route> 
-            <Route element={<ComentariosDashboard />} path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion"></Route> 
+            <Route element={<HomePageEDD />} path="/homePageEDD/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
+            <Route element={<GraficosDashboard />} path="/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route> 
+            <Route element={<ComentariosDashboard />} path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route> 
 
             
-            <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion"></Route> 
+            <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto"></Route> 
             {/* EDD */}
             <Route
               element={<ListadoEddProyecto />}

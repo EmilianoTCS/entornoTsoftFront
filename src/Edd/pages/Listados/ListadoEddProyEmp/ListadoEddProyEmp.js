@@ -116,7 +116,7 @@ export default function ListadoEDDProyEmp() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
         <a
             type="submit"
@@ -268,7 +268,7 @@ export default function ListadoEDDProyEmp() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

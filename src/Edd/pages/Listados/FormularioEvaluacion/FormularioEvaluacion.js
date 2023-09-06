@@ -38,7 +38,7 @@ export default function FormularioEvaluacion() {
       setidEDDEvalPregunta(data);
       setLoadedData(true); //Cambio el estado del booleano
       ConfirmAlert();
-
+      console.log(data);
     });
   }
 
@@ -56,6 +56,8 @@ export default function FormularioEvaluacion() {
         cancelButtonColor: "#d33",
         confirmButtonText: "Continuar",
         cancelButtonText: "Cancelar",
+        allowOutsideClick : false,
+        allowEscapeKey: false
       }).then((result) => {
         if (result.isConfirmed) {
           var fechaIni = new Date();
@@ -67,6 +69,12 @@ export default function FormularioEvaluacion() {
       });
     }
   }
+
+ 
+
+
+
+
 
   function ConfirmAlertEnvio() {
     if (loadedData) {
@@ -113,6 +121,7 @@ export default function FormularioEvaluacion() {
     SendDataService(url, operationUrl, data).then((response) => {
       console.log("respuestaServer:", response);
       ConfirmAlertEnvio();
+
     });
   }
 
@@ -158,20 +167,23 @@ export default function FormularioEvaluacion() {
                 })}
               </div>
               <div class="col" id="encabezadoRight">
-                <img src={logo} />
+              <img width="200px" height="79px" src={idEDDEvalPregunta.logoFormulario}></img>
               </div>
             </div>
           </div>
           {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
 
             if (auxDesc !== idEDDEvalPregunta.descFormulario) {
+              auxDesc= idEDDEvalPregunta.descFormulario
               return (
                 <>
                   <p id="encabezadoEnd" style={{ color: 'white' }}>
                     {auxDesc = idEDDEvalPregunta.descFormulario}
                   </p>
                 </>
+
               )
+              
             }
           })}
 

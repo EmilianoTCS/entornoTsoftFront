@@ -22,7 +22,9 @@ const EditarEmpleados = ({
   const [idPais, setidPais] = useState("");
   const [idArea, setidArea] = useState("");
   const [idCargo, setidCargo] = useState("");
-  
+  const [idCliente, setidCliente] = useState("");
+
+  const [listCliente, setlistCliente] = useState([""]);
   const [listPais, setlistPais] = useState([""]);
   const [listCargo, setlistCargo] = useState([""]);
   const [listArea, setlistArea] = useState([""]);
@@ -42,6 +44,8 @@ const EditarEmpleados = ({
     setidPais(responseID[0].idPais);
     setidArea(responseID[0].idArea);
     setidCargo(responseID[0].idCargo);
+    setidCliente(responseID[0].idCliente);
+
   };
   // ----------------------FUNCIONES----------------------------
   function obtenerPais() {
@@ -61,11 +65,17 @@ const EditarEmpleados = ({
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => setlistArea(response));
   }
-
+  function obtenerCliente() {
+    const url = "pages/auxiliares/listadoClienteForms.php";
+    const operationUrl = "listados";
+    getDataService(url, operationUrl).then((response) =>
+      setlistCliente(response)
+    );
+  }
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idEmpleado, nombreTabla: nombreTabla};
+    var data = { idRegistro: idEmpleado, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -75,6 +85,8 @@ const EditarEmpleados = ({
       setidPais(response[0].idPais);
       setidArea(response[0].idArea);
       setidCargo(response[0].idCargo);
+      setidCliente(response[0].idCliente);
+      
     });
   }, [idEmpleado]);
 
@@ -96,11 +108,12 @@ const EditarEmpleados = ({
       idPais: idPais === "" ? responseID[0].idPais : idPais,
       idArea: idArea === "" ? responseID[0].idArea : idArea,
       idCargo: idCargo === "" ? responseID[0].idCargo : idCargo,
+      idCliente: idCliente=== "" ? responseID[0].idCliente : idCliente,
+
     };
-console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      {actualizarEmpleado(empleado);console.log(response);};
+      // TopAlerts('successEdited');
+      { actualizarEmpleado(empleado); console.log(response); };
     });
 
     function actualizarEmpleado(empleado) {
@@ -118,6 +131,7 @@ console.log(data);
         obtenerPais();
         obtenerArea();
         obtenerCargo();
+        obtenerCliente();
       }
     },
     [idEmpleado]
@@ -135,7 +149,7 @@ console.log(data);
             <div>
               <label htmlFor="input_nombreDelEmpleado">Nombre:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre completo del colaborador"
                 value={nomEmpleado || ""}
                 type="text"
@@ -150,7 +164,7 @@ console.log(data);
             <div>
               <label htmlFor="input_Correo">Correo:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba el correo del colaborador"
                 value={correoEmpleado || ""}
                 type="email"
@@ -233,6 +247,29 @@ console.log(data);
                 {listArea.map((valor) => (
                   <option value={valor.idArea}>{valor.nomArea}</option>
                 ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="input_Area">Cliente: </label>
+              <select
+                required
+                value={idCliente||''}
+                className="form-control"
+                name="input_Area"
+                id="input_Area"
+                placeholder="Seleccione el área"
+              onChange={({ target }) => setidCliente(target.value)}
+              >
+              {listCliente.map((valor) => (
+                  <option
+                    selected={valor.idCliente === idCliente ? false : ""}
+                    value={valor.idCliente}
+                  >
+                    {valor.nomCliente}
+                  </option>
+                ))}
+                
               </select>
             </div>
             <Button

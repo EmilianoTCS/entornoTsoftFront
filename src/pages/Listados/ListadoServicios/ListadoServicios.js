@@ -97,7 +97,7 @@ export default function ListadoServicio() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de servicios</h1>
           <h6 style={{ color: "gray" }}>
@@ -225,7 +225,7 @@ export default function ListadoServicio() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

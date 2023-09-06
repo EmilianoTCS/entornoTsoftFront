@@ -21,11 +21,11 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   const [tipoUsuario, settipoUsuario] = useState("");
   const [nomRol, setnomRol] = useState("");
   const [telefonoEmpleado, settelefonoEmpleado] = useState("");
-
   const [idSubsistema, setidSubsistema] = useState("");
-
   const [listSubsistema, setlistSubsistema] = useState([""]);
+  const [idCliente, setidCliente] = useState("");
 
+  const [listCliente, setlistCliente] = useState([""]);
   const [listPais, setlistPais] = useState([""]);
   const [listCargo, setlistCargo] = useState([""]);
   const [listArea, setlistArea] = useState([""]);
@@ -40,6 +40,13 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   const handleClose = () => cambiarEstado(false);
 
   // ----------------------FUNCIONES----------------------------
+  function obtenerCliente() {
+    const url = "pages/auxiliares/listadoClienteForms.php";
+    const operationUrl = "listados";
+    getDataService(url, operationUrl).then((response) =>
+      setlistCliente(response)
+    );
+  }
   function obtenerSubsistema() {
     const url = "pages/auxiliares/listadoSubsistemaForms.php";
     const operationUrl = "listados";
@@ -84,13 +91,15 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
       idPais: idPais,
       idCargo: idCargo,
       idArea: idArea,
+      idCliente:idCliente,
       usuario: usuario,
       password: password,
       tipoUsuario: tipoUsuario,
       nomRol: nomRol,
       telefonoEmpleado: telefonoEmpleado,
       idSubsistema: idSubsistema,
-    };console.log(data);
+
+    };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
       // TopAlerts("successCreated"); 
@@ -108,6 +117,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
     obtenerCargo();
     obtenerArea();
     obtenerNomRol();
+    obtenerCliente();
     obtenerSubsistema();
   }, []);
 
@@ -292,6 +302,28 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                   ))}
                 </select>
               </div>
+
+              <div className="form-group">
+                <label htmlFor="input_RolUsuario">Cliente: </label>
+                <select
+                  required
+                  className="form-control"
+                  name="input_RolUsuario"
+                  id="input_RolUsuario"
+                  placeholder="Seleccione el rol de usuario"
+                  onChange={({ target }) => setidCliente(target.value)}
+                >
+                  <option hidden value="">
+                    Desplegar lista
+                  </option>
+
+                  {listCliente.map((valor) => (
+                    <option value={valor.idCliente}>{valor.nomCliente}</option>
+                  ))}
+                </select>
+              </div>
+
+
               {/* <div className="form-group" >
                 <label htmlFor="input_RolUsuario">Activar subsistema : </label>
                 <select

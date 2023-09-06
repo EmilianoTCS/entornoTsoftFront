@@ -38,8 +38,9 @@ const InsertarEDDEvalProyEmp = ({
   function obtenerEvaluado() {
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyEmpEvaluado(response)
+    getDataService(url, operationUrl).then((response) => {
+      setlistEDDProyEmpEvaluado(response)
+    }
     );
   }
 
@@ -48,7 +49,7 @@ const InsertarEDDEvalProyEmp = ({
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDProyEmpEvaluador(response)
+      setlistEDDProyEmpEvaluador(response)
     );
   }
   function obtenerEvaluacion() {
@@ -56,8 +57,17 @@ const InsertarEDDEvalProyEmp = ({
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
       setlistEDDEvaluacion(response)
+
     );
   }
+  // filtro = TECH & FUN 
+  // function filterItems(listEDDProyEmpEvaluado, filtro) {
+  //   var listFiltrada = listEDDProyEmpEvaluado.filter((listOriginal) => listOriginal.toLowerCase().includes(filtro.toLowerCase()))
+  //   console.log(listFiltrada);
+  //   return listFiltrada;
+  // }
+
+
 
   function SendData(e) {
     // e.preventDefault();
@@ -68,7 +78,7 @@ const InsertarEDDEvalProyEmp = ({
       evalRespondida: 0,
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
       idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
-      idEDDEvaluacion:idEDDEvaluacion,
+      idEDDEvaluacion: idEDDEvaluacion,
       isActive: true,
     };
     console.log(data);
@@ -139,7 +149,7 @@ const InsertarEDDEvalProyEmp = ({
               </select>
             </div>
             <div className="form-group">
-            <label htmlFor="input_proyemp">Proyecto - Evaluado: </label>
+              <label htmlFor="input_proyemp">Proyecto - Evaluado: </label>
               <select
                 required
                 className="form-control"
@@ -156,8 +166,9 @@ const InsertarEDDEvalProyEmp = ({
                   <option value={valor.idEDDProyEmp}>{valor.nomProyEmp}</option>
                 ))}
               </select>
+              
             </div>
-           
+
 
 
             <Button

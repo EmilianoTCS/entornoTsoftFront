@@ -20,3 +20,14 @@
   text-decoration: none;
   padding: 6px;
 }
+
+#btnAtrasEvaluacion {
+  background-color: #e10b1c;
+  border: #e10b1c solid 1px;
+  border-radius: 3px;
+  color: white;
+  text-decoration: none;
+  padding: 6px;
+  margin-left: 4em;
+  margin-top: 1em;
+}

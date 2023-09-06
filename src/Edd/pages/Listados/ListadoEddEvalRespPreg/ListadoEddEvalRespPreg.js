@@ -115,7 +115,7 @@ export default function ListadoEDDEvalRespPreg() {
       <br></br>
       <br></br>
 
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
       
         <div id="containerTablas">
         <a
@@ -218,6 +218,7 @@ export default function ListadoEDDEvalRespPreg() {
             isActiveEDDEvalRespPreg={isActiveInsertEDDEvalRespPreg}
             cambiarEstado={setIsActiveInsertEDDEvalRespPreg}
             EDDEvalRespPreg={EDDEvalRespPreg}
+            idEDDEvalPregunta={idEDDEvalPregunta}
           ></InsertarEDDEvalRespPreg>
 
           <EditarEDDEvalRespPreg
@@ -281,7 +282,7 @@ export default function ListadoEDDEvalRespPreg() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

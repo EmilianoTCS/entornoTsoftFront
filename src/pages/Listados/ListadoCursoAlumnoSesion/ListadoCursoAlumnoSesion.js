@@ -101,7 +101,7 @@ export default function ListadoCursoAlumnoSesion() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de Cursos Alumnos Sesiones</h1>
           <h6 style={{ color: "gray" }}>
@@ -246,7 +246,7 @@ export default function ListadoCursoAlumnoSesion() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

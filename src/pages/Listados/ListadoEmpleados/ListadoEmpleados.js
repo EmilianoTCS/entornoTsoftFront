@@ -132,7 +132,7 @@ export default function ListadoEmpleados() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de colaboradores</h1>
           <h6 style={{color:'gray'}}>Factory Devops {'->'} Listado de colaboradores</h6>
@@ -244,6 +244,7 @@ export default function ListadoEmpleados() {
                 <th>País</th>
                 <th>Área</th>
                 <th>Cargo</th>
+                <th>Cliente</th>
                 <th>Operaciones</th>
                 {/* <th>Usuario</th> */}
               </tr>
@@ -259,6 +260,8 @@ export default function ListadoEmpleados() {
                   <td>{empleado.nomArea}</td>
                   <td align="right" width={260}>{empleado.nomCargo}</td>
                   {/* <td>{empleado.usuario}</td> */}
+                  <td align="right" width={260}>{empleado.nomCliente}</td>
+
                   <td align="right" width={235}>
                     <button
                       data-title="Editar cliente"
@@ -300,7 +303,7 @@ export default function ListadoEmpleados() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

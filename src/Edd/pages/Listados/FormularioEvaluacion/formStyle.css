@@ -112,7 +112,7 @@ p {
   font-family: "Roboto Slab", serif;
   margin-left: 62px;
   top: 20px;
-  font-size: 13pt;
+  font-size: 11pt;
   background-color: #e10b1c;
   color: #fff;
   border: solid #e10b1c 1px;
@@ -123,4 +123,21 @@ p {
   color: #e10b1c;
   font-weight: 300;
   background-color: #fff;
+}
+
+#enviarOrdenComentario {
+  font-family: "Roboto Slab", serif;
+
+  top: 20px;
+  font-size: 11pt;
+  background-color: #e10b1c;
+  color: #fff;
+  border: solid #e10b1c 1px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#enviarOrdenComentario:hover {
+  color: #e10b1c;
+  font-weight: 300;
+  background-color: #ffffff;
 }

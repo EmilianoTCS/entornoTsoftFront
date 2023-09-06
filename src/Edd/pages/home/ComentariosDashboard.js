@@ -8,9 +8,11 @@ import "./GraficosDashboard"
 import { useRoute } from "wouter";
 
 export default function ComentariosDashboard() {
-    const [, params] = useRoute("/ComentariosDashboard/:idEvaluacion/:nomEvaluacion");
+    const [, params] = useRoute("/ComentariosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto");
 
     const idEDDEvaluacion = params.idEvaluacion;
+    const idEDDProyecto = params.idEDDProyecto;
+
     const nomEvaluacion = decodeURI(params.nomEvaluacion);
 
     const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -31,6 +33,7 @@ export default function ComentariosDashboard() {
         var operationUrl = "listadoComentariosEval";
         var data = {
             idEvaluacion: idEDDEvaluacion,
+            idProyecto:idEDDProyecto,
         };
         SendDataService(url, operationUrl, data).then((data) => {
             setListComentEval(data);
@@ -182,13 +185,19 @@ export default function ComentariosDashboard() {
             GetConfigCompColorFlechas();
             GetConfigCompRangoFlechas();
         },
-        [loadedDataComentEval, loadedDataRango, loadedDataColor, idEDDEvaluacion, nomEvaluacion]
+        [loadedDataComentEval, loadedDataRango, loadedDataColor, idEDDEvaluacion, nomEvaluacion,idEDDProyecto]
     );
 
     return userData.statusConected || userData !== null ? (
         <div>
 
             <Header></Header>
+            <a
+            type="submit"
+            id="btnAtrasEvaluacion"
+            value="Registrar"
+            href="/listadoEddEvalProyEmp/0">Volver
+          </a>
             <h4 id="title">COMENTARIOS DESTACADOS EVALUADORES</h4>
             <div
                 style={{

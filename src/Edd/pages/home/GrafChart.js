@@ -25,25 +25,24 @@ ChartJS.register(
 );
 
 
-export default function GrafChart() {
+export default function GrafChart({idEDDEvaluacion,idEDDProyecto}) {
+
     const [listCompetencias, setListCompetencias] = useState("");
 
     function GetDataCompetencias() {
         var url = "pages/listados/listadoCompetenciasEval.php";
         var operationUrl = "listadoCompetenciasEval";
         var data = {
-            idEvaluacion: 2,
+            idEvaluacion: idEDDEvaluacion,
+            idProyecto:idEDDProyecto,
         };
+        console.log(data);
         SendDataService(url, operationUrl, data).then((data) => {
             setListCompetencias(data);
         });
+        // console.log(data);
     }
 
-
-
-
-
-    
 
     function Porcentajes() {
         var list_eval_comp_porc = {};
@@ -51,8 +50,8 @@ export default function GrafChart() {
         var totalPorcentajesPorCompetencia = {};
         let reversed = Object.values(listCompetencias).reverse()
 
-        console.log("listCompetencias",listCompetencias);
-        console.log("reversed",reversed);
+        // console.log("listCompetencias",listCompetencias);
+        // console.log("reversed",reversed);
     
         reversed.forEach(item => {
             if (item.nomEvaluador in list_eval_comp_porc) {

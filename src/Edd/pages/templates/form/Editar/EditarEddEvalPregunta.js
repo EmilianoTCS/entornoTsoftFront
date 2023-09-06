@@ -74,7 +74,6 @@ const editarEDDEvalPregunta = ({
       settipoResp(response[0].tipoResp);
       setpreguntaObligatoria(response[0].preguntaObligatoria);
 
-
       setidEDDEvalCompetencia(response[0].idEDDEvalCompetencia);
       setidEDDEvaluacion(response[0].idEDDEvaluacion);
 
@@ -100,7 +99,8 @@ const editarEDDEvalPregunta = ({
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
       TopAlerts("successEdited");
-      actualizarEDDEvalPregunta(EDDEvalPregunta);console.log(response);
+      actualizarEDDEvalPregunta(EDDEvalPregunta);
+      console.log(response);
     });
 
     function actualizarEDDEvalPregunta(EDDEvalPregunta) {

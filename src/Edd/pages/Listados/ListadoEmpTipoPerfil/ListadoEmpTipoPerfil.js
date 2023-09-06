@@ -115,7 +115,7 @@ export default function ListadoEmpTipoPerfil() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de perfiles de colaborador</h1>
           <h6 style={{color:'gray'}}>EDD {'->'} Listado de perfiles de colaborador</h6>
@@ -252,7 +252,7 @@ export default function ListadoEmpTipoPerfil() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

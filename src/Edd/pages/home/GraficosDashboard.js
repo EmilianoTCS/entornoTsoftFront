@@ -7,12 +7,16 @@ import { Navigate } from "react-router-dom";
 import "./homeEDD.css";
 import GrafChart from "./GrafChart";
 import { useRoute } from "wouter";
+import { Container, Table } from "react-bootstrap";
+
 
 export default function GraficosDashboard() {
-    const [, params] = useRoute("/GraficosDashboard/:idEvaluacion/:nomEvaluacion");
+    const [, params] = useRoute("/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto");
 
     const idEDDEvaluacion = params.idEvaluacion;
     const nomEvaluacion = decodeURI(params.nomEvaluacion);
+    const idEDDProyecto = params.idEDDProyecto;
+
 
     const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
     const [listResumenEval, setListResumenEval] = useState("");
@@ -39,6 +43,7 @@ export default function GraficosDashboard() {
         var operationUrl = "listadoResumenEval";
         var data = {
             idEvaluacion: idEDDEvaluacion,
+            idProyecto:idEDDProyecto,
         };
         SendDataService(url, operationUrl, data).then((data) => {
             setListResumenEval(data);
@@ -51,6 +56,7 @@ export default function GraficosDashboard() {
         var operationUrl = "listadoCompetenciasEval";
         var data = {
             idEvaluacion: idEDDEvaluacion,
+            idProyecto:idEDDProyecto,
         };
         SendDataService(url, operationUrl, data).then((data) => {
             setListCompetencias(data);
@@ -110,17 +116,18 @@ export default function GraficosDashboard() {
                                 <Card.Text className="cardText">Satisfacción </Card.Text>
                                 <Card.Title className="cardTitle">
                                     {listResumenEval[0].porcSatisfaccion}%
+                                    
                                 </Card.Title>
-                                <Card.Text className="cardText">general</Card.Text>
+                                <Card.Text className="cardText">General</Card.Text>
                             </Card.Body>
                         </Card>
                         <Card>
                             <Card.Body className="cardBody">
-                                <Card.Text className="cardText">Analistas </Card.Text>
+                                <Card.Text className="cardText">Referentes</Card.Text>
                                 <Card.Title className="cardTitle">
                                     {listResumenEval[0].referentesEvaluados}
                                 </Card.Title>
-                                <Card.Text className="cardText">evaluados</Card.Text>
+                                <Card.Text className="cardText">Evaluadores</Card.Text>
                             </Card.Body>
                         </Card>
                         <Card>
@@ -129,7 +136,7 @@ export default function GraficosDashboard() {
                                 <Card.Title className="cardTitle">
                                     {listResumenEval[0].competenciasEvaluadas}
                                 </Card.Title>
-                                <Card.Text className="cardText">evaluadas</Card.Text>
+                                <Card.Text className="cardText">Evaluadas</Card.Text>
                             </Card.Body>
                         </Card>
                         <Card>
@@ -143,6 +150,7 @@ export default function GraficosDashboard() {
                                 <Card.Text className="cardText">Promedio</Card.Text>
                             </Card.Body>
                         </Card>
+                        
                         {/* <Card>
                             <Card.Body className="cardBody">
                                 <Card.Text className="cardText">Satisfacción </Card.Text>
@@ -154,14 +162,16 @@ export default function GraficosDashboard() {
                         </Card> */}
 
                     </div>
+                   
                 </div>
+                
             );
         } else {
             return <h1>Loading</h1>;
         }
     }
-
     function ArrowsTemplate({ porcAprobComp }) {
+        if (loadedDataColor && loadedDataRango) {
         var auxRango = "0"; //posiciones
         var auxColor = "0"; //posiciones
         var varRango = ""; //arriba / abajo /dato visible
@@ -207,9 +217,9 @@ export default function GraficosDashboard() {
                 </div>
             </>
         );
-    }
+    }}
     function InfoArrows() {
-        if (loadedDataLeyenda) {
+        if (loadedDataLeyenda && loadedDataRango && loadedDataColor) {
             const tableRows = [];
             const uniqueDatoNoVisibleValues = new Set();
 
@@ -257,7 +267,7 @@ export default function GraficosDashboard() {
 
             return (
                 <div id="bodyContainer">
-                    <div id="container_cardsCompResumen" style={{ width: '13%' }}>
+                    <div id="container_cardsCompResumen" style={{ width: '45%',marginRight :'-2.3em',marginTop:'-8.2em' }}>
                         <Card>
                             <Card.Body>
                                 <Card.Title>
@@ -274,7 +284,6 @@ export default function GraficosDashboard() {
             );
         }
     }
-
 
     function InfoExag2() {
         var list_proc_emp = {};
@@ -296,51 +305,61 @@ export default function GraficosDashboard() {
                         [item.nomEmpleado]: [item.porcAprobComp],
                     };
                 }
-                console.log(list_proc_emp);
+                // console.log(list_proc_emp);
 
                 if (Object.keys(listCompetencias).length === contador) {
                     render.push(
                         <div id="bodyContainer">
                             <div id="container_cardsCompResumen">
-                                {Object.keys(list_proc_emp).map((evaluador) => (
-                                    <div key={evaluador}>
-                                        <h2 style={{ color: 'white' }}>Evaluador:<br></br> {evaluador}</h2>
-                                        {Object.keys(list_proc_emp[evaluador]).map((empleado) => {
-                                            const porcentajes = list_proc_emp[evaluador][empleado];
-                                            const suma = porcentajes.reduce((total, porcentaje) => total + parseFloat(porcentaje), 0);
-                                            const promedio = suma / porcentajes.length;
+                                {Object.keys(list_proc_emp).reduce((rows, evaluador, index) => {
+                                    if (index % 2 === 0) rows.push([]);
+                                    rows[rows.length - 1].push(evaluador);
+                                    return rows;
+                                }, []).map((row, rowIndex) => (
+                                    <div key={rowIndex} className="row">
+                                        {row.map((evaluador) => (
+                                            <div key={evaluador} className="col-md-7       ">
+                                                <h2 style={{ color: 'white', fontSize: '25px' }}>
+                                                    Evaluador:<br /> {evaluador}
+                                                </h2>
+                                                {Object.keys(list_proc_emp[evaluador]).map((empleado) => {
+                                                    const porcentajes = list_proc_emp[evaluador][empleado];
+                                                    const suma = porcentajes.reduce((total, porcentaje) => total + parseFloat(porcentaje), 0);
+                                                    const promedio = suma / porcentajes.length;
 
-                                            return (
-                                                <Card key={empleado} style={{ width: '400px' }}>
-                                                    <Card.Body className="cardBody1">
-                                                        <Card.Title
-                                                            style={{
-                                                                display: "flex",
-                                                                justifyContent: "space-between",
-                                                                textTransform: "uppercase",
-                                                            }}
-                                                        >
-                                                            <div class="container">
-                                                                <div class="row">
-                                                                    <div class="col cardBody1">
-                                                                        {empleado}
-                                                                    </div>
+                                                    return (
+                                                        <Card key={empleado} style={{ width: '247px' }}>
+                                                            <Card.Body className="cardBody1">
+                                                                <Card.Title
+                                                                    
+                                                                >
+                                                                    <div className="container">
+                                                                        <div className="row">
+                                                                            <div className="col cardBody1">
+                                                                                {empleado}
+                                                                            </div>
 
-                                                                    <div class="col-4">
-                                                                        <div>
-                                                                            <div style={{ fontSize: "15pt", alignItems: "center" }}>
-                                                                                <ArrowsTemplate porcAprobComp={promedio} />
-                                                                                {promedio.toFixed(2)} %
+                                                                            <div className="col-4">
+                                                                                <div>
+                                                                                    <div style={{ fontSize: "12pt", alignItems: "center", marginLeft: '-14px' }}>
+                                                                                        <ArrowsTemplate porcAprobComp={promedio} />
+                                                                                        {promedio.toFixed(2)} %
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        </Card.Title>
-                                                    </Card.Body>
-                                                </Card>
-                                            );
-                                        })}
+                                                                    
+                                                                </Card.Title>
+                                                            </Card.Body>
+                                                            
+                                                        </Card>
+                                                        
+                                                    );
+                                                })}
+                                            </div>
+                                            
+                                        ))}
                                     </div>
                                 ))}
                             </div>
@@ -350,11 +369,6 @@ export default function GraficosDashboard() {
             });
         } return render;
     }
-
-
-
-
-
 
     useEffect(
         function () {
@@ -366,36 +380,42 @@ export default function GraficosDashboard() {
             GetConfigCompRangoLeyenda()
 
         },
-        [loadedDataCompetencias, loadedDataResumenEval, loadedDataRango, loadedDataColor, loadedDataLeyenda, idEDDEvaluacion, nomEvaluacion]
+        [loadedDataCompetencias, loadedDataResumenEval, loadedDataRango, loadedDataColor, loadedDataLeyenda, idEDDEvaluacion, nomEvaluacion,idEDDProyecto]
     );
 
     return userData.statusConected || userData !== null ? (
         <div>
 
             <Header></Header>
-
+            <a
+            type="submit"
+            id="btnAtrasEvaluacion"
+            value="Registrar"
+            href="/listadoEddEvalProyEmp/0">Volver
+          </a>
             <h4 style={{ color: 'white' }}>Resumen evaluación : {nomEvaluacion}</h4>
             <BodyResumen2></BodyResumen2>
+            <Table >
+                <td id="mainTableGrafDash">
+                    <th><div><InfoExag2></InfoExag2></div><InfoArrows></InfoArrows></th>
+                    <th><div></div></th>
+                    <th><div></div></th>
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <InfoExag2></InfoExag2>
-
-                    </div>
-                    <div class="col-sm-8">
-                        <div className="bg-light mx-auto px-2 border border-2 border-secondary"
-                            style={{ width: "690px", height: "350px", }}>
-                            <GrafChart />
+                    <th>
+                        <div class="bg-light mx-auto px-2 border border-2 border-secondary"
+                            style = {{ width: "670px", height: "350px" }}>
+                            <GrafChart idEDDEvaluacion={idEDDEvaluacion} idEDDProyecto={idEDDProyecto} />
                         </div>
-                    </div>
-
-                </div>
-
-            </div><InfoArrows></InfoArrows>
+                    </th>
+                </td>
+                
+            </Table>
+            
         </div>
 
     ) : (
         <Navigate to="/login"></Navigate>
+
     );
 }
+

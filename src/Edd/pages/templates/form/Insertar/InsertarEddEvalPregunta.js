@@ -123,6 +123,7 @@ const InsertarEDDEvalPregunta = ({
                 name="input_nombreDelEDDEvalPregunta"
                 id="input_nombreDelEDDEvalPregunta"
                 maxLength="300"
+                value={nomPregunta || ""}
                 onChange={({ target }) => setnomPregunta(target.value)}
                 required
               />

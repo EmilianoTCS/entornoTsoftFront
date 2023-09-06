@@ -10,6 +10,12 @@ import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillKeyFill, BsFillTrashFill } from "react-icons/bs";
 import { AiFillBook } from "react-icons/ai";
 
+import { MdDashboard } from "react-icons/md";
+import { SiSubstack } from "react-icons/si";
+import { FaComments } from "react-icons/fa";
+import { BiSolidSend } from "react-icons/bi";
+
+
 import "../TablasStyles.css";
 import InsertarEDDEvalProyEmp from "../../templates/form/Insertar/InsertarEddEvalProyEmp";
 import EditarEddEvalProyEmp from "../../templates/form/Editar/EditarEddEvalProyEmp";
@@ -35,16 +41,15 @@ export default function ListadoEDDEvalProyEmp() {
   const nombreTabla = "eddevalproyemp";
 
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState('');
-  const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState(
-    ''
-  );
+
 
   const [idProyecto, setidProyecto] = useState(params.idProyecto);
+  const [idEvaluador, setidEvaluador] = useState(params.idProyecto);
+  const [idEvaluado, setidEvaluado] = useState(params.idProyecto);
+
+  const [listEvaluadorEvaluado, setlistEvaluadorEvaluado] = useState([""]);
 
   const [listProyecto, setlistProyecto] = useState([""]);
-  const [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState(
-    ''
-  );
 
   // const [listEDDProyEmpEvaluador, setlistEDDProyEmpEvaluador] = useState([""]);
   // const [listEDDProyEmpEvaluado, setlistEDDProyEmpEvaluado] = useState([""]);
@@ -57,29 +62,15 @@ export default function ListadoEDDEvalProyEmp() {
       setlistProyecto(response)
     );
   }
+  function obtenerEvaluadorEvaluado() {
+    const url = "pages/auxiliares/listadoEddEvalProyEmp.php";
+    const operationUrl = "listados";
+    getDataService(url, operationUrl).then((response) =>
+    setlistEvaluadorEvaluado(response)
+    );
+  }
 
-  // function obtenerEvaluacion() {
-  //   const url = "pages/auxiliares/listadoEddEvaluacion.php";
-  //   const operationUrl = "listados";
-  //   getDataService(url, operationUrl).then((response) =>
-  //     setlistEDDEvaluacion(response)
-  //   );
-  // }
-  // function obtenerEvaluado() {
-  //   const url = "pages/auxiliares/listadoEddEvalProyEmp.php";
-  //   const operationUrl = "listados";
-  //   getDataService(url, operationUrl).then((response) =>
-  //     setlistEDDProyEmpEvaluador(response)
-  //   );
-  // }
 
-  // function obtenerEvaluador() {
-  //   const url = "pages/auxiliares/listadoEddEvalProyEmp.php";
-  //   const operationUrl = "listados";
-  //   getDataService(url, operationUrl).then((response) =>
-  //     setlistEDDProyEmpEvaluado(response)
-  //   );
-  // }
 
   function insertarEDDEvalProyEmp() {
     setIsActiveInsertEDDEvalProyEmp(!isActiveInsertEDDEvalProyEmp);
@@ -109,17 +100,15 @@ export default function ListadoEDDEvalProyEmp() {
   useEffect(
     function () {
       handleChangePaginador();
-      // obtenerEvaluacion();
-      // obtenerEvaluador();
-      // obtenerEvaluado();
+      obtenerEvaluadorEvaluado();
       obtenerProyecto();
     },
     [
       num_boton,
       cantidadPorPagina,
-      // idEDDEvaluacion,
-      // idEDDProyEmpEvaluador,
-      // idEDDProyEmpEvaluado,
+
+      idEvaluador,
+      idEvaluado,
       idProyecto,
     ]
   );
@@ -135,7 +124,7 @@ export default function ListadoEDDEvalProyEmp() {
         idEDDProyEmpEvaluador: userData.idEmpleado,
         num_boton: num_boton,
         cantidadPorPagina: cantidadPorPagina,
-        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
+        idEDDProyEmpEvaluado: idEvaluado,
         idEDDEvaluacion: idEDDEvaluacion,
         idProyecto: idProyecto,
       }
@@ -143,8 +132,8 @@ export default function ListadoEDDEvalProyEmp() {
       var data = {
         num_boton: num_boton,
         cantidadPorPagina: cantidadPorPagina,
-        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
-        idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
+        idEDDProyEmpEvaluado: idEvaluado,
+        idEDDProyEmpEvaluador: idEvaluador,
         idEDDEvaluacion: idEDDEvaluacion,
         idProyecto, idProyecto,
       };
@@ -166,7 +155,7 @@ export default function ListadoEDDEvalProyEmp() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
           <a
             type="submit"
@@ -211,6 +200,7 @@ export default function ListadoEDDEvalProyEmp() {
                 <option value="100">100</option>
               </select>
             </div>
+           
             <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Proyecto: </label>
               <select
@@ -229,6 +219,50 @@ export default function ListadoEDDEvalProyEmp() {
                     value={valor.idEDDProyecto}
                   >
                     {valor.nomProyecto}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group" id="btn2">
+              <label htmlFor="input_CantidadR">Evaluación - Proyecto - Evaluador: </label>
+              <select
+                required
+                type="text"
+                className="form-control"
+                onChange={({ target }) => {
+                  setidEvaluador(target.value); setNumBoton(1);
+
+                }}
+              >
+                <option value="0">Todos</option>
+                {listEvaluadorEvaluado.map((valor) => (
+                  <option
+                    selected={(valor.idEDDProyEmpEvaluador === idEvaluador ? "selected" : "")}
+                    value={valor.idEDDProyEmpEvaluador}
+                  >
+                    {valor.nomEvalEmpEvaluador}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group" id="btn2">
+              <label htmlFor="input_CantidadR">Evaluación - Proyecto - Evaluado: </label>
+              <select
+                required
+                type="text"
+                className="form-control"
+                onChange={({ target }) => {
+                  setidEvaluado(target.value); setNumBoton(1);
+
+                }}
+              >
+                <option value="0">Todos</option>
+                {listEvaluadorEvaluado.map((valor) => (
+                  <option
+                    selected={(valor.idEDDProyEmpEvaluado === idEvaluado ? "selected" : "")}
+                    value={valor.idEDDProyEmpEvaluado}
+                  >
+                    {valor.nomEvalEmpEvaluado}
                   </option>
                 ))}
               </select>
@@ -260,6 +294,7 @@ export default function ListadoEDDEvalProyEmp() {
                 <th>Proyecto</th>
 
                 <th>Evaluador</th>
+                <th>Cargo</th>
                 <th>Evaluado</th>
 
                 <th>Respondida</th>
@@ -271,70 +306,78 @@ export default function ListadoEDDEvalProyEmp() {
             <tbody>
               {EDDEvalProyEmp.map((EDDEvalProyEmp) => (
                 // (userData.nomRol === 'alumno' && userData.nomEmpleado === EDDEvalProyEmp.nomEmpleadoEvaluador ? (
-                 <tr key={EDDEvalProyEmp.idEDDEvalProyEmp}>
+                <tr key={EDDEvalProyEmp.idEDDEvalProyEmp}>
                   <td>{EDDEvalProyEmp.idEDDEvalProyEmp}</td>
                   <td>{EDDEvalProyEmp.nomEvaluacion}</td>
-                  <td>{EDDEvalProyEmp.fechaInicioPeriodoEvaluacion}</td> 
-                  <td>{EDDEvalProyEmp.fechaFinPeriodoEvaluacion}</td>
+                  <td width={5}>{EDDEvalProyEmp.fechaInicioPeriodoEvaluacion}</td>
+                  <td width={5}>{EDDEvalProyEmp.fechaFinPeriodoEvaluacion}</td>
                   <td>
                     {EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? (
-                      <td>Disponible</td>
+                      <td>DISPONIBLE</td>
                     ) : (
-                      <td>No disponible</td>
+                      <td>NO DISPONIBLE</td>
                     )}
                   </td>
                   <td>{EDDEvalProyEmp.nomProyecto}</td>
 
-                  <td>{EDDEvalProyEmp.nomEmpleadoEvaluador}</td>
+                  <td >{EDDEvalProyEmp.nomEmpleadoEvaluador}</td>
+                  <td>{EDDEvalProyEmp.cargoEnProy === 'COLABORADOR' ? (
+                      <td>COLAB</td>
+                    ) : (
+                      <td>REF</td>
+                    )}</td>
+
                   <td>{EDDEvalProyEmp.nomEmpleadoEvaluado}</td>
 
                   <td>{EDDEvalProyEmp.evalRespondida}</td>
-                  <td>
+                  <td >
                     {EDDEvalProyEmp.evalRespondida === 'NO' ? (
                       <p style={{ color: 'white' }}></p>
                     ) : (
                       EDDEvalProyEmp.fechaIni
 
                     )}
-                  </td><td>
+                  </td>
+                  <td >
                     {EDDEvalProyEmp.evalRespondida === 'NO' ? (
                       <p style={{ color: 'white' }}></p>
                     ) : (
                       EDDEvalProyEmp.fechaFin
                     )}
-                  </td><td>
+                  </td>
+                  <td >
                     {EDDEvalProyEmp.evalRespondida === 'NO' ? (
                       <p style={{ color: 'white' }}></p>
                     ) : (
-                      EDDEvalProyEmp.tiempoTotalEnMin
+                      EDDEvalProyEmp.tiempoTotalEnMin 
                     )}
                   </td>
 
                   <td align="center">
-                    {EDDEvalProyEmp.evalRespondida === 'NO' ? 
-                    (
-                    <button
-                      data-title="Editar evaluación de proyecto - colaborador"
-                      id="OperationBtns"
-                      onClick={() =>
-                        editarEDDEvalProyEmp(EDDEvalProyEmp.idEDDEvalProyEmp)
-                      }
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-                    ):(
-                      <button
-                      disabled
-                      data-title="Editar evaluación de proyecto - colaborador"
-                      id="OperationBtns"
-                      onClick={() =>
-                        editarEDDEvalProyEmp(EDDEvalProyEmp.idEDDEvalProyEmp
-                          )
-                      }
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>)}
-                    
+                    {EDDEvalProyEmp.evalRespondida === 'NO' ?
+                      (
+                        <button
+                          data-title="Editar evaluación de proyecto - colaborador"
+                          id="OperationBtns"
+                          onClick={() =>
+                            editarEDDEvalProyEmp(EDDEvalProyEmp.idEDDEvalProyEmp)
+                          }
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          data-title="Editar evaluación de proyecto - colaborador"
+                          id="OperationBtns"
+                          onClick={() =>
+                            editarEDDEvalProyEmp(EDDEvalProyEmp.idEDDEvalProyEmp
+                            )
+                          }
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>)}
+
 
                     {userData.nomRol === "administrador" || "people" ? (
                       EDDEvalProyEmp.evalRespondida === 'NO' ? (
@@ -372,6 +415,39 @@ export default function ListadoEDDEvalProyEmp() {
                     )
                     }
 
+                    {EDDEvalProyEmp.cargoEnProy !== 'REFERENTE' ? (
+                      <Link to={`/homePageEDD/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                        <button data-title="Información referentes" id="OperationBtns">
+                          <MdDashboard id="icons" />
+                        </button>
+                      </Link>
+                    ) : (
+                      <Link to={`/GraficosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                        <button data-title="Información colaboradores" id="OperationBtns">
+                          <MdDashboard id="icons" />
+                        </button>
+                      </Link>
+                    )
+                    }
+
+                    <Link to={`/ComentariosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                      <button data-title="Comentarios" id="OperationBtns">
+                        <FaComments id="icons" />
+                      </button>
+                    </Link>
+
+                    <Link to={`/AlertasOporDes/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.tipoEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                      <button data-title="Desempeño" id="OperationBtns">
+                        <SiSubstack id="icons" />
+                      </button>
+                    </Link>
+
+                    {/* <Link to={`/AlertasOporDes/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.tipoEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                      <button data-title="Desempeño" id="OperationBtns">
+                        <BiSolidSend id="icons" />
+                      </button>
+                    </Link> */}
+
                     <button
                       data-title="Desactivar evaluación de proyecto - colaborador"
                       onClick={() =>
@@ -394,7 +470,7 @@ export default function ListadoEDDEvalProyEmp() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

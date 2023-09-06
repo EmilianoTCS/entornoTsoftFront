@@ -1,9 +1,19 @@
 
-
+/* TABLA GRAFICO DASHBOARD */
+#mainTableGrafDash{
+  display: flex;
+  justify-content: center;
+}
+/*  */
 
 #fondoTabla{
   border-radius: 2em; 
   background-color: #fff;
+  width: 90%;
+  float: right;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
 }
 
 #icons{

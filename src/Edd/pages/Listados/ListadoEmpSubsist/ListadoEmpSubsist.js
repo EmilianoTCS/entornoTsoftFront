@@ -116,7 +116,7 @@ export default function ListadoEmpSubsist() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de colaborador asociados a subsistemas</h1>
           <h6 style={{ color: "gray" }}>
@@ -258,7 +258,7 @@ export default function ListadoEmpSubsist() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

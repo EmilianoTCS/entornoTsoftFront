@@ -31,10 +31,10 @@ const EditarEDDEvaluacion = ({
 
   const handleClose = () => {
     cambiarEstado(false);
-    setfechaIni("");
-    setfechaFin("");
-    settipoEvaluacion("");
-    setnomEvaluacion("");
+    setfechaIni(responseID[0].fechaIni);
+    setfechaFin(responseID[0].fechaFin);
+    settipoEvaluacion(responseID[0].tipoEvaluacion);
+    setnomEvaluacion(responseID[0].nomEvaluacion);
     setReset(true)
 
   };
@@ -71,7 +71,7 @@ const EditarEDDEvaluacion = ({
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts('successEdited');
+      TopAlerts('successEdited');
       actualizarEDDEvaluacion(EDDEvaluacion); console.log(response);
     });
 

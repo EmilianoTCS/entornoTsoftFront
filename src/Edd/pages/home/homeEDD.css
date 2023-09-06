@@ -119,16 +119,34 @@ color: #ffffff;
   box-shadow: 0px 2px 20px 0px rgba(54, 52, 52, 0.81);
 }
 
-/*  */
+/* REFERENTES CARDS  */
+
 .cardContainer {
-  display: flex;
-  flex-direction: 0;
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    50%
+  ); /* Dos columnas y se ajusta automáticamente */
+  gap: 20px; /* Espacio entre las tarjetas */
+  justify-content: center;
+}
+.cardContainer1Solo {
+  display: grid;
+ columns: 1;
+  justify-content: left;
+  margin-right: 45em;
+
 }
 
 .cardColumn {
-  flex-basis: calc(50% - 15px);
-  margin: 75px; /* Espacio entre las columnas */
+  flex: 1;
+  margin: 10px;
+  position: relative;
+  background-color: #ffffff;
+  margin: -4.1em 6em 6em;
 }
+
+
 
 #container_cardsEDD {
   display: grid;
@@ -155,12 +173,29 @@ color: #ffffff;
 .cardBody1 {
   text-align: left;
   margin-top: 6px;
+  font-size: 11pt;
+  margin-left: -10px;
+
 }
 #cards1-2 {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
 }
+
+  #container_cardsLEYENDA {
+    /* display: grid; */
+    width: 400px;
+    /* height: 100px; */
+    /* margin-top: 40px; */
+    /* justify-self: start; */
+    /* gap: 20px; */
+    /* margin: -1% auto; */
+background-color: #ffffff;
+  }
+
+
+
 
 @media screen and (max-width: 1465px) {
   #container_cardsCompResumen {
@@ -170,6 +205,7 @@ color: #ffffff;
     justify-self: start;
     gap: 20px;
     margin: 1% auto;
+    
   }
 }
 

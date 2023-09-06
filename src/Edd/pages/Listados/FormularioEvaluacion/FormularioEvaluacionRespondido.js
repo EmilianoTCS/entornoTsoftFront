@@ -17,9 +17,12 @@ export default function FormularioEvaluacionRespondida() {
 
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
   const [loadedData, setLoadedData] = useState(false); //Bool que determina el recibimiento correcto de los datos
+
   const idEDDEvaluacion = params.idEvaluacion;
   const idEDDProyEmpEvaluado = params.idEDDProyEmpEvaluado;
   const idEDDProyEmpEvaluador = params.idEDDProyEmpEvaluador;
+  const idEDDProyecto = params.idEDDProyecto;
+
   const [inputVerEnDashboard, setInputVerEnDashboard] = useState("");
   const [inputOrdenDashboard, setInputOrdenDashboard] = useState("");
   const [idEDDEvalProyEmp, setIdEDDEvalProyEmp] = useState();
@@ -35,6 +38,7 @@ export default function FormularioEvaluacionRespondida() {
       idEvaluacion: idEDDEvaluacion,
       idEmpleado: idEDDProyEmpEvaluador,
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
+      idEDDProyecto: idEDDProyecto,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);
@@ -93,6 +97,77 @@ export default function FormularioEvaluacionRespondida() {
     // console.log("updated", idEDDEvalPregunta);
   }
 
+  function RespuestaComentario() {
+    var render = []
+
+    {
+      idEDDEvalPregunta.map((idEDDEvalPregunta) => {
+
+        if (idEDDEvalPregunta.tipoResp === 'T' && idEDDEvalPregunta.tipoResp !== 'A') {
+          console.log('Resp', idEDDEvalPregunta.tipoResp);
+          render.push(
+
+            <form
+              name={idEDDEvalPregunta.pregunta}
+              key={idEDDEvalPregunta.pregunta}
+              onSubmit={VerEnDashboard}
+            >
+              <div>
+                <label for="verEnDashboard">Habilitar &nbsp;</label>
+                <input
+                  name={idEDDEvalPregunta.pregunta}
+                  type="checkbox"
+                  key={idEDDEvalPregunta.pregunta}
+                  value={
+                    idEDDEvalPregunta.verEnDashboard === null ||
+                      idEDDEvalPregunta.verEnDashboard === "0"
+                      ? false
+                      : true
+                  }
+                  defaultChecked={
+                    idEDDEvalPregunta.verEnDashboard === null ||
+                      idEDDEvalPregunta.verEnDashboard === "0" ||
+                      idEDDEvalPregunta.verEnDashboard === ""
+                      ? false
+                      : true
+                  }
+                  onChange={({ target }) => {
+                    setInputVerEnDashboard(target.value);
+                    setIdEDDEvalProyEmp(
+                      idEDDEvalPregunta.idEDDEvalProyResp
+                    );
+                    setDisableInputText(!disableInputText);
+                  }}
+                />
+              </div>
+              <div>
+                <>
+                  <h7>Orden de dashboard : &nbsp;</h7>
+                  <input
+                    type="number"
+                    name={idEDDEvalPregunta.pregunta}
+                    defaultValue={idEDDEvalPregunta.ordenDashboard}
+                    onChange={({ target }) => {
+                      setInputOrdenDashboard(target.value);
+                      setIdEDDEvalProyEmp(
+                        idEDDEvalPregunta.idEDDEvalProyResp
+                      );
+                    }}
+                  ></input>
+                  <br />
+                </>
+              </div>
+              <Button type="submit" id="enviarFormRespondido">Enviar</Button>
+            </form>
+
+          )
+        }
+      })
+    }
+
+    return (<div>{render}</div>
+    )
+  }
   //Se ejecuta al entrar a la página y se actualiza de acuerdo a las dependencias establecidas
   useEffect(
     function () {
@@ -103,11 +178,12 @@ export default function FormularioEvaluacionRespondida() {
   var auxEncabezado = "0";
   var auxOrden = "0";
 
+
   return userData.statusConected || userData !== null ? (
     <>
       <Header></Header>
       <div>
-        
+
         <a
           style={{ margin: "10px", marginTop: "15px", marginLeft: "60px" }}
           type="submit"
@@ -123,14 +199,28 @@ export default function FormularioEvaluacionRespondida() {
               return (
                 <>
                   <strong>
-                    <h2>
+                    <h1>
                       Resultados de la evaluación: &nbsp;
+                      <br></br>
                       {(auxEncabezado = idEDDEvalPregunta.nomEvaluacion)}
-                    </h2>
+                    </h1>
+                  </strong>
+                  <strong>
+                    <h5 style={{backgroundColor:'#dfdfdf',color:'black',padding:'4px'}}>
+                      Realizado por: &nbsp;{idEDDEvalPregunta.nomEvaluador}
+                    </h5>
+                  </strong>
+                  <br></br>
+                  <strong>
+                    <h5>
+                      Instrucciones :
+                    </h5>
                   </strong>
                   <strong>
                     <h5>
-                      Realizado por: &nbsp;{idEDDEvalPregunta.nomEvaluador}
+                      -Seleccione y elija el orden de los comentarios a desplegar en el dashboard.
+                      <br></br>
+                      -Las respuestas de alternativas no son seleccionables.
                     </h5>
                   </strong>
                 </>
@@ -160,72 +250,83 @@ export default function FormularioEvaluacionRespondida() {
                       <tr>
                         <td
                           id="respuesta"
-                          style={{ textTransform: "uppercase" }}
+                          style={{ textTransform: "uppercase",backgroundColor: '#dfdfdf',padding:'7px' }}
                         >
-                          {idEDDEvalPregunta.respuesta === null ? (
-                            <h6>No respondida</h6>
-                          ) : (
-                            idEDDEvalPregunta.respuesta
-                          )}
+                          {/* <Table border={1} style={{ backgroundColor: '#dfdfdf' }}>
+                            <tr>
+                              <td> */}
+                                {idEDDEvalPregunta.respuesta === null ? (
+                                  <h6>No respondida</h6>
+                                ) : (
+                                  idEDDEvalPregunta.respuesta
+                                )}
+                              {/* </td>
+                            </tr>
+                          </Table> */}
+
                         </td>
                       </tr>
 
-                      <Container>
-                        <form
-                          name={idEDDEvalPregunta.pregunta}
-                          key={idEDDEvalPregunta.pregunta}
-                          onSubmit={VerEnDashboard}
-                        >
-                          <div>
-                            <label for="verEnDashboard">Habilitar &nbsp;</label>
-                            <input
+                      <tr>
+                        <td>
+                          {idEDDEvalPregunta.tipoResp === 'T' ? (
+                            <form
                               name={idEDDEvalPregunta.pregunta}
-                              type="checkbox"
                               key={idEDDEvalPregunta.pregunta}
-                              value={
-                                idEDDEvalPregunta.verEnDashboard === null ||
-                                idEDDEvalPregunta.verEnDashboard === "0"
-                                  ? false
-                                  : true
-                              }
-                              defaultChecked={
-                                idEDDEvalPregunta.verEnDashboard === null ||
-                                idEDDEvalPregunta.verEnDashboard === "0" ||
-                                idEDDEvalPregunta.verEnDashboard === ""
-                                  ? false
-                                  : true
-                              }
-                              onChange={({ target }) => {
-                                setInputVerEnDashboard(target.value);
-                                setIdEDDEvalProyEmp(
-                                  idEDDEvalPregunta.idEDDEvalProyResp
-                                );
-                                setDisableInputText(!disableInputText);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <>
-                            <h7>Orden de dashboard : &nbsp;</h7>
+                              onSubmit={VerEnDashboard}
+                            >
+
+                              <label for="verEnDashboard">Seleccionar : &nbsp;</label>
                               <input
-                                type="number"
+                                style={{width:'20px',height:'20px'}}
                                 name={idEDDEvalPregunta.pregunta}
-                                defaultValue={idEDDEvalPregunta.ordenDashboard}
+                                type="checkbox"
+                                key={idEDDEvalPregunta.pregunta}
+                                value={
+                                  idEDDEvalPregunta.verEnDashboard === null ||
+                                    idEDDEvalPregunta.verEnDashboard === "0"
+                                    ? false
+                                    : true
+                                }
+                                defaultChecked={
+                                  idEDDEvalPregunta.verEnDashboard === null ||
+                                    idEDDEvalPregunta.verEnDashboard === "0" ||
+                                    idEDDEvalPregunta.verEnDashboard === ""
+                                    ? false
+                                    : true
+                                }
                                 onChange={({ target }) => {
-                                  setInputOrdenDashboard(target.value);
+                                  setInputVerEnDashboard(target.value);
                                   setIdEDDEvalProyEmp(
                                     idEDDEvalPregunta.idEDDEvalProyResp
                                   );
+                                  setDisableInputText(!disableInputText);
                                 }}
-                              ></input>
-                              <br />
-                            </>
-                          </div>
-                          <Button type="submit" id="enviarFormRespondido">Enviar</Button>
-                        </form>
-                      </Container>
+                              />
+                              <>
+                                <h7>  &nbsp;&nbsp;Orden de despliegue en dashboard : &nbsp;</h7>
+                                <input
+                                  style={{ width: '33px',height:'30px', fontSize: '16px'}}
+                                  type="txt"
+                                  name={idEDDEvalPregunta.pregunta}
+                                  defaultValue={idEDDEvalPregunta.ordenDashboard}
+                                  onChange={({ target }) => {
+                                    setInputOrdenDashboard(target.value);
+                                    setIdEDDEvalProyEmp(
+                                      idEDDEvalPregunta.idEDDEvalProyResp
+                                    );
+                                  }}
+                                ></input>
+                                <br></br>
 
-                      <br></br>
+                              </>
+                              <p><Button type="submit" id="enviarOrdenComentario">Enviar</Button></p>
+
+                            </form>) :
+                            (<></>)}
+                        </td>
+                      </tr>
+
                     </Table>
                   </>
                 );
@@ -233,6 +334,7 @@ export default function FormularioEvaluacionRespondida() {
             })}
             &nbsp;
           </Container>
+
         </Container>
       </div>
       <br></br>

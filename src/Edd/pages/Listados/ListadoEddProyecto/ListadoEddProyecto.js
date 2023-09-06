@@ -102,7 +102,7 @@ export default function ListadoEddProyecto() {
       <Header></Header>
       <br></br>
       <br></br>
-      <Container id="fondoTabla">
+      <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de proyectos</h1>
           <h6 style={{color:'gray'}}>EDD {'->'} Listado de proyectos</h6>
@@ -223,7 +223,7 @@ export default function ListadoEddProyecto() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </Container>
+      </div>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

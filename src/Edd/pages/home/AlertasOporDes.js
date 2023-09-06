@@ -7,10 +7,14 @@ import "./homeEDD.css";
 import { useRoute } from "wouter";
 
 export default function AlertOpoDes() {
-  const [, params] = useRoute("/AlertasOporDes/:idEvaluacion/:nomEvaluacion");
+  const [, params] = useRoute("/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto");
 
   const idEDDEvaluacion = params.idEvaluacion;
   const nomEvaluacion = decodeURI(params.nomEvaluacion);
+  const tipoEvaluacion = params.tipoEvaluacion;
+  const idEDDProyecto = params.idEDDProyecto;
+
+
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [listResumenEval, setListResumenEval] = useState("");
@@ -81,7 +85,8 @@ export default function AlertOpoDes() {
     var url = "pages/listados/listadoResumenEval.php";
     var operationUrl = "listadoResumenEval";
     var data = {
-      idEvaluacion: 1,
+      idEvaluacion: idEDDEvaluacion,
+      idProyecto:idEDDProyecto,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setListResumenEval(data);
@@ -95,6 +100,7 @@ export default function AlertOpoDes() {
     var operationUrl = "listadoCompetenciasEval";
     var data = {
       idEvaluacion: idEDDEvaluacion,
+      idProyecto:idEDDProyecto,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setListCompetencias(data);
@@ -262,7 +268,7 @@ export default function AlertOpoDes() {
 
   // REFERENTE
   function DestacablesReferentesTemplate() {
-    if (tipoEvaluacion = "REFERENTE") {
+    if (tipoEvaluacion === "REFERENTE") {
       // Array donde almacenaremos los elementos a renderizar
       const render = [];
 
@@ -323,535 +329,565 @@ export default function AlertOpoDes() {
   }
   // COLABORADOR
   function DestacablesColaboradoresTemplate() {
-    // Array donde almacenaremos los elementos a renderizar
-    const render = [];
+    if (tipoEvaluacion === "COLABORADOR") {
+      // Array donde almacenaremos los elementos a renderizar
+      const render = [];
 
-    // Variables para el seguimiento del empleado actual y el cálculo de promedios
-    let auxEvaluado = "";
-    let contReg = 0;
-    let totalPorc = 0;
+      // Variables para el seguimiento del empleado actual y el cálculo de promedios
+      let auxEvaluado = "";
+      let contReg = 0;
+      let totalPorc = 0;
 
-    // Iteramos a través de los datos
-    listCompetencias.forEach((item, index) => {
-      // Si es el primer elemento, asignamos el nombre del empleado actual
-      if (index === 0) {
-        auxEvaluado = item.nomEmpleado;
-      }
-      // Comprobamos si el empleado cambió o si estamos en el último elemento
-      if (
-        auxEvaluado !== item.nomEmpleado ||
-        index === listCompetencias.length - 1
-      ) {
-        // Calculamos el promedio de porcentaje
-        const promedioPorc = totalPorc / contReg;
+      // Iteramos a través de los datos
+      listCompetencias.forEach((item, index) => {
+        // Si es el primer elemento, asignamos el nombre del empleado actual
+        if (index === 0) {
+          auxEvaluado = item.nomEmpleado;
+        }
+        // Comprobamos si el empleado cambió o si estamos en el último elemento
+        if (
+          auxEvaluado !== item.nomEmpleado ||
+          index === listCompetencias.length - 1
+        ) {
+          // Calculamos el promedio de porcentaje
+          const promedioPorc = totalPorc / contReg;
 
-        // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
-        if (eval(promedioPorc + ConfigDestColab.datoNoVisible)) {
-          render.push(
-            <div key={index} >
-              <div >      <br></br>
+          // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
+          if (eval(promedioPorc + ConfigDestColab.datoNoVisible)) {
+            render.push(
+              <div key={index} >
+                <div >      <br></br>
 
-                <Card style={{ backgroundColor: ConfigDestColab.datoVisible }}>
-                  <Card.Body >
-                    <Card.Text className="letraAlertas">Colaboradores</Card.Text>
+                  <Card style={{ backgroundColor: ConfigDestColab.datoVisible }}>
+                    <Card.Body >
+                      <Card.Text className="letraAlertas">Colaboradores</Card.Text>
 
-                    <Card.Title className="letraAlertas">
-                      {promedioPorc.toFixed(2)}%
-                    </Card.Title>
-                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
-                  </Card.Body>
-                </Card>
+                      <Card.Title className="letraAlertas">
+                        {promedioPorc.toFixed(2)}%
+                      </Card.Title>
+                      <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
+                    </Card.Body>
+                  </Card>
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
+
+          // Reiniciamos variables para el siguiente empleado
+          auxEvaluado = item.nomEmpleado;
+          contReg = 0;
+          totalPorc = 0;
         }
 
-        // Reiniciamos variables para el siguiente empleado
-        auxEvaluado = item.nomEmpleado;
-        contReg = 0;
-        totalPorc = 0;
-      }
+        // Sumamos el porcentaje actual y aumentamos el contador
+        totalPorc += parseFloat(item.porcAprobComp);
+        contReg++;
+      });
 
-      // Sumamos el porcentaje actual y aumentamos el contador
-      totalPorc += parseFloat(item.porcAprobComp);
-      contReg++;
-    });
-
-    // Devolvemos el array con los elementos renderizados
-    return render;
+      // Devolvemos el array con los elementos renderizados
+      return render;
+    }
   }
   function DestacablesColaboradoresTsoftTemplate() {
-    // Array donde almacenaremos los elementos a renderizar
-    const render = [];
+    if (tipoEvaluacion === "COLABORADOR") {
+      // Array donde almacenaremos los elementos a renderizar
+      const render = [];
 
-    // Variables para el seguimiento del empleado actual y el cálculo de promedios
-    let auxEvaluado = "";
-    let contReg = 0;
-    let totalPorc = 0;
+      // Variables para el seguimiento del empleado actual y el cálculo de promedios
+      let auxEvaluado = "";
+      let contReg = 0;
+      let totalPorc = 0;
 
-    // Iteramos a través de los datos
-    listCompetencias.forEach((item, index) => {
-      // Si es el primer elemento, asignamos el nombre del empleado actual
-      if (index === 0) {
-        auxEvaluado = item.nomEmpleado;
-      }
-      // Comprobamos si el empleado cambió o si estamos en el último elemento
-      if (
-        auxEvaluado !== item.nomEmpleado ||
-        index === listCompetencias.length - 1
-      ) {
-        // Calculamos el promedio de porcentaje
-        const promedioPorc = totalPorc / contReg;
+      // Iteramos a través de los datos
+      listCompetencias.forEach((item, index) => {
+        // Si es el primer elemento, asignamos el nombre del empleado actual
+        if (index === 0) {
+          auxEvaluado = item.nomEmpleado;
+        }
+        // Comprobamos si el empleado cambió o si estamos en el último elemento
+        if (
+          auxEvaluado !== item.nomEmpleado ||
+          index === listCompetencias.length - 1
+        ) {
+          // Calculamos el promedio de porcentaje
+          const promedioPorc = totalPorc / contReg;
 
-        // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
-        if (eval(promedioPorc + ConfigDestColabTsoft.datoNoVisible)) {
-          render.push(
-            <div key={index} >
-              <div >      <br></br>
+          // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
+          if (eval(promedioPorc + ConfigDestColabTsoft.datoNoVisible)) {
+            render.push(
+              <div key={index} >
+                <div >      <br></br>
 
-                <Card
-                  style={{ backgroundColor: ConfigDestColabTsoft.datoVisible }}
-                >
-                  <Card.Body >
-                    <Card.Text className="letraAlertas">
-                      Colaboradores Tsoft
-                    </Card.Text>
+                  <Card
+                    style={{ backgroundColor: ConfigDestColabTsoft.datoVisible }}
+                  >
+                    <Card.Body >
+                      <Card.Text className="letraAlertas">
+                        Colaboradores Tsoft
+                      </Card.Text>
 
-                    <Card.Title className="letraAlertas">
-                      {promedioPorc.toFixed(2)}%
-                    </Card.Title>
-                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
-                  </Card.Body>
-                </Card>
+                      <Card.Title className="letraAlertas">
+                        {promedioPorc.toFixed(2)}%
+                      </Card.Title>
+                      <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
+                    </Card.Body>
+                  </Card>
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
+
+          // Reiniciamos variables para el siguiente empleado
+          auxEvaluado = item.nomEmpleado;
+          contReg = 0;
+          totalPorc = 0;
         }
 
-        // Reiniciamos variables para el siguiente empleado
-        auxEvaluado = item.nomEmpleado;
-        contReg = 0;
-        totalPorc = 0;
-      }
+        // Sumamos el porcentaje actual y aumentamos el contador
+        totalPorc += parseFloat(item.porcAprobComp);
+        contReg++;
+      });
 
-      // Sumamos el porcentaje actual y aumentamos el contador
-      totalPorc += parseFloat(item.porcAprobComp);
-      contReg++;
-    });
+      // Devolvemos el array con los elementos renderizados
+      return render;
 
-    // Devolvemos el array con los elementos renderizados
-    return render;
+    }
   }
 
   //------------- OPORTUNIDADES -------------
 
   // REFERENTE
   function OportunidadesReferentesTemplate() {
-    // Crear un array para almacenar los componentes renderizados
-    const render = [];
-    // Crear un array para almacenar las competencias
-    var competencias = [];
+    if (tipoEvaluacion === "REFERENTE") {
 
-    // Variable para rastrear el empleado actual
-    let auxEvaluado = "";
+      // Crear un array para almacenar los componentes renderizados
+      const render = [];
+      // Crear un array para almacenar las competencias
+      var competencias = [];
 
-    // Recorrer el array datosRef utilizando forEach
-    listCompetencias.forEach((item, index) => {
-      // Comprobar si es el primer elemento del array
-      if (index === 0) {
-        auxEvaluado = item.nomEmpleado;
-      }
+      // Variable para rastrear el empleado actual
+      let auxEvaluado = "";
 
-      // Comprobar si el empleado ha cambiado o es el último elemento
-      if (auxEvaluado !== item.nomEmpleado || index === listCompetencias.length - 1) {
-        // Comprobar si hay competencias en el array competencias
-        if (competencias.length > 0) {
-          // Agregar un componente Card al array render
-          render.push(
-            <div key={index} >
-              <div >      <br></br>
-
-                <Card style={{ backgroundColor: ConfigOportRef.datoVisible }}>
-                  <Card.Body >
-                    <Card.Text className="letra">
-                      Referentes con oportunidad de mejora:
-                    </Card.Text>
-                    <Card.Text className="letraCompetencias">
-                      {competencias.map((competencia, index) => (
-                        <span key={index} style={{ textAlign: 'left' }}>
-                          {competencia}
-                          <br /> {/* Agregar un salto de línea */}
-                        </span>
-                      ))}
-                    </Card.Text>
-                    <Card.Text className="letra"><strong>{auxEvaluado}</strong></Card.Text>
-                  </Card.Body>
-                </Card>
-              </div>
-            </div>
-          );
+      // Recorrer el array datosRef utilizando forEach
+      listCompetencias.forEach((item, index) => {
+        // Comprobar si es el primer elemento del array
+        if (index === 0) {
+          auxEvaluado = item.nomEmpleado;
         }
 
-        // Actualizar la variable auxEvaluado
-        auxEvaluado = item.nomEmpleado;
-        // Reiniciar el array competencias
-        competencias = [];
+        // Comprobar si el empleado ha cambiado o es el último elemento
+        if (auxEvaluado !== item.nomEmpleado || index === listCompetencias.length - 1) {
+          // Comprobar si hay competencias en el array competencias
+          if (competencias.length > 0) {
+            // Agregar un componente Card al array render
+            render.push(
+              <div key={index} >
+                <div >      <br></br>
 
-        // Comprobar si la competencia cumple con el criterio
-        if (eval(item.porcAprobComp + ConfigOportRef.datoNoVisible)) {
+                  <Card style={{ backgroundColor: ConfigOportRef.datoVisible }}>
+                    <Card.Body >
+                      <Card.Text className="letra">
+                        Referentes con oportunidad de mejora:
+                      </Card.Text>
+                      <Card.Text className="letraCompetencias">
+                        {competencias.slice() // Crear una copia del arreglo original para no modificarlo directamente
+                          .sort() // Ordenar alfabéticamente
+                          .map((competencia, index) => (
+                            <span key={index} style={{ textAlign: 'left' }}>
+                              {competencia}
+                              <br /> {/* Agregar un salto de línea */}
+                            </span>
+                          ))}
+                      </Card.Text>
+                      <Card.Text className="letra"><strong>{auxEvaluado}</strong></Card.Text>
+                    </Card.Body>
+                  </Card>
+                </div>
+              </div>
+            );
+          }
+
+          // Actualizar la variable auxEvaluado
+          auxEvaluado = item.nomEmpleado;
+          // Reiniciar el array competencias
+          competencias = [];
+
+          // Comprobar si la competencia cumple con el criterio
+          if (eval(item.porcAprobComp + ConfigOportRef.datoNoVisible)) {
+            competencias.push("\n - " + item.nomCompetencia + "\n");
+          }
+        } else if (eval(item.porcAprobComp + ConfigOportRef.datoNoVisible)) {
+          // Agregar la competencia al array competencias si cumple con el criterio
           competencias.push("\n - " + item.nomCompetencia + "\n");
         }
-      } else if (eval(item.porcAprobComp + ConfigOportRef.datoNoVisible)) {
-        // Agregar la competencia al array competencias si cumple con el criterio
-        competencias.push("\n - " + item.nomCompetencia + "\n");
-      }
 
-      // Actualizar la variable auxEvaluado para el próximo ciclo
-      auxEvaluado = item.nomEmpleado;
-    });
+        // Actualizar la variable auxEvaluado para el próximo ciclo
+        auxEvaluado = item.nomEmpleado;
+      });
 
-    // Devolver el array de componentes renderizados
-    return render;
+      // Devolver el array de componentes renderizados
+      return render;
+    }
   }
   // COLABORADOR
   function OportunidadesColaboradoresTemplate() {
-    // Crear un array para almacenar los componentes renderizados
-    const render = [];
-    // Crear un array para almacenar las competencias
-    var competencias = [];
+    if (tipoEvaluacion === "COLABORADOR") {
 
-    // Variable para rastrear el colaborador actual
-    let auxEvaluado = "";
+      // Crear un array para almacenar los componentes renderizados
+      const render = [];
+      // Crear un array para almacenar las competencias
+      var competencias = [];
 
-    // Recorrer el array datosColaborador utilizando forEach
-    listCompetencias.forEach((item, index) => {
-      // Comprobar si es el primer elemento del array
-      if (index === 0) {
-        auxEvaluado = item.nomEmpleado;
-      }
+      // Variable para rastrear el colaborador actual
+      let auxEvaluado = "";
 
-      // Comprobar si el colaborador ha cambiado o es el último elemento
-      if (
-        auxEvaluado !== item.nomEmpleado ||
-        index === listCompetencias.length - 1
-      ) {
-        // Comprobar si hay competencias en el array competencias
-        if (competencias.length > 0) {
-          // Agregar un componente Card al array render
-          render.push(
-            <div key={index} >
-              <div >      <br></br>
-
-                <Card style={{ backgroundColor: ConfigOportColab.datoVisible }}>
-                  <Card.Body >
-                    <Card.Text className="letra">
-                      Colaboradores con oportunidad de mejora:
-                    </Card.Text>
-                    <Card.Text className="letraCompetencias">
-                      {competencias.map((competencia, index) => (
-                        <span key={index}>
-                          {competencia}
-                          <br /> {/* Agregar un salto de línea */}
-                        </span>
-                      ))}
-                    </Card.Text>
-                    <Card.Text className="letra"><strong>{auxEvaluado}</strong></Card.Text>
-                  </Card.Body>
-                </Card>
-              </div>
-            </div>
-          );
+      // Recorrer el array datosColaborador utilizando forEach
+      listCompetencias.forEach((item, index) => {
+        // Comprobar si es el primer elemento del array
+        if (index === 0) {
+          auxEvaluado = item.nomEmpleado;
         }
 
-        // Actualizar la variable auxEvaluado
-        auxEvaluado = item.nomEmpleado;
-        // Reiniciar el array competencias
-        competencias = [];
+        // Comprobar si el colaborador ha cambiado o es el último elemento
+        if (
+          auxEvaluado !== item.nomEmpleado ||
+          index === listCompetencias.length - 1
+        ) {
+          // Comprobar si hay competencias en el array competencias
+          if (competencias.length > 0) {
+            // Agregar un componente Card al array render
+            render.push(
+              <div key={index}>
+                <div> <br />
 
-        // Comprobar si la competencia cumple con el criterio
-        if (eval(item.porcAprobComp + ConfigOportColab.datoNoVisible)) {
+                  <Card style={{ backgroundColor: ConfigOportColab.datoVisible }}>
+                    <Card.Body>
+                      <Card.Text className="letra">
+                        Colaboradores con oportunidad de mejora:
+                      </Card.Text>
+                      <Card.Text className="letraCompetencias">
+                        {competencias
+                          .slice() // Crear una copia del arreglo original para no modificarlo directamente
+                          .sort() // Ordenar alfabéticamente
+                          .map((competencia, index) => (
+                            <span key={index}>
+                              {competencia}
+                              <br /> {/* Agregar un salto de línea */}
+                            </span>
+                          ))}
+                      </Card.Text>
+                      <Card.Text className="letra"><strong>{auxEvaluado}</strong></Card.Text>
+                    </Card.Body>
+                  </Card>
+                </div>
+              </div>
+            );
+          }
+
+          // Actualizar la variable auxEvaluado
+          auxEvaluado = item.nomEmpleado;
+          // Reiniciar el array competencias
+          competencias = [];
+
+          // Comprobar si la competencia cumple con el criterio
+          if (eval(item.porcAprobComp + ConfigOportColab.datoNoVisible)) {
+            competencias.push("\n - " + item.nomCompetencia + "\n");
+          }
+        } else if (eval(item.porcAprobComp + ConfigOportColab.datoNoVisible)) {
+          // Agregar la competencia al array competencias si cumple con el criterio
           competencias.push("\n - " + item.nomCompetencia + "\n");
         }
-      } else if (eval(item.porcAprobComp + ConfigOportColab.datoNoVisible)) {
-        // Agregar la competencia al array competencias si cumple con el criterio
-        competencias.push("\n - " + item.nomCompetencia + "\n");
-      }
 
-      // Actualizar la variable auxEvaluado para el próximo ciclo
-      auxEvaluado = item.nomEmpleado;
-    });
+        // Actualizar la variable auxEvaluado para el próximo ciclo
+        auxEvaluado = item.nomEmpleado;
+      });
 
-    // Devolver el array de componentes renderizados
-    return render;
+      // Devolver el array de componentes renderizados
+      return render;
+    }
   }
   function OportunidadesColaboradoresTsoftTemplate() {
-    // Crear un array para almacenar los componentes renderizados
-    const render = [];
-    // Crear un array para almacenar las competencias
-    var competencias = [];
+    if (tipoEvaluacion === "COLABORADOR") {
 
-    // Variables para rastrear el colaborador actual, el contador de registros y el total del porcentaje
-    let auxEvaluado = "";
-    let contReg = 0;
-    let totalPorc = 0;
+      // Crear un array para almacenar los componentes renderizados
+      const render = [];
+      // Crear un array para almacenar las competencias
+      var competencias = [];
 
-    // Recorrer el array datosColaboradorTsoft utilizando forEach
-    listCompetencias.forEach((item, index) => {
-      // Comprobar si es el primer elemento del array
-      if (index === 0) {
-        auxEvaluado = item.nomEmpleado;
-      }
+      // Variables para rastrear el colaborador actual, el contador de registros y el total del porcentaje
+      let auxEvaluado = "";
+      let contReg = 0;
+      let totalPorc = 0;
 
-      // Comprobar si el colaborador ha cambiado o es el último elemento
-      if (
-        auxEvaluado !== item.nomEmpleado ||
-        index === listCompetencias.length - 1
-      ) {
-        // Comprobar si hay competencias en el array competencias
-        if (competencias.length > 0) {
-          // Agregar un componente Card al array render
-          render.push(
-            <div key={index} >
-              <div >      <br></br>
-
-                <Card
-                  style={{ backgroundColor: ConfigOportColabTsoft.datoVisible }}
-                >
-                  <Card.Body >
-                    <Card.Text className="letra">
-                      Colaboradores Tsoft con oportunidad de mejora:
-                    </Card.Text>
-                    <Card.Text className="letraCompetencias">
-                      {competencias.map((competencia, index) => (
-                        <span key={index}>
-                          {competencia}
-                          <br /> {/* Agregar un salto de línea */}
-                        </span>
-                      ))}
-                    </Card.Text>
-                    <Card.Text className="letra"><strong>{auxEvaluado}</strong></Card.Text>
-                  </Card.Body>
-                </Card>
-              </div>
-            </div>
-          );
+      // Recorrer el array datosColaboradorTsoft utilizando forEach
+      listCompetencias.forEach((item, index) => {
+        // Comprobar si es el primer elemento del array
+        if (index === 0) {
+          auxEvaluado = item.nomEmpleado;
         }
 
-        // Actualizar la variable auxEvaluado
-        auxEvaluado = item.nomEmpleado;
-        // Reiniciar el array competencias
-        competencias = [];
+        // Comprobar si el colaborador ha cambiado o es el último elemento
+        if (
+          auxEvaluado !== item.nomEmpleado ||
+          index === listCompetencias.length - 1
+        ) {
+          // Comprobar si hay competencias en el array competencias
+          if (competencias.length > 0) {
+            // Agregar un componente Card al array render
+            render.push(
+              <div key={index} >
+                <div >      <br></br>
 
-        // Comprobar si la competencia cumple con el criterio
-        if (eval(item.porcAprobComp + ConfigOportColabTsoft.datoNoVisible)) {
+                  <Card
+                    style={{ backgroundColor: ConfigOportColabTsoft.datoVisible }}
+                  >
+                    <Card.Body >
+                      <Card.Text className="letra">
+                        Colaboradores Tsoft con oportunidad de mejora:
+                      </Card.Text>
+                      <Card.Text className="letraCompetencias">
+                        {competencias
+                          .slice() // Crear una copia del arreglo original para no modificarlo directamente
+                          .sort() // Ordenar alfabéticamente
+                          .map((competencia, index) => (
+                            <span key={index}>
+                              {competencia}
+                              <br /> {/* Agregar un salto de línea */}
+                            </span>
+                          ))}
+                      </Card.Text>
+                      <Card.Text className="letra"><strong>{auxEvaluado}</strong></Card.Text>
+                    </Card.Body>
+                  </Card>
+                </div>
+              </div>
+            );
+          }
+
+          // Actualizar la variable auxEvaluado
+          auxEvaluado = item.nomEmpleado;
+          // Reiniciar el array competencias
+          competencias = [];
+
+          // Comprobar si la competencia cumple con el criterio
+          if (eval(item.porcAprobComp + ConfigOportColabTsoft.datoNoVisible)) {
+            competencias.push("\n - " + item.nomCompetencia + "\n");
+          }
+
+          // Reiniciar el contador de registros y el total del porcentaje
+          contReg = 0;
+          totalPorc = 0;
+        } else if (
+          eval(item.porcAprobComp + ConfigOportColabTsoft.datoNoVisible)
+        ) {
+          // Agregar la competencia al array competencias si cumple con el criterio
           competencias.push("\n - " + item.nomCompetencia + "\n");
         }
 
-        // Reiniciar el contador de registros y el total del porcentaje
-        contReg = 0;
-        totalPorc = 0;
-      } else if (
-        eval(item.porcAprobComp + ConfigOportColabTsoft.datoNoVisible)
-      ) {
-        // Agregar la competencia al array competencias si cumple con el criterio
-        competencias.push("\n - " + item.nomCompetencia + "\n");
-      }
+        // Actualizar el total del porcentaje y el contador de registros
+        totalPorc += parseFloat(item.porcAprobComp);
+        contReg++;
 
-      // Actualizar el total del porcentaje y el contador de registros
-      totalPorc += parseFloat(item.porcAprobComp);
-      contReg++;
+        // Actualizar la variable auxEvaluado para el próximo ciclo
+        auxEvaluado = item.nomEmpleado;
+      });
 
-      // Actualizar la variable auxEvaluado para el próximo ciclo
-      auxEvaluado = item.nomEmpleado;
-    });
-
-    // Devolver el array de componentes renderizados
-    return render;
+      // Devolver el array de componentes renderizados
+      return render;
+    }
   }
 
   //------------- ALERTAS -------------
 
   // REFERENTE
   function AlertasReferentesTemplate() {
-    // Array donde almacenaremos los elementos a renderizar
-    const render = [];
+    if (tipoEvaluacion === "REFERENTE") {
 
-    // Variables para el seguimiento del empleado actual y el cálculo de promedios
-    let auxEvaluado = "";
-    let contReg = 0;
-    let totalPorc = 0;
+      // Array donde almacenaremos los elementos a renderizar
+      const render = [];
 
-    // Iteramos a través de los datos
-    listCompetencias.forEach((item, index) => {
-      // Si es el primer elemento, asignamos el nombre del empleado actual
-      if (index === 0) {
-        auxEvaluado = item.nomEmpleado;
-      }
-      // Comprobamos si el empleado cambió o si estamos en el último elemento
-      if (auxEvaluado !== item.nomEmpleado || index === listCompetencias.length - 1) {
-        // Calculamos el promedio de porcentaje
-        const promedioPorc = totalPorc / contReg;
+      // Variables para el seguimiento del empleado actual y el cálculo de promedios
+      let auxEvaluado = "";
+      let contReg = 0;
+      let totalPorc = 0;
 
-        // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
-        if (eval(promedioPorc + ConfigAlertasRef.datoNoVisible)) {
-          render.push(
-            <div key={index} >
-              <div >      <br></br>
+      // Iteramos a través de los datos
+      listCompetencias.forEach((item, index) => {
+        // Si es el primer elemento, asignamos el nombre del empleado actual
+        if (index === 0) {
+          auxEvaluado = item.nomEmpleado;
+        }
+        // Comprobamos si el empleado cambió o si estamos en el último elemento
+        if (auxEvaluado !== item.nomEmpleado || index === listCompetencias.length - 1) {
+          // Calculamos el promedio de porcentaje
+          const promedioPorc = totalPorc / contReg;
 
-                <Card style={{ backgroundColor: ConfigAlertasRef.datoVisible }}>
-                  <Card.Body style={{ color: 'white' }} >
-                    <Card.Text className="letraAlertas">Referentes</Card.Text>
-                    <Card.Title className="letraAlertas">
-                      {promedioPorc.toFixed(2)}%
-                    </Card.Title>
-                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
-                  </Card.Body>
-                </Card>
+          // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
+          if (eval(promedioPorc + ConfigAlertasRef.datoNoVisible)) {
+            render.push(
+              <div key={index} >
+                <div >      <br></br>
+
+                  <Card style={{ backgroundColor: ConfigAlertasRef.datoVisible }}>
+                    <Card.Body style={{ color: 'white' }} >
+                      <Card.Text className="letraAlertas">Referentes</Card.Text>
+                      <Card.Title className="letraAlertas">
+                        {promedioPorc.toFixed(2)}%
+                      </Card.Title>
+                      <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
+                    </Card.Body>
+                  </Card>
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
+
+          // Reiniciamos variables para el siguiente empleado
+          auxEvaluado = item.nomEmpleado;
+          contReg = 0;
+          totalPorc = 0;
         }
 
-        // Reiniciamos variables para el siguiente empleado
-        auxEvaluado = item.nomEmpleado;
-        contReg = 0;
-        totalPorc = 0;
-      }
+        // Sumamos el porcentaje actual y aumentamos el contador
+        totalPorc += parseFloat(item.porcAprobComp);
+        contReg++;
+      });
 
-      // Sumamos el porcentaje actual y aumentamos el contador
-      totalPorc += parseFloat(item.porcAprobComp);
-      contReg++;
-    });
-
-    // Devolvemos el array con los elementos renderizados
-    return render;
+      // Devolvemos el array con los elementos renderizados
+      return render;
+    }
   }
-
   // COLABORADOR
   function AlertasColaboradoresTemplate() {
-    // Array donde almacenaremos los elementos a renderizar
-    const render = [];
+    if (tipoEvaluacion === "COLABORADOR") {
 
-    // Variables para el seguimiento del empleado actual y el cálculo de promedios
-    let auxEvaluado = "";
-    let contReg = 0;
-    let totalPorc = 0;
+      // Array donde almacenaremos los elementos a renderizar
+      const render = [];
 
-    // Iteramos a través de los datos
-    listCompetencias.forEach((item, index) => {
-      // Si es el primer elemento, asignamos el nombre del empleado actual
-      if (index === 0) {
-        auxEvaluado = item.nomEmpleado;
-      }
-      // Comprobamos si el empleado cambió o si estamos en el último elemento
-      if (
-        auxEvaluado !== item.nomEmpleado ||
-        index === listCompetencias.length - 1
-      ) {
-        // Calculamos el promedio de porcentaje
-        const promedioPorc = totalPorc / contReg;
+      // Variables para el seguimiento del empleado actual y el cálculo de promedios
+      let auxEvaluado = "";
+      let contReg = 0;
+      let totalPorc = 0;
 
-        // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
-        if (eval(promedioPorc + ConfigAlertasColab.datoNoVisible)) {
-          render.push(
-            <div key={index} >
-              <div >      <br></br>
+      // Iteramos a través de los datos
+      listCompetencias.forEach((item, index) => {
+        // Si es el primer elemento, asignamos el nombre del empleado actual
+        if (index === 0) {
+          auxEvaluado = item.nomEmpleado;
+        }
+        // Comprobamos si el empleado cambió o si estamos en el último elemento
+        if (
+          auxEvaluado !== item.nomEmpleado ||
+          index === listCompetencias.length - 1
+        ) {
+          // Calculamos el promedio de porcentaje
+          const promedioPorc = totalPorc / contReg;
 
-                <Card
-                  style={{ backgroundColor: ConfigAlertasColab.datoVisible }}
-                >
-                  <Card.Body >
-                    <Card.Text className="letraAlertas">Colaboradores</Card.Text>
+          // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
+          if (eval(promedioPorc + ConfigAlertasColab.datoNoVisible)) {
+            render.push(
+              <div key={index} >
+                <div >      <br></br>
 
-                    <Card.Title className="letraAlertas">
-                      {promedioPorc.toFixed(2)}%
-                    </Card.Title>
-                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
-                  </Card.Body>
-                </Card>      <br></br>
+                  <Card
+                    style={{ backgroundColor: ConfigAlertasColab.datoVisible }}
+                  >
+                    <Card.Body >
+                      <Card.Text className="letraAlertas">Colaboradores</Card.Text>
 
+                      <Card.Title className="letraAlertas">
+                        {promedioPorc.toFixed(2)}%
+                      </Card.Title>
+                      <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
+                    </Card.Body>
+                  </Card>      <br></br>
+
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
+
+          // Reiniciamos variables para el siguiente empleado
+          auxEvaluado = item.nomEmpleado;
+          contReg = 0;
+          totalPorc = 0;
         }
 
-        // Reiniciamos variables para el siguiente empleado
-        auxEvaluado = item.nomEmpleado;
-        contReg = 0;
-        totalPorc = 0;
-      }
+        // Sumamos el porcentaje actual y aumentamos el contador
+        totalPorc += parseFloat(item.porcAprobComp);
+        contReg++;
+      });
 
-      // Sumamos el porcentaje actual y aumentamos el contador
-      totalPorc += parseFloat(item.porcAprobComp);
-      contReg++;
-    });
-
-    // Devolvemos el array con los elementos renderizados
-    return render;
+      // Devolvemos el array con los elementos renderizados
+      return render;
+    }
   }
   function AlertasColaboradoresTsoftTemplate() {
-    // Array donde almacenaremos los elementos a renderizar
-    const render = [];
+    if (tipoEvaluacion === "COLABORADOR") {
 
-    // Variables para el seguimiento del empleado actual y el cálculo de promedios
-    let auxEvaluado = "";
-    let contReg = 0;
-    let totalPorc = 0;
+      // Array donde almacenaremos los elementos a renderizar
+      const render = [];
 
-    // Iteramos a través de los datos
-    listCompetencias.forEach((item, index) => {
-      // Si es el primer elemento, asignamos el nombre del empleado actual
-      if (index === 0) {
-        auxEvaluado = item.nomEmpleado;
-      }
-      // Comprobamos si el empleado cambió o si estamos en el último elemento
-      if (
-        auxEvaluado !== item.nomEmpleado ||
-        index === listCompetencias.length - 1
-      ) {
-        // Calculamos el promedio de porcentaje
-        const promedioPorc = totalPorc / contReg;
+      // Variables para el seguimiento del empleado actual y el cálculo de promedios
+      let auxEvaluado = "";
+      let contReg = 0;
+      let totalPorc = 0;
 
-        // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
-        if (eval(promedioPorc + ConfigAlertasColabTsoft.datoNoVisible)) {
-          render.push(
-            <div key={index} >
-              <div >      <br></br>
+      // Iteramos a través de los datos
+      listCompetencias.forEach((item, index) => {
+        // Si es el primer elemento, asignamos el nombre del empleado actual
+        if (index === 0) {
+          auxEvaluado = item.nomEmpleado;
+        }
+        // Comprobamos si el empleado cambió o si estamos en el último elemento
+        if (
+          auxEvaluado !== item.nomEmpleado ||
+          index === listCompetencias.length - 1
+        ) {
+          // Calculamos el promedio de porcentaje
+          const promedioPorc = totalPorc / contReg;
 
-                <Card
-                  style={{
-                    backgroundColor: ConfigAlertasColabTsoft.datoVisible,
-                  }}
-                >
-                  <Card.Body >
-                    <Card.Text className="letraAlertas">
-                      Colaboradores Tsoft
-                    </Card.Text>
+          // Si el promedio es mayor o igual a 90, agregamos un elemento al array render
+          if (eval(promedioPorc + ConfigAlertasColabTsoft.datoNoVisible)) {
+            render.push(
+              <div key={index} >
+                <div >      <br></br>
 
-                    <Card.Title className="letraAlertas">
-                      {promedioPorc.toFixed(2)}%
-                    </Card.Title>
-                    <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
-                  </Card.Body>
-                </Card>
+                  <Card
+                    style={{
+                      backgroundColor: ConfigAlertasColabTsoft.datoVisible,
+                    }}
+                  >
+                    <Card.Body >
+                      <Card.Text className="letraAlertas">
+                        Colaboradores Tsoft
+                      </Card.Text>
+
+                      <Card.Title className="letraAlertas">
+                        {promedioPorc.toFixed(2)}%
+                      </Card.Title>
+                      <Card.Text className="letraAlertas"><strong>{auxEvaluado}</strong></Card.Text>
+                    </Card.Body>
+                  </Card>
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
+
+          // Reiniciamos variables para el siguiente empleado
+          auxEvaluado = item.nomEmpleado;
+          contReg = 0;
+          totalPorc = 0;
         }
 
-        // Reiniciamos variables para el siguiente empleado
-        auxEvaluado = item.nomEmpleado;
-        contReg = 0;
-        totalPorc = 0;
-      }
+        // Sumamos el porcentaje actual y aumentamos el contador
+        totalPorc += parseFloat(item.porcAprobComp);
+        contReg++;
+      });
 
-      // Sumamos el porcentaje actual y aumentamos el contador
-      totalPorc += parseFloat(item.porcAprobComp);
-      contReg++;
-    });
-
-    // Devolvemos el array con los elementos renderizados
-    return render;
+      // Devolvemos el array con los elementos renderizados
+      return render;
+    }
   }
 
   //------------- COMPLEMENTARIAS -------------
@@ -960,9 +996,11 @@ export default function AlertOpoDes() {
                   Competencias bajo el 30%:
                 </Card.Text>
                 <Card.Text className="letraCompetencias">
-                  {competenciasCumplidasArray.map((competencia, index) => (
-                    <div key={index}> - {competencia}</div>
-                  ))}
+                  {competenciasCumplidasArray.slice() // Crear una copia del arreglo original para no modificarlo directamente
+                    .sort() // Ordenar alfabéticamente
+                    .map((competencia, index) => (
+                      <div key={index}> - {competencia}</div>
+                    ))}
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -1077,12 +1115,18 @@ export default function AlertOpoDes() {
       GetConfigOportunidades();
       GetConfigAlertas();
     },
-    [loadedDataCompetencias, loadedDataResumenEval, idEDDEvaluacion, nomEvaluacion]
+    [loadedDataCompetencias, loadedDataResumenEval, idEDDEvaluacion, nomEvaluacion, tipoEvaluacion,idEDDProyecto]
   );
 
   return userData.statusConected || userData !== null ? (
     <div>
       <Header></Header>
+      <a
+            type="submit"
+            id="btnAtrasEvaluacion"
+            value="Registrar"
+            href="/listadoEddEvalProyEmp/0">Volver
+          </a>
       <div id="columnGeneral">
         <div id="column">
           <h2 id="titleColor">Destacables</h2>

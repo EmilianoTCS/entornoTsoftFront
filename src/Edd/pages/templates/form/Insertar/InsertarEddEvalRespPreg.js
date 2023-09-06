@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
@@ -11,6 +11,7 @@ import Modal from "react-bootstrap/Modal";
 const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEvalRespPreg }) => {
   // ----------------------CONSTANTES----------------------------
   const [nomRespPreg, setnomRespPreg] = useState("");
+
   const [ordenRespPreg, setordenRespPreg] = useState("");
 
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState("");
@@ -18,6 +19,7 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
   const [listEDDEvalPregunta, setlistEDDEvalPregunta] = useState([""]);
 
   const listEDDEvalRespPreg = EDDEvalRespPreg;
+
 
   const show = isActiveEDDEvalRespPreg;
 
@@ -31,7 +33,7 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
     const url = "pages/auxiliares/listadoEddEvalPregunta.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDEvalPregunta(response)
+      setlistEDDEvalPregunta(response)
     );
   }
 
@@ -44,12 +46,13 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
       nomRespPreg: nomRespPreg,
       ordenRespPreg: ordenRespPreg,
       idEDDEvalPregunta: idEDDEvalPregunta,
-      isActive:true
+      isActive: true
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
       TopAlerts('successCreated');
-      actualizarEDDEvalRespPreg(EDDEvalRespPreg);console.log(response);
+      actualizarEDDEvalRespPreg(EDDEvalRespPreg);
+      console.log(response);
     });
   }
 
@@ -70,7 +73,7 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div className="form-group">
+            <div className="form-group">
               <label htmlFor="input_EvalPregunta">Pregunta: </label>
               <select
                 required
@@ -78,18 +81,20 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
                 name="input_EvalPregunta"
                 id="input_EvalPregunta"
                 placeholder="Seleccione la EvalPreg"
+
                 onChange={({ target }) => setidEDDEvalPregunta(target.value)}
               >
-                 <option hidden value="">
-                  Desplegar lista
-                </option>
-
                 {listEDDEvalPregunta.map((valor) => (
-                  <option value={valor.idEDDEvalPregunta}>{valor.nomPregunta}</option>
+                  <option
+                    selected={valor.idEDDEvalPregunta === idEDDEvalPregunta ? "selected" : ""}
+                    value={valor.idEDDEvalPregunta}
+                  >
+                    {valor.nomPregunta}
+                  </option>
                 ))}
               </select>
             </div>
-          
+
 
             <div>
               <label htmlFor="input_Orden">Orden:</label>
@@ -105,7 +110,7 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
                 required
               />
             </div>
-            
+
 
             <div className="form-group">
               <label htmlFor="input_TipRESP">Respuesta: </label>
