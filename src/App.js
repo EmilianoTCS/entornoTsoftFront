@@ -35,13 +35,15 @@ import ListadoEddEvalProyResp from "./Edd/pages/Listados/ListadoEddEvalProyResp/
 import ListadoEDDEvaluacion from "./Edd/pages/Listados/ListadoEddEvaluacion/ListadoEddEvaluacion";
 import FormAnalistas from "./Edd/pages/Formularios/FormAnalistas";
 import FormReferentes from "./Edd/pages/Formularios/FormReferentes";
-import ListadoEvaluacionesPendientes from "./Edd/pages/Listados/EvaluacionesPendientes/EvaluacionesPendientes";
 import FormularioEvaluacion from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacion";
 import FormularioEvaluacionRespondida from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacionRespondido";
 import HomePageEDD from "../src/Edd/pages/home/HomepageEDD";
 import GraficosDashboard from "./Edd/pages/home/GraficosDashboard";
 import AlertOpoDes from "./Edd/pages/home/AlertasOporDes";
 import ComentariosDashboard from "./Edd/pages/home/ComentariosDashboard";
+import DiseñoDashboardTablaConLineasPorc from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTablaConLineaPorc";
+import DiseñoDashboardGrafico from "./Edd/pages/DiseñoDashboard/DiseñoDashboardGrafico";
+import DiseñoDashboardTabla from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTabla";
 
 function App() {
   return (
@@ -115,11 +117,19 @@ function App() {
 
             {/* DASHBOARD */}
             <Route element={<HomePageEDD />} path="/homePageEDD/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
-            <Route element={<GraficosDashboard />} path="/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route> 
-            <Route element={<ComentariosDashboard />} path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route> 
+            <Route element={<GraficosDashboard />} path="/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
+            <Route element={<ComentariosDashboard />} path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
 
-            
-            <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto"></Route> 
+            {/* PRUEBA DE DASHBOARD */}
+
+            <Route element={<DiseñoDashboardTablaConLineasPorc/>} path="/DiseñoDashboardTablaConLineasPorc"></Route>
+            <Route element={<DiseñoDashboardGrafico />} path="/DiseñoDashboardGrafico"></Route>
+            <Route element={<DiseñoDashboardTabla />} path="/DiseñoDashboardTabla"></Route>
+
+            {/* ------------------- */}
+
+
+            <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto"></Route>
             {/* EDD */}
             <Route
               element={<ListadoEddProyecto />}
@@ -166,10 +176,8 @@ function App() {
               element={<FormReferentes />}
               path="/FormularioRefEDD"
             ></Route>
-            <Route
-              element={<ListadoEvaluacionesPendientes />}
-              path="/listadoEvaluacionesPendientes"
-            ></Route>
+ 
+
             <Route
               element={<FormularioEvaluacion />}
               path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"

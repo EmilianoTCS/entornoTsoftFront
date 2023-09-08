@@ -20,18 +20,50 @@ export default function HomePage() {
   return userData.statusConected || userData !== null ? (
     <div>
       <Header></Header>
-
-
-
+      <div style={{paddingLeft:'10em'}}>
+      <br></br>
+      <a
+        
+        type="submit"
+        id="btnAtras"
+        
+        href="/DiseñoDashboardTablaConLineasPorc">DiseñoTbLineasPorc
+      </a>
+      
+      <br></br>
+      <br></br>
+      
+      <a
+        
+        type="submit"
+        id="btnAtras"
+       
+        href="/DiseñoDashboardGrafico">DiseñoGrafico
+      </a>
+      
+      <br></br>
+      <br></br>
+     
+      <a
+        
+        type="submit"
+        id="btnAtras"
+        href="/DiseñoDashboardTabla">DiseñoTabla
+      </a>
+      </div>
       <div class="column-container">
-        <div >
+    
         <h4 class="column left-column">EVALUACIONES<br></br> DE<br></br> DESEMPEÑO</h4>
-        </div>
+        
+        
+     
+
+
         <div >
           <h4 class="column right-column">ACADEMIA <br></br>DE<br></br> FORMACIÓN</h4>
         </div>
       </div>
-
+      
 
 
     </div>

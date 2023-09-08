@@ -42,14 +42,19 @@ export default function ListadoEDDEvalProyEmp() {
 
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState('');
 
+  const [idEvaluado, setidEvaluado] = useState('');
+  const [idEvaluador, setidEvaluador] = useState('');
 
   const [idProyecto, setidProyecto] = useState(params.idProyecto);
-  const [idEvaluador, setidEvaluador] = useState(params.idProyecto);
-  const [idEvaluado, setidEvaluado] = useState(params.idProyecto);
+  const [listEvaluadores, setlistEvaluadores] = useState('');
+  const [listEvaluados, setlistEvaluados] = useState('');
+
+
 
   const [listEvaluadorEvaluado, setlistEvaluadorEvaluado] = useState([""]);
 
   const [listProyecto, setlistProyecto] = useState([""]);
+  const [loadedData, setloadedData] = useState(false);
 
   // const [listEDDProyEmpEvaluador, setlistEDDProyEmpEvaluador] = useState([""]);
   // const [listEDDProyEmpEvaluado, setlistEDDProyEmpEvaluado] = useState([""]);
@@ -62,14 +67,20 @@ export default function ListadoEDDEvalProyEmp() {
       setlistProyecto(response)
     );
   }
+
   function obtenerEvaluadorEvaluado() {
-    const url = "pages/auxiliares/listadoEddEvalProyEmp.php";
-    const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-    setlistEvaluadorEvaluado(response)
+    const url = "pages/auxiliares/listadoEvaluadoresEvaluados.php";
+    const operationUrl = "listadoEvaluadoresEvaluados";
+    getDataService(url, operationUrl).then((response) => {
+      console.log(response);
+      const { evaluadores, evaluados } = response
+      setlistEvaluadores(evaluadores)
+      setlistEvaluados(evaluados)
+      setloadedData(true)
+
+    }
     );
   }
-
 
 
   function insertarEDDEvalProyEmp() {
@@ -106,10 +117,10 @@ export default function ListadoEDDEvalProyEmp() {
     [
       num_boton,
       cantidadPorPagina,
-
-      idEvaluador,
-      idEvaluado,
       idProyecto,
+      idEvaluado,
+      idEvaluador,
+      loadedData
     ]
   );
 
@@ -139,10 +150,11 @@ export default function ListadoEDDEvalProyEmp() {
       };
     // console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
+      console.log(data);
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setEDDEvalProyEmp(datos.datos);
-      // console.log(data);
+
     });
   }
 
@@ -200,7 +212,7 @@ export default function ListadoEDDEvalProyEmp() {
                 <option value="100">100</option>
               </select>
             </div>
-           
+
             <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Proyecto: </label>
               <select
@@ -213,18 +225,20 @@ export default function ListadoEDDEvalProyEmp() {
                 }}
               >
                 <option value="0">Todos</option>
-                {listProyecto.map((valor) => (
-                  <option
-                    selected={(valor.idEDDProyecto === idProyecto ? "selected" : "")}
-                    value={valor.idEDDProyecto}
-                  >
-                    {valor.nomProyecto}
-                  </option>
-                ))}
+                {
+
+                  listProyecto.map((valor) => (
+                    <option
+                      selected={(valor.idEDDProyecto === idProyecto ? "selected" : "")}
+                      value={valor.idEDDProyecto}
+                    >
+                      {valor.nomProyecto}
+                    </option>
+                  ))}
               </select>
             </div>
             <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Evaluación - Proyecto - Evaluador: </label>
+              <label htmlFor="input_CantidadR">Evaluador: </label>
               <select
                 required
                 type="text"
@@ -235,18 +249,20 @@ export default function ListadoEDDEvalProyEmp() {
                 }}
               >
                 <option value="0">Todos</option>
-                {listEvaluadorEvaluado.map((valor) => (
-                  <option
-                    selected={(valor.idEDDProyEmpEvaluador === idEvaluador ? "selected" : "")}
-                    value={valor.idEDDProyEmpEvaluador}
-                  >
-                    {valor.nomEvalEmpEvaluador}
-                  </option>
-                ))}
+                {
+                  loadedData ?
+                    listEvaluadores.map((valor) => (
+                      <option
+                        selected={(valor.idEDDProyEmpEvaluador === idEvaluador ? "selected" : "")}
+                        value={valor.idEDDProyEmpEvaluador}
+                      >
+                        {valor.nomEmpleado}
+                      </option>
+                    )) : <></>}
               </select>
             </div>
             <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Evaluación - Proyecto - Evaluado: </label>
+              <label htmlFor="input_CantidadR">Evaluado: </label>
               <select
                 required
                 type="text"
@@ -257,14 +273,15 @@ export default function ListadoEDDEvalProyEmp() {
                 }}
               >
                 <option value="0">Todos</option>
-                {listEvaluadorEvaluado.map((valor) => (
-                  <option
-                    selected={(valor.idEDDProyEmpEvaluado === idEvaluado ? "selected" : "")}
-                    value={valor.idEDDProyEmpEvaluado}
-                  >
-                    {valor.nomEvalEmpEvaluado}
-                  </option>
-                ))}
+                {loadedData ?
+                  listEvaluados.map((valor) => (
+                    <option
+                      selected={(valor.idEDDProyEmpEvaluado === idEvaluado ? "selected" : "")}
+                      value={valor.idEDDProyEmpEvaluado}
+                    >
+                      {valor.nomEmpleado}
+                    </option>
+                  )) : <></>}
               </select>
             </div>
           </div>
@@ -311,8 +328,7 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.nomEvaluacion}</td>
                   <td width={5}>{EDDEvalProyEmp.fechaInicioPeriodoEvaluacion}</td>
                   <td width={5}>{EDDEvalProyEmp.fechaFinPeriodoEvaluacion}</td>
-                  <td>
-                    {EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? (
+                  <td>{EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? (
                       <td>DISPONIBLE</td>
                     ) : (
                       <td>NO DISPONIBLE</td>
@@ -322,34 +338,33 @@ export default function ListadoEDDEvalProyEmp() {
 
                   <td >{EDDEvalProyEmp.nomEmpleadoEvaluador}</td>
                   <td>{EDDEvalProyEmp.cargoEnProy === 'COLABORADOR' ? (
-                      <td>COLAB</td>
-                    ) : (
-                      <td>REF</td>
-                    )}</td>
+                    <td>COLAB</td>
+                  ) : (
+                    <td>REF</td>
+                  )}</td>
 
                   <td>{EDDEvalProyEmp.nomEmpleadoEvaluado}</td>
 
                   <td>{EDDEvalProyEmp.evalRespondida}</td>
-                  <td >
-                    {EDDEvalProyEmp.evalRespondida === 'NO' ? (
+                  <td  width={5}>{EDDEvalProyEmp.evalRespondida === 'NO' ? (
                       <p style={{ color: 'white' }}></p>
                     ) : (
                       EDDEvalProyEmp.fechaIni
 
                     )}
                   </td>
-                  <td >
+                  <td  width={5}>
                     {EDDEvalProyEmp.evalRespondida === 'NO' ? (
                       <p style={{ color: 'white' }}></p>
                     ) : (
                       EDDEvalProyEmp.fechaFin
                     )}
                   </td>
-                  <td >
+                  <td  width={5}>
                     {EDDEvalProyEmp.evalRespondida === 'NO' ? (
                       <p style={{ color: 'white' }}></p>
                     ) : (
-                      EDDEvalProyEmp.tiempoTotalEnMin 
+                      EDDEvalProyEmp.tiempoTotalEnMin
                     )}
                   </td>
 

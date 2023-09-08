@@ -114,6 +114,7 @@ export default function GrafChart({idEDDEvaluacion,idEDDProyecto}) {
         "Pink", // Pink
         "Cyan", // Cyan
         "Magenta", // Magenta
+        "Orange",
         // Agrega más colores según sea necesario
     ];
     

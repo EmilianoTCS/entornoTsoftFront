@@ -135,6 +135,7 @@ export default function ListadoEDDEvalPregunta() {
       <div id="fondoTabla">
         <div id="containerTablas">
         <a
+        
             type="submit"
             id="btnAtras"
             value="Registrar"
