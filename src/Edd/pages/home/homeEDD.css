@@ -1,3 +1,26 @@
+/* Style Face */
+#faceStyle{
+width: 7%;
+
+}
+
+#table{
+text-align: center;
+border-collapse: collapse;
+width: 70%;
+margin: auto;
+background-color: #ffffff;
+
+
+}
+
+#borderTdTh{
+  border: 1px solid black ;
+ 
+}
+
+
+/* ---------- */
 /* Porcentaje Card */
 .porcentajeCard {
   display: inline;
@@ -234,6 +257,7 @@ background-color: #ffffff;
   border-style: solid;
   border-width: 20px;
   border-top-width: 0px;
+  
 }
 
 #hexag {
