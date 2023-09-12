@@ -1,26 +1,89 @@
-/* Style Face */
+
+
+
+/* DIESEÑO DASHBOARD TABLA */
 #faceStyle{
-width: 7%;
+  width: 11.5%;
 
-}
+  float: right;
+  margin-right: 1em;
+  }
 
-#table{
-text-align: center;
-border-collapse: collapse;
-width: 70%;
-margin: auto;
-background-color: #ffffff;
-
+#table1{
+  width: 80%;
+  margin: auto;
 
 }
 
 #borderTdTh{
-  border: 1px solid black ;
- 
+  border: 1px solid black ; 
+}
+#infoTable{
+  padding-left: 0.5em;
+  padding-top: 0.4em;
+
+}
+/* ---------- */
+
+
+
+/* DIESEÑO DASHBOARD TABLA CON LINEA PORC */
+#infoLinePorc{
+padding-bottom: 0.6em;
 }
 
+#table{
 
-/* ---------- */
+  width: 80%;
+  margin: auto;
+  
+  }
+
+  #paddingColab{
+    padding: 0.5em;
+
+  }
+
+  
+  #faceStyleLinea{
+    width: 12%;
+    float: right;
+    margin-right: 1em;
+    }
+  /* ---------- */
+/* COLORES BARRAS DASHBOARD TABLA CON LINEA PORC*/
+
+.yellow-progress-bar .progress-bar {
+  background-color: #e9dc65;
+  color: black;
+  font-size: 12pt;
+
+}
+
+.lightGreen-progress-bar .progress-bar {
+  background-color: #94FF01;
+  color: black;
+  font-size: 12pt;
+
+}
+.red-progress-bar .progress-bar {
+  background-color: #FC0000;
+  color: black;
+  font-size: 12pt;
+
+}
+.green-progress-bar .progress-bar {
+  background-color: #02C202;
+  color: black;
+  font-size: 12pt;
+
+}
+.orange-progress-bar .progress-bar {
+  background-color: #FF7300;
+  color: black;
+  font-size: 12pt;
+}
+/* ----------- */
 /* Porcentaje Card */
 .porcentajeCard {
   display: inline;

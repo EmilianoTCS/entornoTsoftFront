@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import Header from "../../../templates/Header/Header";
 import "../Listados/BtnInsertar.css";
-import { CircularProgressbar,buildStyles } from 'react-circular-progressbar';
+import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import RadialSeparators from "./RadialSeparators";
+import Bars from "./BarsChart";
 
 export default function DiseñoDashboardGrafico() {
     const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -18,45 +20,89 @@ export default function DiseñoDashboardGrafico() {
     return userData.statusConected || userData !== null ? (
         <>
             <Header></Header>
-            <br></br>
-            <br></br>
             <a
 
                 type="submit"
-                id="btnAtras"
+                id="btnAtrasPRUEBASDash"
                 value="Registrar"
                 href="/home">Volver
             </a>
 
-            <Table style={{width:'50%',margin:'auto'}}>
+            <Table style={{ width: '70%', margin: 'auto' }}>
                 <tr >
-                    <td style={{ width: 100}}> 
-                        <CircularProgressbar  value={66} text={`${satGeneral}%`}
-                        // styles={buildStyles({
-                        //     rotation: 0.25,
-                        //     strokeLinecap: 'butt',
-                        //     textSize: '16px',
-                        //     pathTransitionDuration: 0.5,
-                        //     // Colors
-                        //     pathColor: `#f88`,
-                        //     textColor: '#f88',
-                        //     trailColor: '#fff',
-                        //     backgroundColor: '#3e98c7',
-                        // })} 
+                    <td>
+                        <CircularProgressbar value={66} text={`${satGeneral}%`}
+                            background
+                            backgroundPadding={6}
+                            styles={buildStyles({
+                                backgroundColor: "#3e98c7",
+                                textColor: "#fff",
+                                pathColor: "#fff",
+                                trailColor: "transparent"
+                            })}
                         />
                     </td>
-                    <td style={{ width: 100}}> 
-                            
-                        <CircularProgressbar  maxValue={4} value={2} text={`${refEval}`} />
+                    <td>
+                        <CircularProgressbar maxValue={4} value={2} text={`${refEval}`} />
                     </td>
-                    <td style={{ width: 100}}> 
+                    <td>
+                        <CircularProgressbarWithChildren
+                            background
+                            value={80}
+                            text={`${80}%`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={12}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+                    {/* FONDO BLANCO SIN RAYAS */}
+                    {/* <td style={{ width: 100 }}>
+        <CircularProgressbarWithChildren
+            background
+            backgroundPadding={6}
+
+            value={80}
+            text={`${80}%`}
+            strokeWidth={10}
+            styles={buildStyles({
+                strokeLinecap: "butt"
+            })}
+        >
+            <RadialSeparators
+                count={12}
+                style={{
+                    background: "#fff",
+                    width: "2px",
+                    // This needs to be equal to props.strokeWidth
+                    height: `${10}%`
+                }}
+            />
+        </CircularProgressbarWithChildren>
+    </td> */}
+                    <td>
                         <CircularProgressbar value={100} text={`${compEval}`} />
                     </td>
-                    <td style={{ width: 100}}> 
+                    <td>
                         <CircularProgressbar value={100} text={`${tiempProm}`} />
                     </td>
                 </tr>
             </Table>
+            <br></br>
+            <div className="bg-light mx-auto" style={{width:"60%", height:"60%",padding:'16px'}}>
+                    <Bars />
+                </div>
+                <br></br>
         </>
     ) : (
         <Navigate to="/login"></Navigate>
