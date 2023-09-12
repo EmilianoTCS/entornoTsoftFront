@@ -24,23 +24,7 @@
 
 /* ---------- */
 
-.wrapper {
-  border: 3px solid blue;
-}
 
-.container {
-  background-color: pink;
-}
-
-.barCompleted {
-  background-color: rgb(0, 191, 255) !important;
-  width: 80%;
-}
-
-.label {
-  font-size: 20px;
-  color: green;
-}
 /* DIESEÑO DASHBOARD TABLA CON LINEA PORC */
 #table{
   text-align: left;
