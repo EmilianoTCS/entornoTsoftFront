@@ -6,7 +6,7 @@ import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } fro
 import 'react-circular-progressbar/dist/styles.css';
 import RadialSeparators from "./RadialSeparators";
 import "../home/homeEDD.css"
-import "../DiseñoDashboard/style.scss"
+
 import faceVerde1 from "../Smileys/faceVerde1.png"
 import faceVerdeLima2 from "../Smileys/faceVerdeLima2.png"
 import faceAmarillo3 from "../Smileys/faceAmarillo3.png"
