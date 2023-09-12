@@ -125,24 +125,24 @@ export default function DiseñoDashboardTablaConLineasPorc() {
      
                                 <tr >
                                     <th rowspan="5"  style={{width:'10em' ,paddingLeft:'1em'}}>Romina Alvarez </th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img> 
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
                                     <ProgressBar  className='lightGreen-progress-bar' now={81} label={`${81}%`} /></td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyleLinea" src={faceRojo5}></img> 
+                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
                                     <ProgressBar  className='red-progress-bar' now={33} label={`${33}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='orange-progress-bar' now={51} label={`${51}%`} /></td>
+                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
+                                    <ProgressBar  className='yellow-progress-bar' now={51} label={`${51}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyleLinea" src={faceVerde1}></img> 
+                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
                                     <ProgressBar  className='green-progress-bar' now={95} label={`${95}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img> 
+                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
                                     <ProgressBar  className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
                                 </tr>
 
@@ -163,24 +163,24 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             <tbody>
                                 <tr >
                                     <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}}>Juana Lopez </th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyleLinea" src={faceRojo5}></img> 
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
                                     <ProgressBar  className='red-progress-bar' now={35} label={`${35}%`} /></td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyleLinea" src={faceVerde1}></img> 
+                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
                                     <ProgressBar  className='green-progress-bar' now={97} label={`${97}%`} /></td>
                                 </tr>
                                 <tr>
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img> 
+                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
                                     <ProgressBar  className='orange-progress-bar' now={52} label={`${52}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img> 
+                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
                                     <ProgressBar  className='yellow-progress-bar' now={64} label={`${64}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img> 
+                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
                                     <ProgressBar  className='lightGreen-progress-bar' now={84} label={`${84}%`} /></td>
                                 </tr>
 
@@ -202,24 +202,24 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             <tbody >
                                 <tr >
                                     <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}} >Marcelo Cortes Ortega</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyleLinea" src={faceVerde1}></img> 
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
                                     <ProgressBar  className='green-progress-bar' now={91} label={`${91}%`} /></td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img> 
+                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
                                     <ProgressBar  className='yellow-progress-bar' now={63} label={`${63}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyleLinea" src={faceRojo5}></img> 
+                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
                                     <ProgressBar  className='red-progress-bar' now={22} label={`${22}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyleLinea" src={faceVerde1}></img> 
+                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
                                     <ProgressBar  className='green-progress-bar' now={98} label={`${98}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img> 
+                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
                                     <ProgressBar  className='lightGreen-progress-bar' now={80} label={`${80}%`} /></td>
                                 </tr>
 
@@ -242,24 +242,24 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             <tbody>
                                 <tr >
                                     <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}} >Guillermina Gomez</th>
-                                    <td>Florencia Lorenzati &nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img> 
+                                    <td>Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
                                     <ProgressBar  className='orange-progress-bar' now={51} label={`${51}%`} /></td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img> 
+                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
                                     <ProgressBar  className='yellow-progress-bar' now={67} label={`${67}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyleLinea" src={faceRojo5}></img> 
+                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
                                     <ProgressBar  className='red-progress-bar' now={25} label={`${25}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img> 
+                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
                                     <ProgressBar  className='lightGreen-progress-bar' now={78} label={`${78}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img> 
+                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
                                     <ProgressBar  className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
                                 </tr>
 
@@ -280,24 +280,24 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             <tbody>
                                 <tr >
                                     <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}} >Mauricio Perez</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyleLinea" src={faceRojo5}></img> 
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
                                     <ProgressBar  className='red-progress-bar' now={29} label={`${29}%`} /></td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img> 
+                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
                                     <ProgressBar  className='yellow-progress-bar' now={56} label={`${56}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyleLinea" src={faceVerde1}></img> 
+                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
                                     <ProgressBar  className='green-progress-bar' now={92} label={`${92}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img> 
+                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
                                     <ProgressBar  className='orange-progress-bar' now={50} label={`${50}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyleLinea" src={faceRojo5}></img> 
+                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
                                     <ProgressBar  className='red-progress-bar' now={21} label={`${21}%`} /></td>
                                 </tr>
 
@@ -319,24 +319,24 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             <tbody>
                                 <tr >
                                     <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}} >Estefania Gonzales</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img> 
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
                                     <ProgressBar  className='lightGreen-progress-bar' now={81} label={`${81}%`} /></td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img> 
+                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
                                     <ProgressBar  className='orange-progress-bar' now={49} label={`${49}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyleLinea" src={faceVerde1}></img> 
+                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
                                     <ProgressBar  className='green-progress-bar' now={100} label={`${100}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img> 
+                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
                                     <ProgressBar  className='orange-progress-bar' now={54} label={`${54}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img> 
+                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
                                     <ProgressBar  className='lightGreen-progress-bar' now={84} label={`${84}%`} /></td>
                                 </tr>
 
@@ -359,24 +359,24 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             <tbody>
                                 <tr >
                                     <th rowspan="5"  style={{width:'10em' ,paddingLeft:'1em'}}>Jorge Martinez</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyleLinea" src={faceVerde1}></img> 
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
                                     <ProgressBar  className='green-progress-bar' now={95} label={`${95}%`} /></td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img> 
+                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
                                     <ProgressBar  className='lightGreen-progress-bar' now={87} label={`${87}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img> 
+                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
                                     <ProgressBar  className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img> 
+                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
                                     <ProgressBar  className='orange-progress-bar' now={54} label={`${54}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyleLinea" src={faceRojo5}></img> 
+                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
                                     <ProgressBar  className='red-progress-bar' now={39} label={`${39}%`} /></td>
                                 </tr>
 
@@ -397,24 +397,24 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             <tbody>
                                 <tr >
                                     <th rowspan="5"  style={{width:'10em' ,paddingLeft:'1em'}}>Fausto Dominguez</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyleLinea" src={faceVerde1}></img> 
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
                                     <ProgressBar  className='green-progress-bar' now={94} label={`${94}%`} /></td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img> 
+                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
                                     <ProgressBar  className='lightGreen-progress-bar' now={86} label={`${86}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img> 
+                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
                                     <ProgressBar  className='yellow-progress-bar' now={61} label={`${61}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img> 
+                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
                                     <ProgressBar  className='orange-progress-bar' now={52} label={`${52}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyleLinea" src={faceRojo5}></img> 
+                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
                                     <ProgressBar  className='red-progress-bar' now={31} label={`${31}%`} /></td>
                                 </tr>
 
@@ -436,24 +436,24 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             <tbody>
                                 <tr >
                                     <th rowspan="5"  style={{width:'10em' ,paddingLeft:'1em'}}>Marcelo cortes ortega</th>
-                                   <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyleLinea" src={faceVerde1}></img> 
+                                   <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
                                    <ProgressBar  className='green-progress-bar' now={95} label={`${95}%`} /></td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img> 
+                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
                                     <ProgressBar  className='lightGreen-progress-bar' now={88} label={`${88}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img> 
+                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
                                     <ProgressBar  className='yellow-progress-bar' now={66} label={`${66}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img> 
+                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
                                     <ProgressBar  className='orange-progress-bar' now={53} label={`${53}%`} /></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyleLinea" src={faceRojo5}></img> 
+                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
                                     <ProgressBar  className='red-progress-bar' now={35} label={`${35}%`} /></td>
                                 </tr>
 
