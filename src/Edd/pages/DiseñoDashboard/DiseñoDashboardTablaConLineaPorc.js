@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Table,Container,Row,Col } from "react-bootstrap";
+import { Table, Container, Row, Col } from "react-bootstrap";
 import Header from "../../../templates/Header/Header";
 import "../Listados/BtnInsertar.css";
 import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import RadialSeparators from "./RadialSeparators";
 import "../home/homeEDD.css"
+import "../DiseñoDashboard/style.scss"
 import faceVerde1 from "../Smileys/faceVerde1.png"
 import faceVerdeLima2 from "../Smileys/faceVerdeLima2.png"
 import faceAmarillo3 from "../Smileys/faceAmarillo3.png"
 import faceNaranja4 from "../Smileys/faceNaranja4.png"
 import faceRojo5 from "../Smileys/faceRojo5.png"
-
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 
 export default function DiseñoDashboardTablaConLineasPorc() {
@@ -28,7 +29,6 @@ export default function DiseñoDashboardTablaConLineasPorc() {
         <>
 
             <Header></Header>
-
             <a
 
                 type="submit"
@@ -110,182 +110,358 @@ export default function DiseñoDashboardTablaConLineasPorc() {
             <br></br>
 
 
+            <table id="table" responsive>
 
-            <div>
-      <Row>
-      <Col> 
-        <table id="table" responsive>
-                <thead>
-                    <tr>
+                <tr>
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', borderRadius: '10px' }}>
+                            <thead>
+                                <tr>
 
-                        <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
-                        <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
+                                    <th id='borderTdThPORC' style={{ padding: '1em' }} >REFERENTE</th>
+                                    <th id='borderTdThPORC' style={{ padding: '1em' }} >COLABORADOR</th>
+                                </tr>
+                            </thead>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="borderTdTh">
-                        <th rowspan="5" id="borderTdTh" style={{width:'35%'}}>Romina Alvarez</th>
-                        <td>Florencia 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
+                            <tbody >
+                                <tr >
+                                    <th rowspan="5" style={{ width: '40%' }}>Romina Alvarez</th>
+                                    <th id="paddingColab">Florencia 90%&nbsp; <img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar animated now={90} label={`${90}%`} /></th>
 
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                    </tr>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Emiliano 88%&nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img>
+                                        <ProgressBar animated now={88} label={`${88}%`} /></th>
 
-                </tbody>
-            </table></Col>
-        <Col> 
-        <table id="table" responsive>
-                <thead>
-                    <tr>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Daniela 72%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar animated now={72} label={`${72}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Juan 47%&nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img>
+                                        <ProgressBar animated now={47} label={`${47}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Esteban 22%&nbsp;<img id="faceStyleLinea" src={faceRojo5}></img>
+                                        <ProgressBar animated now={22} label={`${22}%`} /> </th>
+                                </tr>
 
-                        <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
-                        <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
+                            </tbody>
+                        </table>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="borderTdTh">
-                        <th rowspan="5" id="borderTdTh" style={{width:'35%'}}>Josefina Perez</th>
-                        <td>Florencia 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
+                    </td>
 
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Daniela 62%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                    </tr>
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', borderRadius: '10px' }}>
+                            <thead>
+                                <tr>
 
-                </tbody>
-            </table></Col>
-      </Row>
-      <br></br>
-      <Row>
-      <Col> 
-        <table id="table" responsive>
+                                    <th id='borderTdThPORC' style={{ padding: '1em' }} >REFERENTE</th>
+                                    <th id='borderTdThPORC' style={{ padding: '1em' }} >COLABORADOR</th>
 
-                
-        <tbody>
-                    <tr id="borderTdTh">
-                        <th rowspan="5" id="borderTdTh" style={{width:'35%'}}>Marcelo Cortes Ortega</th>
-                        <td>Florencia 40%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr >
+                                    <th rowspan="5" style={{ width: '40%' }}>Romina Alvarez</th>
+                                    <th id="paddingColab">Florencia 90%&nbsp; <img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar animated now={90} label={`${90}%`} /></th>
 
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Emiliano 28%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Daniela 48%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Juan 97%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Esteban 62%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                    </tr>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Emiliano 88%&nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img>
+                                        <ProgressBar animated now={88} label={`${88}%`} /></th>
 
-                </tbody>
-            </table></Col>
-        <Col> 
-        <table id="table" responsive>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Daniela 72%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar animated now={72} label={`${72}%`} /></th>
+                                </tr>
 
-                <tbody>
-                    <tr id="borderTdTh">
-                        <th rowspan="5" id="borderTdTh" style={{width:'35%'}} >Ramiro Gomez</th>
-                        <td>Florencia 40%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Emiliano 28%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Juan 97%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Esteban 62%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                    </tr>
-
-                </tbody>
-            </table></Col>
-      </Row>
-      <br></br>
-      <Row>
-      <Col> 
-        <table id="table" responsive>
-
-                
-        <tbody>
-                    <tr id="borderTdTh">
-                        <th rowspan="5" id="borderTdTh" style={{width:'35%'}}>Fatima Gonzales</th>
-                        <td>Florencia 60%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Emiliano 28%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Juan 97%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Esteban 100%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-                    </tr>
-
-                </tbody>
-            </table></Col>
-        <Col> 
-        <table id="table" responsive>
-
-                <tbody>
-                    <tr id="borderTdTh">
-                        <th rowspan="5" id="borderTdTh" style={{width:'35%'}} >Esteban Ramirez</th>
-                        <td>Florencia 40%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Emiliano 28%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Juan 97%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-                    </tr>
-                    <tr id="borderTdTh">
-                        <td>Esteban 62%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                    </tr>
-
-                </tbody>
-            </table></Col>
-      </Row>
-    </div>
+                                <tr >
+                                    <th id="paddingColab">Juan 47%&nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img>
+                                        <ProgressBar animated now={47} label={`${47}%`} /></th>
+                                </tr>
 
 
 
+                                <tr >
+                                    <th id="paddingColab">Esteban 22%&nbsp;<img id="faceStyleLinea" src={faceRojo5}></img>
+                                        <ProgressBar animated now={22} label={`${22}%`} /> </th>
+                                </tr>
 
-           
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', borderRadius: '10px' }}>
+                            <thead>
+                                <tr>
+
+                                    <th id='borderTdThPORC' style={{ padding: '1em' }} >REFERENTE</th>
+                                    <th id='borderTdThPORC' style={{ padding: '1em' }} >COLABORADOR</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr >
+                                    <th rowspan="5" style={{ width: '40%' }}>Josefina Perez</th>
+                                    <th id="paddingColab">Florencia 65%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar animated now={65} label={`${65}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Emiliano 88%&nbsp;<img id="faceStyleLinea" src={faceVerdeLima2}></img>
+                                        <ProgressBar animated now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Daniela 52%&nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img>
+                                        <ProgressBar animated now={62} label={`${62}%`} /> </th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Juan 47%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar animated now={100} label={`${100}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Esteban 22%&nbsp;<img id="faceStyleLinea" src={faceRojo5}></img>
+                                        <ProgressBar animated now={32} label={`${32}%`} /> </th>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+                <br></br>
+
+                {/* ----------------- */}
+
+                <tr>
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', borderRadius: '10px' }}>
+
+
+                            <tbody>
+                                <tr >
+                                    <th rowspan="5" style={{ width: '40%' }}>Fatima Gonzales</th>
+                                    <th id="paddingColab">Florencia 60%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Emiliano 28%&nbsp;<img id="faceStyleLinea" src={faceRojo5}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Daniela 72%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Juan 97%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Esteban 100%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', borderRadius: '10px' }}>
+
+
+                            <tbody>
+                                <tr >
+                                    <th rowspan="5" style={{ width: '40%' }}>Fatima Gonzales</th>
+                                    <th id="paddingColab">Florencia 60%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Emiliano 28%&nbsp;<img id="faceStyleLinea" src={faceRojo5}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Daniela 72%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Juan 97%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Esteban 100%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', borderRadius: '10px' }}>
+
+                            <tbody>
+                                <tr >
+                                    <th rowspan="5" style={{ width: '40%' }} >Marcelo Cortes Ortega</th>
+                                    <th id="paddingColab">Florencia 40%&nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Emiliano 28%&nbsp;<img id="faceStyleLinea" src={faceRojo5}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Daniela 72%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Juan 97%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /> </th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Esteban 62%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar now={88} label={`${88}%`} /> </th>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+
+                    </td>
+                </tr>
+
+                <br></br>
+
+                {/* ----------------- */}
+
+                <tr>
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', borderRadius: '10px' }}>
+
+
+                            <tbody>
+                                <tr >
+                                    <th rowspan="5" style={{ width: '40%' }}>Fatima Gonzales</th>
+                                    <th id="paddingColab">Florencia 60%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Emiliano 28%&nbsp;<img id="faceStyleLinea" src={faceRojo5}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Daniela 72%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Juan 97%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Esteban 100%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', borderRadius: '10px' }}>
+
+
+                            <tbody>
+                                <tr >
+                                    <th rowspan="5" style={{ width: '40%' }}>Fatima Gonzales</th>
+                                    <th id="paddingColab">Florencia 60%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Emiliano 28%&nbsp;<img id="faceStyleLinea" src={faceRojo5}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Daniela 72%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Juan 97%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Esteban 100%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', borderRadius: '10px' }}>
+
+                            <tbody>
+                                <tr >
+                                    <th rowspan="5" style={{ width: '40%' }} >Esteban Ramirez</th>
+                                    <th id="paddingColab">Florencia 40%&nbsp;<img id="faceStyleLinea" src={faceNaranja4}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Emiliano 28%&nbsp;<img id="faceStyleLinea" src={faceRojo5}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Daniela 72%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /></th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Juan 97%&nbsp;<img id="faceStyleLinea" src={faceVerde1}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /> </th>
+                                </tr>
+                                <tr >
+                                    <th id="paddingColab">Esteban 62%&nbsp;<img id="faceStyleLinea" src={faceAmarillo3}></img>
+                                        <ProgressBar visuallyHidden now={88} label={`${88}%`} /> </th>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+
+                    </td>
+                </tr>
+
+            </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,26 +1,56 @@
-/* Style Face */
+/* DIESEÑO DASHBOARD TABLA */
 #faceStyle{
-width: 7%;
+  width: 12%;
 
-}
+  float: right;
+  margin-right: 1em;
+  }
 
-#table{
-text-align: center;
-border-collapse: collapse;
-width: 70%;
-margin: auto;
-background-color: #ffffff;
-
+#table1{
+  text-align: left;
+  border-collapse: collapse;
+  width: 80%;
+  margin: auto;
+  border-radius: 10px;
 
 }
 
 #borderTdTh{
   border: 1px solid black ;
+ vertical-align: middle;
  
 }
 
 
 /* ---------- */
+
+
+/* DIESEÑO DASHBOARD TABLA CON LINEA PORC */
+#table{
+  text-align: left;
+  border-collapse: collapse;
+  width: 80%;
+  margin: auto;
+  
+  }
+
+  #paddingColab{
+    padding: 0.5em;
+
+  }
+  #borderTdThPORC{
+    border-bottom: 1px solid black ;
+   vertical-align: middle;
+   
+  }
+  
+  #faceStyleLinea{
+    width: 10%;
+    float: right;
+    margin-top: 1em;
+    }
+  /* ---------- */
+
 /* Porcentaje Card */
 .porcentajeCard {
   display: inline;
