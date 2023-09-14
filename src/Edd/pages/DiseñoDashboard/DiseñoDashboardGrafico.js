@@ -6,6 +6,7 @@ import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } fro
 import 'react-circular-progressbar/dist/styles.css';
 import RadialSeparators from "./RadialSeparators";
 import Bars from "./BarsChart";
+import LinesChart from "./LineChart";
 
 export default function DiseñoDashboardGrafico() {
     const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -27,7 +28,8 @@ export default function DiseñoDashboardGrafico() {
                 value="Registrar"
                 href="/home">Volver
             </a>
-
+            <h4 style={{color:'white'}}>EVALUACIÓN COLABORADOR</h4>
+<br></br>
             <Table style={{ width: '70%', margin: 'auto' }}>
                 <tr >
                     <td>
@@ -97,9 +99,12 @@ export default function DiseñoDashboardGrafico() {
                         <CircularProgressbar value={100} text={`${tiempProm}`} />
                     </td>
                 </tr>
-            </Table>
+            </Table>            <br></br>
+            <div className="bg-light mx-auto" style={{width:"55em", height:"70%",padding:'16px'}}>
+                    <LinesChart />
+                </div>
             <br></br>
-            <div className="bg-light mx-auto" style={{width:"60%", height:"60%",padding:'16px'}}>
+            <div className="bg-light mx-auto" style={{width:"55em", height:"70%",padding:'16px'}}>
                     <Bars />
                 </div>
                 <br></br>

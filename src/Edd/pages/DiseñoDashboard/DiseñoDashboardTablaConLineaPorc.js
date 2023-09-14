@@ -6,13 +6,13 @@ import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } fro
 import 'react-circular-progressbar/dist/styles.css';
 import RadialSeparators from "./RadialSeparators";
 import "../home/homeEDD.css"
-
 import faceVerde1 from "../Smileys/faceVerde1.png"
 import faceVerdeLima2 from "../Smileys/faceVerdeLima2.png"
 import faceAmarillo3 from "../Smileys/faceAmarillo3.png"
 import faceNaranja4 from "../Smileys/faceNaranja4.png"
 import faceRojo5 from "../Smileys/faceRojo5.png"
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import LinesChart from "./LineChart";
 
 
 export default function DiseñoDashboardTablaConLineasPorc() {
@@ -21,8 +21,9 @@ export default function DiseñoDashboardTablaConLineasPorc() {
     const refEval = '2/4';
     const compEval = 13;
     const tiempProm = 0.23;
-   
+
     //PAGINADOR ---------------------
+
 
     return userData.statusConected || userData !== null ? (
         <>
@@ -35,7 +36,8 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                 value="Registrar"
                 href="/home">Volver
             </a>
-
+            <h4 style={{ color: 'white' }}>EVALUACIÓN COLABORADOR</h4>
+            <br></br>
             <Table style={{ width: '70%', margin: 'auto' }}>
                 <tr >
                     <td>
@@ -107,12 +109,70 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                 </tr>
             </Table>
             <br></br>
-
-
-    <table id="table" responsive>
+            <table id="tableLeyendas">
                 <tr>
-                <td >
-                    <table style={{backgroundColor:'white',width:'30em',borderRadius:'10px'}}>
+                    <td><div className="bg-light mx-auto" style={{ width: "55em", height: "70%", padding: '16px' }}>
+                        <LinesChart />
+                    </div></td>
+
+                    <td>
+                        <table style={{ backgroundColor: 'white', width: '10em', borderRadius: '20px',marginLeft:'1em' }}>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                <b>EXCELENTE</b>
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceVerde1}></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                <b>OPORTUNIDAD DE MEJORA</b>
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceVerdeLima2}></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                <b>REQUIERE ATENCIÓN
+</b>
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceAmarillo3}></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                    <b>REVISAR SITUACIÓN</b>
+
+
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceNaranja4}></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                    <b>ALERTA</b>
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceRojo5}></img>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <br></br>
+
+            <table id="table" responsive >
+                <tr>
+                    <td >
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
                             <thead>
                                 <tr>
 
@@ -122,75 +182,42 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                 </tr>
                             </thead>
                             <tbody >
-     
+
                                 <tr >
-                                    <th rowspan="5"  style={{width:'10em' ,paddingLeft:'1em'}}>Romina Alvarez </th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
-                                    <ProgressBar  className='lightGreen-progress-bar' now={81} label={`${81}%`} /></td>
+                                    <th rowspan="5" style={{ width: '10em', paddingLeft: '1em' }}>Romina Alvarez </th>
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;
+                                        <ProgressBar className='yellow-progress-bar' now={65} label={`${65}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceAmarillo3}></img> </td>
+
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
-                                    <ProgressBar  className='red-progress-bar' now={33} label={`${33}%`} /></td>
+                                    <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
+                                        <ProgressBar className='red-progress-bar' now={33} label={`${33}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={51} label={`${51}%`} /></td>
+                                    <td id="infoLinePorc">Daniela Perez &nbsp;
+                                        <ProgressBar className='orange-progress-bar' now={51} label={`${51}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
-                                    <ProgressBar  className='green-progress-bar' now={95} label={`${95}%`} /></td>
+                                    <td id="infoLinePorc">Juan Aguirre &nbsp;
+                                        <ProgressBar className='orange-progress-bar' now={59} label={`${59}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
-                                </tr>
+                                    <td id="infoLinePorc">Esteban Dominguez &nbsp;
+                                        <ProgressBar className='lightGreen-progress-bar' now={81} label={`${81}%`} /></td>
+                                    <td ><img id="sizeCaritas" src={faceVerdeLima2}></img> </td>
 
-                            </tbody>
-                        </table>
-                    </td>
-
-                    <td >
-                    <table style={{backgroundColor:'white',width:'30em',borderRadius:'10px'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} >COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr >
-                                    <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}}>Juana Lopez </th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
-                                    <ProgressBar  className='red-progress-bar' now={35} label={`${35}%`} /></td>
-
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
-                                    <ProgressBar  className='green-progress-bar' now={97} label={`${97}%`} /></td>
-                                </tr>
-                                <tr>
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='orange-progress-bar' now={52} label={`${52}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={64} label={`${64}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
-                                    <ProgressBar  className='lightGreen-progress-bar' now={84} label={`${84}%`} /></td>
                                 </tr>
 
                             </tbody>
                         </table>
                     </td>
-
-
-                    <td >
-                    <table style={{backgroundColor:'white',width:'30em',borderRadius:'10px'}}>
+                     <td >
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
                             <thead>
                                 <tr>
 
@@ -200,37 +227,93 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                 </tr>
                             </thead>
                             <tbody >
+
                                 <tr >
-                                    <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}} >Marcelo Cortes Ortega</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
-                                    <ProgressBar  className='green-progress-bar' now={91} label={`${91}%`} /></td>
+                                    <th rowspan="5" style={{ width: '10em', paddingLeft: '1em' }}>Romina Alvarez </th>
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;
+                                        <ProgressBar className='green-progress-bar' now={99} label={`${99}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceVerde1}></img></td>
+
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={63} label={`${63}%`} /></td>
+                                    <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
+                                        <ProgressBar className='lightGreen-progress-bar' now={79} label={`${79}%`} /></td>
+                                    <td ><img id="sizeCaritas" src={faceVerdeLima2}></img> </td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
-                                    <ProgressBar  className='red-progress-bar' now={22} label={`${22}%`} /></td>
+                                    <td id="infoLinePorc">Daniela Perez &nbsp;
+                                        <ProgressBar className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceAmarillo3}></img> </td>
+
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
-                                    <ProgressBar  className='green-progress-bar' now={98} label={`${98}%`} /></td>
+                                    <td id="infoLinePorc">Juan Aguirre &nbsp;
+                                        <ProgressBar className='lightGreen-progress-bar' now={83} label={`${83}%`} /></td>
+                                    <td ><img id="sizeCaritas" src={faceVerdeLima2}></img> </td>
+
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
-                                    <ProgressBar  className='lightGreen-progress-bar' now={80} label={`${80}%`} /></td>
+                                    <td id="infoLinePorc">Esteban Dominguez &nbsp;
+                                        <ProgressBar className='orange-progress-bar' now={46} label={`${46}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
+
                                 </tr>
 
                             </tbody>
                         </table>
                     </td>
-                </tr>
+
+
+                    <td >
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
+                            <thead>
+                                <tr>
+
+                                    <th style={{ padding: '1em' }} >REFERENTE</th>
+                                    <th style={{ padding: '1em' }} >COLABORADOR</th>
+
+                                </tr>
+                            </thead>
+                            <tbody >
+
+                                <tr >
+                                    <th rowspan="5" style={{ width: '10em', paddingLeft: '1em' }}>Romina Alvarez </th>
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;
+                                        <ProgressBar className='lightGreen-progress-bar' now={75} label={`${75}%`} /></td>
+                                    <td ><img id="sizeCaritas" src={faceVerdeLima2}></img> </td>
+
+                                </tr>
+                                <tr >
+                                    <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
+                                        <ProgressBar className='green-progress-bar' now={93} label={`${93}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceVerde1}></img></td>
+                                </tr>
+                                <tr >
+                                    <td id="infoLinePorc">Daniela Perez &nbsp;
+                                        <ProgressBar className='orange-progress-bar' now={45} label={`${45}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
+                                </tr>
+                                <tr >
+                                    <td id="infoLinePorc">Juan Aguirre &nbsp;
+                                        <ProgressBar className='red-progress-bar' now={16} label={`${16}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
+
+                                </tr>
+                                <tr >
+                                    <td id="infoLinePorc">Esteban Dominguez &nbsp;
+                                        <ProgressBar className='yellow-progress-bar' now={67} label={`${67}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceAmarillo3}></img> </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td> 
+                 </tr>
                 <br></br>
                 <tr>
-                <td >
-                    <table style={{backgroundColor:'white',width:'30em',borderRadius:'10px'}}>
+                    <td >
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
                             <thead>
                                 <tr>
 
@@ -239,36 +322,87 @@ export default function DiseñoDashboardTablaConLineasPorc() {
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody >
+
                                 <tr >
-                                    <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}} >Guillermina Gomez</th>
-                                    <td>Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='orange-progress-bar' now={51} label={`${51}%`} /></td>
+                                    <th rowspan="5" style={{ width: '10em', paddingLeft: '1em' }}>Jose Ramirez </th>
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;
+                                        <ProgressBar className='red-progress-bar' now={27} label={`${27}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={67} label={`${67}%`} /></td>
+                                    <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
+                                        <ProgressBar className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceAmarillo3}></img> </td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
-                                    <ProgressBar  className='red-progress-bar' now={25} label={`${25}%`} /></td>
+                                    <td id="infoLinePorc">Daniela Perez &nbsp;
+                                        <ProgressBar className='yellow-progress-bar' now={56} label={`${56}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceAmarillo3}></img></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
-                                    <ProgressBar  className='lightGreen-progress-bar' now={78} label={`${78}%`} /></td>
+                                    <td id="infoLinePorc">Juan Aguirre &nbsp;
+                                        <ProgressBar className='yellow-progress-bar' now={48} label={`${48}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceAmarillo3}></img></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
+                                    <td id="infoLinePorc">Esteban Dominguez &nbsp;
+                                        <ProgressBar className='green-progress-bar' now={98} label={`${98}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceVerde1}></img></td>
                                 </tr>
 
                             </tbody>
                         </table>
                     </td>
+                    <td >
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
+                            <thead>
+                                <tr>
+
+                                    <th style={{ padding: '1em' }} >REFERENTE</th>
+                                    <th style={{ padding: '1em' }} >COLABORADOR</th>
+
+                                </tr>
+                            </thead>
+                            <tbody >
+
+                                <tr >
+                                    <th rowspan="5" style={{ width: '10em', paddingLeft: '1em' }}>Marcelo Cortes Ortega </th>
+                                    <td id="infoLinePorc">Florencia Lorenzati&nbsp;
+                                        <ProgressBar className='yellow-progress-bar' now={53} label={`${53}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceAmarillo3}></img></td>
+
+                                </tr>
+                                <tr >
+                                    <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
+                                        <ProgressBar className='red-progress-bar' now={33} label={`${33}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
+                                </tr>
+                                <tr >
+                                    <td id="infoLinePorc">Daniela Perez &nbsp;
+                                        <ProgressBar className='orange-progress-bar' now={41} label={`${41}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
+                                </tr>
+                                <tr >
+                                    <td id="infoLinePorc">Juan Aguirre &nbsp;
+                                        <ProgressBar className='green-progress-bar' now={100} label={`${100}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceVerde1}></img></td>
+                                </tr>
+                                <tr >
+                                    <td id="infoLinePorc">Esteban Dominguez &nbsp;
+                                        <ProgressBar className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceAmarillo3}></img> </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+
+
 
                     <td >
-                    <table style={{backgroundColor:'white',width:'30em',borderRadius:'10px'}}>
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
                             <thead>
                                 <tr>
 
@@ -277,190 +411,42 @@ export default function DiseñoDashboardTablaConLineasPorc() {
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody >
+
                                 <tr >
-                                    <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}} >Mauricio Perez</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
-                                    <ProgressBar  className='red-progress-bar' now={29} label={`${29}%`} /></td>
+                                    <th rowspan="5" style={{ width: '10em', paddingLeft: '1em' }}>Laura Perez </th>
+                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;
+                                        <ProgressBar className='lightGreen-progress-bar' now={79} label={`${79}%`} /></td>
+                                    <td ><img id="sizeCaritas" src={faceVerdeLima2}></img> </td>
 
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={56} label={`${56}%`} /></td>
+                                    <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
+                                        <ProgressBar className='red-progress-bar' now={35} label={`${35}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
-                                    <ProgressBar  className='green-progress-bar' now={92} label={`${92}%`} /></td>
+                                    <td id="infoLinePorc">Daniela Perez &nbsp;
+                                        <ProgressBar className='yellow-progress-bar' now={53} label={`${53}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceAmarillo3}></img></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='orange-progress-bar' now={50} label={`${50}%`} /></td>
+                                    <td id="infoLinePorc">Juan Aguirre &nbsp;
+                                        <ProgressBar className='red-progress-bar' now={20} label={`${20}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceRojo5}></img></td>
                                 </tr>
                                 <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
-                                    <ProgressBar  className='red-progress-bar' now={21} label={`${21}%`} /></td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-
-
-                    <td >
-                    <table style={{backgroundColor:'white',width:'30em',borderRadius:'10px'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} >COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr >
-                                    <th rowspan="5" style={{width:'10em' ,paddingLeft:'1em'}} >Estefania Gonzales</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
-                                    <ProgressBar  className='lightGreen-progress-bar' now={81} label={`${81}%`} /></td>
-
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='orange-progress-bar' now={49} label={`${49}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
-                                    <ProgressBar  className='green-progress-bar' now={100} label={`${100}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='orange-progress-bar' now={54} label={`${54}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
-                                    <ProgressBar  className='lightGreen-progress-bar' now={84} label={`${84}%`} /></td>
+                                    <td id="infoLinePorc">Esteban Dominguez &nbsp;
+                                        <ProgressBar className='green-progress-bar' now={92} label={`${92}%`} /></td>
+                                    <td><img id="sizeCaritas" src={faceVerde1}></img> </td>
                                 </tr>
 
                             </tbody>
                         </table>
-                    </td>
+                    </td> 
                 </tr>
                 <br></br>
-                {/* <tr>
-                <td >
-                    <table style={{backgroundColor:'white',width:'30em',borderRadius:'10px'}}>
-                            <thead>
-                                <tr>
 
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} >COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr >
-                                    <th rowspan="5"  style={{width:'10em' ,paddingLeft:'1em'}}>Jorge Martinez</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
-                                    <ProgressBar  className='green-progress-bar' now={95} label={`${95}%`} /></td>
-
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
-                                    <ProgressBar  className='lightGreen-progress-bar' now={87} label={`${87}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='orange-progress-bar' now={54} label={`${54}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
-                                    <ProgressBar  className='red-progress-bar' now={39} label={`${39}%`} /></td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-
-                    <td >
-                    <table style={{backgroundColor:'white',width:'30em',borderRadius:'10px'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} >COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr >
-                                    <th rowspan="5"  style={{width:'10em' ,paddingLeft:'1em'}}>Fausto Dominguez</th>
-                                    <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
-                                    <ProgressBar  className='green-progress-bar' now={94} label={`${94}%`} /></td>
-
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
-                                    <ProgressBar  className='lightGreen-progress-bar' now={86} label={`${86}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={61} label={`${61}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='orange-progress-bar' now={52} label={`${52}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
-                                    <ProgressBar  className='red-progress-bar' now={31} label={`${31}%`} /></td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-
-
-                    <td >
-                    <table style={{backgroundColor:'white',width:'30em',borderRadius:'10px'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} >COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr >
-                                    <th rowspan="5"  style={{width:'10em' ,paddingLeft:'1em'}}>Marcelo cortes ortega</th>
-                                   <td id="infoLinePorc">Florencia Lorenzati &nbsp;<img id="faceStyle" src={faceVerde1}></img> 
-                                   <ProgressBar  className='green-progress-bar' now={95} label={`${95}%`} /></td>
-
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Emiliano &nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> 
-                                    <ProgressBar  className='lightGreen-progress-bar' now={88} label={`${88}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Daniela &nbsp;<img id="faceStyle" src={faceAmarillo3}></img> 
-                                    <ProgressBar  className='yellow-progress-bar' now={66} label={`${66}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Juan &nbsp;<img id="faceStyle" src={faceNaranja4}></img> 
-                                    <ProgressBar  className='orange-progress-bar' now={53} label={`${53}%`} /></td>
-                                </tr>
-                                <tr >
-                                    <td id="infoLinePorc">Esteban &nbsp;<img id="faceStyle" src={faceRojo5}></img> 
-                                    <ProgressBar  className='red-progress-bar' now={35} label={`${35}%`} /></td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-                </tr> */}
             </table>
         </>
     ) : (

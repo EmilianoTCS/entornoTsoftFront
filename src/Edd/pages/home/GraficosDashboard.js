@@ -403,7 +403,7 @@ export default function GraficosDashboard() {
 
                     <th>
                         <div class="bg-light mx-auto px-2 border border-2 border-secondary"
-                            style = {{ width: "670px", height: "350px" }}>
+                            style = {{ width: "50em", height: "27em" }}>
                             <GrafChart idEDDEvaluacion={idEDDEvaluacion} idEDDProyecto={idEDDProyecto} />
                         </div>
                     </th>

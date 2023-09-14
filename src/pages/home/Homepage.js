@@ -20,53 +20,79 @@ export default function HomePage() {
   return userData.statusConected || userData !== null ? (
     <div>
       <Header></Header>
-      <div style={{paddingLeft:'10em'}}>
-      <br></br>
-      <a
-        
-        type="submit"
-        id="btnAtras"
-        
-        href="/DiseñoDashboardTablaConLineasPorc">DiseñoTbLineasPorc
-      </a>
+      <table style={{ width: '50%', margin: 'auto' }}>
+        <td>
+          <td>
+            <h4 class="column left-column">EVALUACIONES<br></br> DE<br></br> DESEMPEÑO</h4>
+          </td>
+        </td>
+        <td>
+          <td>
+            <h4 class="column right-column">ACADEMIA <br></br>DE<br></br> FORMACIÓN</h4>    </td>
+        </td>
+      </table>
       
-      <br></br>
-      <br></br>
-      
-      <a
-        
-        type="submit"
-        id="btnAtras"
-       
-        href="/DiseñoDashboardGrafico">DiseñoGrafico
-      </a>
-      
-      <br></br>
-      <br></br>
-     
-      <a
-        
-        type="submit"
-        id="btnAtras"
-        href="/DiseñoDashboardTabla">DiseñoTabla
-      </a>
+      <div style={{ paddingLeft: '5em', paddingTop: '3em' }}>
+        <table style={{ border: 'black 2px solid' }}>
+          <td style={{ border: 'black 2px solid', padding: '1em' }} border={2}>
+            <h4 style={{ color: 'white' }}>Colaborador</h4>
+            <br></br>
+            <tr>
+              <a
+                type="submit"
+                id="btnAtras"
+
+                href="/DiseñoDashboardTablaConLineasPorc">DiseñoTbLineasPorc
+              </a>
+            </tr>
+            <br></br>
+            <tr>
+              <a
+                type="submit"
+                id="btnAtras"
+
+                href="/DiseñoDashboardGrafico">DiseñoGrafico
+              </a>
+            </tr>
+            <br></br>
+            <tr>
+              <a
+                type="submit"
+                id="btnAtras"
+                href="/DiseñoDashboardTabla">DiseñoTabla
+              </a>
+            </tr>
+          </td>
+
+          <td style={{ border: 'black 1px solid', padding: '1em' }}>
+            <tr>
+              <h4 style={{ color: 'white' }}>Referente</h4>
+
+              <br></br>
+              <a
+
+                type="submit"
+                id="btnAtras"
+
+                href="/DiseñoTablaLineaReferente">DiseñoTablaLineaReferente
+              </a>
+            </tr>
+            <br></br>
+            <tr>
+              <a
+
+                type="submit"
+                id="btnAtras"
+
+                href="/UnReferenteDiseño">DiseñoUnReferente
+              </a>
+            </tr>
+          </td>
+        </table>
       </div>
-      <div class="column-container">
-    
-        <h4 class="column left-column">EVALUACIONES<br></br> DE<br></br> DESEMPEÑO</h4>
-        
-        
-     
+    </div >
 
 
-        <div >
-          <h4 class="column right-column">ACADEMIA <br></br>DE<br></br> FORMACIÓN</h4>
-        </div>
-      </div>
-      
-
-
-    </div>
   ) : (
     <Navigate to="/login"></Navigate>
   );

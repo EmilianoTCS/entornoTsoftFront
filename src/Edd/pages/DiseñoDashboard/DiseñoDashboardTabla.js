@@ -11,6 +11,7 @@ import faceVerdeLima2 from "../Smileys/faceVerdeLima2.png"
 import faceAmarillo3 from "../Smileys/faceAmarillo3.png"
 import faceNaranja4 from "../Smileys/faceNaranja4.png"
 import faceRojo5 from "../Smileys/faceRojo5.png"
+import LinesChart from "./LineChart";
 
 export default function DiseñoDashboardTabla() {
     const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -33,7 +34,8 @@ export default function DiseñoDashboardTabla() {
                 value="Registrar"
                 href="/home">Volver
             </a>
-
+            <h4 style={{ color: 'white' }}>EVALUACIÓN COLABORADOR</h4>
+            <br></br>
             <Table style={{ width: '70%', margin: 'auto' }}>
                 <tr >
                     <td>
@@ -106,27 +108,70 @@ export default function DiseñoDashboardTabla() {
             </Table>
             <br></br>
 
+            <table id="tableLeyendas">
+                <tr>
+                    <td><div className="bg-light mx-auto" style={{ width: "55em", height: "70%", padding: '16px' }}>
+                        <LinesChart />
+                    </div></td>
+
+                    <td>
+                        <table style={{ backgroundColor: 'white', width: '10em', borderRadius: '20px',marginLeft:'1em' }}>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                <b>EXCELENTE</b>
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceVerde1}></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                <b>OPORTUNIDAD DE MEJORA</b>
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceVerdeLima2}></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                <b>REQUIERE ATENCIÓN
+</b>
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceAmarillo3}></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                    <b>REVISAR SITUACIÓN</b>
 
 
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceNaranja4}></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="infoLinePorcLeyendas">
+                                    <b>ALERTA</b>
+                                </td>
+                                <td>
+                                    <img id="sizeCaritas" src={faceRojo5}></img>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
 
+                </tr>
 
-
-
-
-
-
-
-
-
-
-
-
+            </table>
+            <br></br>
 
             <table id="table1" responsive>
 
                 <tr>
-                    <td  style={{width:'32%'}}>
-                    <table style={{backgroundColor:'white',width:'30em'}}>
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em' }}>
                             <thead>
                                 <tr>
 
@@ -137,29 +182,29 @@ export default function DiseñoDashboardTabla() {
                             </thead>
                             <tbody>
                                 <tr id="borderTdTh">
-                                    <th rowspan="5" id="borderTdTh" style={{width:'10em'}}>Romina Alvarez </th>
-                                    <td id="infoTable">Florencia Lorenzati 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
+                                    <th rowspan="5" id="borderTdTh" style={{ width: '10em', paddingLeft: '1em' }}>Romina Alvarez </th>
+                                    <td id="infoTable">Florencia Lorenzati <b>15%</b>&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
 
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td id="infoTable">Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
+                                    <td id="infoTable">Emiliano <b>88%</b>&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td id="infoTable">Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
+                                    <td id="infoTable">Daniela <b>82%</b>&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td id="infoTable">Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
+                                    <td id="infoTable">Juan <b>61%</b>&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td id="infoTable">Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
+                                    <td id="infoTable">Esteban <b>22%</b>&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
                                 </tr>
 
                             </tbody>
                         </table>
                     </td>
 
-                    <td  style={{width:'32%'}}>
-                    <table style={{backgroundColor:'white',width:'30em'}}>
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em' }}>
                             <thead>
                                 <tr>
 
@@ -170,21 +215,21 @@ export default function DiseñoDashboardTabla() {
                             </thead>
                             <tbody>
                                 <tr id="borderTdTh">
-                                    <th rowspan="5" id="borderTdTh" style={{width:'10em'}}>Josefina Perez</th>
-                                    <td id="infoTable">Florencia Lorenzati 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
+                                    <th rowspan="5" id="borderTdTh" style={{ width: '10em', paddingLeft: '1em' }}>Josefina Perez</th>
+                                    <td id="infoTable">Florencia Lorenzati <b>89%</b>&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
 
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td  id="infoTable">Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
+                                    <td id="infoTable">Emiliano <b>69%</b>&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td  id="infoTable">Daniela 62%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
+                                    <td id="infoTable">Daniela <b>62%</b>&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td  id="infoTable">Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
+                                    <td id="infoTable">Juan <b>42%</b>&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td  id="infoTable">Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
+                                    <td id="infoTable">Esteban <b>92%</b>&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
                                 </tr>
 
                             </tbody>
@@ -192,8 +237,8 @@ export default function DiseñoDashboardTabla() {
                     </td>
 
 
-                    <td  style={{width:'32%'}}>
-                    <table style={{backgroundColor:'white',width:'30em'}}>
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em' }}>
                             <thead>
                                 <tr>
 
@@ -204,21 +249,126 @@ export default function DiseñoDashboardTabla() {
                             </thead>
                             <tbody>
                                 <tr id="borderTdTh">
-                                    <th rowspan="5" id="borderTdTh" style={{width:'10em'}}>Romina Alvarez</th>
-                                    <td  id="infoTable">Florencia Lorenzati 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
+                                    <th rowspan="5" id="borderTdTh" style={{ width: '10em', paddingLeft: '1em' }}>Josefina Perez</th>
+                                    <td id="infoTable">Florencia Lorenzati <b>10%</b>&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
 
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td  id="infoTable">Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
+                                    <td id="infoTable">Emiliano <b>88%</b>&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td  id="infoTable">Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
+                                    <td id="infoTable">Daniela <b>92%</b>&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td  id="infoTable">Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
+                                    <td id="infoTable">Juan <b>51%</b>&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
                                 </tr>
                                 <tr id="borderTdTh">
-                                    <td  id="infoTable">Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
+                                    <td id="infoTable">Esteban <b>42%</b>&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+
+                </tr>
+                <br></br>
+                <tr>
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em' }}>
+                            <thead>
+                                <tr>
+
+                                    <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
+                                    <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="borderTdTh">
+                                    <th rowspan="5" id="borderTdTh" style={{ width: '10em', paddingLeft: '1em' }}>Josefina Perez</th>
+                                    <td id="infoTable">Florencia Lorenzati <b>90%</b>&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
+
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Emiliano <b>88%</b>&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Daniela <b>79%</b>&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Juan <b>87%</b>&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Esteban <b>32%</b>&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+
+
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em' }}>
+                            <thead>
+                                <tr>
+
+                                    <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
+                                    <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="borderTdTh">
+                                    <th rowspan="5" id="borderTdTh" style={{ width: '10em', paddingLeft: '1em' }}>Josefina Perez</th>
+                                    <td id="infoTable">Florencia Lorenzati <b>45%</b>&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
+
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Emiliano <b>88%</b>&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Daniela <b>62%</b>&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Juan <b>57%</b>&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Esteban <b>82%</b>&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+
+
+
+                    <td style={{ width: '32%' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em' }}>
+                            <thead>
+                                <tr>
+
+                                    <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
+                                    <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="borderTdTh">
+                                    <th rowspan="5" id="borderTdTh" style={{ width: '10em', paddingLeft: '1em' }}>Josefina Perez</th>
+                                    <td id="infoTable">Florencia Lorenzati <b>40%</b>&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
+
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Emiliano <b>88%</b>&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Daniela <b>22%</b>&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Juan <b>47%</b>&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
+                                </tr>
+                                <tr id="borderTdTh">
+                                    <td id="infoTable">Esteban <b>62%</b>&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
                                 </tr>
 
                             </tbody>
@@ -226,209 +376,6 @@ export default function DiseñoDashboardTabla() {
                     </td>
                 </tr>
                 <br></br>
-                <tr>
-                    <td  style={{width:'32%'}}>
-                    <table style={{backgroundColor:'white',width:'30em'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
-                                    <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="borderTdTh">
-                                    <th rowspan="5" id="borderTdTh" style={{width:'10em'}}>Romina Alvarez</th>
-                                    <td  id="infoTable">Florencia Lorenzati 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td  id="infoTable">Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td  id="infoTable">Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td  id="infoTable">Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td  id="infoTable">Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-
-                    <td  style={{width:'32%'}}>
-                    <table style={{backgroundColor:'white',width:'30em'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
-                                    <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="borderTdTh">
-                                    <th rowspan="5" id="borderTdTh" style={{width:'10em'}}>Josefina Perez</th>
-                                    <td id="infoTable">Florencia Lorenzati 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Daniela 62%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-
-
-                    <td  style={{width:'32%'}}>
-                    <table style={{backgroundColor:'white',width:'30em'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
-                                    <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="borderTdTh">
-                                    <th rowspan="5" id="borderTdTh" style={{width:'10em'}}>Romina Alvarez</th>
-                                    <td id="infoTable">Florencia Lorenzati 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <br></br>
-                <tr>
-                    <td  style={{width:'32%'}}>
-                    <table style={{backgroundColor:'white',width:'30em'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
-                                    <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="borderTdTh">
-                                    <th rowspan="5" id="borderTdTh" style={{width:'10em'}}>Romina Alvarez</th>
-                                    <td  id="infoTable">Florencia Lorenzati 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td  id="infoTable">Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td  id="infoTable">Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td  id="infoTable">Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td  id="infoTable">Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-
-                    <td  style={{width:'32%'}}>
-                    <table style={{backgroundColor:'white',width:'30em'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
-                                    <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="borderTdTh">
-                                    <th rowspan="5" id="borderTdTh" style={{width:'10em'}}>Josefina Perez</th>
-                                    <td id="infoTable">Florencia Lorenzati 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Daniela 62%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-
-
-                    <td  style={{width:'32%'}}>
-                    <table style={{backgroundColor:'white',width:'30em'}}>
-                            <thead>
-                                <tr>
-
-                                    <th style={{ padding: '1em' }} id="borderTdTh">REFERENTE</th>
-                                    <th style={{ padding: '1em' }} id="borderTdTh">COLABORADOR</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="borderTdTh">
-                                    <th rowspan="5" id="borderTdTh" style={{width:'10em',paddingLeft:'1em'}}>Romina Alvarez</th>
-                                    <td id="infoTable">Florencia Lorenzati 90%&nbsp;<img id="faceStyle" src={faceVerde1}></img> </td>
-
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Emiliano 88%&nbsp;<img id="faceStyle" src={faceVerdeLima2}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Daniela 72%&nbsp;<img id="faceStyle" src={faceAmarillo3}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Juan 47%&nbsp;<img id="faceStyle" src={faceNaranja4}></img> </td>
-                                </tr>
-                                <tr id="borderTdTh">
-                                    <td id="infoTable">Esteban 22%&nbsp;<img id="faceStyle" src={faceRojo5}></img> </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
             </table>
 
 

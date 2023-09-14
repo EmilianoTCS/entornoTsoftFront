@@ -1,78 +1,37 @@
+/* LINEA */
+.linea{
+height: 5px;
+border-right: 2px ridge black;
+}
+/* --- */
 
-
-/* DIESEÑO DASHBOARD TABLA */
-#faceStyle{
-  width: 11.5%;
-
-  float: right;
-  margin-right: 1em;
-  }
-
-#table1{
+/* LEYENDAS CARITAS */
+#infoLinePorcLeyendas {
+  padding: 1em;
+  font-size: 12pt;
+}
+#tableLeyendas {
+  text-align: left;
+  border-collapse: collapse;
   width: 80%;
   margin: auto;
-
-}
-
-#borderTdTh{
-  border: 1px solid black ; 
-}
-#infoTable{
-  padding-left: 0.5em;
-  padding-top: 0.4em;
-
-}
-/* ---------- */
-
-
-
-/* DIESEÑO DASHBOARD TABLA CON LINEA PORC */
-#infoLinePorc{
-padding-bottom: 0.6em;
-}
-
-#table{
-
-  width: 80%;
-  margin: auto;
+  border-radius: 10px;
   
-  }
+}
+#hr{
+  height:1em;
+  width:1em;
+  border-width:0;
+  color:#000000;
+  background-color:#000;
+ }
 
-  #paddingColab{
-    padding: 0.5em;
-
-  }
-
+#infoLinePorcLeyendasREFERENTE {
+  padding: 1em;
+  font-size: 12pt;
   
-  #faceStyleLinea{
-    width: 12%;
-    float: right;
-    margin-right: 1em;
-    }
-  /* ---------- */
-/* COLORES BARRAS DASHBOARD TABLA CON LINEA PORC*/
-
-.yellow-progress-bar .progress-bar {
-  background-color: #e9dc65;
-  color: black;
-  font-size: 12pt;
-
 }
-
-.lightGreen-progress-bar .progress-bar {
-  background-color: #94FF01;
-  color: black;
-  font-size: 12pt;
-
-/* DIESEÑO DASHBOARD TABLA */
-#faceStyle{
-  width: 12%;
-}
-  float: right;
-  margin-right: 1em;
-  }
-
-#table1{
+#tableLeyendasREFERENTE {
   text-align: left;
   border-collapse: collapse;
   width: 80%;
@@ -80,61 +39,153 @@ padding-bottom: 0.6em;
   border-radius: 10px;
 
 }
+/* --------------- */
 
-#borderTdTh{
-  border: 1px solid black ;
- vertical-align: middle;
- 
+/* DIESEÑO DASHBOARD TABLA */
+#faceStyle {
+  width: 11.5%;
 
+  float: right;
+  margin-right: 1em;
 }
-.red-progress-bar .progress-bar {
-  background-color: #FC0000;
-  color: black;
-  font-size: 12pt;
 
+#table1 {
+  width: 60%;
+  margin: auto;
 }
-.green-progress-bar .progress-bar {
-  background-color: #02C202;
-  color: black;
-  font-size: 12pt;
 
-
+#borderTdTh {
+  border: 1px solid black;
 }
-.orange-progress-bar .progress-bar {
-  background-color: #FF7300;
-  color: black;
-  font-size: 12pt;
+#infoTable {
+  padding-left: 0.5em;
+  padding-top: 0.4em;
 }
-/* ----------- */
-
 /* ---------- */
 
 
+/* DIESEÑO TABLA CON LINEA PORC REFERENTES */
+
+
+#infoLinePorcREFERENTE {
+  
+  width: 14em;
+}
+
+#infoLinePorcREFERENTEConHR {
+  padding-top: 0.6em;
+  padding-left: 1em;
+}
+
+#faceStyleReferenteTitle {
+  width: 10%;
+  margin-bottom: 4px;
+}
+
+#faceStyleReferenteTodas {
+  width: 1.7em;
+  margin-bottom: 4px;
+  float: right;
+  margin-right: 0.3em;
+  margin-left: 0.5em;
+}
+
+#sizeCaritasReferentes {
+  width: 30px;
+  margin-right: 1em;
+}
+
+/* ----------------------- */
+
 /* DIESEÑO DASHBOARD TABLA CON LINEA PORC */
-#table{
+#infoLinePorc {
+  padding-bottom: 0.8em;
+}
+
+#table {
+  margin: auto;
+}
+#borderTdThPORC {
+  border-bottom: 1px solid black;
+  vertical-align: middle;
+}
+
+#paddingColab {
+  padding: 0.5em;
+}
+
+#faceStyleLinea {
+  width: 12%;
+  float: right;
+  margin-right: 1em;
+}
+/* ---------- */
+
+
+/* DIESEÑO DASHBOARD TABLA */
+#faceStyle {
+  width: 12%;
+
+  float: right;
+  margin-right: 1em;
+  padding-bottom: 3px;
+}
+
+#table1 {
   text-align: left;
   border-collapse: collapse;
   width: 80%;
   margin: auto;
-  
-  }
+  border-radius: 10px;
+}
 
-  #paddingColab{
-    padding: 0.5em;
+#borderTdTh {
+  border: 1px solid black;
+  vertical-align: middle;
+}
+#sizeCaritas {
+  width: 30px;
+  float: right;
+  margin-right: 1em;
+}
+/* -------------- */
 
-  }
-  #borderTdThPORC{
-    border-bottom: 1px solid black ;
-   vertical-align: middle;
-   
-  }
-  
-  #faceStyleLinea{
-    width: 10%;
-    float: right;
-    margin-top: 1em;
-    }
-  /* ---------- */
+/* COLORES BARRAS DASHBOARD TABLA CON LINEA PORC*/
+.yellow-progress-bar .progress-bar {
+  background-color: #e9dc65;
+  color: black;
+  font-size: 12pt;
+  font-weight: 700;
+}
+
+.lightGreen-progress-bar .progress-bar {
+  background-color: #94ff01;
+  color: black;
+  font-size: 12pt;
+  font-weight: 700;
+}
+
+.red-progress-bar .progress-bar {
+  background-color: #f71717;
+  color: rgb(255, 255, 255);
+  font-size: 12pt;
+  font-weight: 700;
+}
+.green-progress-bar .progress-bar {
+  background-color: #02c202;
+  color: rgb(255, 255, 255);
+  font-size: 12pt;
+  font-weight: 700;
+}
+.orange-progress-bar .progress-bar {
+  background-color: #ff7300;
+  color: rgb(0, 0, 0);
+  font-size: 12pt;
+  font-weight: 700;
+}
+/* ----------- */
+
+
 
 
 /* Porcentaje Card */
@@ -143,9 +194,9 @@ padding-bottom: 0.6em;
   margin-left: 5px; /* Ajusta este valor según necesites */
 }
 /* ALERTAS DESTACADOS Y OPORTUNIDADES */
-#titleColor{
+#titleColor {
   margin-top: 15px;
-color: #ffffff;
+  color: #ffffff;
 }
 .letraCompetencias {
   text-align: left;
@@ -179,7 +230,6 @@ color: #ffffff;
   text-align: center;
   flex-direction: column;
   width: 80%;
-  
 }
 
 /* Comentarios */
@@ -194,7 +244,6 @@ color: #ffffff;
   width: 100%;
 }
 
-
 .cardContainerComentario {
   display: grid;
   grid-template-columns: repeat(
@@ -203,7 +252,6 @@ color: #ffffff;
   ); /* Dos columnas y se ajusta automáticamente */
   gap: 20px; /* Espacio entre las tarjetas */
   justify-content: center;
-
 }
 
 .cardColumnComentario {
@@ -213,14 +261,12 @@ color: #ffffff;
   background-color: #a6a9ac;
 }
 
-
 .columnTitle {
   font-weight: bold;
 }
 
 .columnContent {
   padding-left: 10px;
-  
 }
 
 .nomEvaluadorCell {
@@ -232,7 +278,6 @@ color: #ffffff;
   bottom: 0;
   right: 0;
   color: #ffffff;
-  
 }
 /* -- */
 
@@ -271,10 +316,9 @@ color: #ffffff;
 }
 .cardContainer1Solo {
   display: grid;
- columns: 1;
+  columns: 1;
   justify-content: left;
   margin-right: 45em;
-
 }
 
 .cardColumn {
@@ -284,8 +328,6 @@ color: #ffffff;
   background-color: #ffffff;
   margin: -4.1em 6em 6em;
 }
-
-
 
 #container_cardsEDD {
   display: grid;
@@ -314,7 +356,6 @@ color: #ffffff;
   margin-top: 6px;
   font-size: 11pt;
   margin-left: -10px;
-
 }
 #cards1-2 {
   display: flex;
@@ -322,19 +363,16 @@ color: #ffffff;
   justify-content: space-evenly;
 }
 
-  #container_cardsLEYENDA {
-    /* display: grid; */
-    width: 400px;
-    /* height: 100px; */
-    /* margin-top: 40px; */
-    /* justify-self: start; */
-    /* gap: 20px; */
-    /* margin: -1% auto; */
-background-color: #ffffff;
-  }
-
-
-
+#container_cardsLEYENDA {
+  /* display: grid; */
+  width: 400px;
+  /* height: 100px; */
+  /* margin-top: 40px; */
+  /* justify-self: start; */
+  /* gap: 20px; */
+  /* margin: -1% auto; */
+  background-color: #ffffff;
+}
 
 @media screen and (max-width: 1465px) {
   #container_cardsCompResumen {
@@ -344,7 +382,6 @@ background-color: #ffffff;
     justify-self: start;
     gap: 20px;
     margin: 1% auto;
-    
   }
 }
 
@@ -373,7 +410,6 @@ background-color: #ffffff;
   border-style: solid;
   border-width: 20px;
   border-top-width: 0px;
-  
 }
 
 #hexag {

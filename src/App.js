@@ -44,6 +44,8 @@ import ComentariosDashboard from "./Edd/pages/home/ComentariosDashboard";
 import DiseñoDashboardTablaConLineasPorc from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTablaConLineaPorc";
 import DiseñoDashboardGrafico from "./Edd/pages/DiseñoDashboard/DiseñoDashboardGrafico";
 import DiseñoDashboardTabla from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTabla";
+import DiseñoTablaLineaReferente from "./Edd/pages/DiseñoDashboard/DiseñoTablaLineaReferente";
+import UnReferenteDiseño from "./Edd/pages/DiseñoDashboard/1Ref";
 
 function App() {
   return (
@@ -125,6 +127,10 @@ function App() {
             <Route element={<DiseñoDashboardTablaConLineasPorc/>} path="/DiseñoDashboardTablaConLineasPorc"></Route>
             <Route element={<DiseñoDashboardGrafico />} path="/DiseñoDashboardGrafico"></Route>
             <Route element={<DiseñoDashboardTabla />} path="/DiseñoDashboardTabla"></Route>
+            <Route element={<DiseñoTablaLineaReferente />} path="/DiseñoTablaLineaReferente"></Route>
+            <Route element={<UnReferenteDiseño />} path="/UnReferenteDiseño"></Route>
+
+
 
             {/* ------------------- */}
 
