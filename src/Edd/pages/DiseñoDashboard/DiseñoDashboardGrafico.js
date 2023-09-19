@@ -29,36 +29,22 @@ export default function DiseñoDashboardGrafico() {
                 href="/home">Volver
             </a>
             <h4 style={{color:'white'}}>EVALUACIÓN COLABORADOR</h4>
-<br></br>
+            <br></br>
             <Table style={{ width: '70%', margin: 'auto' }}>
+
                 <tr >
-                    <td>
-                        <CircularProgressbar value={66} text={`${satGeneral}%`}
-                            background
-                            backgroundPadding={6}
-                            styles={buildStyles({
-                                backgroundColor: "#3e98c7",
-                                textColor: "#fff",
-                                pathColor: "#fff",
-                                trailColor: "transparent"
-                            })}
-                        />
-                    </td>
-                    <td>
-                        <CircularProgressbar maxValue={4} value={2} text={`${refEval}`} />
-                    </td>
-                    <td>
+                <td>
                         <CircularProgressbarWithChildren
                             background
-                            value={80}
-                            text={`${80}%`}
+                            value={100}
+                            text={`${satGeneral}%`}
                             strokeWidth={10}
                             styles={buildStyles({
                                 strokeLinecap: "butt"
                             })}
                         >
                             <RadialSeparators
-                                count={12}
+                                count={10}
                                 style={{
                                     background: "#fff",
                                     width: "2px",
@@ -68,38 +54,101 @@ export default function DiseñoDashboardGrafico() {
                             />
                         </CircularProgressbarWithChildren>
                     </td>
-                    {/* FONDO BLANCO SIN RAYAS */}
-                    {/* <td style={{ width: 100 }}>
-        <CircularProgressbarWithChildren
-            background
-            backgroundPadding={6}
+                    <td>
+                        <CircularProgressbarWithChildren
+                            color
+                            background
+                            value={50}
+                            text={`${refEval}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt",  color:'red',
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                  
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+                   
+                    <td>
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${80}%`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+                    <td>
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${compEval}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
 
-            value={80}
-            text={`${80}%`}
-            strokeWidth={10}
-            styles={buildStyles({
-                strokeLinecap: "butt"
-            })}
-        >
-            <RadialSeparators
-                count={12}
-                style={{
-                    background: "#fff",
-                    width: "2px",
-                    // This needs to be equal to props.strokeWidth
-                    height: `${10}%`
-                }}
-            />
-        </CircularProgressbarWithChildren>
-    </td> */}
                     <td>
-                        <CircularProgressbar value={100} text={`${compEval}`} />
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${tiempProm}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
                     </td>
-                    <td>
-                        <CircularProgressbar value={100} text={`${tiempProm}`} />
-                    </td>
+                   
+
+
                 </tr>
-            </Table>            <br></br>
+
+            </Table>
+            <br></br>
             <div className="bg-light mx-auto" style={{width:"55em", height:"70%",padding:'16px'}}>
                     <LinesChart />
                 </div>

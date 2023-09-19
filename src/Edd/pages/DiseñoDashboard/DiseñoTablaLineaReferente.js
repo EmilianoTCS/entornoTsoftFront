@@ -41,34 +41,18 @@ export default function DiseñoTablaLineaReferente() {
             <Table style={{ width: '70%', margin: 'auto' }}>
 
                 <tr >
-                    <td>
-                        <CircularProgressbar value={66} text={`${satGeneral}%`}
-                            background
-                            backgroundPadding={6}
-                            styles={buildStyles({
-                                backgroundColor: "#3e98c7",
-                                textColor: "#fff",
-                                pathColor: "#fff",
-                                trailColor: "transparent"
-                            })}
-                        />
-                    </td>
-
-                    <td>
-                        <CircularProgressbar maxValue={4} value={2} text={`${refEval}`} />
-                    </td>
-                    <td>
+                <td>
                         <CircularProgressbarWithChildren
                             background
-                            value={80}
-                            text={`${80}%`}
+                            value={100}
+                            text={`${satGeneral}%`}
                             strokeWidth={10}
                             styles={buildStyles({
                                 strokeLinecap: "butt"
                             })}
                         >
                             <RadialSeparators
-                                count={12}
+                                count={10}
                                 style={{
                                     background: "#fff",
                                     width: "2px",
@@ -78,13 +62,34 @@ export default function DiseñoTablaLineaReferente() {
                             />
                         </CircularProgressbarWithChildren>
                     </td>
-                    {/* FONDO BLANCO SIN RAYAS */}
-                    {/* <td style={{ width: 100 }}>
+                    <td>
+                        <CircularProgressbarWithChildren
+                            color
+                            background
+                            value={50}
+                            text={`${refEval}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt",  color:'red',
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                  
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+                   
+                    <td>
                         <CircularProgressbarWithChildren
                             background
-                            backgroundPadding={6}
-
-                            value={80}
+                            value={100}
                             text={`${80}%`}
                             strokeWidth={10}
                             styles={buildStyles({
@@ -92,7 +97,7 @@ export default function DiseñoTablaLineaReferente() {
                             })}
                         >
                             <RadialSeparators
-                                count={12}
+                                count={10}
                                 style={{
                                     background: "#fff",
                                     width: "2px",
@@ -101,13 +106,51 @@ export default function DiseñoTablaLineaReferente() {
                                 }}
                             />
                         </CircularProgressbarWithChildren>
-                    </td> */}
-                    <td>
-                        <CircularProgressbar value={100} text={`${compEval}`} />
                     </td>
                     <td>
-                        <CircularProgressbar value={100} text={`${tiempProm}`} />
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${compEval}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
                     </td>
+
+                    <td>
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${tiempProm}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+                   
 
 
                 </tr>
@@ -164,62 +207,62 @@ export default function DiseñoTablaLineaReferente() {
             <table id="table" responsive>
                 <tr>
                     <td >
-                        <table style={{ backgroundColor: 'white', width: '26em', height: '26em', borderRadius: '10px' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
                             <thead>
                                 <tr>
 
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} ></th>
+                                    <th style={{ paddingLeft: '0.8em',fontSize:'15pt' }} >REFERENTE</th>
+
 
 
                                 </tr>
                             </thead>
                             <tbody >
-                                <tr >
-                                    <th style={{ height: '3.5em', paddingLeft: '1em' }}>MARCELO CORTES ORTEGA</th>
+                                <tr style={{ borderBottom: '2px #808080 solid' }}>
+                                    <th style={{ height: '50px', paddingLeft: '1em' }}>MARCELO CORTES ORTEGA </th>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={71} label={`${71}%`} /></td>
                                     <td ><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img></td>
 
 
                                 </tr>
-                                <hr></hr>
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>AUTONOMIA </td>
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={88} label={`${88}%`} /></td>
                                     <td ><img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD ANALITICA </td>
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={31} label={`${31}%`} /></td>
                                     <td ><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD DE APRENDIZAJE</td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={51} label={`${51}%`} /></td>
                                     <td ><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>COMUNICACION </td>
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='green-progress-bar' now={95} label={`${95}%`} /></td>
                                     <td ><img id="faceStyleReferenteTodas" src={faceVerde1}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CONFIANZA</td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={62} label={`${62}%`} /></td>
                                     <td><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>DESEMPEÑO</td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={51} label={`${51}%`} /></td>
                                     <td ><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>DISPOSICION/ACTITUD </td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='green-progress-bar' now={95} label={`${95}%`} /></td>
                                     <td ><img id="faceStyleReferenteTodas" src={faceVerde1}></img>
@@ -234,27 +277,30 @@ export default function DiseñoTablaLineaReferente() {
                             </tbody>
                         </table>
                     </td>
+                    <td>
+                        &nbsp;
+                    </td>
                     <td >
-                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px', height: '26em' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
                             <thead>
                                 <tr>
 
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} ></th>
+                                <th style={{ paddingLeft: '0.8em',fontSize:'15pt' }} >REFERENTE</th>
+
 
 
                                 </tr>
                             </thead>
                             <tbody >
-                                <tr >
-                                    <th style={{ height: '3.5em', paddingLeft: '1em' }}>ROMAN PEREZ </th>
+                                <tr style={{ borderBottom: '2px #808080 solid' }}>
+                                    <th style={{ height: '50px', paddingLeft: '1em' }}>ROMAN PEREZ </th>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={81} label={`${81}%`} /></td>
                                     <td><img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
                                     </td>
 
                                 </tr>
-                                <hr></hr>
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>AUTONOMIA </td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={61} label={`${61}%`} /></td>
 
@@ -262,42 +308,42 @@ export default function DiseñoTablaLineaReferente() {
                                     </td>
 
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD ANALITICA </td>
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={63} label={`${63}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD DE APRENDIZAJE</td>
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={31} label={`${31}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>COMUNICACION </td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='green-progress-bar' now={91} label={`${91}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceVerde1}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CONFIANZA</td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={85} label={`${85}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>DESEMPEÑO</td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={81} label={`${81}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>DISPOSICION/ACTITUD </td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={15} label={`${15}%`} /></td>
 
@@ -314,69 +360,70 @@ export default function DiseñoTablaLineaReferente() {
                             </tbody>
                         </table>
                     </td>
+                    <td>
+                        &nbsp;
+                    </td>
                     <td >
-                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px', height: '26em' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
                             <thead>
                                 <tr>
 
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} ></th>
-
+                                <th style={{ paddingLeft: '0.8em',fontSize:'15pt' }} >REFERENTE</th>
 
                                 </tr>
                             </thead>
                             <tbody >
-                                <tr >
-                                    <th style={{ height: '3.5em', paddingLeft: '1em' }}>DARIO GOMEZ</th>
+                                <tr style={{ borderBottom: '2px #808080 solid' }}>
+                                    <th style={{ height: '50px', paddingLeft: '1em' }}>DARIO GOMEZ </th>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={31} label={`${31}%`} /></td>
                                     <td><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
                                     </td>
 
                                 </tr>
-                                <hr></hr>
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>AUTONOMIA </td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={24} label={`${24}%`} /></td>
                                     <td><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
                                     </td>
 
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD ANALITICA </td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={17} label={`${17}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD DE APRENDIZAJE</td>
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={41} label={`${41}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>COMUNICACION </td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={75} label={`${75}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CONFIANZA</td>
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>DESEMPEÑO</td>
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={51} label={`${51}%`} /></td>
 
                                     <td><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
                                     </td>
                                 </tr>
-                                <tr >
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ width: '12em', paddingLeft: '1em' }}>DISPOSICION/ACTITUD </td>
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={65} label={`${65}%`} /></td>
 
@@ -397,105 +444,125 @@ export default function DiseñoTablaLineaReferente() {
                 <br></br>
                 <tr>
                     <td >
-                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px', height: '26em' }}>
-                            <thead>
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
+                            {/* <thead>
                                 <tr>
 
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} ></th>
+                                    <th colSpan='2' style={{ paddingLeft: '1em' }} >REFERENTE : 	FIDEL SANTIAGO  </th>
+
 
 
                                 </tr>
                             </thead>
                             <tbody >
-                                <tr >
-                                    <th style={{ height: '3.5em', paddingLeft: '1em' }}>JOAQUIN DEFLE</th>
+                                <tr style={{ borderBottom: '2px #808080 solid' }}>
 
 
-                                    <td> <ProgressBar id="infoLinePorcREFERENTE" className='green-progress-bar' now={94} label={`${94}%`} /></td>
+                                    <td align='center' colSpan={3} id="faceStyleReferenteTodasConHR">
+                                        <img id="faceStyleReferenteTitle" src={faceNaranja4}></img>
+                                        <ProgressBar id="infoLinePorcREFPrin" className='orange-progress-bar' now={42} label={`${42}%`} />
+                                    </td> */}
+                            <thead>
+                                <tr>
 
-                                    <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceVerde1}></img>
-                                       </td>
+                                <th style={{ paddingLeft: '0.8em',fontSize:'15pt' }} >REFERENTE</th>
 
                                 </tr>
-                                <hr></hr>
-                                <tr >
+                            </thead>
+                            <tbody >
+                                <tr style={{ borderBottom: '2px #808080 solid' }}>
+                                    <th style={{ height: '50px', paddingLeft: '1em' }}>DARIO GOMEZ </th>
+                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={45} label={`${45}%`} /></td>
+                                    <td><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
+                                    </td>
+
+                                </tr>
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
+                                    <td style={{ paddingLeft: '1em' }}>AUTONOMIA </td>
+                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={24} label={`${24}%`} /></td>
+                                    <td><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
+                                    </td>
+                                </tr>
+
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>AUTONOMIA </td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={79} label={`${79}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
-                                       </td>
+                                    </td>
 
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD ANALITICA </td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={43} label={`${43}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
-                                        </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD DE APRENDIZAJE</td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={41} label={`${41}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
-                                        </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>COMUNICACION </td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={25} label={`${25}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
-                                        </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CONFIANZA</td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={22} label={`${22}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
-                                        </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>DESEMPEÑO</td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={51} label={`${51}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
-                                       </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ width: '12em', paddingLeft: '1em' }}>DISPOSICION/ACTITUD </td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='green-progress-bar' now={89} label={`${89}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceVerde1}></img>
-                                        </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
+
                                 <tr >
                                     <td style={{ paddingLeft: '1em' }}>EMPODERAMIENTO</td>
 
@@ -503,115 +570,120 @@ export default function DiseñoTablaLineaReferente() {
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceVerde1}></img>
-                                        </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
+
 
                             </tbody>
                         </table>
                     </td>
-
+                    <td>
+                        &nbsp;
+                    </td>
 
                     <td >
-                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px', height: '26em' }}>
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
                             <thead>
                                 <tr>
 
-                                    <th style={{ padding: '1em' }} >REFERENTE</th>
-                                    <th style={{ padding: '1em' }} ></th>
-
+                                <th style={{ paddingLeft: '0.8em',fontSize:'15pt' }} >REFERENTE</th>
 
                                 </tr>
                             </thead>
                             <tbody >
-                                <tr >
-                                    <th style={{ height: '3.5em', paddingLeft: '1em' }}>STUART RODRIGUEZ</th>
-
-                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={41} label={`${41}%`} /></td>
-
-
-                                    <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
-                                        </td>
+                                <tr style={{ borderBottom: '2px #808080 solid' }}>
+                                    <th style={{ height: '50px', paddingLeft: '1em' }}>DARIO GOMEZ </th>
+                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={61} label={`${61}%`} /></td>
+                                    <td><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
+                                    </td>
 
                                 </tr>
-                                <hr></hr>
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
+                                    <td style={{ paddingLeft: '1em' }}>AUTONOMIA </td>
+                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={64} label={`${64}%`} /></td>
+                                    <td><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
+                                    </td>
+
+                                </tr>
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>AUTONOMIA </td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={81} label={`${81}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
-                                        </td>
+                                    </td>
 
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD ANALITICA </td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={83} label={`${83}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
-                                       </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD DE APRENDIZAJE</td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={51} label={`${51}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
-                                       </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>COMUNICACIÓN </td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={55} label={`${55}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
-                                       </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CONFIANZA</td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={59} label={`${59}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
-                                        </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>DESEMPEÑO</td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={35} label={`${35}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
-                                       </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ width: '12em', paddingLeft: '1em' }}>DISPOSICION/ACTITUD </td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={19} label={`${19}%`} /></td>
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
-                                        </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
+
                                 <tr >
                                     <td style={{ paddingLeft: '1em' }}>EMPODERAMIENTO</td>
 
@@ -620,36 +692,61 @@ export default function DiseñoTablaLineaReferente() {
 
 
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
-                                        </td>
+                                    </td>
                                 </tr>
-                                <hr></hr>
+
 
                             </tbody>
                         </table>
                     </td>
-
+                    <td>
+                        &nbsp;
+                    </td>
                     <td >
-                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px', height: '26em' }}>
-                            <thead>
+                        <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
+                            {/* <thead>
                                 <tr>
 
-                                    <th colSpan='2' style={{ height: '3em', paddingLeft: '1em' }} >REFERENTE : DANIELA AGUIRRE  </th>
+                                    <th colSpan='2' style={{ paddingLeft: '1em' }} >REFERENTE : DANIELA AGUIRRE  </th>
 
 
 
                                 </tr>
                             </thead>
                             <tbody >
-                                <tr >
+                                <tr style={{ borderBottom: '2px #808080 solid' }}>
+
 
                                     <td align='center' colSpan={3} id="faceStyleReferenteTodasConHR">
                                         <img id="faceStyleReferenteTitle" src={faceVerde1}></img>
-                                        <ProgressBar id="infoLinePorcREFERENTE" className='green-progress-bar' now={86} label={`${86}%`} />
+                                        <ProgressBar id="infoLinePorcREFPrin" className='green-progress-bar' now={86} label={`${86}%`} />
+                                    </td> 
+
+                                </tr>*/}
+ <thead>
+                                <tr>
+
+                                <th style={{ paddingLeft: '0.8em',fontSize:'15pt' }} >REFERENTE</th>
+
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr style={{ borderBottom: '2px #808080 solid' }}>
+                                    <th style={{ height: '50px', paddingLeft: '1em' }}>DARIO GOMEZ </th>
+                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='green-progress-bar' now={95} label={`${95}%`} /></td>
+                                    <td><img id="faceStyleReferenteTodas" src={faceVerde1}></img>
                                     </td>
 
                                 </tr>
-                                <hr></hr>
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
+                                    <td style={{ paddingLeft: '1em' }}>AUTONOMIA </td>
+                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={83} label={`${83}%`} /></td>
+                                    <td><img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
+                                    </td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
+
                                     <td style={{ paddingLeft: '1em' }}>AUTONOMIA </td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={79} label={`${79}%`} /></td>
@@ -659,9 +756,9 @@ export default function DiseñoTablaLineaReferente() {
                                     </td>
 
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD ANALITICA </td>
 
 
@@ -671,9 +768,9 @@ export default function DiseñoTablaLineaReferente() {
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
                                     </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CAPACIDAD DE APRENDIZAJE</td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={58} label={`${58}%`} /></td>
@@ -682,9 +779,9 @@ export default function DiseñoTablaLineaReferente() {
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
                                     </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>COMUNICACION </td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={25} label={`${25}%`} /></td>
@@ -693,9 +790,9 @@ export default function DiseñoTablaLineaReferente() {
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
                                     </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>CONFIANZA</td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='red-progress-bar' now={37} label={`${37}%`} /></td>
@@ -704,9 +801,9 @@ export default function DiseñoTablaLineaReferente() {
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceRojo5}></img>
                                     </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ paddingLeft: '1em' }}>DESEMPEÑO</td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={58} label={`${58}%`} /></td>
@@ -715,9 +812,9 @@ export default function DiseñoTablaLineaReferente() {
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
                                     </td>
                                 </tr>
-                                <hr></hr>
 
-                                <tr >
+
+                                <tr style={{ borderBottom: '1px #808080 solid' }}>
                                     <td style={{ width: '12em', paddingLeft: '1em' }}>DISPOSICION/ACTITUD </td>
 
                                     <td> <ProgressBar id="infoLinePorcREFERENTE" className='green-progress-bar' now={93} label={`${93}%`} /></td>
@@ -726,8 +823,8 @@ export default function DiseñoTablaLineaReferente() {
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceVerde1}></img>
                                     </td>
                                 </tr>
-                                <hr></hr>
-                                <tr >
+
+                                <tr>
                                     <td style={{ paddingLeft: '1em' }}>EMPODERAMIENTO</td>
 
                                     <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={58} label={`${58}%`} /></td>
@@ -736,7 +833,7 @@ export default function DiseñoTablaLineaReferente() {
                                     <td id="faceStyleReferenteTodasConHR"><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
                                     </td>
                                 </tr>
-                                <hr></hr>
+
 
                             </tbody>
                         </table>

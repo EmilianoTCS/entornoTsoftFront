@@ -41,34 +41,18 @@ export default function UnReferenteDiseño() {
             <Table style={{ width: '70%', margin: 'auto' }}>
 
                 <tr >
-                    <td>
-                        <CircularProgressbar value={66} text={`${satGeneral}%`}
-                            background
-                            backgroundPadding={6}
-                            styles={buildStyles({
-                                backgroundColor: "#3e98c7",
-                                textColor: "#fff",
-                                pathColor: "#fff",
-                                trailColor: "transparent"
-                            })}
-                        />
-                    </td>
-
-                    <td>
-                        <CircularProgressbar maxValue={4} value={2} text={`${refEval}`} />
-                    </td>
-                    <td>
+                <td>
                         <CircularProgressbarWithChildren
                             background
-                            value={80}
-                            text={`${80}%`}
+                            value={100}
+                            text={`${satGeneral}%`}
                             strokeWidth={10}
                             styles={buildStyles({
                                 strokeLinecap: "butt"
                             })}
                         >
                             <RadialSeparators
-                                count={12}
+                                count={10}
                                 style={{
                                     background: "#fff",
                                     width: "2px",
@@ -78,13 +62,34 @@ export default function UnReferenteDiseño() {
                             />
                         </CircularProgressbarWithChildren>
                     </td>
-                    {/* FONDO BLANCO SIN RAYAS */}
-                    {/* <td style={{ width: 100 }}>
+                    <td>
+                        <CircularProgressbarWithChildren
+                            color
+                            background
+                            value={50}
+                            text={`${refEval}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt",  color:'red',
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                  
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+                   
+                    <td>
                         <CircularProgressbarWithChildren
                             background
-                            backgroundPadding={6}
-
-                            value={80}
+                            value={100}
                             text={`${80}%`}
                             strokeWidth={10}
                             styles={buildStyles({
@@ -92,7 +97,7 @@ export default function UnReferenteDiseño() {
                             })}
                         >
                             <RadialSeparators
-                                count={12}
+                                count={10}
                                 style={{
                                     background: "#fff",
                                     width: "2px",
@@ -101,13 +106,51 @@ export default function UnReferenteDiseño() {
                                 }}
                             />
                         </CircularProgressbarWithChildren>
-                    </td> */}
-                    <td>
-                        <CircularProgressbar value={100} text={`${compEval}`} />
                     </td>
                     <td>
-                        <CircularProgressbar value={100} text={`${tiempProm}`} />
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${compEval}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
                     </td>
+
+                    <td>
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${tiempProm}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+                   
 
 
                 </tr>
@@ -206,13 +249,13 @@ export default function UnReferenteDiseño() {
                                 </tr>
                                 <tr >
                                     <td style={{  paddingLeft: '1em'  }}>CONFIANZA</td>
-                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={62} label={`${62}%`} /></td>
+                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
                                     <td><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
                                         </td>
                                 </tr>
                                 <tr >
                                     <td style={{  paddingLeft: '1em'  }}>DESEMPEÑO</td>
-                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={51} label={`${51}%`} /></td>
+                                    <td><ProgressBar id="infoLinePorcREFERENTE" className='orange-progress-bar' now={51} label={`${51}%`} /></td>
                                     <td ><img id="faceStyleReferenteTodas" src={faceNaranja4}></img>
                                         </td>
                                 </tr>

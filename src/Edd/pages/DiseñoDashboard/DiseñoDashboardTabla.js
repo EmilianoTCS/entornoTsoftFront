@@ -34,61 +34,23 @@ export default function DiseñoDashboardTabla() {
                 value="Registrar"
                 href="/home">Volver
             </a>
-            <h4 style={{ color: 'white' }}>EVALUACIÓN COLABORADOR</h4>
+            <h4 >EVALUACIÓN COLABORADOR</h4>
             <br></br>
             <Table style={{ width: '70%', margin: 'auto' }}>
-                <tr >
-                    <td>
-                        <CircularProgressbar value={66} text={`${satGeneral}%`}
-                            background
-                            backgroundPadding={6}
-                            styles={buildStyles({
-                                backgroundColor: "#3e98c7",
-                                textColor: "#fff",
-                                pathColor: "#fff",
-                                trailColor: "transparent"
-                            })}
-                        />
-                    </td>
-                    <td>
-                        <CircularProgressbar maxValue={4} value={2} text={`${refEval}`} />
-                    </td>
-                    <td>
-                        <CircularProgressbarWithChildren
-                            background
-                            value={80}
-                            text={`${80}%`}
-                            strokeWidth={10}
-                            styles={buildStyles({
-                                strokeLinecap: "butt"
-                            })}
-                        >
-                            <RadialSeparators
-                                count={12}
-                                style={{
-                                    background: "#fff",
-                                    width: "2px",
-                                    // This needs to be equal to props.strokeWidth
-                                    height: `${10}%`
-                                }}
-                            />
-                        </CircularProgressbarWithChildren>
-                    </td>
-                    {/* FONDO BLANCO SIN RAYAS */}
-                    {/* <td style={{ width: 100 }}>
-                        <CircularProgressbarWithChildren
-                            background
-                            backgroundPadding={6}
 
-                            value={80}
-                            text={`${80}%`}
+                <tr >
+                <td>
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${satGeneral}%`}
                             strokeWidth={10}
                             styles={buildStyles({
                                 strokeLinecap: "butt"
                             })}
                         >
                             <RadialSeparators
-                                count={12}
+                                count={10}
                                 style={{
                                     background: "#fff",
                                     width: "2px",
@@ -97,81 +59,155 @@ export default function DiseñoDashboardTabla() {
                                 }}
                             />
                         </CircularProgressbarWithChildren>
-                    </td> */}
-                    <td>
-                        <CircularProgressbar value={100} text={`${compEval}`} />
                     </td>
                     <td>
-                        <CircularProgressbar value={100} text={`${tiempProm}`} />
+                        <CircularProgressbarWithChildren
+                            color
+                            background
+                            value={50}
+                            text={`${refEval}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt",  color:'red',
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                  
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
                     </td>
+                   
+                    <td>
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${80}%`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+                    <td>
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${compEval}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+
+                    <td>
+                        <CircularProgressbarWithChildren
+                            background
+                            value={100}
+                            text={`${tiempProm}`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                strokeLinecap: "butt"
+                            })}
+                        >
+                            <RadialSeparators
+                                count={10}
+                                style={{
+                                    background: "#fff",
+                                    width: "2px",
+                                    // This needs to be equal to props.strokeWidth
+                                    height: `${10}%`
+                                }}
+                            />
+                        </CircularProgressbarWithChildren>
+                    </td>
+                   
+
+
                 </tr>
+
             </Table>
             <br></br>
+            <br></br>
+            <table style={{ backgroundColor: 'white', width: '50%', borderRadius: '20px', margin: 'auto' }}>
 
-            <table id="tableLeyendas">
-                <tr>
-                    <td><div className="bg-light mx-auto" style={{ width: "55em", height: "70%", padding: '16px' }}>
-                        <LinesChart />
-                    </div></td>
+                <td  id="infoLinePorcLeyendasREFERENTE">
+                    <b>EXCELENTE</b>
+                </td>
+                
+                <td className="linea">
+                    <img id="sizeCaritasReferentes" src={faceVerde1}></img>
+                </td>
 
-                    <td>
-                        <table style={{ backgroundColor: 'white', width: '10em', borderRadius: '20px',marginLeft:'1em' }}>
-                            <tr>
-                                <td id="infoLinePorcLeyendas">
-                                <b>EXCELENTE</b>
-                                </td>
-                                <td>
-                                    <img id="sizeCaritas" src={faceVerde1}></img>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td id="infoLinePorcLeyendas">
-                                <b>OPORTUNIDAD DE MEJORA</b>
-                                </td>
-                                <td>
-                                    <img id="sizeCaritas" src={faceVerdeLima2}></img>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td id="infoLinePorcLeyendas">
-                                <b>REQUIERE ATENCIÓN
-</b>
-                                </td>
-                                <td>
-                                    <img id="sizeCaritas" src={faceAmarillo3}></img>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td id="infoLinePorcLeyendas">
-                                    <b>REVISAR SITUACIÓN</b>
+                <td  id="infoLinePorcLeyendasREFERENTE">
+                    <b>OPORTUNIDAD DE MEJORA</b>
+                </td>
+                <td className="linea">
+                    <img id="sizeCaritasReferentes" src={faceVerdeLima2}></img>
+                </td>
+
+                <td id="infoLinePorcLeyendasREFERENTE">
+                    <b>REQUIERE ATENCIÓN
+                    </b>
+                </td>
+                <td className="linea"> 
+                    <img id="sizeCaritasReferentes" src={faceAmarillo3}></img>
+                </td>
+
+                <td id="infoLinePorcLeyendasREFERENTE">
+                    <b>REVISAR SITUACIÓN</b>
 
 
-                                </td>
-                                <td>
-                                    <img id="sizeCaritas" src={faceNaranja4}></img>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td id="infoLinePorcLeyendas">
-                                    <b>ALERTA</b>
-                                </td>
-                                <td>
-                                    <img id="sizeCaritas" src={faceRojo5}></img>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
+                </td>
+                <td className="linea">
+                    <img id="sizeCaritasReferentes" src={faceNaranja4}></img>
+                </td>
 
-                </tr>
+                <td id="infoLinePorcLeyendasREFERENTE">
+                    <b>ALERTA</b>
+                </td>
+                <td >
+                    <img id="sizeCaritasReferentes" src={faceRojo5}></img>
+                </td>
 
             </table>
             <br></br>
 
+
+
+
             <table id="table1" responsive>
 
                 <tr>
-                    <td style={{ width: '32%' }}>
-                        <table style={{ backgroundColor: 'white', width: '26em' }}>
+                    <td>
+                        <table style={{ backgroundColor: 'white', width: '26em',borderRadius:'20px'}}>
                             <thead>
                                 <tr>
 
@@ -202,9 +238,11 @@ export default function DiseñoDashboardTabla() {
                             </tbody>
                         </table>
                     </td>
-
-                    <td style={{ width: '32%' }}>
-                        <table style={{ backgroundColor: 'white', width: '26em' }}>
+                    <td>
+                    &nbsp;
+                    </td>
+                    <td>
+                    <table style={{ backgroundColor: 'white', width: '26em',borderRadius:'20px'}}>
                             <thead>
                                 <tr>
 
@@ -236,9 +274,11 @@ export default function DiseñoDashboardTabla() {
                         </table>
                     </td>
 
-
-                    <td style={{ width: '32%' }}>
-                        <table style={{ backgroundColor: 'white', width: '26em' }}>
+                    <td>
+                    &nbsp;
+                    </td>
+                    <td>
+                    <table style={{ backgroundColor: 'white', width: '26em',borderRadius:'20px'}}>
                             <thead>
                                 <tr>
 
@@ -273,8 +313,8 @@ export default function DiseñoDashboardTabla() {
                 </tr>
                 <br></br>
                 <tr>
-                    <td style={{ width: '32%' }}>
-                        <table style={{ backgroundColor: 'white', width: '26em' }}>
+                    <td>
+                    <table style={{ backgroundColor: 'white', width: '26em',borderRadius:'20px'}}>
                             <thead>
                                 <tr>
 
@@ -305,10 +345,12 @@ export default function DiseñoDashboardTabla() {
                             </tbody>
                         </table>
                     </td>
+                    <td>
+                    &nbsp;
+                    </td>
 
-
-                    <td style={{ width: '32%' }}>
-                        <table style={{ backgroundColor: 'white', width: '26em' }}>
+                    <td>
+                    <table style={{ backgroundColor: 'white', width: '26em',borderRadius:'20px'}}>
                             <thead>
                                 <tr>
 
@@ -340,10 +382,12 @@ export default function DiseñoDashboardTabla() {
                         </table>
                     </td>
 
+                    <td>
+                    &nbsp;
+                    </td>
 
-
-                    <td style={{ width: '32%' }}>
-                        <table style={{ backgroundColor: 'white', width: '26em' }}>
+                    <td>
+                    <table style={{ backgroundColor: 'white', width: '26em',borderRadius:'20px'}}>
                             <thead>
                                 <tr>
 

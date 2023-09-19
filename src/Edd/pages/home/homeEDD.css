@@ -1,3 +1,9 @@
+/* colortxtCircle */
+
+.colortxtCircle{
+text-align: right;
+}
+
 /* LINEA */
 .linea{
 height: 5px;
@@ -50,13 +56,13 @@ border-right: 2px ridge black;
 }
 
 #table1 {
-  width: 60%;
+  /* width: 60%; */
   margin: auto;
 }
 
-#borderTdTh {
+/* #borderTdTh {
   border: 1px solid black;
-}
+} */
 #infoTable {
   padding-left: 0.5em;
   padding-top: 0.4em;
@@ -66,6 +72,10 @@ border-right: 2px ridge black;
 
 /* DIESEÑO TABLA CON LINEA PORC REFERENTES */
 
+#infoLinePorcREFPrin{
+width: 90%;
+margin-bottom: 3px;
+}
 
 #infoLinePorcREFERENTE {
   
@@ -139,10 +149,10 @@ border-right: 2px ridge black;
   border-radius: 10px;
 }
 
-#borderTdTh {
+/* #borderTdTh {
   border: 1px solid black;
   vertical-align: middle;
-}
+} */
 #sizeCaritas {
   width: 30px;
   float: right;
