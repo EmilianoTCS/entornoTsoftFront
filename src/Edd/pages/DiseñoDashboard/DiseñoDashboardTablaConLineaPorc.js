@@ -6,6 +6,7 @@ import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } fro
 import 'react-circular-progressbar/dist/styles.css';
 import RadialSeparators from "./RadialSeparators";
 import "../home/homeEDD.css"
+import "../DiseñoDashboard/prueba.css";
 import faceVerde1 from "../Smileys/faceVerde1.png"
 import faceVerdeLima2 from "../Smileys/faceVerdeLima2.png"
 import faceAmarillo3 from "../Smileys/faceAmarillo3.png"
@@ -30,6 +31,7 @@ export default function DiseñoDashboardTablaConLineasPorc() {
     return userData.statusConected || userData !== null ? (
         <>
             <Header></Header>
+
             <a
                 type="submit"
                 id="btnAtrasPRUEBASDash"
@@ -37,12 +39,11 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                 href="/home">Volver
             </a>
             <h4 >EVALUACIÓN COLABORADOR</h4>
-            <br></br>
-
+            
             <Table style={{ width: '60%', margin: 'auto' }}>
                 <GradientSVG />
                 <tr >
-                <td>
+                <td >
                         <CircularProgressbarWithChildren
 
                             background
@@ -53,16 +54,17 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                 path: { stroke: `url(#${idCSS})`, height: "100%" },
                                 trail: {
                                     stroke: "grey", //Color fondo barrita
-
+                                    path: { stroke: `url(#${idCSS})` },
+                                    trail: { stroke: 'transparent' },
                                 }
                             }}
                         >
                             <div style={{ fontSize: 20, textAlign: 'center' }}>
-                                <strong>Referentes</strong>
+                                <strong>Satisfacción</strong>
                                 <br></br>
                                 <strong>{satGeneral}%</strong>
                                 <br></br>
-                                <strong>Referentes</strong>
+                                <strong>General</strong>
                             </div>
                             <RadialSeparators
                                 count={10}
@@ -96,7 +98,7 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                 <br></br>
                                 <strong>{refEval}</strong>
                                 <br></br>
-                                <strong>Referentes</strong>
+                                <strong>Evaluadores</strong>
                             </div>
                             <RadialSeparators
                                 count={10}
@@ -583,6 +585,9 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                 <br></br>
 
             </table>
+
+           
+            
         </>
     ) : (
         <Navigate to="/login"></Navigate>

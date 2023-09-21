@@ -1,8 +1,8 @@
 #fondo1 {
-    background-image: url("/Fondo1.svg");
-    background-repeat: repeat;
-    background-attachment: fixed;
-    background-size: cover;
+  background-color: rgb(187, 187, 187);
+    background-image: url("/Logo.png");
+    background-repeat: round; 
+    background-size: 30em;
   }
   
   /*Scroll*/
@@ -27,5 +27,5 @@
   }
   
   #fondo1::-webkit-scrollbar-thumb:active {
-      background-color: #afa4a4;  }
+      background-color: #b4b4b4;  }
   
