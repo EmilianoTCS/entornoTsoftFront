@@ -18,7 +18,7 @@ import GradientSVG from "./GradientSVG";
 
 export default function DiseñoDashboardTablaConLineasPorc() {
     const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-    const satGeneral = 66;
+    const satGeneral = 74;
     const refEval = '2/4';
     const compEval = 13;
     const tiempProm = 0.23;
@@ -39,26 +39,28 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                 href="/home">Volver
             </a>
             <h4 >EVALUACIÓN COLABORADOR</h4>
-            
-            <Table style={{ width: '60%', margin: 'auto' }}>
-                <GradientSVG />
-                <tr >
-                <td >
-                        <CircularProgressbarWithChildren
+<div id="tableResumen">
+            <Table>
 
-                            background
+                <tr >
+                    <td >
+                        <CircularProgressbarWithChildren
                             value={satGeneral}
-                            // text={`${satGeneral}`}
+                            background
+                          
+                            
+                            // text={`${80}%`}
                             strokeWidth={10}
-                            styles={{
-                                path: { stroke: `url(#${idCSS})`, height: "100%" },
-                                trail: {
-                                    stroke: "grey", //Color fondo barrita
-                                    path: { stroke: `url(#${idCSS})` },
-                                    trail: { stroke: 'transparent' },
-                                }
-                            }}
+                            styles={buildStyles({
+                                strokeLinecap: 'butt',
+                                pathColor: "#94FF01",
+                                trailColor: "#E5E7E9",
+                                backgroundColor:'white',
+                                
+                                
+                            })}
                         >
+
                             <div style={{ fontSize: 20, textAlign: 'center' }}>
                                 <strong>Satisfacción</strong>
                                 <br></br>
@@ -79,19 +81,17 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                         </CircularProgressbarWithChildren>
                     </td>
                     <td>
-                        <CircularProgressbarWithChildren
-
-                            background
+                    <CircularProgressbarWithChildren
                             value={50}
-                            // text={`${refEval}`}
+                            background
+                            // text={`${80}%`}
                             strokeWidth={10}
-                            styles={{
-                                path: { stroke: `url(#${idCSS})`, height: "100%" },
-                                trail: {
-                                    stroke: "grey", //Color fondo barrita
-
-                                }
-                            }}
+                            styles={buildStyles({
+                                pathColor: "#2980B9",
+                                trailColor: "#E5E7E9",
+                                strokeLinecap: 'butt',
+                                backgroundColor:'white'
+                            })}
                         >
                             <div style={{ fontSize: 20, textAlign: 'center' }}>
                                 <strong>Referentes</strong>
@@ -103,7 +103,6 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             <RadialSeparators
                                 count={10}
                                 style={{
-
                                     background: "#fff",
                                     width: "2px",
                                     // This needs to be equal to props.strokeWidth
@@ -113,19 +112,19 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                         </CircularProgressbarWithChildren>
                     </td>
                     <td>
-                        <CircularProgressbarWithChildren
-                            background
+                    <CircularProgressbarWithChildren
                             value={100}
-                            // text={`${compEval}`}
+                            background
+                            // text={`${80}%`}
                             strokeWidth={10}
-                            styles={{
-                                path: { stroke: `url(#${idCSS})`, height: "100%" },
-                                trail: {
-                                    stroke: "grey" //Color fondo barrita
-                                }
-                            }}
+                            styles={buildStyles({
+                                strokeLinecap: 'butt',
+                                pathColor: "#2980B9",
+                                trailColor: "grey",
+                                backgroundColor:'white'
+                            })}
                         >
-                             <div style={{ fontSize: 20, textAlign: 'center' }}>
+                            <div style={{ fontSize: 20, textAlign: 'center' }}>
                                 <strong>Competencias</strong>
                                 <br></br>
                                 <strong>{compEval}</strong>
@@ -145,19 +144,19 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                     </td>
 
                     <td>
-                        <CircularProgressbarWithChildren
-                            background
+                    <CircularProgressbarWithChildren
                             value={100}
-                            // text={`${tiempProm}`}
+                            background
+                            // text={`${80}%`}
                             strokeWidth={10}
-                            styles={{
-                                path: { stroke: `url(#${idCSS})`, height: "100%" },
-                                trail: {
-                                    stroke: "grey" //Color fondo barrita
-                                }
-                            }}
+                            styles={buildStyles({
+                                strokeLinecap: 'butt',
+                                pathColor: "#2980B9",
+                                trailColor: "grey",
+                                backgroundColor:'white'
+                            })}
                         >
-                             <div style={{ fontSize: 20, textAlign: 'center' }}>
+                            <div style={{ fontSize: 20, textAlign: 'center' }}>
                                 <strong>Tiempo</strong>
                                 <br></br>
                                 <strong>{tiempProm}min</strong>
@@ -178,6 +177,7 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                 </tr>
 
             </Table>
+            </div>
             <br></br>
             <table style={{ backgroundColor: 'white', width: '50%', borderRadius: '20px', margin: 'auto' }}>
 
@@ -586,8 +586,8 @@ export default function DiseñoDashboardTablaConLineasPorc() {
 
             </table>
 
-           
-            
+
+
         </>
     ) : (
         <Navigate to="/login"></Navigate>
