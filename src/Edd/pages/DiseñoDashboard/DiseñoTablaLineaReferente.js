@@ -6,7 +6,7 @@ import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } fro
 import 'react-circular-progressbar/dist/styles.css';
 import RadialSeparators from "./RadialSeparators";
 import "../home/homeEDD.css"
-
+import "../DiseñoDashboard/DiseñoDash.css";
 import faceVerde1 from "../Smileys/faceVerde1.png"
 import faceVerdeLima2 from "../Smileys/faceVerdeLima2.png"
 import faceAmarillo3 from "../Smileys/faceAmarillo3.png"
@@ -36,24 +36,41 @@ export default function DiseñoTablaLineaReferente() {
                 value="Registrar"
                 href="/home">Volver
             </a>
-            <h4 style={{ color: 'white' }}>EVALUACIÓN REFERENTES</h4>
+            <h4 style={{ color: 'black' }}>EVALUACIÓN REFERENTES</h4>
             <br></br>
-            <Table style={{ width: '70%', margin: 'auto' }}>
+            <div id="tableResumen">
+            <Table>
 
                 <tr >
-                <td>
+                    <td >
                         <CircularProgressbarWithChildren
+                            value={satGeneral}
                             background
-                            value={100}
-                            text={`${satGeneral}%`}
+                          
+                            
+                            // text={`${80}%`}
                             strokeWidth={10}
                             styles={buildStyles({
-                                strokeLinecap: "butt"
+                                strokeLinecap: 'butt',
+                                pathColor: "#94FF01",
+                                trailColor: "#E5E7E9",
+                                backgroundColor:'white',
+                                
+                                
                             })}
                         >
+
+                            <div style={{ fontSize: 20, textAlign: 'center' }}>
+                                <strong>Satisfacción</strong>
+                                <br></br>
+                                <strong>{satGeneral}%</strong>
+                                <br></br>
+                                <strong>General</strong>
+                            </div>
                             <RadialSeparators
                                 count={10}
                                 style={{
+
                                     background: "#fff",
                                     width: "2px",
                                     // This needs to be equal to props.strokeWidth
@@ -63,39 +80,25 @@ export default function DiseñoTablaLineaReferente() {
                         </CircularProgressbarWithChildren>
                     </td>
                     <td>
-                        <CircularProgressbarWithChildren
-                            color
-                            background
+                    <CircularProgressbarWithChildren
                             value={50}
-                            text={`${refEval}`}
-                            strokeWidth={10}
-                            styles={buildStyles({
-                                strokeLinecap: "butt",  color:'red',
-                            })}
-                        >
-                            <RadialSeparators
-                                count={10}
-                                style={{
-                                  
-                                    background: "#fff",
-                                    width: "2px",
-                                    // This needs to be equal to props.strokeWidth
-                                    height: `${10}%`
-                                }}
-                            />
-                        </CircularProgressbarWithChildren>
-                    </td>
-                   
-                    <td>
-                        <CircularProgressbarWithChildren
                             background
-                            value={100}
-                            text={`${80}%`}
+                            // text={`${80}%`}
                             strokeWidth={10}
                             styles={buildStyles({
-                                strokeLinecap: "butt"
+                                pathColor: "#2980B9",
+                                trailColor: "#E5E7E9",
+                                strokeLinecap: 'butt',
+                                backgroundColor:'white'
                             })}
                         >
+                            <div style={{ fontSize: 20, textAlign: 'center' }}>
+                                <strong>Referentes</strong>
+                                <br></br>
+                                <strong>{refEval}</strong>
+                                <br></br>
+                                <strong>Evaluadores</strong>
+                            </div>
                             <RadialSeparators
                                 count={10}
                                 style={{
@@ -108,15 +111,25 @@ export default function DiseñoTablaLineaReferente() {
                         </CircularProgressbarWithChildren>
                     </td>
                     <td>
-                        <CircularProgressbarWithChildren
-                            background
+                    <CircularProgressbarWithChildren
                             value={100}
-                            text={`${compEval}`}
+                            background
+                            // text={`${80}%`}
                             strokeWidth={10}
                             styles={buildStyles({
-                                strokeLinecap: "butt"
+                                strokeLinecap: 'butt',
+                                pathColor: "#2980B9",
+                                trailColor: "grey",
+                                backgroundColor:'white'
                             })}
                         >
+                            <div style={{ fontSize: 20, textAlign: 'center' }}>
+                                <strong>Competencias</strong>
+                                <br></br>
+                                <strong>{compEval}</strong>
+                                <br></br>
+                                <strong>Evaluadas</strong>
+                            </div>
                             <RadialSeparators
                                 count={10}
                                 style={{
@@ -130,15 +143,25 @@ export default function DiseñoTablaLineaReferente() {
                     </td>
 
                     <td>
-                        <CircularProgressbarWithChildren
-                            background
+                    <CircularProgressbarWithChildren
                             value={100}
-                            text={`${tiempProm}`}
+                            background
+                            // text={`${80}%`}
                             strokeWidth={10}
                             styles={buildStyles({
-                                strokeLinecap: "butt"
+                                strokeLinecap: 'butt',
+                                pathColor: "#2980B9",
+                                trailColor: "grey",
+                                backgroundColor:'white'
                             })}
                         >
+                            <div style={{ fontSize: 20, textAlign: 'center' }}>
+                                <strong>Tiempo</strong>
+                                <br></br>
+                                <strong>{tiempProm}min</strong>
+                                <br></br>
+                                <strong>Promedio</strong>
+                            </div>
                             <RadialSeparators
                                 count={10}
                                 style={{
@@ -150,12 +173,10 @@ export default function DiseñoTablaLineaReferente() {
                             />
                         </CircularProgressbarWithChildren>
                     </td>
-                   
-
-
                 </tr>
 
             </Table>
+            </div>
             <br></br>
 
             <table style={{ backgroundColor: 'white', width: '50%', borderRadius: '20px', margin: 'auto' }}>

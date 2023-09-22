@@ -18,6 +18,7 @@ import { BiSolidSend } from "react-icons/bi";
 
 import "../TablasStyles.css";
 import InsertarEDDEvalProyEmp from "../../templates/form/Insertar/InsertarEddEvalProyEmp";
+import EnviarCorreo from "./EnviarCorreo";
 import EditarEddEvalProyEmp from "../../templates/form/Editar/EditarEddEvalProyEmp";
 import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
 import TopAlerts from "../../../../templates/alerts/TopAlerts";
@@ -32,6 +33,8 @@ export default function ListadoEDDEvalProyEmp() {
   const [isActiveInsertEDDEvalProyEmp, setIsActiveInsertEDDEvalProyEmp] =
     useState(false);
   const [isActiveEditEDDEvalProyEmp, setIsActiveEditEDDEvalProyEmp] =
+    useState(false);
+  const [isActiveInsertEDDEnviarCorreo, setIsActiveInsertEDDEnviarCorreo] =
     useState(false);
   const [idEDDEvalProyEmp, setidEDDEvalProyEmp] = useState(null);
   const [num_boton, setNumBoton] = useState(1);
@@ -81,7 +84,9 @@ export default function ListadoEDDEvalProyEmp() {
     }
     );
   }
-
+  function enviarCorreo() {
+    setIsActiveInsertEDDEnviarCorreo(!isActiveInsertEDDEnviarCorreo);
+  }
 
   function insertarEDDEvalProyEmp() {
     setIsActiveInsertEDDEvalProyEmp(!isActiveInsertEDDEvalProyEmp);
@@ -183,7 +188,10 @@ export default function ListadoEDDEvalProyEmp() {
             EDD {"->"} Listado de evaluaciones asociadas al proyecto-colaborador
           </h6>
           <br></br>
-
+          <Button id="btn" onClick={enviarCorreo}>
+            Enviar Correo
+          </Button>
+          <br></br>
           <div id="selectPaginador">
             <Button id="btn" onClick={insertarEDDEvalProyEmp}>
               Asociar evaluación al proyecto - colaborador
@@ -286,6 +294,13 @@ export default function ListadoEDDEvalProyEmp() {
             </div>
           </div>
 
+
+          <EnviarCorreo
+            isActiveEDDEnviarCorreo={isActiveInsertEDDEnviarCorreo}
+            cambiarEstado={setIsActiveInsertEDDEnviarCorreo}
+          // EDDEnviarCorreo={EDDEnviarCorreo}
+          ></EnviarCorreo>
+
           <InsertarEDDEvalProyEmp
             isActiveEDDEvalProyEmp={isActiveInsertEDDEvalProyEmp}
             cambiarEstado={setIsActiveInsertEDDEvalProyEmp}
@@ -317,6 +332,14 @@ export default function ListadoEDDEvalProyEmp() {
                 <th>Respondida</th>
                 <th colSpan={2}>Fecha respuesta eval</th>
                 <th>Total min</th>
+
+                <th>Fecha vigencia ref</th>
+                <th>Días vigencia ref</th>
+                <th>Correo enviado ref</th>
+                <th>Fecha vigencia col</th>
+                <th>Días vigencia col</th>
+                <th>Correo enviado col</th>
+
                 <th>Operaciones</th>
               </tr>
             </thead>
@@ -329,10 +352,10 @@ export default function ListadoEDDEvalProyEmp() {
                   <td width={5}>{EDDEvalProyEmp.fechaInicioPeriodoEvaluacion}</td>
                   <td width={5}>{EDDEvalProyEmp.fechaFinPeriodoEvaluacion}</td>
                   <td>{EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? (
-                      <td>DISPONIBLE</td>
-                    ) : (
-                      <td>NO DISPONIBLE</td>
-                    )}
+                    <td>DISPONIBLE</td>
+                  ) : (
+                    <td>NO DISPONIBLE</td>
+                  )}
                   </td>
                   <td>{EDDEvalProyEmp.nomProyecto}</td>
 
@@ -346,27 +369,33 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.nomEmpleadoEvaluado}</td>
 
                   <td>{EDDEvalProyEmp.evalRespondida}</td>
-                  <td  width={5}>{EDDEvalProyEmp.evalRespondida === 'NO' ? (
-                      <p style={{ color: 'white' }}></p>
-                    ) : (
-                      EDDEvalProyEmp.fechaIni
+                  <td width={5}>{EDDEvalProyEmp.evalRespondida === 'NO' ? (
+                    <p style={{ color: 'white' }}></p>
+                  ) : (
+                    EDDEvalProyEmp.fechaIni
 
-                    )}
+                  )}
                   </td>
-                  <td  width={5}>
+                  <td width={5}>
                     {EDDEvalProyEmp.evalRespondida === 'NO' ? (
                       <p style={{ color: 'white' }}></p>
                     ) : (
                       EDDEvalProyEmp.fechaFin
                     )}
                   </td>
-                  <td  width={5}>
+                  <td width={5}>
                     {EDDEvalProyEmp.evalRespondida === 'NO' ? (
                       <p style={{ color: 'white' }}></p>
                     ) : (
                       EDDEvalProyEmp.tiempoTotalEnMin
                     )}
                   </td>
+                  <td>{EDDEvalProyEmp.fechaIniVigenciaEvalRef}</td>
+                  <td>{EDDEvalProyEmp.diasVigenciaEvalRef}</td>
+                  <td>{EDDEvalProyEmp.CorreoLinkEnviadoRef}</td>
+                  <td>{EDDEvalProyEmp.fechaIniVigenciaEvalColab}</td>
+                  <td>{EDDEvalProyEmp.diasVigenciaEvalRefColab}</td>
+                  <td>{EDDEvalProyEmp.CorreoLinkEnviadoColab}</td>
 
                   <td align="center">
                     {EDDEvalProyEmp.evalRespondida === 'NO' ?

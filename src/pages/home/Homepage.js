@@ -34,20 +34,19 @@ export default function HomePage() {
 
 
 
-      <table style={{ width: '50%', margin: 'auto' }}>
+      <table style={{ width: '60%', margin: 'auto' }}>
         <tr>
           <td>
-            <h4 class="column left-column">MAQUETAS<br></br> DASHBOARD</h4>
+            <h4 class="column left-column" style={{color:'black'}}>MAQUETAS<br></br> DASHBOARD</h4>
           </td>
         </tr>
-
 <br></br>
         <tr>
           <td>
             <div style={{ width: '50%', margin: 'auto' }}>
-              <table style={{ border: 'white 2px solid' }}>
-                <td style={{ border: 'white 2px solid', padding: '1em' }} border={2}>
-                  <h4 style={{ color: 'white' }}>Colaborador</h4>
+              <table style={{ border: 'black 2px solid' ,backgroundColor:'white'}}>
+                <td style={{ border: 'black 2px solid', padding: '1em' }} border={2}>
+                  <h4 style={{ color: 'black' }}>Colaborador</h4>
                   <br></br>
                   <tr>
                     <a
@@ -57,28 +56,12 @@ export default function HomePage() {
                       href="/DiseñoDashboardTablaConLineasPorc">DiseñoTbLineasPorc
                     </a>
                   </tr>
-                  <br></br>
-                  <tr>
-                    <a
-                      type="submit"
-                      id="btnAtras"
-
-                      href="/DiseñoDashboardGrafico">DiseñoGrafico
-                    </a>
-                  </tr>
-                  <br></br>
-                  <tr>
-                    <a
-                      type="submit"
-                      id="btnAtras"
-                      href="/DiseñoDashboardTabla">DiseñoTabla
-                    </a>
-                  </tr>
-                </td>
+</td>
+                  
 
                 <td style={{ border: 'black 1px solid', padding: '1em' }}>
                   <tr>
-                    <h4 style={{ color: 'white' }}>Referente</h4>
+                    <h4 style={{ color: 'black' }}>Referente</h4>
 
                     <br></br>
                     <a
@@ -89,16 +72,8 @@ export default function HomePage() {
                       href="/DiseñoTablaLineaReferente">DiseñoTablaLineaReferente
                     </a>
                   </tr>
-                  <br></br>
-                  <tr>
-                    <a
 
-                      type="submit"
-                      id="btnAtras"
 
-                      href="/UnReferenteDiseño">DiseñoUnReferente
-                    </a>
-                  </tr>
                 </td>
               </table>
             </div>

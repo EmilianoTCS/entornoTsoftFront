@@ -46,6 +46,7 @@ import DiseñoDashboardGrafico from "./Edd/pages/DiseñoDashboard/DiseñoDashboa
 import DiseñoDashboardTabla from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTabla";
 import DiseñoTablaLineaReferente from "./Edd/pages/DiseñoDashboard/DiseñoTablaLineaReferente";
 import UnReferenteDiseño from "./Edd/pages/DiseñoDashboard/1Ref";
+import RedirectErrorMail from "./Edd/pages/Listados/ListadoEddEvalProyEmp/RedirectErrorMail"
 
 function App() {
   return (
@@ -54,6 +55,14 @@ function App() {
         <Routes>
           <Route element={<Login />} path="/"></Route>
           <Route element={<Login />} path="/Login"></Route>
+
+
+          <Route
+            element={<FormularioEvaluacion />}
+            path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
+          ></Route>
+
+          <Route element={<RedirectErrorMail />} path="/RedirectErrorMail"></Route>
 
           <Route element={<PrivateRoute />}>
             <Route path="/home" element={<HomePage />}></Route>
@@ -124,7 +133,7 @@ function App() {
 
             {/* PRUEBA DE DASHBOARD */}
 
-            <Route element={<DiseñoDashboardTablaConLineasPorc/>} path="/DiseñoDashboardTablaConLineasPorc"></Route>
+            <Route element={<DiseñoDashboardTablaConLineasPorc />} path="/DiseñoDashboardTablaConLineasPorc"></Route>
             <Route element={<DiseñoDashboardGrafico />} path="/DiseñoDashboardGrafico"></Route>
             <Route element={<DiseñoDashboardTabla />} path="/DiseñoDashboardTabla"></Route>
             <Route element={<DiseñoTablaLineaReferente />} path="/DiseñoTablaLineaReferente"></Route>
@@ -133,6 +142,7 @@ function App() {
 
 
             {/* ------------------- */}
+
 
 
             <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto"></Route>
@@ -182,12 +192,8 @@ function App() {
               element={<FormReferentes />}
               path="/FormularioRefEDD"
             ></Route>
- 
 
-            <Route
-              element={<FormularioEvaluacion />}
-              path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
-            ></Route>
+
             <Route
               element={<FormularioEvaluacionRespondida />}
               path="/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"

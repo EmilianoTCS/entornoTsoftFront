@@ -6,7 +6,7 @@ import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } fro
 import 'react-circular-progressbar/dist/styles.css';
 import RadialSeparators from "./RadialSeparators";
 import "../home/homeEDD.css"
-import "../DiseñoDashboard/prueba.css";
+import "../DiseñoDashboard/DiseñoDash.css";
 import faceVerde1 from "../Smileys/faceVerde1.png"
 import faceVerdeLima2 from "../Smileys/faceVerdeLima2.png"
 import faceAmarillo3 from "../Smileys/faceAmarillo3.png"
@@ -87,7 +87,7 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             // text={`${80}%`}
                             strokeWidth={10}
                             styles={buildStyles({
-                                pathColor: "#2980B9",
+                                pathColor: "yellow",
                                 trailColor: "#E5E7E9",
                                 strokeLinecap: 'butt',
                                 backgroundColor:'white'
@@ -119,7 +119,7 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             strokeWidth={10}
                             styles={buildStyles({
                                 strokeLinecap: 'butt',
-                                pathColor: "#2980B9",
+                                pathColor: "green",
                                 trailColor: "grey",
                                 backgroundColor:'white'
                             })}
@@ -161,7 +161,7 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                 <br></br>
                                 <strong>{tiempProm}min</strong>
                                 <br></br>
-                                <strong>Tiempo</strong>
+                                <strong>Promedio</strong>
                             </div>
                             <RadialSeparators
                                 count={10}
@@ -240,27 +240,27 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                     <td style={{ width: '16em' }}>
                                         <table style={{ width: '100%' }}>
 
-                                            <tr>
+                                            <tr style={{ borderBottom: '1px #808080 solid' }}>
                                                 <th style={{ padding: '1em' }} >COLABORADOR</th>
                                             </tr>
-                                            <tr >
+                                            <tr style={{ borderBottom: '1px #DCDCDC solid' }} >
 
                                                 <td id="infoLinePorc">Florencia Lorenzati &nbsp;
                                                     <ProgressBar className='yellow-progress-bar' now={65} label={`${65}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceAmarillo3}></img> </td>
 
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
                                                     <ProgressBar className='red-progress-bar' now={33} label={`${33}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Daniela Pérez &nbsp;
                                                     <ProgressBar className='orange-progress-bar' now={51} label={`${51}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Juan Aguirre &nbsp;
                                                     <ProgressBar className='orange-progress-bar' now={59} label={`${59}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
@@ -299,34 +299,34 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                     <td style={{ width: '16em' }}>
                                         <table style={{ width: '100%' }}>
 
-                                            <tr>
+                                            <tr style={{ borderBottom: '1px #808080 solid' }}>
                                                 <th style={{ padding: '1em' }} >COLABORADOR</th>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
 
                                                 <td id="infoLinePorc">Florencia Lorenzati &nbsp;
                                                     <ProgressBar className='green-progress-bar' now={99} label={`${99}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceVerde1}></img></td>
 
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
                                                     <ProgressBar className='lightGreen-progress-bar' now={79} label={`${79}%`} /></td>
                                                 <td ><img id="sizeCaritas" src={faceVerdeLima2}></img> </td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Daniela Pérez &nbsp;
                                                     <ProgressBar className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceAmarillo3}></img> </td>
 
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Juan Aguirre &nbsp;
                                                     <ProgressBar className='lightGreen-progress-bar' now={83} label={`${83}%`} /></td>
                                                 <td ><img id="sizeCaritas" src={faceVerdeLima2}></img> </td>
 
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Esteban Domínguez &nbsp;
                                                     <ProgressBar className='orange-progress-bar' now={46} label={`${46}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
@@ -361,10 +361,10 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                     <td style={{ width: '16em' }}>
                                         <table style={{ width: '100%' }}>
 
-                                            <tr>
+                                            <tr style={{ borderBottom: '1px #808080 solid' }}> 
                                                 <th style={{ padding: '1em' }} >COLABORADOR</th>
                                             </tr>
-                                            <tr >
+                                            <tr style={{ borderBottom: '1px #DCDCDC solid' }}>
 
                                                 <td id="infoLinePorc">Florencia Lorenzati &nbsp;
                                                     <ProgressBar className='lightGreen-progress-bar' now={75} label={`${75}%`} /></td>
@@ -372,17 +372,17 @@ export default function DiseñoDashboardTablaConLineasPorc() {
 
 
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
                                                     <ProgressBar className='green-progress-bar' now={93} label={`${93}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceVerde1}></img></td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Daniela Pérez &nbsp;
                                                     <ProgressBar className='orange-progress-bar' now={45} label={`${45}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Juan Aguirre &nbsp;
                                                     <ProgressBar className='red-progress-bar' now={16} label={`${16}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
@@ -422,27 +422,27 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                     <td style={{ width: '16em' }}>
                                         <table style={{ width: '100%' }}>
 
-                                            <tr>
+                                            <tr style={{ borderBottom: '1px #808080 solid' }}>
                                                 <th style={{ padding: '1em' }} >COLABORADOR</th>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
 
                                                 <td id="infoLinePorc">Florencia Lorenzati &nbsp;
                                                     <ProgressBar className='red-progress-bar' now={27} label={`${27}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
 
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
                                                     <ProgressBar className='yellow-progress-bar' now={62} label={`${62}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceAmarillo3}></img> </td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Daniela Pérez &nbsp;
                                                     <ProgressBar className='yellow-progress-bar' now={56} label={`${56}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceAmarillo3}></img></td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Juan Aguirre &nbsp;
                                                     <ProgressBar className='yellow-progress-bar' now={48} label={`${48}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceAmarillo3}></img></td>
@@ -480,27 +480,27 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                     <td style={{ width: '16em' }}>
                                         <table style={{ width: '100%' }}>
 
-                                            <tr>
+                                            <tr style={{ borderBottom: '1px #808080 solid' }}>
                                                 <th style={{ padding: '1em' }} >COLABORADOR</th>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
 
                                                 <td id="infoLinePorc">Florencia Lorenzati&nbsp;
                                                     <ProgressBar className='yellow-progress-bar' now={53} label={`${53}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceAmarillo3}></img></td>
 
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
                                                     <ProgressBar className='red-progress-bar' now={33} label={`${33}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Daniela Pérez &nbsp;
                                                     <ProgressBar className='orange-progress-bar' now={41} label={`${41}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceNaranja4}></img></td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Juan Aguirre &nbsp;
                                                     <ProgressBar className='green-progress-bar' now={100} label={`${100}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceVerde1}></img></td>
@@ -540,32 +540,32 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                     <td style={{ width: '16em' }}>
                                         <table style={{ width: '100%' }}>
 
-                                            <tr>
+                                            <tr style={{ borderBottom: '1px #808080 solid' }}>
                                                 <th style={{ padding: '1em' }} >COLABORADOR</th>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
 
                                                 <td id="infoLinePorc">Florencia Lorenzati &nbsp;
                                                     <ProgressBar className='lightGreen-progress-bar' now={79} label={`${79}%`} /></td>
                                                 <td ><img id="sizeCaritas" src={faceVerdeLima2}></img> </td>
 
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Emiliano Sotomayor &nbsp;
                                                     <ProgressBar className='red-progress-bar' now={35} label={`${35}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceRojo5}></img> </td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Daniela Pérez &nbsp;
                                                     <ProgressBar className='yellow-progress-bar' now={53} label={`${53}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceAmarillo3}></img></td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Juan Aguirre &nbsp;
                                                     <ProgressBar className='red-progress-bar' now={20} label={`${20}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceRojo5}></img></td>
                                             </tr>
-                                            <tr >
+                                            <tr  style={{ borderBottom: '1px #DCDCDC solid' }}>
                                                 <td id="infoLinePorc">Esteban Domínguez &nbsp;
                                                     <ProgressBar className='green-progress-bar' now={92} label={`${92}%`} /></td>
                                                 <td><img id="sizeCaritas" src={faceVerde1}></img> </td>

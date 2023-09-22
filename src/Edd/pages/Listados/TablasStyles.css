@@ -1,4 +1,22 @@
 
+
+/* REDIRECT ERROR */
+#cssExplicacion{
+  font-size: 13pt;
+  font-family: Calibri, sans-serif;
+  margin: 0;
+  widows: auto;
+  word-spacing: 0px;
+  font-variant-caps: normal;
+  orphans: auto;
+  color: black;
+  font-family: Century Gothic, sans-serif;
+  text-align: left;
+  margin-left: 1em;
+  margin-right: 1em;
+  }
+/* --- */
+
 /* TABLA GRAFICO DASHBOARD */
 #mainTableGrafDash{
   display: flex;

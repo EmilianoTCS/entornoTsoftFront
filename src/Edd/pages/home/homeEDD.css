@@ -6,8 +6,8 @@ text-align: right;
 
 /* LINEA */
 .linea{
-height: 5px;
-border-right: 2px ridge black;
+height: 7px;
+border-right: 2px ridge rgba(151, 151, 151, 0.568);
 }
 /* --- */
 

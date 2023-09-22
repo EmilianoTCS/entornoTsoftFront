@@ -1,8 +1,9 @@
 #fondo1 {
-  background-color: rgb(241, 241, 241);
-    background-image: url("/Logo.png");
-    background-repeat: round; 
-    background-size: 30em;
+  background-color: rgba(228, 228, 228, 0.815);
+    background-image: url("/Fondo4.svg");
+    /* background-repeat: round; 
+    background-size: 30em; */
+
   }
   
   /*Scroll*/
