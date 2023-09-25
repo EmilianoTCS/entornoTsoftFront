@@ -1,5 +1,24 @@
 
 
+.btn-Other {
+  background-color: #e10b1c;
+  border-style: none none none none;
+  font-size: 10pt;
+  /* border: #e10b1c solid 1px; */
+
+  border: #e10b1c solid 1px;
+  width: 50%;
+  width: 100%;
+  border-radius: 7px;
+  color: white;
+}
+
+.btn-Other:hover {
+  background-color: #ffffff;
+  color: #e10b1c;
+}
+
+
 #btn {
   background-color: #e10b1c;
   margin-left: 10px;

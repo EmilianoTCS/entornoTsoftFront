@@ -87,7 +87,7 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             // text={`${80}%`}
                             strokeWidth={10}
                             styles={buildStyles({
-                                pathColor: "yellow",
+                                pathColor: "#FFE700",
                                 trailColor: "#E5E7E9",
                                 strokeLinecap: 'butt',
                                 backgroundColor:'white'
@@ -119,7 +119,7 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                             strokeWidth={10}
                             styles={buildStyles({
                                 strokeLinecap: 'butt',
-                                pathColor: "#2980B9",
+                                pathColor: "#02C101",
                                 trailColor: "grey",
                                 backgroundColor:'white'
                             })}

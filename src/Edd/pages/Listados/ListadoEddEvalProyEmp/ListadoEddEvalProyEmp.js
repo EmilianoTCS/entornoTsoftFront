@@ -188,15 +188,16 @@ export default function ListadoEDDEvalProyEmp() {
             EDD {"->"} Listado de evaluaciones asociadas al proyecto-colaborador
           </h6>
           <br></br>
-          <Button id="btn" onClick={enviarCorreo}>
-            Enviar Correo
-          </Button>
-          <br></br>
-          <div id="selectPaginador">
-            <Button id="btn" onClick={insertarEDDEvalProyEmp}>
+
+
+          <table>
+            <tr> <td><Button id="btn" onClick={insertarEDDEvalProyEmp}>
               Asociar evaluación al proyecto - colaborador
             </Button>
-            <div className="form-group" id="btn2">
+            </td>
+            
+              <td>
+              <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadRegistros">
                 Cantidad registros:
               </label>
@@ -221,7 +222,10 @@ export default function ListadoEDDEvalProyEmp() {
               </select>
             </div>
 
-            <div className="form-group" id="btn2">
+              </td>
+
+              <td>
+              <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Proyecto: </label>
               <select
                 required
@@ -245,7 +249,10 @@ export default function ListadoEDDEvalProyEmp() {
                   ))}
               </select>
             </div>
-            <div className="form-group" id="btn2">
+              </td>
+
+              <td>
+              <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Evaluador: </label>
               <select
                 required
@@ -269,7 +276,10 @@ export default function ListadoEDDEvalProyEmp() {
                     )) : <></>}
               </select>
             </div>
-            <div className="form-group" id="btn2">
+              </td>
+
+              <td>
+              <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadR">Evaluado: </label>
               <select
                 required
@@ -292,9 +302,11 @@ export default function ListadoEDDEvalProyEmp() {
                   )) : <></>}
               </select>
             </div>
-          </div>
+              </td>
+            </tr>
+          </table>
 
-
+          
           <EnviarCorreo
             isActiveEDDEnviarCorreo={isActiveInsertEDDEnviarCorreo}
             cambiarEstado={setIsActiveInsertEDDEnviarCorreo}
@@ -321,42 +333,56 @@ export default function ListadoEDDEvalProyEmp() {
               <tr>
                 <th>ID</th>
                 <th>Evaluación</th>
-                <th colSpan={2}>Fecha vigencia eval</th>
-                <th>Disp eval</th>
+                {/* <th colSpan={2}>Fecha vigencia eval</th>
+                <th>Disp eval</th> */}
                 <th>Proyecto</th>
 
                 <th>Evaluador</th>
                 <th>Cargo</th>
                 <th>Evaluado</th>
 
-                <th>Respondida</th>
-                <th colSpan={2}>Fecha respuesta eval</th>
-                <th>Total min</th>
+                <th >Resp</th>
+                <th>Fecha respuesta eval</th>
+                {/* <th>Total min</th> */}
 
-                <th>Fecha vigencia ref</th>
-                <th>Días vigencia ref</th>
+                <th >Fecha fin vigencia ref</th>
+
                 <th>Correo enviado ref</th>
-                <th>Fecha vigencia col</th>
-                <th>Días vigencia col</th>
+                <th >Fecha fin vigencia col</th>
+
                 <th>Correo enviado col</th>
 
-                <th>Operaciones</th>
+                <th>
+
+                  <table>
+                    <tr>
+                      <td ><button data-title="Envío correo con formulario evaluaciones a referentes" type="button" class="btn-Other" onClick={enviarCorreo}>Envío Eval Ref</button>
+                      </td>
+
+                    </tr><tr><td>
+                      <button data-title="Envío correo con formulario evaluaciones a colaboradores" type="button" class="btn-Other" onClick={enviarCorreo}>Envío Eval Col</button>
+                    </td></tr>
+                  </table>
+
+                  Operaciones</th>
+
               </tr>
             </thead>
             <tbody>
               {EDDEvalProyEmp.map((EDDEvalProyEmp) => (
+              
                 // (userData.nomRol === 'alumno' && userData.nomEmpleado === EDDEvalProyEmp.nomEmpleadoEvaluador ? (
                 <tr key={EDDEvalProyEmp.idEDDEvalProyEmp}>
                   <td>{EDDEvalProyEmp.idEDDEvalProyEmp}</td>
                   <td>{EDDEvalProyEmp.nomEvaluacion}</td>
-                  <td width={5}>{EDDEvalProyEmp.fechaInicioPeriodoEvaluacion}</td>
+                  {/* <td width={5}>{EDDEvalProyEmp.fechaInicioPeriodoEvaluacion}</td>
                   <td width={5}>{EDDEvalProyEmp.fechaFinPeriodoEvaluacion}</td>
                   <td>{EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? (
                     <td>DISPONIBLE</td>
                   ) : (
                     <td>NO DISPONIBLE</td>
                   )}
-                  </td>
+                  </td> */}
                   <td>{EDDEvalProyEmp.nomProyecto}</td>
 
                   <td >{EDDEvalProyEmp.nomEmpleadoEvaluador}</td>
@@ -369,7 +395,21 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.nomEmpleadoEvaluado}</td>
 
                   <td>{EDDEvalProyEmp.evalRespondida}</td>
-                  <td width={5}>{EDDEvalProyEmp.evalRespondida === 'NO' ? (
+
+
+
+                  <td width={5} data-title={' Fecha inicio: '+ EDDEvalProyEmp.fechaIni +'\n'+' Fecha fin: '+ EDDEvalProyEmp.fechaFin +' Total minutos: '+ EDDEvalProyEmp.tiempoTotalEnMin} style={{textDecoration:'underline'}}>{EDDEvalProyEmp.evalRespondida === 'NO' ? (
+                    <p style={{ color: 'white' }}></p>
+                  ) : (
+                    EDDEvalProyEmp.fechaIni
+
+                  )}
+                  </td>
+
+
+
+
+                  {/* <td width={5}>{EDDEvalProyEmp.evalRespondida === 'NO' ? (
                     <p style={{ color: 'white' }}></p>
                   ) : (
                     EDDEvalProyEmp.fechaIni
@@ -382,19 +422,19 @@ export default function ListadoEDDEvalProyEmp() {
                     ) : (
                       EDDEvalProyEmp.fechaFin
                     )}
-                  </td>
-                  <td width={5}>
+                  </td> */}
+                  {/* <td width={5}>
                     {EDDEvalProyEmp.evalRespondida === 'NO' ? (
                       <p style={{ color: 'white' }}></p>
                     ) : (
                       EDDEvalProyEmp.tiempoTotalEnMin
                     )}
-                  </td>
+                  </td> */}
                   <td>{EDDEvalProyEmp.fechaIniVigenciaEvalRef}</td>
-                  <td>{EDDEvalProyEmp.diasVigenciaEvalRef}</td>
+
                   <td>{EDDEvalProyEmp.CorreoLinkEnviadoRef}</td>
                   <td>{EDDEvalProyEmp.fechaIniVigenciaEvalColab}</td>
-                  <td>{EDDEvalProyEmp.diasVigenciaEvalRefColab}</td>
+
                   <td>{EDDEvalProyEmp.CorreoLinkEnviadoColab}</td>
 
                   <td align="center">
@@ -514,7 +554,7 @@ export default function ListadoEDDEvalProyEmp() {
             num_boton={num_boton}
           ></Paginador>
         </div>
-      </div>
+      </div >
     </>
   ) : (
     <Navigate to="/login"></Navigate>

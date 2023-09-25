@@ -56,6 +56,15 @@ export default function HomePage() {
                       href="/DiseñoDashboardTablaConLineasPorc">DiseñoTbLineasPorc
                     </a>
                   </tr>
+                  <br></br>
+                  <tr>
+                    <a
+                      type="submit"
+                      id="btnAtras"
+
+                      href="/DiseñoDashboardGrafico">DiseñoTbLineasPorc 2
+                    </a>
+                  </tr>
 </td>
                   
 
@@ -72,7 +81,15 @@ export default function HomePage() {
                       href="/DiseñoTablaLineaReferente">DiseñoTablaLineaReferente
                     </a>
                   </tr>
+<br></br>
+<tr>
+                    <a
+                      type="submit"
+                      id="btnAtras"
 
+                      href="/UnReferenteDiseño">DiseñoTablaLineaReferente 2
+                    </a>
+                  </tr>
 
                 </td>
               </table>

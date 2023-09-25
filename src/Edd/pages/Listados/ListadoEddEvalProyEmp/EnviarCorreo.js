@@ -69,10 +69,10 @@ const EnviarCorreo = ({
         const url = "pages/auxiliares/listadoEddEvaluacion.php";
         const operationUrl = "listados";
         getDataService(url, operationUrl).then((response) =>
-          setlistEDDEvaluacion(response)
-    
+            setlistEDDEvaluacion(response)
+
         );
-      }
+    }
 
 
     useEffect(function () {
@@ -99,7 +99,7 @@ const EnviarCorreo = ({
                                 name="input_Evaluacion"
                                 id="input_Evaluacion"
                                 placeholder="Seleccione la evaluación"
-                                // onChange={({ target }) => setidEDDEvaluacion(target.value)}
+                            // onChange={({ target }) => setidEDDEvaluacion(target.value)}
                             >
                                 <option hidden value="">
                                     Desplegar lista
@@ -120,7 +120,7 @@ const EnviarCorreo = ({
                                 name="input_proyemp"
                                 id="input_proyemp"
                                 placeholder="Seleccione la Proyecto + Evaluado"
-                                // onChange={({ target }) => setidEDDProyEmpEvaluado(target.value)}
+                            // onChange={({ target }) => setidEDDProyEmpEvaluado(target.value)}
                             >
                                 <option hidden value="">
                                     Desplegar lista
@@ -129,6 +129,28 @@ const EnviarCorreo = ({
                                 {listEDDContactos.map((valor) => (
                                     <option value={valor.correoContacto1}>{valor.nomContacto}</option>
                                 ))}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="input_TipRESP">Cargo: </label>
+                            <select
+                                required
+                                className="form-control"
+                                name="input_TipRESP"
+                                id="input_TipRESP"
+                                // onChange={({ target }) => setnomRespPreg(target.value)}
+                            >
+                                <option hidden value="">
+                                    Desplegar lista
+                                </option>
+
+                                <option value='Colaborador'>
+                                   Colaborador
+                                </option>
+                                <option value='Referente'>
+                                    Referente
+                                </option>
+                            
                             </select>
                         </div>
                         <Button
