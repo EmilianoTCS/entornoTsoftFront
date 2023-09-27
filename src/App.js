@@ -47,6 +47,8 @@ import DiseñoDashboardTabla from "./Edd/pages/DiseñoDashboard/DiseñoDashboard
 import DiseñoTablaLineaReferente from "./Edd/pages/DiseñoDashboard/DiseñoTablaLineaReferente";
 import UnReferenteDiseño from "./Edd/pages/DiseñoDashboard/1Ref";
 import RedirectErrorMail from "./Edd/pages/Listados/ListadoEddEvalProyEmp/RedirectErrorMail"
+import LoginVerif from "./pages/login/loginVerif";
+import FormularioEvaluacionExterno from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacionExterno";
 
 function App() {
   return (
@@ -55,15 +57,16 @@ function App() {
         <Routes>
           <Route element={<Login />} path="/"></Route>
           <Route element={<Login />} path="/Login"></Route>
+          <Route element={<LoginVerif />} path="/LoginVerif"></Route>
 
-
-          <Route
-            element={<FormularioEvaluacion />}
-            path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
-          ></Route>
-
+        
           <Route element={<RedirectErrorMail />} path="/RedirectErrorMail"></Route>
 
+          <Route
+            element={<FormularioEvaluacionExterno />}
+            path="/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador/:idEDDProyEmpEvaluado"
+          ></Route>
+          
           <Route element={<PrivateRoute />}>
             <Route path="/home" element={<HomePage />}></Route>
             {/* ACADEMIA */}
@@ -147,6 +150,11 @@ function App() {
 
             <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto"></Route>
             {/* EDD */}
+            <Route
+            element={<FormularioEvaluacion />}
+            path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
+          ></Route>
+
             <Route
               element={<ListadoEddProyecto />}
               path="/listadoEddProyecto/:params"

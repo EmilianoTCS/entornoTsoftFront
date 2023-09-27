@@ -152,7 +152,7 @@ export default function ListadoEDDEvalPregunta() {
               Crear pregunta 
             </Button>
 
-            <div className="form-group" id="btn2">
+            <div style={{width:'10em'}} className="form-group" id="btn2">
               <label htmlFor="input_CantidadRegistros">
                 Cantidad registros:
               </label>

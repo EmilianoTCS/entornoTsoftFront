@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container, Table } from "react-bootstrap";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useRoute } from "wouter";
 
 import SendDataService from "../../../../services/SendDataService";
@@ -11,19 +11,26 @@ import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
 import logo from "./logo/tsoft.png";
 import Swal from "sweetalert2";
+import ConfirmAlertAll from "../../Alerts/ConfirmAlertAll";
+import RedirectErrorMail from "../ListadoEddEvalProyEmp/RedirectErrorMail";
+import { AuthContext } from "../../../../context/AuthContext";
 
-export default function FormularioEvaluacion() {
-  const [, params] = useRoute("/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador");
-
+export default function FormularioEvaluacionExterno() {
+  const [, params] = useRoute("/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador/:idEDDProyEmpEvaluado");
+  const { logout } = useContext(AuthContext);
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
   const [idEDDEvalNomPregunta, setidEDDEvalNomPregunta] = useState(""); //Almacena el listado de preguntas procesado
   const [loadedData, setLoadedData] = useState(false); //Bool que determina el recibimiento correcto de los datos
   var respuestasAEnviar = [];
-  const idEDDEvaluacion = params.idEvaluacion;
-  const idEDDProyEmpEvaluado = params.idEDDProyEmpEvaluado;
-  const idEDDProyEmpEvaluador = params.idEDDProyEmpEvaluador;
+
+
+  const idEDDEvaluacion = params === null || "" ? "" : params.idEvaluacion ;
+  const idEDDProyEmpEvaluado = params === null || "" ? "" : params.idEDDProyEmpEvaluado ;
+  const idEDDProyEmpEvaluador = params === null || "" ? "" : params.idEDDProyEmpEvaluador ;
+
   const [fechaInicioExamen, setfechaInicioExamen] = useState("");
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
+  const navigate = useNavigate();
 
   function GetData() {
     var url = "pages/listados/listadoRespPregEvaluaciones.php";
@@ -33,7 +40,7 @@ export default function FormularioEvaluacion() {
       idEmpleado: idEDDProyEmpEvaluador,
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado
     };
-    console.log("getdata",data);
+    console.log("getdata", data);
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);
       setLoadedData(true); //Cambio el estado del booleano
@@ -41,6 +48,11 @@ export default function FormularioEvaluacion() {
       console.log(data);
     });
   }
+
+  function handleLogout() {
+    logout();
+  }
+
 
   function ConfirmAlert() {
     if (loadedData) {
@@ -56,7 +68,7 @@ export default function FormularioEvaluacion() {
         cancelButtonColor: "#d33",
         confirmButtonText: "Continuar",
         cancelButtonText: "Cancelar",
-        allowOutsideClick : false,
+        allowOutsideClick: false,
         allowEscapeKey: false
       }).then((result) => {
         if (result.isConfirmed) {
@@ -70,12 +82,6 @@ export default function FormularioEvaluacion() {
     }
   }
 
- 
-
-
-
-
-
   function ConfirmAlertEnvio() {
     if (loadedData) {
       Swal.fire({
@@ -88,7 +94,8 @@ export default function FormularioEvaluacion() {
         confirmButtonText: "Continuar",
       }).then((result) => {
         if (result.isConfirmed) {
-          window.history.back()
+          navigate("/login");
+          handleLogout();
         }
       });
     }
@@ -101,15 +108,15 @@ export default function FormularioEvaluacion() {
       respuestasAEnviar.push(registro);
     }
   }
-
   function SendData(e) {
-    ConfirmAlertEnvio().then((response) => {
+    e.preventDefault();
+    ConfirmAlertAll('¿Confirma el envío de los datos?', 'No podrás cambiar los resultados.', 'warning').then((response) => {
       if (response === true) {
         const url = "pages/insertar/insertarEddEvalProyResp.php";
         const operationUrl = "insertarEddEvalProyResp";
-        e.preventDefault();
+
         let fechaFin = new Date();
-    
+
         var data = {
           respuestas: respuestasAEnviar,
           datosExtra: {
@@ -117,52 +124,41 @@ export default function FormularioEvaluacion() {
             fechaFinExamen: fechaFin,
             idEDDEvaluacion: idEDDEvaluacion,
             usuarioCreacion: userData.usuario,
-    
+
           },
-        }; 
+        };
         console.log(data);
         SendDataService(url, operationUrl, data).then((response) => {
           console.log("respuestaServer:", response);
+          ConfirmAlertEnvio();
+         
+
         });
-      }
+      } 
     });
+
   }
-
-  ConfirmAlert().then((response) => {
-    if (response === true) {
-      var url = "pages/cambiarEstado/cambiarEstado.php";
-      var operationUrl = "cambiarEstado";
-      var data = {
-        idRegistro: ID,
-        usuarioModificacion: userData.usuario,
-        nombreTabla: nombreTabla,
-      };
-
-      SendDataService(url, operationUrl, data).then((response) => {
-        TopAlerts('successEdited');
-      });
-    }
-  });
 
   useEffect(
     function () {
       GetData();
+      console.log(params);
     },
-    [idEDDEvaluacion, loadedData]
+    [idEDDEvaluacion,loadedData]
   );
 
-  
+
   var auxIdPregunta = "0";
   var auxEncabezado = "0";
   var auxDesc = "0";
 
-  return userData.statusConected || userData !== null ? (
+  return userData.idEmpleado === "24" && userData.nomRol === "externo" && userData.usuario === "Externo" ? (
     <>
       <Header></Header>
       <form onSubmit={SendData}>
         <a
-                style={{ margin: '10px' ,marginTop:'15px',marginLeft:'60px'}}
-                type="submit"
+          style={{ margin: '10px', marginTop: '15px', marginLeft: '60px' }}
+          type="submit"
           id="btnAtras"
           value="Registrar"
           href="javascript: history.go(-1)">Volver
@@ -186,14 +182,14 @@ export default function FormularioEvaluacion() {
                 })}
               </div>
               <div class="col" id="encabezadoRight">
-              <img width="200px" height="79px" src={idEDDEvalPregunta.logoFormulario}></img>
+                <img width="200px" height="79px" src={idEDDEvalPregunta.logoFormulario}></img>
               </div>
             </div>
           </div>
           {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
 
             if (auxDesc !== idEDDEvalPregunta.descFormulario) {
-              auxDesc= idEDDEvalPregunta.descFormulario
+              auxDesc = idEDDEvalPregunta.descFormulario
               return (
                 <>
                   <p id="encabezadoEnd" style={{ color: 'white' }}>
@@ -202,7 +198,7 @@ export default function FormularioEvaluacion() {
                 </>
 
               )
-              
+
             }
           })}
 
@@ -241,7 +237,7 @@ export default function FormularioEvaluacion() {
                             <tr>
                               <td></td>
                               <td>
-                                
+
                                 <textarea
                                   maxLength="500"
                                   type="textarea"
@@ -312,7 +308,7 @@ export default function FormularioEvaluacion() {
                                   value={idEDDEvalPregunta.nomRespPreg}
                                   required={idEDDEvalPregunta.preguntaObligatoria === "1"}
                                   id="inputNomRespuesta"
-                                  style={{ width: "4em",textTransform: "uppercase"}}
+                                  style={{ width: "4em", textTransform: "uppercase" }}
                                   onChange={({ target }) => {
                                     let respuestaTexto = target.value;
 
@@ -358,7 +354,7 @@ export default function FormularioEvaluacion() {
                                 value={idEDDEvalPregunta.nomRespPreg}
                                 required={idEDDEvalPregunta.preguntaObligatoria === "1"}
                                 id="inputNomRespuesta"
-                                style={{ width: "4em",textTransform: "uppercase"}}
+                                style={{ width: "4em", textTransform: "uppercase" }}
                                 onChange={({ target }) => {
                                   let respuestaTexto = target.value;
 
@@ -392,6 +388,7 @@ export default function FormularioEvaluacion() {
               }
             })}
             <Button
+
               variant="secondary"
               type="submit"
               id="btn_registrar"
@@ -406,7 +403,7 @@ export default function FormularioEvaluacion() {
       </form>
     </>
   ) : (
-    <Navigate to="/login"></Navigate>
+    <Navigate to="/RedirectErrorMail"></Navigate>
   );
 
 }

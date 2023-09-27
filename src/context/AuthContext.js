@@ -69,6 +69,7 @@ const AuthState = (props) => {
       });
   };
 
+  
   const logout = () => {
     setAuth({
       isLogged: false,

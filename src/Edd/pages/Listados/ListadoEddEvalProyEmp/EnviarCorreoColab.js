@@ -8,24 +8,22 @@ import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-const EnviarCorreo = ({
-    isActiveEDDEnviarCorreo,
+const EnviarCorreoColab = ({
+    isActiveEDDEnviarCorreoColab,
     cambiarEstado,
-    EDDEnviarCorreo,
+    EDDEnviarCorreoColab,
 }) => {
     // ----------------------CONSTANTES----------------------------
     const contactoCorreoEnviar = [];
 
-    const listEDDEnviarCorreo = EDDEnviarCorreo;
+    const listEDDEnviarCorreoColab = EDDEnviarCorreoColab;
     const [idProyecto, setidProyecto] = useState("");
 
-    const [idEDDContactos, setidEDDContactos] = useState("");
-    const [listEDDContactos, setlistEDDContactos] = useState([""]);
+
     const [idEDDProyecto, setidEDDProyecto] = useState("");
     const [listEDDProyecto, setlistEDDProyecto] = useState([""]);
 
-
-    const show = isActiveEDDEnviarCorreo;
+    const show = isActiveEDDEnviarCorreoColab;
 
     const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
@@ -42,7 +40,7 @@ const EnviarCorreo = ({
         var data = {
             usuarioCreacion: userData.usuario,
             idProyecto:1,
-            cargoEnProy: 'Referente',
+            cargoEnProy: 'Colaborador',
             tipoConfDato: "EMAIL",
             subTipoConfDato: "REFERENTES_GRAL",
             listContactos: contactoCorreoEnviar,
@@ -51,55 +49,46 @@ const EnviarCorreo = ({
         console.log(data);
         SendDataService(url, operationUrl, data).then((response) => {
             // TopAlerts("successCreated");
+            console.log(response);
         });
     }
 
-    function obtenerContactos() {
-        const url = "pages/auxiliares/listadoContactosProy.php";
-        const operationUrl = "listadoContactosProy";
-        var data = {
-            idProyecto: idEDDProyecto,
-        };
-        SendDataService(url, operationUrl, data).then((response) => {
-            setlistEDDContactos(response)
-        });
-    }
+
+
+
 
     function obtenerProyecto() {
         const url = "pages/auxiliares/listadoProyectoForms.php";
         const operationUrl = "listados";
         getDataService(url, operationUrl).then((response) =>
             setlistEDDProyecto(response)
+
         );
     }
+
 
     useEffect(function () {
         obtenerProyecto();
     }, []);
 
-    useEffect(function () {
-        if (idEDDProyecto) {
-            obtenerContactos(idEDDProyecto);
-        }
-    }, [idEDDProyecto]);
 
     // ----------------------RENDER----------------------------
     return (
         <>
             <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Enviar correo referentes</Modal.Title>
+                    <Modal.Title>Enviar correo colaboradores</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={SendDataEmail}>
                         <div className="form-group">
-                            <label htmlFor="Proyecto">Proyecto: </label>
+                            <label htmlFor="input_Evaluacion">Proyecto: </label>
                             <select
                                 required
                                 className="form-control"
-                                name="Proyecto"
-                                id="Proyecto"
-                                placeholder="Seleccione el proyecto"
+                                name="input_Evaluacion"
+                                id="input_Evaluacion"
+                                placeholder="Seleccione la evaluación"
                                 onChange={({ target }) => setidEDDProyecto(target.value)}
                             >
                                 <option hidden value="">
@@ -113,26 +102,7 @@ const EnviarCorreo = ({
                                 ))}
                             </select>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="contactos">Contactos: </label>
-                            <select
-                                required
-                                className="form-control"
-                                name="contactos"
-                                id="contactos"
-                                placeholder="Seleccione los contactos"
-                                onChange={({ target }) => setidEDDContactos(target.value)}
-                            >
-                                <option hidden value="">
-                                    Desplegar lista
-                                </option>
-
-                                {listEDDContactos.map((valor) => (
-                                    <option value={valor.correoContacto1}>{valor.nomContacto}{valor.correoContacto1}{valor.correoContacto2}</option>
-                                ))}
-                            </select>
-                        </div>
-                      
+                       
                         <Button
                             variant="secondary"
                             type="submit"
@@ -147,4 +117,4 @@ const EnviarCorreo = ({
         </>
     );
 };
-export default EnviarCorreo;
+export default EnviarCorreoColab;

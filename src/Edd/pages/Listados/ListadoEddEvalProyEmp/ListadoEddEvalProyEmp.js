@@ -19,6 +19,7 @@ import { BiSolidSend } from "react-icons/bi";
 import "../TablasStyles.css";
 import InsertarEDDEvalProyEmp from "../../templates/form/Insertar/InsertarEddEvalProyEmp";
 import EnviarCorreo from "./EnviarCorreo";
+import EnviarCorreoColab from "./EnviarCorreoColab";
 import EditarEddEvalProyEmp from "../../templates/form/Editar/EditarEddEvalProyEmp";
 import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
 import TopAlerts from "../../../../templates/alerts/TopAlerts";
@@ -35,6 +36,8 @@ export default function ListadoEDDEvalProyEmp() {
   const [isActiveEditEDDEvalProyEmp, setIsActiveEditEDDEvalProyEmp] =
     useState(false);
   const [isActiveInsertEDDEnviarCorreo, setIsActiveInsertEDDEnviarCorreo] =
+    useState(false);
+  const [isActiveInsertEDDEnviarCorreoColab, setIsActiveInsertEDDEnviarCorreoColab] =
     useState(false);
   const [idEDDEvalProyEmp, setidEDDEvalProyEmp] = useState(null);
   const [num_boton, setNumBoton] = useState(1);
@@ -87,6 +90,11 @@ export default function ListadoEDDEvalProyEmp() {
   function enviarCorreo() {
     setIsActiveInsertEDDEnviarCorreo(!isActiveInsertEDDEnviarCorreo);
   }
+
+  function enviarCorreoColab() {
+    setIsActiveInsertEDDEnviarCorreoColab(!isActiveInsertEDDEnviarCorreoColab);
+  }
+
 
   function insertarEDDEvalProyEmp() {
     setIsActiveInsertEDDEvalProyEmp(!isActiveInsertEDDEvalProyEmp);
@@ -163,6 +171,26 @@ export default function ListadoEDDEvalProyEmp() {
     });
   }
 
+  function sumarDiasAFecha(fecha, dias) {
+    const fechaNueva = new Date(fecha);
+    fechaNueva.setDate(fechaNueva.getDate() + dias);
+    return fechaNueva;
+  }
+
+  function SumaTotal() {
+    const fechaInicial = new Date(); // Puedes usar la fecha que desees como punto de partida
+    const diasASumar = 7; // Cambia este valor por el número de días que quieras sumar
+
+    const fechaResultado = sumarDiasAFecha(fechaInicial, diasASumar);
+
+    return (
+      <div>
+        <p>Fecha inicial: {fechaInicial.toDateString()}</p>
+        <p>Días a sumar: {diasASumar}</p>
+        <p>Fecha resultado: {fechaResultado.toDateString()}</p>
+      </div>
+    );
+  }
 
 
   //PAGINADOR ---------------------
@@ -195,123 +223,129 @@ export default function ListadoEDDEvalProyEmp() {
               Asociar evaluación al proyecto - colaborador
             </Button>
             </td>
-            
-              <td>
-              <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadRegistros">
-                Cantidad registros:
-              </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadRegistros"
-                id="input_CantidadRegistros"
-                onChange={({ target }) => {
-                  setcantidadPorPagina(target.value);
-                  setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
 
-              </td>
-
-              <td>
-              <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Proyecto: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidProyecto(target.value); setNumBoton(1);
-                  history.pushState(null, null, `/listadoEDDEvalProyEmp/${target.value}`);
-                }}
-              >
-                <option value="0">Todos</option>
-                {
-
-                  listProyecto.map((valor) => (
-                    <option
-                      selected={(valor.idEDDProyecto === idProyecto ? "selected" : "")}
-                      value={valor.idEDDProyecto}
-                    >
-                      {valor.nomProyecto}
+              <td style={{ width: '12em' }}>
+                <div className="form-group" id="btn2">
+                  <label htmlFor="input_CantidadRegistros">
+                    Cantidad registros:
+                  </label>
+                  <select
+                    value={cantidadPorPagina || ""}
+                    className="form-control"
+                    name="input_CantidadRegistros"
+                    id="input_CantidadRegistros"
+                    onChange={({ target }) => {
+                      setcantidadPorPagina(target.value);
+                      setNumBoton(1);
+                    }}
+                    required
+                  >
+                    <option hidden value="">
+                      {cantidadPorPagina}
                     </option>
-                  ))}
-              </select>
-            </div>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </div>
+
               </td>
 
               <td>
-              <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Evaluador: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidEvaluador(target.value); setNumBoton(1);
+                <div className="form-group" id="btn2">
+                  <label htmlFor="input_CantidadR">Proyecto: </label>
+                  <select
+                    required
+                    type="text"
+                    className="form-control"
+                    onChange={({ target }) => {
+                      setidProyecto(target.value); setNumBoton(1);
+                      history.pushState(null, null, `/listadoEDDEvalProyEmp/${target.value}`);
+                    }}
+                  >
+                    <option value="0">Todos</option>
+                    {
 
-                }}
-              >
-                <option value="0">Todos</option>
-                {
-                  loadedData ?
-                    listEvaluadores.map((valor) => (
-                      <option
-                        selected={(valor.idEDDProyEmpEvaluador === idEvaluador ? "selected" : "")}
-                        value={valor.idEDDProyEmpEvaluador}
-                      >
-                        {valor.nomEmpleado}
-                      </option>
-                    )) : <></>}
-              </select>
-            </div>
+                      listProyecto.map((valor) => (
+                        <option
+                          selected={(valor.idEDDProyecto === idProyecto ? "selected" : "")}
+                          value={valor.idEDDProyecto}
+                        >
+                          {valor.nomProyecto}
+                        </option>
+                      ))}
+                  </select>
+                </div>
               </td>
 
               <td>
-              <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Evaluado: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidEvaluado(target.value); setNumBoton(1);
+                <div className="form-group" id="btn2">
+                  <label htmlFor="input_CantidadR">Evaluador: </label>
+                  <select
+                    required
+                    type="text"
+                    className="form-control"
+                    onChange={({ target }) => {
+                      setidEvaluador(target.value); setNumBoton(1);
 
-                }}
-              >
-                <option value="0">Todos</option>
-                {loadedData ?
-                  listEvaluados.map((valor) => (
-                    <option
-                      selected={(valor.idEDDProyEmpEvaluado === idEvaluado ? "selected" : "")}
-                      value={valor.idEDDProyEmpEvaluado}
-                    >
-                      {valor.nomEmpleado}
-                    </option>
-                  )) : <></>}
-              </select>
-            </div>
+                    }}
+                  >
+                    <option value="0">Todos</option>
+                    {
+                      loadedData ?
+                        listEvaluadores.map((valor) => (
+                          <option
+                            selected={(valor.idEDDProyEmpEvaluador === idEvaluador ? "selected" : "")}
+                            value={valor.idEDDProyEmpEvaluador}
+                          >
+                            {valor.nomEmpleado}
+                          </option>
+                        )) : <></>}
+                  </select>
+                </div>
+              </td>
+
+              <td>
+                <div className="form-group" id="btn2">
+                  <label htmlFor="input_CantidadR">Evaluado: </label>
+                  <select
+                    required
+                    type="text"
+                    className="form-control"
+                    onChange={({ target }) => {
+                      setidEvaluado(target.value); setNumBoton(1);
+
+                    }}
+                  >
+                    <option value="0">Todos</option>
+                    {loadedData ?
+                      listEvaluados.map((valor) => (
+                        <option
+                          selected={(valor.idEDDProyEmpEvaluado === idEvaluado ? "selected" : "")}
+                          value={valor.idEDDProyEmpEvaluado}
+                        >
+                          {valor.nomEmpleado}
+                        </option>
+                      )) : <></>}
+                  </select>
+                </div>
               </td>
             </tr>
           </table>
 
-          
+
           <EnviarCorreo
             isActiveEDDEnviarCorreo={isActiveInsertEDDEnviarCorreo}
             cambiarEstado={setIsActiveInsertEDDEnviarCorreo}
           // EDDEnviarCorreo={EDDEnviarCorreo}
           ></EnviarCorreo>
+
+          <EnviarCorreoColab
+            isActiveEDDEnviarCorreoColab={isActiveInsertEDDEnviarCorreoColab}
+            cambiarEstado={setIsActiveInsertEDDEnviarCorreoColab}
+          // EDDEnviarCorreoColab={EDDEnviarCorreoColab}
+          ></EnviarCorreoColab>
 
           <InsertarEDDEvalProyEmp
             isActiveEDDEvalProyEmp={isActiveInsertEDDEvalProyEmp}
@@ -360,7 +394,7 @@ export default function ListadoEDDEvalProyEmp() {
                       </td>
 
                     </tr><tr><td>
-                      <button data-title="Envío correo con formulario evaluaciones a colaboradores" type="button" class="btn-Other" onClick={enviarCorreo}>Envío Eval Col</button>
+                      <button data-title="Envío correo con formulario evaluaciones a colaboradores" type="button" class="btn-Other" onClick={enviarCorreoColab}>Envío Eval Col</button>
                     </td></tr>
                   </table>
 
@@ -370,7 +404,7 @@ export default function ListadoEDDEvalProyEmp() {
             </thead>
             <tbody>
               {EDDEvalProyEmp.map((EDDEvalProyEmp) => (
-              
+
                 // (userData.nomRol === 'alumno' && userData.nomEmpleado === EDDEvalProyEmp.nomEmpleadoEvaluador ? (
                 <tr key={EDDEvalProyEmp.idEDDEvalProyEmp}>
                   <td>{EDDEvalProyEmp.idEDDEvalProyEmp}</td>
@@ -398,14 +432,16 @@ export default function ListadoEDDEvalProyEmp() {
 
 
 
-                  <td width={5} data-title={' Fecha inicio: '+ EDDEvalProyEmp.fechaIni +'\n'+' Fecha fin: '+ EDDEvalProyEmp.fechaFin +' Total minutos: '+ EDDEvalProyEmp.tiempoTotalEnMin} style={{textDecoration:'underline'}}>{EDDEvalProyEmp.evalRespondida === 'NO' ? (
-                    <p style={{ color: 'white' }}></p>
-                  ) : (
-                    EDDEvalProyEmp.fechaIni
+                  <td width={5} >{EDDEvalProyEmp.evalRespondida === 'NO' ? (
+                      <p style={{ color: 'white' }}></p>
+                    ) : (
+                      <div href="#" class="tip" style={{textDecoration:'underline', color: 'black' }}>{EDDEvalProyEmp.fechaIni}<span>{' Fecha inicio: ' + EDDEvalProyEmp.fechaIni +' Fecha fin: ' + EDDEvalProyEmp.fechaFin + ' Total minutos: ' + EDDEvalProyEmp.tiempoTotalEnMin}
+                    </span></div>
+                      
 
-                  )}
+                    )}
+
                   </td>
-
 
 
 
