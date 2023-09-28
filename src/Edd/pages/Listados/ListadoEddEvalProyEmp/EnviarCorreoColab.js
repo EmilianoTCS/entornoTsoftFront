@@ -14,9 +14,9 @@ const EnviarCorreoColab = ({
     EDDEnviarCorreoColab,
 }) => {
     // ----------------------CONSTANTES----------------------------
-    const contactoCorreoEnviar = [];
 
     const listEDDEnviarCorreoColab = EDDEnviarCorreoColab;
+
     const [idProyecto, setidProyecto] = useState("");
 
 
@@ -39,11 +39,10 @@ const EnviarCorreoColab = ({
         const operationUrl = "emailEDD";
         var data = {
             usuarioCreacion: userData.usuario,
-            idProyecto:1,
+            idProyecto:idEDDProyecto,
             cargoEnProy: 'Colaborador',
             tipoConfDato: "EMAIL",
             subTipoConfDato: "REFERENTES_GRAL",
-            listContactos: contactoCorreoEnviar,
             isActive: true,
         };
         console.log(data);
@@ -77,7 +76,7 @@ const EnviarCorreoColab = ({
         <>
             <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Enviar correo colaboradores</Modal.Title>
+                    <Modal.Title>Envío correo de evaluaciones a <strong>Colaboradores</strong></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={SendDataEmail}>

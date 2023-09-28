@@ -207,7 +207,7 @@ export default function FormularioEvaluacionRespondida() {
                   </strong>
                   <strong>
                     <h5 style={{backgroundColor:'#dfdfdf',color:'black',padding:'4px'}}>
-                      Realizado por: &nbsp;{idEDDEvalPregunta.nomEvaluador}
+                      Realizado por: &nbsp;{idEDDEvalPregunta.nomEvaluado}
                     </h5>
                   </strong>
                   <br></br>

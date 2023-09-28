@@ -13,7 +13,7 @@ import faceAmarillo3 from "../Smileys/faceAmarillo3.png"
 import faceNaranja4 from "../Smileys/faceNaranja4.png"
 import faceRojo5 from "../Smileys/faceRojo5.png"
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import LinesChart from "./LineChart";
+import LineChart from "./LineChart";
 import GradientSVG from "./GradientSVG";
 
 export default function DiseñoDashboardTablaConLineasPorc() {
@@ -415,7 +415,7 @@ export default function DiseñoDashboardTablaConLineasPorc() {
                                     <td valign="top" style={{ width: '10em' }}>
                                         <table >
                                             <th style={{ padding: '1em' }} >REFERENTE
-                                                <td>Jose Ramírez Ramírez Ramírez Ramírez</td>
+                                                <td>Jose Ramírez </td>
                                             </th>
                                         </table>
                                     </td>
@@ -586,8 +586,12 @@ export default function DiseñoDashboardTablaConLineasPorc() {
 
             </table>
 
-
-
+            <div class="bg-light mx-auto px-2"
+                            style = {{ width: "50em", height: "25em",padding:'10px' }}>
+                            <LineChart />
+                            
+                        </div>
+<br></br>
         </>
     ) : (
         <Navigate to="/login"></Navigate>

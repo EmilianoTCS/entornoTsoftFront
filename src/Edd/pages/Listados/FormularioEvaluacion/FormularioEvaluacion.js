@@ -11,6 +11,9 @@ import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
 import logo from "./logo/tsoft.png";
 import Swal from "sweetalert2";
+import ConfirmAlertAll from "../../Alerts/ConfirmAlertAll";
+import logoTsoft from "../FormularioEvaluacion/logo/tsoft.png"
+
 
 export default function FormularioEvaluacion() {
   const [, params] = useRoute("/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador");
@@ -101,48 +104,33 @@ export default function FormularioEvaluacion() {
       respuestasAEnviar.push(registro);
     }
   }
-
   function SendData(e) {
-    ConfirmAlertEnvio().then((response) => {
-      if (response === true) {
-        const url = "pages/insertar/insertarEddEvalProyResp.php";
-        const operationUrl = "insertarEddEvalProyResp";
-        e.preventDefault();
-        let fechaFin = new Date();
-    
-        var data = {
-          respuestas: respuestasAEnviar,
-          datosExtra: {
-            fechaInicioExamen: fechaInicioExamen,
-            fechaFinExamen: fechaFin,
-            idEDDEvaluacion: idEDDEvaluacion,
-            usuarioCreacion: userData.usuario,
-    
-          },
-        }; 
-        console.log(data);
-        SendDataService(url, operationUrl, data).then((response) => {
-          console.log("respuestaServer:", response);
-        });
-      }
+    e.preventDefault();
+    ConfirmAlertAll('¿Confirma el envío de los datos?', 'No podrás cambiar los resultados.', 'warning').then((response) => {
+
+    const url = "pages/insertar/insertarEddEvalProyResp.php";
+    const operationUrl = "insertarEddEvalProyResp";
+    e.preventDefault();
+    let fechaFin = new Date();
+
+    var data = {
+      respuestas: respuestasAEnviar,
+      datosExtra: {
+        fechaInicioExamen: fechaInicioExamen,
+        fechaFinExamen: fechaFin,
+        idEDDEvaluacion: idEDDEvaluacion,
+        usuarioCreacion: userData.usuario,
+
+      },
+    }; 
+    console.log(data);
+    SendDataService(url, operationUrl, data).then((response) => {
+      console.log("respuestaServer:", response);
+      ConfirmAlertEnvio();
+
     });
-  }
-
-  ConfirmAlert().then((response) => {
-    if (response === true) {
-      var url = "pages/cambiarEstado/cambiarEstado.php";
-      var operationUrl = "cambiarEstado";
-      var data = {
-        idRegistro: ID,
-        usuarioModificacion: userData.usuario,
-        nombreTabla: nombreTabla,
-      };
-
-      SendDataService(url, operationUrl, data).then((response) => {
-        TopAlerts('successEdited');
-      });
-    }
   });
+  }
 
   useEffect(
     function () {
@@ -186,8 +174,10 @@ export default function FormularioEvaluacion() {
                 })}
               </div>
               <div class="col" id="encabezadoRight">
-              <img width="200px" height="79px" src={idEDDEvalPregunta.logoFormulario}></img>
+              <img width="180px" height="100px" src={logoTsoft}></img>
+
               </div>
+              {/* src={idEDDEvalPregunta.logoFormulario} */}
             </div>
           </div>
           {idEDDEvalPregunta.map((idEDDEvalPregunta) => {

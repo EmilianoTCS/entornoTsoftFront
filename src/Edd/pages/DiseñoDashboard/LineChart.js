@@ -24,26 +24,16 @@ ChartJS.register(
 
 var General = [15, 30, 55, 50, 55, 60, 20, 45, 15, 55, 40, 40];
 
-var Marcelo = [10, 50, 20, 30, 80, 40, 30, 20, 20, 30, 10, 60];
-var Ramiro = [20, 10, 90, 70, 30, 80, 10, 70, 10, 80, 70, 20];
+var Joaquín = [10, 50, 20, 30, 80, 40, 30, 20, 20, 30, 10, 60];
+var Marco = [20, 10, 90, 70, 30, 80, 10, 70, 10, 80, 70, 20];
 var meses = ["AUTONOMIA", "CAPACIDAD ANALITICA", "CAPACIDAD DE APRENDIZAJE", "COMUNICACIÓN", "CONFIANZA", "DESEMPEÑO", "DISPOSICION/ACTITUD", "EMPODERAMIENTO"];
 
 var midata = {
     labels: meses,
     datasets: [ // Cada una de las líneas del gráfico
         {
-            label: 'Marcelo Cortes Ortega',
-            data: Marcelo,
-            borderColor: 'red',
-            backgroundColor: 'red',
-            pointRadius: 5,
-            pointBorderColor: 'red',
-            pointBackgroundColor: 'red',
-        },  
-        
-        {
-            label: 'Ramiro Gomez',
-            data: Ramiro,
+            label: 'Joaquín Aguirre',
+            data: Joaquín,
             borderColor: 'green',
             backgroundColor: 'green',
             pointRadius: 5,
@@ -51,29 +41,39 @@ var midata = {
             pointBackgroundColor: 'green',
         },
         {
-            label: 'GENERAL',
-            data: General,
-            borderColor: 'purple',
-            backgroundColor: 'purple',
+            label: 'Marco Díaz',
+            data: Marco,
+            borderColor: 'red',
+            backgroundColor: 'red',
             pointRadius: 5,
-            pointBorderColor: 'purple',
-            pointBackgroundColor: 'purple',
+            pointBorderColor: 'red',
+            pointBackgroundColor: 'red',
         },
+        {
+            label: 'General',
+            data: General,
+            borderColor: 'blue',
+            backgroundColor: 'blue',
+            pointRadius: 5,
+            pointBorderColor: 'blue',
+            pointBackgroundColor: 'blue',
+        },
+        
     ],
 };
 
 var misoptions = {
     responsive: true,
-    scales : {
-        y : {
-            min : 0
+    scales: {
+        y: {
+            min: 0
         },
         x: {
-            ticks: { color: 'black'}
+            ticks: { color: 'black' }
         }
     }
 };
 
 export default function LinesChart() {
-    return <Line data={midata} options={misoptions}/>
+    return <Line data={midata} options={misoptions} />
 }

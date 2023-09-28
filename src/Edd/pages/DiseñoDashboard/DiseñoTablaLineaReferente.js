@@ -21,8 +21,7 @@ export default function DiseñoTablaLineaReferente() {
     const satGeneral = 66;
     const refEval = '2/4';
     const compEval = 13;
-    const tiempProm = 0.23;
-
+    const tiempProm = 4.83;
     //PAGINADOR ---------------------
 
     return userData.statusConected || userData !== null ? (
@@ -144,14 +143,15 @@ export default function DiseñoTablaLineaReferente() {
 
                     <td>
                     <CircularProgressbarWithChildren
-                            value={100}
+                            maxValue={10}
+                            value={tiempProm}
                             background
                             // text={`${80}%`}
                             strokeWidth={10}
                             styles={buildStyles({
                                 strokeLinecap: 'butt',
-                                pathColor: "#2980B9",
-                                trailColor: "grey",
+                                pathColor: "#FF7300",
+                                trailColor: "#E5E7E9",
                                 backgroundColor:'white'
                             })}
                         >

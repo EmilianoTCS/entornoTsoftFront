@@ -4,29 +4,37 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useRoute } from "wouter";
 
 import SendDataService from "../../../../services/SendDataService";
+import getDataService from "../../../../services/GetDataService";
 import Header from "../../../../templates/Header/Header";
 import "../TablasStyles.css";
 import "./formStyle.css";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
-import logo from "./logo/tsoft.png";
 import Swal from "sweetalert2";
 import ConfirmAlertAll from "../../Alerts/ConfirmAlertAll";
 import RedirectErrorMail from "../ListadoEddEvalProyEmp/RedirectErrorMail";
 import { AuthContext } from "../../../../context/AuthContext";
+import logoTsoft from "../FormularioEvaluacion/logo/tsoft.png"
+
 
 export default function FormularioEvaluacionExterno() {
   const [, params] = useRoute("/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador/:idEDDProyEmpEvaluado");
   const { logout } = useContext(AuthContext);
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
-  const [idEDDEvalNomPregunta, setidEDDEvalNomPregunta] = useState(""); //Almacena el listado de preguntas procesado
   const [loadedData, setLoadedData] = useState(false); //Bool que determina el recibimiento correcto de los datos
   var respuestasAEnviar = [];
 
+  const [idEDDEvaluado, setidEDDEvaluado] = useState("");
 
-  const idEDDEvaluacion = params === null || "" ? "" : params.idEvaluacion ;
-  const idEDDProyEmpEvaluado = params === null || "" ? "" : params.idEDDProyEmpEvaluado ;
-  const idEDDProyEmpEvaluador = params === null || "" ? "" : params.idEDDProyEmpEvaluador ;
+  const [listEDDEvaluado, setlistEDDEvaluado] = useState("");
+
+  // const [idEDDEvaluacion, setidEDDEvaluacion] = useState("");
+  // const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState("");
+
+
+  const idEDDEvaluacion = params && params.idEvaluacion ? params.idEvaluacion : "";
+  const idEDDProyEmpEvaluado = params && params.idEDDProyEmpEvaluado ? params.idEDDProyEmpEvaluado : "";
+  const idEDDProyEmpEvaluador = params && params.idEDDProyEmpEvaluador ? params.idEDDProyEmpEvaluador : "";
 
   const [fechaInicioExamen, setfechaInicioExamen] = useState("");
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -39,20 +47,20 @@ export default function FormularioEvaluacionExterno() {
       idEvaluacion: idEDDEvaluacion,
       idEmpleado: idEDDProyEmpEvaluador,
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado
+
     };
-    console.log("getdata", data);
+    // console.log("getdata", data);
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);
       setLoadedData(true); //Cambio el estado del booleano
       ConfirmAlert();
-      console.log(data);
+      // console.log(data);
     });
   }
 
   function handleLogout() {
     logout();
   }
-
 
   function ConfirmAlert() {
     if (loadedData) {
@@ -108,6 +116,7 @@ export default function FormularioEvaluacionExterno() {
       respuestasAEnviar.push(registro);
     }
   }
+
   function SendData(e) {
     e.preventDefault();
     ConfirmAlertAll('¿Confirma el envío de los datos?', 'No podrás cambiar los resultados.', 'warning').then((response) => {
@@ -124,33 +133,50 @@ export default function FormularioEvaluacionExterno() {
             fechaFinExamen: fechaFin,
             idEDDEvaluacion: idEDDEvaluacion,
             usuarioCreacion: userData.usuario,
-
+            idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
+            isActive: true,
           },
         };
         console.log(data);
         SendDataService(url, operationUrl, data).then((response) => {
           console.log("respuestaServer:", response);
           ConfirmAlertEnvio();
-         
-
         });
-      } 
+      }
     });
 
   }
 
+  function obtenerEvaluadorEval(e) {
+    // e.preventDefault();
+    const url = "pages/auxiliares/listadoEvaluadoEval.php";
+    const operationUrl = "listadoEvaluadoEval";
+    var data = {
+      idEvaluacion: idEDDEvaluacion,
+      idEDDProyEmpEvaluador: idEDDProyEmpEvaluador
+    };
+    console.log('data', data);
+    SendDataService(url, operationUrl, data).then((response) => {
+      console.log('response', response);
+      setlistEDDEvaluado(response)
+
+    });
+  }
+
+
+
   useEffect(
     function () {
       GetData();
-      console.log(params);
+      obtenerEvaluadorEval();
     },
-    [idEDDEvaluacion,loadedData]
+    [idEDDEvaluacion, loadedData]
   );
-
 
   var auxIdPregunta = "0";
   var auxEncabezado = "0";
   var auxDesc = "0";
+  var selectMostrado = false;
 
   return userData.idEmpleado === "24" && userData.nomRol === "externo" && userData.usuario === "Externo" ? (
     <>
@@ -182,8 +208,9 @@ export default function FormularioEvaluacionExterno() {
                 })}
               </div>
               <div class="col" id="encabezadoRight">
-                <img width="200px" height="79px" src={idEDDEvalPregunta.logoFormulario}></img>
+                <img width="180px" height="100px" src={logoTsoft}></img>
               </div>
+              {/*src={idEDDEvalPregunta.logoFormulario}*/}
             </div>
           </div>
           {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
@@ -195,6 +222,7 @@ export default function FormularioEvaluacionExterno() {
                   <p id="encabezadoEnd" style={{ color: 'white' }}>
                     {auxDesc = idEDDEvalPregunta.descFormulario}
                   </p>
+
                 </>
 
               )
@@ -208,15 +236,59 @@ export default function FormularioEvaluacionExterno() {
 
           <br></br>
           <h1>Formulario de evaluación</h1>
+
           <Table>
             {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
+
               if (auxIdPregunta !== idEDDEvalPregunta.idEDDEvalPregunta) {
                 {
                   auxIdPregunta = idEDDEvalPregunta.idEDDEvalPregunta;
                 }
                 if (idEDDEvalPregunta.tipoResp === "T") {
+
+                  if (!selectMostrado) {
+                    selectMostrado = true; // Cambia el valor para que no se muestre más
+                  
+                    // Obtén el primer valor de nomEvaluador (asumiendo que es el mismo para todos los elementos)
+                    const primerNomEvaluador = listEDDEvaluado.length > 0 ? listEDDEvaluado[0].nomEvaluador : '';
+                  
+                    return (
+                      <>
+                      <br></br>
+                        <h5>Evaluador: {primerNomEvaluador}</h5>
+                        <tr key="select">
+                          <td>
+                            <div className="form-group">
+                              <label htmlFor="evalaudo">Seleccione el evaluado: </label>
+                              <select
+                                required
+                                className="form-control"
+                                name="evalaudo"
+                                id="evalaudo"
+                                placeholder="Seleccione el evalaudo"
+                                onChange={({ target }) => setidEDDEvaluado(target.value)}
+                              >
+                                <option hidden value="">
+                                  Desplegar lista
+                                </option>
+                                {listEDDEvaluado.map((valor) => (
+                                  <option key={valor.idEDDProyEmpEvaluado} value={valor.idEDDProyEmpEvaluado}>
+                                    {valor.nomEvaluado}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </td>
+                        </tr>
+                     </>
+                    );
+                  }
+                
+                  
+                  
                   return (
                     <>
+
                       <tr>
                         <td>
                           <br></br>
@@ -386,7 +458,9 @@ export default function FormularioEvaluacionExterno() {
                   </>
                 );
               }
+
             })}
+
             <Button
 
               variant="secondary"

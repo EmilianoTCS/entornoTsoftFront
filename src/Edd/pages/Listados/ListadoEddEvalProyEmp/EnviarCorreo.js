@@ -7,6 +7,7 @@ import getDataService from "../../../../services/GetDataService";
 import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+// import { MultiSelect } from "react-multi-select-component";
 
 const EnviarCorreo = ({
     isActiveEDDEnviarCorreo,
@@ -14,7 +15,8 @@ const EnviarCorreo = ({
     EDDEnviarCorreo,
 }) => {
     // ----------------------CONSTANTES----------------------------
-    const contactoCorreoEnviar = [];
+
+    const [listContactosEnviar, setlistContactosEnviar] = useState([]);
 
     const listEDDEnviarCorreo = EDDEnviarCorreo;
     const [idProyecto, setidProyecto] = useState("");
@@ -24,13 +26,23 @@ const EnviarCorreo = ({
     const [idEDDProyecto, setidEDDProyecto] = useState("");
     const [listEDDProyecto, setlistEDDProyecto] = useState([""]);
 
-
     const show = isActiveEDDEnviarCorreo;
 
     const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
     const handleClose = () => cambiarEstado(false);
 
+    const handleContactosChange = (e) => {
+        const selectedOptions = Array.from(e.target.selectedOptions).map((option) => {
+            const selectedContact = listEDDContactos.find((contact) => contact.correoContacto1 === option.value);
+            return {
+                nomContacto: selectedContact ? selectedContact.nomContacto : '',
+                correoContacto: option.value,
+                correoContacto2: selectedContact ? selectedContact.correoContacto2 : '',
+            };
+        });
+        setlistContactosEnviar(selectedOptions);
+    };
     // ----------------------FUNCIONES----------------------------
 
 
@@ -41,11 +53,11 @@ const EnviarCorreo = ({
         const operationUrl = "emailEDD";
         var data = {
             usuarioCreacion: userData.usuario,
-            idProyecto:1,
+            idProyecto: idEDDProyecto,
             cargoEnProy: 'Referente',
             tipoConfDato: "EMAIL",
             subTipoConfDato: "REFERENTES_GRAL",
-            listContactos: contactoCorreoEnviar,
+            listContactos: listContactosEnviar,
             isActive: true,
         };
         console.log(data);
@@ -88,7 +100,7 @@ const EnviarCorreo = ({
         <>
             <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Enviar correo referentes</Modal.Title>
+                    <Modal.Title>Envío correo de evaluaciones a <strong>Referentes</strong></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={SendDataEmail}>
@@ -113,26 +125,29 @@ const EnviarCorreo = ({
                                 ))}
                             </select>
                         </div>
+
+
+
+
                         <div className="form-group">
-                            <label htmlFor="contactos">Contactos: </label>
+                            <label htmlFor="contactos">Seleccione uno o más contactos (Utilice tecla Ctrl): </label>
                             <select
-                                required
                                 className="form-control"
                                 name="contactos"
                                 id="contactos"
-                                placeholder="Seleccione los contactos"
-                                onChange={({ target }) => setidEDDContactos(target.value)}
+                                multiple
+                                onChange={(e) => handleContactosChange(e)}
                             >
                                 <option hidden value="">
                                     Desplegar lista
                                 </option>
 
                                 {listEDDContactos.map((valor) => (
-                                    <option value={valor.correoContacto1}>{valor.nomContacto}{valor.correoContacto1}{valor.correoContacto2}</option>
+                                    <option value={valor.correoContacto1}>{valor.nomContacto}</option>
                                 ))}
                             </select>
                         </div>
-                      
+                     
                         <Button
                             variant="secondary"
                             type="submit"
