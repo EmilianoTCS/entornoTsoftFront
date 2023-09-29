@@ -171,27 +171,6 @@ export default function ListadoEDDEvalProyEmp() {
     });
   }
 
-  function sumarDiasAFecha(fecha, dias) {
-    const fechaNueva = new Date(fecha);
-    fechaNueva.setDate(fechaNueva.getDate() + dias);
-    return fechaNueva;
-  }
-
-  function SumaTotal() {
-    const fechaInicial = new Date(); // Puedes usar la fecha que desees como punto de partida
-    const diasASumar = 7; // Cambia este valor por el número de días que quieras sumar
-
-    const fechaResultado = sumarDiasAFecha(fechaInicial, diasASumar);
-
-    return (
-      <div>
-        <p>Fecha inicial: {fechaInicial.toDateString()}</p>
-        <p>Días a sumar: {diasASumar}</p>
-        <p>Fecha resultado: {fechaResultado.toDateString()}</p>
-      </div>
-    );
-  }
-
 
   //PAGINADOR ---------------------
 
@@ -380,10 +359,11 @@ export default function ListadoEDDEvalProyEmp() {
                 {/* <th>Total min</th> */}
 
                 <th >Fecha fin vigencia ref</th>
+                
 
                 <th>Correo enviado ref</th>
                 <th >Fecha fin vigencia col</th>
-
+             
                 <th>Correo enviado col</th>
 
                 <th>
@@ -433,13 +413,13 @@ export default function ListadoEDDEvalProyEmp() {
 
 
                   <td width={5} >{EDDEvalProyEmp.evalRespondida === 'NO' ? (
-                      <p style={{ color: 'white' }}></p>
-                    ) : (
-                      <div href="#" class="tip" style={{textDecoration:'underline', color: 'black' }}>{EDDEvalProyEmp.fechaIni}<span>{' Fecha inicio: ' + EDDEvalProyEmp.fechaIni +' Fecha fin: ' + EDDEvalProyEmp.fechaFin + ' Total minutos: ' + EDDEvalProyEmp.tiempoTotalEnMin}
+                    <p style={{ color: 'white' }}></p>
+                  ) : (
+                    <div href="#" class="tip" style={{ textDecoration: 'underline', color: 'black' }}>{EDDEvalProyEmp.fechaIni}<span>{' Fecha inicio: ' + EDDEvalProyEmp.fechaIni + ' Fecha fin: ' + EDDEvalProyEmp.fechaFin + ' Total minutos: ' + EDDEvalProyEmp.tiempoTotalEnMin}
                     </span></div>
-                      
 
-                    )}
+
+                  )}
 
                   </td>
 
@@ -466,10 +446,81 @@ export default function ListadoEDDEvalProyEmp() {
                       EDDEvalProyEmp.tiempoTotalEnMin
                     )}
                   </td> */}
-                  <td>{EDDEvalProyEmp.fechaIniVigenciaEvalRef}</td>
+
+                  <td>
+                    {EDDEvalProyEmp.fechaIniVigenciaEvalRef &&
+                      EDDEvalProyEmp.fechaIniVigenciaEvalRef.split(' ').map((part, index) => {
+                        if (index === 0) {
+                          var [dia, mes, anio] = part.split('/'); // Suponiendo que la fecha está en formato 'dd/mm/yyyy'
+
+                          // Convierte el día, mes y año a números
+                          var diaNumero = Number(dia);
+                          var mesNumero = Number(mes);
+                          var anioNumero = Number(anio);
+
+                          // Suma los días de vigencia
+                          diaNumero += Number(EDDEvalProyEmp.diasVigenciaEvalRef);
+
+                          // Comprueba si se superó el último día del mes
+                          if (diaNumero > 31) { // Supongo el valor máximo de días en un mes es 31, puedes ajustarlo según tus necesidades
+                            diaNumero -= 31; // Resta 31 para obtener el día correcto
+                            mesNumero++; // Aumenta el mes en 1
+
+                            // Comprueba si se superó el último mes del año
+                            if (mesNumero > 12) {
+                              mesNumero -= 12; // Resta 12 para obtener el mes correcto
+                              anioNumero++; // Aumenta el año en 1
+                            }
+                          }
+
+                          // Formatea la nueva fecha
+                          return `${diaNumero}/${mesNumero}/${anioNumero}`;
+                        } else {
+                          return part;
+                        }
+                      }).join(' ')
+                    }
+                  </td>
 
                   <td>{EDDEvalProyEmp.CorreoLinkEnviadoRef}</td>
-                  <td>{EDDEvalProyEmp.fechaIniVigenciaEvalColab}</td>
+
+                  <td>
+                    {EDDEvalProyEmp.fechaIniVigenciaEvalColab &&
+                      EDDEvalProyEmp.fechaIniVigenciaEvalColab.split(' ').map((part, index) => {
+                        if (index === 0) {
+                          var [dia, mes, anio] = part.split('/'); // Suponiendo que la fecha está en formato 'dd/mm/yyyy'
+
+                          // Convierte el día, mes y año a números
+                          var diaNumero = Number(dia);
+                          var mesNumero = Number(mes);
+                          var anioNumero = Number(anio);
+
+                          // Suma los días de vigencia
+                          diaNumero += Number(EDDEvalProyEmp.diasVigenciaEvalRefColab);
+
+                          // Comprueba si se superó el último día del mes
+                          if (diaNumero > 31) { // Supongo el valor máximo de días en un mes es 31, puedes ajustarlo según tus necesidades
+                            diaNumero -= 31; // Resta 31 para obtener el día correcto
+                            mesNumero++; // Aumenta el mes en 1
+
+                            // Comprueba si se superó el último mes del año
+                            if (mesNumero > 12) {
+                              mesNumero -= 12; // Resta 12 para obtener el mes correcto
+                              anioNumero++; // Aumenta el año en 1
+                            }
+                          }
+
+                          // Formatea la nueva fecha
+                          return `${diaNumero}/${mesNumero}/${anioNumero}`;
+                        } else {
+                          return part;
+                        }
+                      }).join(' ')
+                    }
+                  </td>
+
+
+
 
                   <td>{EDDEvalProyEmp.CorreoLinkEnviadoColab}</td>
 

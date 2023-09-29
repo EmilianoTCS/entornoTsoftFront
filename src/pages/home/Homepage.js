@@ -43,7 +43,7 @@ export default function HomePage() {
 <br></br>
         <tr>
           <td>
-            <div style={{ width: '50%', margin: 'auto' }}>
+            <div style={{ width: '40%', margin: 'auto' }}>
               <table style={{ border: 'black 2px solid' ,backgroundColor:'white'}}>
                 <td style={{ border: 'black 2px solid', padding: '1em' }} border={2}>
                   <h4 style={{ color: 'black' }}>Colaborador</h4>
@@ -71,7 +71,7 @@ export default function HomePage() {
                       type="submit"
                       id="btnAtras"
 
-                      href="/DiseñoTablaLineaReferente">DiseñoRef
+                      href="/DiseñoTablaLineaReferente">DiseñoReferente
                     </a>
                   </tr>
 

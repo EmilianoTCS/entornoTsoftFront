@@ -64,7 +64,7 @@ function App() {
 
           <Route
             element={<FormularioEvaluacionExterno />}
-            path="/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador/:idEDDProyEmpEvaluado"
+            path="/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador"
           ></Route>
           
           <Route element={<PrivateRoute />}>

@@ -5,7 +5,7 @@ import { useRoute } from "wouter";
 
 import SendDataService from "../../../../services/SendDataService";
 import getDataService from "../../../../services/GetDataService";
-import Header from "../../../../templates/Header/Header";
+import HeaderExterno from "../../../../templates/Header/HeaderExterno";
 import "../TablasStyles.css";
 import "./formStyle.css";
 import Button from "react-bootstrap/Button";
@@ -18,7 +18,7 @@ import logoTsoft from "../FormularioEvaluacion/logo/tsoft.png"
 
 
 export default function FormularioEvaluacionExterno() {
-  const [, params] = useRoute("/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador/:idEDDProyEmpEvaluado");
+  const [, params] = useRoute("/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador");
   const { logout } = useContext(AuthContext);
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
   const [loadedData, setLoadedData] = useState(false); //Bool que determina el recibimiento correcto de los datos
@@ -31,6 +31,7 @@ export default function FormularioEvaluacionExterno() {
   // const [idEDDEvaluacion, setidEDDEvaluacion] = useState("");
   // const [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState("");
 
+  // const [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState("");
 
   const idEDDEvaluacion = params && params.idEvaluacion ? params.idEvaluacion : "";
   const idEDDProyEmpEvaluado = params && params.idEDDProyEmpEvaluado ? params.idEDDProyEmpEvaluado : "";
@@ -180,15 +181,10 @@ export default function FormularioEvaluacionExterno() {
 
   return userData.idEmpleado === "24" && userData.nomRol === "externo" && userData.usuario === "Externo" ? (
     <>
-      <Header></Header>
+      <HeaderExterno></HeaderExterno>
+      <br></br>
       <form onSubmit={SendData}>
-        <a
-          style={{ margin: '10px', marginTop: '15px', marginLeft: '60px' }}
-          type="submit"
-          id="btnAtras"
-          value="Registrar"
-          href="javascript: history.go(-1)">Volver
-        </a>
+
         <Container id="textStyle">
 
           <div class="container">

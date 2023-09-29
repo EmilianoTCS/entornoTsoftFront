@@ -43,6 +43,7 @@ const EnviarCorreoColab = ({
             cargoEnProy: 'Colaborador',
             tipoConfDato: "EMAIL",
             subTipoConfDato: "REFERENTES_GRAL",
+            listContactos: '',
             isActive: true,
         };
         console.log(data);

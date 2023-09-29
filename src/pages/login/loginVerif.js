@@ -48,7 +48,7 @@ export default function LoginVerif() {
                 }
 
 
-                var url = `/listadoRespPregEvaluacionesExterno/${idEvaluacion}/${idEDDProyEmpEvaluador}/${idEDDProyEmpEvaluado}`;
+                var url = `/listadoRespPregEvaluacionesExterno/${idEvaluacion}/${idEDDProyEmpEvaluador}`;
                 navigate(url);
 
                                 
