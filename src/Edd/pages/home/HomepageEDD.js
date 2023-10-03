@@ -13,11 +13,11 @@ import { Container, Table } from 'react-bootstrap';
 import { useRoute } from "wouter";
 import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import RadialSeparators from "./RadialSeparators";
-import faceVerde1 from "../Smileys/faceVerde1.png"
-import faceVerdeLima2 from "../Smileys/faceVerdeLima2.png"
-import faceAmarillo3 from "../Smileys/faceAmarillo3.png"
-import faceNaranja4 from "../Smileys/faceNaranja4.png"
-import faceRojo5 from "../Smileys/faceRojo5.png"
+import carita_excelente from "../Smileys/carita_excelente.png"
+import carita_mejora from "../Smileys/carita_mejora.png"
+import carita_atencion from "../Smileys/carita_atencion.png"
+import carita_situacion from "../Smileys/carita_situacion.png"
+import carita_alerta from "../Smileys/carita_alerta.png"
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export default function HomePageEDD() {
@@ -39,11 +39,33 @@ export default function HomePageEDD() {
   const [listConfigCompRangoLeyenda, setListConfigCompRangoLeyenda] =
     useState("");
 
+    const [listConfigTiempoPromedio, setListConfigTiempoPromedio] =
+    useState("");
+
+
   const [loadedDataResumenEval, setLoadedDataResumenEval] = useState(false);
   const [loadedDataCompetencias, setLoadedDataCompetencias] = useState(false);
   const [loadedDataRango, setLoadedDataRango] = useState(false);
   const [loadedDataColor, setLoadedDataColor] = useState(false);
   const [loadedDataLeyenda, setLoadedDataLeyenda] = useState(false);
+  const [loadedDataTiempoPromedio, setLoadedDataTiempoPromedio] = useState(false);
+
+
+  function GetConfigTiempoPromedio() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "EDD",
+      subTipoConfDato: "TIEMPO_LIMITE",
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      // console.log(data);
+      setListConfigTiempoPromedio(data);
+
+      setLoadedDataTiempoPromedio(true)
+
+    });
+  }
 
   function GetConfigCompRangoLeyenda() {
     var url = "pages/listados/listadoConfigDatos.php";
@@ -65,11 +87,11 @@ export default function HomePageEDD() {
       idEvaluacion: idEDDEvaluacion,
       idProyecto: idEDDProyecto,
     };
-    console.log(data);
+    // console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       setListResumenEval(data);
       setLoadedDataResumenEval(true);
-      console.log('Response', data);
+
     });
   }
 
@@ -85,7 +107,7 @@ export default function HomePageEDD() {
     SendDataService(url, operationUrl, data).then((data) => {
       setListCompetencias(data);
       setLoadedDataCompetencias(true);
-      // console.log(data);
+      // console.log('DATA', data);
     });
   }
 
@@ -117,16 +139,12 @@ export default function HomePageEDD() {
     });
   }
 
-
   function ArrowsTemplate({ porcAprobComp }) {
     if (loadedDataColor && loadedDataRango) {
 
 
       var auxRango = "0"; //posiciones
-      var auxColor = "0"; //posiciones
       var varRango = ""; //arriba / abajo /dato visible
-      var varColor = ""; //color /dato visible
-      let listColor = listConfigCompColorFlechas.map((orden) => orden).reverse();
       let listRango = listConfigCompRangoFlechas.map((orden) => orden).reverse();
 
       listRango.map((rango) => {
@@ -139,39 +157,31 @@ export default function HomePageEDD() {
         }
       });
 
-      listColor.map((color1) => {
-        if (auxColor === "0") {
-          if (eval(porcAprobComp + color1.datoNoVisible)) {
-            varColor = color1.datoVisible;
-            auxColor = "1";
-          }
-        };
-      });
 
+      const carita_exc1 = varRango === 'carita_excelente' ? <img id="faceStyleReferenteTodas" src={carita_excelente}></img> : '';
+      const carita_mej1 = varRango === 'carita_mejora' ? <img id="faceStyleReferenteTodas" src={carita_mejora}></img> : '';
+      const carita_atenc1 = varRango === 'carita_atencion' ? <img id="faceStyleReferenteTodas" src={carita_atencion}></img> : '';
+      const carita_sit1 = varRango === 'carita_situacion' ? <img id="faceStyleReferenteTodas" src={carita_situacion}></img> : '';
+      const carita_aler1 = varRango === 'carita_alerta' ? <img id="faceStyleReferenteTodas" src={carita_alerta}></img> : '';
 
 
       return (
         <>
-          {/* <div
-            style={
-              varRango === "ARRIBA"
-                ? {
-                  borderColor: `transparent transparent ${varColor} transparent`,
-                }
-                : {
-                  borderColor: `${varColor} transparent transparent  transparent`,
-                }
-            }
-            className={varRango === "ARRIBA" ? "flechaArriba" : "flechaAbajo"}
-          >
-          </div> */}
+          <div>
+            {carita_exc1}
+            {carita_mej1}
+            {carita_atenc1}
+            {carita_sit1}
+            {carita_aler1}
+          </div>
         </>
       );
+
     }
   }
 
   function InfoArrows() {
-    if (loadedDataLeyenda && loadedDataColor && loadedDataRango) {
+    if (loadedDataLeyenda && loadedDataRango) {
       const tableRows = [];
       const uniqueDatoNoVisibleValues = new Set();
 
@@ -183,159 +193,66 @@ export default function HomePageEDD() {
         uniqueDatoNoVisibleValues.add(rango.datoNoVisible);
       });
 
-      listConfigCompColorFlechas.forEach((color) => {
-        uniqueDatoNoVisibleValues.add(color.datoNoVisible);
-      });
+      // listConfigCompColorFlechas.forEach((color) => {
+      //   uniqueDatoNoVisibleValues.add(color.datoNoVisible);
+      // });
 
       uniqueDatoNoVisibleValues.forEach((datoNoVisible) => {
         const matchingLey = listConfigCompRangoLeyenda.find(ley => ley.datoNoVisible === datoNoVisible);
         const matchingRango = listConfigCompRangoFlechas.find(rango => rango.datoNoVisible === datoNoVisible);
-        const matchingColor = listConfigCompColorFlechas.find(color => color.datoNoVisible === datoNoVisible);
+        // const matchingColor = listConfigCompColorFlechas.find(color => color.datoNoVisible === datoNoVisible);
 
-        if (matchingLey && matchingRango && matchingColor) {
+        if (matchingLey && matchingRango) {
+          const carita_exc = matchingRango.datoVisible === 'carita_excelente' ? <img id="faceStyleReferenteTodas" src={carita_excelente}></img> : '';
+          const carita_mej = matchingRango.datoVisible === 'carita_mejora' ? <img id="faceStyleReferenteTodas" src={carita_mejora}></img> : '';
+          const carita_atenc = matchingRango.datoVisible === 'carita_atencion' ? <img id="faceStyleReferenteTodas" src={carita_atencion}></img> : '';
+          const carita_sit = matchingRango.datoVisible === 'carita_situacion' ? <img id="faceStyleReferenteTodas" src={carita_situacion}></img> : '';
+          const carita_aler = matchingRango.datoVisible === 'carita_alerta' ? <img id="faceStyleReferenteTodas" src={carita_alerta}></img> : '';
+
+
           tableRows.push(
-            <tr>
-              <td>
-                <div
-                  style={
-                    matchingRango.datoVisible === "ARRIBA"
-                      ? {
-                        borderColor: `transparent transparent ${matchingColor.datoVisible} transparent`,
-                      }
-                      : {
-                        borderColor: `${matchingColor.datoVisible} transparent transparent transparent`,
-                      }
-                  }
-                  className={matchingRango.datoVisible === "ARRIBA" ? "flechaArriba" : "flechaAbajo"}
-                />
+            <>
+
+              <br></br>
+
+
+
+
+
+              <td id="infoLinePorcLeyendasREFERENTE">
+                <b>{matchingLey.datoVisible}</b>
               </td>
-              <td style={{ fontSize: '13px', padding: '8px' }}>
-                {matchingLey.datoVisible}
+
+              
+              <td className="linea">
+                <td>{carita_exc}</td>
+                <td> {carita_mej}</td>
+                <td> {carita_atenc}</td>
+                <td> {carita_sit}</td>
+                <td> {carita_aler}</td>
+               
+             
+               
               </td>
-            </tr>
+
+
+            </>
           );
+
+
         }
       });
 
       return (
-        <div >
-          <div id="container_cardsCompResumen" style={{ width: '13%' }}>
-            <Card style={{ marginTop: '2.9em' }}>
-              <Card.Body >
-                <Card.Title>
-                  <table>
-                    <tbody>
-                      {tableRows}
-                    </tbody>
-                  </table>
-                </Card.Title>
-              </Card.Body>
-            </Card>
-          </div>
-        </div>
-      );
+        <div>
+
+          <table style={{ backgroundColor: 'white', width: '50%', borderRadius: '20px', margin: 'auto' }}>
+
+            {tableRows}
+
+          </table><br></br></div>)
     }
   }
-
-  // function Porcentajes() {
-  //   var list_eval_comp_porc = {};
-  //   var total_porcentajes = {};
-  //   var cantidad_comp_por_empleado = {};
-  //   var result_list = {};
-  //   var contador = 0;
-
-  //   // Iterate through the listCompetencias array
-  //   for (const item of Object.values(listCompetencias)) {
-  //     if (item.nomEmpleado in list_eval_comp_porc) {
-  //       if (item.nomCompetencia in list_eval_comp_porc[item.nomEmpleado]) {
-  //         list_eval_comp_porc[item.nomEmpleado][item.nomCompetencia].push(item.porcAprobComp);
-  //       } else {
-  //         list_eval_comp_porc[item.nomEmpleado][item.nomCompetencia] = [item.porcAprobComp];
-  //       }
-  //     } else {
-  //       list_eval_comp_porc[item.nomEmpleado] = {
-  //         [item.nomCompetencia]: [item.porcAprobComp]
-  //       };
-  //     }
-  //   }
-
-  //   const render = [];
-
-  //   for (const [key, value] of Object.entries(list_eval_comp_porc)) {
-  //     total_porcentajes[key] = 0;
-  //     cantidad_comp_por_empleado[key] = Object.keys(value).length;
-  //     result_list[key] = {};
-
-  //     const empleadoRows = [];
-  //     const empleadoRows2 = [];
-
-  //     for (const [key1, value1] of Object.entries(value)) {
-  //       const suma = value1.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0) / value1.length;
-  //       result_list[key][key1] = suma;
-
-  //       total_porcentajes[key] += suma;
-
-  //       empleadoRows.push(
-  //         <tr key={key1} >
-
-  //           <td style={{
-  //             paddingBottom: '1.2em'
-  //           }}> {key1}</td>
-
-  //           <td style={{
-  //             paddingBottom: '1.2em'
-  //           }}>
-  //             <ArrowsTemplate porcAprobComp={suma} />
-  //             {suma.toFixed(2)} %
-  //           </td>
-  //         </tr>
-  //       );
-  //     }
-
-  //     empleadoRows2.push(
-  //       <tr key="Total">
-  //         <td style={{ fontSize: '30px' }}>REFERENTE: <br></br><strong >{key.toUpperCase()}</strong></td>
-
-  //         <td >
-  //           <ArrowsTemplate porcAprobComp={total_porcentajes[key] / cantidad_comp_por_empleado[key]} />
-  //           {((total_porcentajes[key] / cantidad_comp_por_empleado[key])).toFixed(2)} %
-  //         </td>
-  //       </tr>
-  //     );
-
-  //     render.push(
-  //       <div>
-  //         <Card className="cardColumn" >
-  //           <Card.Body>
-  //             <Card.Title>
-  //               <table style={{ width: '20em' }}>
-  //                 {empleadoRows2}
-  //                 <hr></hr>
-  //                 <tbody >{empleadoRows}</tbody>
-  //               </table>
-  //             </Card.Title>
-  //           </Card.Body>
-  //         </Card>
-  //       </div>
-  //     );
-  //     contador += 1;
-  //   }
-
-  //   if (contador !== 1) {
-  //     return (
-  //       <div className="cardContainer">
-  //         {render}
-  //       </div>
-  //     );
-  //   } else {
-  //     return (
-  //       <div className="cardContainer1Solo">
-  //         {render}
-  //       </div>
-  //     );
-  //   }
-
-  // }
 
   function Porcentajes() {
     var list_eval_comp_porc = {};
@@ -360,6 +277,9 @@ export default function HomePageEDD() {
     }
 
     const render = [];
+    const maxEvaluadoresPorFila = 3;
+    let evaluadoresEnFila = 0;
+    let filaEvaluadores = [];
 
     for (const [key, value] of Object.entries(list_eval_comp_porc)) {
       total_porcentajes[key] = 0;
@@ -368,35 +288,30 @@ export default function HomePageEDD() {
 
       const empleadoRows = [];
       const empleadoRows2 = [];
-      console.log('InfoList',result_list);
-
       for (const [key1, value1] of Object.entries(value)) {
-
         const suma = value1.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0) / value1.length;
 
         result_list[key][key1] = suma;
-
         total_porcentajes[key] += suma;
 
+
         empleadoRows.push(
-          <tr >
-
+          <tr style={{ borderTop: '1px #DCDCDC solid' }}>
             <td style={{ paddingLeft: '1em' }}>{key1} </td>
-            <td> <ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={suma} label={`${suma.toFixed(2)}%`} /></td>
-            <td ><img id="faceStyleReferenteTodas"></img></td>
-
+            <td><ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={suma} label={`${suma.toFixed(2)}%`} /></td>
+            <td><img id="faceStyleReferenteTodas"></img></td>
             <td>
               <ArrowsTemplate porcAprobComp={suma} />
-              <img id="faceStyleReferenteTodas" src={faceVerdeLima2}></img>
             </td>
           </tr>
         );
       }
 
-      empleadoRows2.push(
-        <tr >
 
-          <th style={{ paddingLeft: '1em',width:'12em',height: '50px' }}>{key.toUpperCase()} </th>
+      empleadoRows2.push(
+        <tr style={{ borderBottom: '2px #808080 solid' }}>
+
+          <th style={{ paddingLeft: '1em', width: '12em', height: '50px' }}>{key.toUpperCase()} </th>
           <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={((total_porcentajes[key] / cantidad_comp_por_empleado[key]))} label={`${((total_porcentajes[key] / cantidad_comp_por_empleado[key])).toFixed(2)}%`} /></td>
           <td ><img id="faceStyleReferenteTodas" ></img></td>
 
@@ -404,144 +319,68 @@ export default function HomePageEDD() {
 
           <td >
             <ArrowsTemplate porcAprobComp={total_porcentajes[key] / cantidad_comp_por_empleado[key]} />
-            <img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>
+            {/* <img id="faceStyleReferenteTodas" src={carita_situacion}></img> */}
           </td>
 
 
-        </tr>
+        </tr>);
+
+      filaEvaluadores.push(
+        <td>
+          <table style={{
+            backgroundColor: 'white',
+            width: '26em',
+            borderRadius: '10px',
+            margin: '5px', // Espacio entre tablas
+          }}>
+            <thead>
+              <tr>
+                <th style={{ paddingLeft: '0.8em', fontSize: '15pt' }}>REFERENTE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <tr >
+                  {empleadoRows2}
+                </tr>
+                <tr>
+                  {empleadoRows}
+                </tr>
+              </tr>
+            </tbody>
+          </table>
+        </td>
       );
 
-      render.push(
-        <table id="table" responsive>
-          <tr>
-            <td >
-              <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
-                <thead>
-                  <tr>
-
-                    <th style={{ paddingLeft: '0.8em', fontSize: '15pt' }} >REFERENTE</th>
-
-                  </tr>
-                </thead>
-                <tbody >
-                  <tr>
-                  <tr style={{ borderBottom: '2px #808080 solid' }}>
-                      {empleadoRows2}
-                    </tr>
-
-                    <tr >
-                      {empleadoRows}
-                    </tr>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-
-        </table>
-
-
-
-        // <div>
-        //   <Card className="cardColumn" >
-        //     <Card.Body>
-        //       <Card.Title>
-        //         <table style={{ width: '20em' }}>
-        //           {empleadoRows2}
-        //           <hr></hr>
-        //           <tbody >{empleadoRows}</tbody>
-        //         </table>
-        //       </Card.Title>
-        //     </Card.Body>
-        //   </Card>
-        // </div>
-        // <td >
-        //     <table style={{ backgroundColor: 'white', width: '26em', borderRadius: '10px' }}>
-        //         <thead>
-        //             <tr>
-        //                 <th style={{ paddingLeft: '0.8em',fontSize:'15pt' }} >{empleadoRows2}</th>
-        //             </tr>
-        //         </thead>
-        //         <tbody >
-        //             <tr style={{ borderBottom: '2px #808080 solid' }}>
-        //                 <th style={{ height: '50px', paddingLeft: '1em' }}>MARCELO CORTES ORTEGA </th>
-        //                 <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={71} label={`${71}%`} /></td>
-        //                 <td ><img id="faceStyleReferenteTodas" src={faceAmarillo3}></img>{empleadoRows}</td>
-        //             </tr>
-        //         </tbody>
-        //     </table>
-        // </td>
-      );
-      contador += 1;
+      evaluadoresEnFila++;
+      if (evaluadoresEnFila === maxEvaluadoresPorFila) {
+        render.push(<tr>{filaEvaluadores}</tr>);
+        filaEvaluadores = [];
+        evaluadoresEnFila = 0;
+      }
     }
 
-    if (contador !== 1) {
-      return (
-        <div className="cardContainer">
-          {render}
-        </div>
-      );
-    } else {
-      return (
-        <div className="cardContainer1Solo">
-          {render}
-        </div>
-      );
+    if (evaluadoresEnFila > 0) {
+      render.push(<tr>{filaEvaluadores}</tr>);
     }
 
+    return (
+
+      <table responsive>
+        <tbody>
+          {render}
+        </tbody>
+      </table>
+
+    );
   }
-
   function CompetenciasResumen() {
     if (loadedDataCompetencias) {
       return (
         <div>
           <div>
-            <br></br>
-
-            <table style={{ backgroundColor: 'white', width: '50%', borderRadius: '20px', margin: 'auto' }}>
-
-              <td id="infoLinePorcLeyendasREFERENTE">
-                <b>EXCELENTE</b>
-              </td>
-
-              <td className="linea">
-                <img id="sizeCaritasReferentes" src={faceVerde1}></img>
-              </td>
-
-              <td id="infoLinePorcLeyendasREFERENTE">
-                <b>OPORTUNIDAD DE MEJORA</b>
-              </td>
-              <td className="linea">
-                <img id="sizeCaritasReferentes" src={faceVerdeLima2}></img>
-              </td>
-
-              <td id="infoLinePorcLeyendasREFERENTE">
-                <b>REQUIERE ATENCIÓN
-                </b>
-              </td>
-              <td className="linea">
-                <img id="sizeCaritasReferentes" src={faceAmarillo3}></img>
-              </td>
-
-              <td id="infoLinePorcLeyendasREFERENTE">
-                <b>REVISAR SITUACIÓN</b>
-
-
-              </td>
-              <td className="linea">
-                <img id="sizeCaritasReferentes" src={faceNaranja4}></img>
-              </td>
-
-              <td id="infoLinePorcLeyendasREFERENTE">
-                <b>ALERTA</b>
-              </td>
-              <td >
-                <img id="sizeCaritasReferentes" src={faceRojo5}></img>
-              </td>
-
-            </table>
-            <br></br>
-            {/* <InfoArrows></InfoArrows> */}
+            
+            <InfoArrows></InfoArrows>
           </div>
           <div>
             <Porcentajes></Porcentajes>
@@ -554,9 +393,14 @@ export default function HomePageEDD() {
   }
 
   function BodyResumen() {
-
-    const tiempProm = 4.83;
-    if (loadedDataResumenEval) {
+    if (loadedDataResumenEval && loadedDataTiempoPromedio) {
+      const splitReferentes = listResumenEval[0].referentesEvaluados;
+      var totalSplit = splitReferentes.split('/');
+  
+      var cant = totalSplit[0];
+      var totalRef = totalSplit[1];
+  
+      console.log('can',cant,'tot',totalRef);
       return (
         <div id="tableResumen">
           <Table>
@@ -566,9 +410,6 @@ export default function HomePageEDD() {
                 <CircularProgressbarWithChildren
                   value={listResumenEval[0].porcSatisfaccion}
                   background
-
-
-                  // text={`${80}%`}
                   strokeWidth={10}
                   styles={buildStyles({
                     strokeLinecap: 'butt',
@@ -601,9 +442,9 @@ export default function HomePageEDD() {
               </td>
               <td>
                 <CircularProgressbarWithChildren
-                  value={listResumenEval[0].referentesEvaluados}
+                  maxValue={eval(totalRef)}
+                  value={cant}
                   background
-                  // text={`${80}%`}
                   strokeWidth={10}
                   styles={buildStyles({
                     pathColor: "#FFE700",
@@ -664,8 +505,8 @@ export default function HomePageEDD() {
 
               <td>
                 <CircularProgressbarWithChildren
-                  maxValue={10}
-                  value={tiempProm}
+                  maxValue={listConfigTiempoPromedio[0].datoNoVisible}
+                  value={(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}
                   background
                   // text={`${80}%`}
                   strokeWidth={10}
@@ -679,7 +520,7 @@ export default function HomePageEDD() {
                   <div style={{ fontSize: 20, textAlign: 'center' }}>
                     <strong>Tiempo</strong>
                     <br></br>
-                    <strong><span>{listResumenEval[0].tiempoPromedio}</span>
+                    <strong><span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}</span>
                       <p className="porcentajeCard">min</p></strong>
                     <br></br>
                     <strong>Promedio</strong>
@@ -700,57 +541,7 @@ export default function HomePageEDD() {
           </Table>
         </div>
 
-        // <div id="bodyContainer">
-        //   <div id="container_cardsEDD">
-        //     <Card>
-        //       <Card.Body className="cardBody">
-        //         <Card.Text className="cardText">Satisfacción</Card.Text>
-        //         <Card.Title className="cardTitle">
-        //           {listResumenEval[0].porcSatisfaccion}%
-
-        //         </Card.Title>
-        //         <Card.Text className="cardText">General</Card.Text>
-        //       </Card.Body>
-        //     </Card>
-        //     <Card>
-        //       <Card.Body className="cardBody">
-        //         <Card.Text className="cardText">Colaboradores</Card.Text>
-        //         <Card.Title className="cardTitle">
-        //           {listResumenEval[0].referentesEvaluados}
-        //         </Card.Title>
-        //         <Card.Text className="cardText">Evaluadores</Card.Text>
-        //       </Card.Body>
-        //     </Card>
-        //     <Card>
-        //       <Card.Body className="cardBody">
-        //         <Card.Text className="cardText">Competencias</Card.Text>
-        //         <Card.Title className="cardTitle">
-        //           {listResumenEval[0].competenciasEvaluadas}
-        //         </Card.Title>
-        //         <Card.Text className="cardText">Evaluadas</Card.Text>
-        //       </Card.Body>
-        //     </Card>
-        //     <Card>
-        //       <Card.Body className="cardBody">
-        //         <Card.Text className="cardText">Evaluadores</Card.Text>
-        //         <Card.Title className="cardTitle">
-        //           {listResumenEval[0].cantEvaluadoresTsoft}
-        //         </Card.Title>
-        //         <Card.Text className="cardText">Tsoft</Card.Text>
-        //       </Card.Body>
-        //     </Card>
-        //     <Card>
-        //       <Card.Body className="cardBody">
-        //         <Card.Text className="cardText">Tiempo</Card.Text>
-        //         <Card.Title className="cardTitle">
-        //           <span>{listResumenEval[0].tiempoPromedio}</span>
-        //           <p className="porcentajeCard">min</p>
-        //         </Card.Title>
-        //         <Card.Text className="cardText">Promedio</Card.Text>
-        //       </Card.Body>
-        //     </Card>
-        //   </div>
-        // </div>
+       
       );
     } else {
       return <h1>Loading</h1>;
@@ -766,6 +557,7 @@ export default function HomePageEDD() {
       GetConfigCompColorFlechas();
       GetConfigCompRangoFlechas();
       GetConfigCompRangoLeyenda();
+      GetConfigTiempoPromedio();
     },
     [loadedDataCompetencias, loadedDataResumenEval, loadedDataRango, loadedDataColor, loadedDataLeyenda, idEDDEvaluacion, nomEvaluacion, idEDDProyecto]
   );
@@ -782,7 +574,7 @@ export default function HomePageEDD() {
       </a>
       <h4>Resumen evaluación : {nomEvaluacion}</h4>
 
-
+      {/* <InfoArrows></InfoArrows> */}
       <BodyResumen></BodyResumen>
       <div
         style={{

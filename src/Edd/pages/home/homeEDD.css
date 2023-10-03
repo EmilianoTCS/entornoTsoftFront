@@ -9,6 +9,7 @@ text-align: right;
 height: 7px;
 border-right: 2px ridge rgba(151, 151, 151, 0.568);
 }
+
 /* --- */
 
 /* LEYENDAS CARITAS */
@@ -164,34 +165,31 @@ margin-bottom: 3px;
 .yellow-progress-bar .progress-bar {
   background-color: #e9dc65;
   color: black;
-  font-size: 12pt;
+  font-size: 11pt;
   font-weight: 700;
 }
 
 .lightGreen-progress-bar .progress-bar {
   background-color: #94ff01;
   color: black;
-  font-size: 12pt;
+  font-size: 11pt;
   font-weight: 700;
 }
 
 .red-progress-bar .progress-bar {
   background-color: #f71717;
   color: rgb(255, 255, 255);
-  font-size: 12pt;
-  font-weight: 700;
+  font-size: 11pt;  font-weight: 700;
 }
 .green-progress-bar .progress-bar {
   background-color: #02c202;
   color: rgb(255, 255, 255);
-  font-size: 12pt;
-  font-weight: 700;
+  font-size: 11pt; font-weight: 700;
 }
 .orange-progress-bar .progress-bar {
   background-color: #ff7300;
   color: rgb(0, 0, 0);
-  font-size: 12pt;
-  font-weight: 700;
+  font-size: 11pt; font-weight: 700;
 }
 /* ----------- */
 

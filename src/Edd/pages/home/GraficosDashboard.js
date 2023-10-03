@@ -8,6 +8,14 @@ import "./homeEDD.css";
 import GrafChart from "./GrafChart";
 import { useRoute } from "wouter";
 import { Container, Table } from "react-bootstrap";
+import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
+import RadialSeparators from "./RadialSeparators";
+import carita_excelente from "../Smileys/carita_excelente.png"
+import carita_mejora from "../Smileys/carita_mejora.png"
+import carita_atencion from "../Smileys/carita_atencion.png"
+import carita_situacion from "../Smileys/carita_situacion.png"
+import carita_alerta from "../Smileys/carita_alerta.png"
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 
 export default function GraficosDashboard() {
@@ -28,22 +36,38 @@ export default function GraficosDashboard() {
         useState("");
     const [listConfigCompRangoLeyenda, setListConfigCompRangoLeyenda] =
         useState("");
-
+        const [listConfigTiempoPromedio, setListConfigTiempoPromedio] =
+        useState("");
     const [loadedDataLeyenda, setLoadedDataLeyenda] = useState(false);
 
     const [loadedDataResumenEval, setLoadedDataResumenEval] = useState(false);
     const [loadedDataCompetencias, setLoadedDataCompetencias] = useState(false);
     const [loadedDataRango, setLoadedDataRango] = useState(false);
     const [loadedDataColor, setLoadedDataColor] = useState(false);
+    const [loadedDataTiempoPromedio, setLoadedDataTiempoPromedio] = useState(false);
 
-
+    function GetConfigTiempoPromedio() {
+        var url = "pages/listados/listadoConfigDatos.php";
+        var operationUrl = "listadoConfigDatos";
+        var data = {
+          tipoConfDato: "EDD",
+          subTipoConfDato: "TIEMPO_LIMITE",
+        };
+        SendDataService(url, operationUrl, data).then((data) => {
+          // console.log(data);
+          setListConfigTiempoPromedio(data);
+    
+          setLoadedDataTiempoPromedio(true)
+    
+        });
+      }
 
     function GetDataResumenEval() {
         var url = "pages/listados/listadoResumenEval.php";
         var operationUrl = "listadoResumenEval";
         var data = {
             idEvaluacion: idEDDEvaluacion,
-            idProyecto:idEDDProyecto,
+            idProyecto: idEDDProyecto,
         };
         SendDataService(url, operationUrl, data).then((data) => {
             setListResumenEval(data);
@@ -56,12 +80,12 @@ export default function GraficosDashboard() {
         var operationUrl = "listadoCompetenciasEval";
         var data = {
             idEvaluacion: idEDDEvaluacion,
-            idProyecto:idEDDProyecto,
+            idProyecto: idEDDProyecto,
         };
         SendDataService(url, operationUrl, data).then((data) => {
             setListCompetencias(data);
             setLoadedDataCompetencias(true);
-            console.log(data);
+            // console.log('Response', data);
         });
     }
 
@@ -107,119 +131,203 @@ export default function GraficosDashboard() {
     }
 
     function BodyResumen2() {
-        if (loadedDataResumenEval) {
+
+console.log(listResumenEval);
+        if (loadedDataResumenEval && loadedDataTiempoPromedio) {
             return (
-                <div id="bodyContainer">
-                    <div id="container_cardsEDD">
-                        <Card >
-                            <Card.Body className="cardBody">
-                                <Card.Text className="cardText">Satisfacción </Card.Text>
-                                <Card.Title className="cardTitle">
-                                    {listResumenEval[0].porcSatisfaccion}%
-                                    
-                                </Card.Title>
-                                <Card.Text className="cardText">General</Card.Text>
-                            </Card.Body>
-                        </Card>
-                        <Card>
-                            <Card.Body className="cardBody">
-                                <Card.Text className="cardText">Referentes</Card.Text>
-                                <Card.Title className="cardTitle">
-                                    {listResumenEval[0].referentesEvaluados}
-                                </Card.Title>
-                                <Card.Text className="cardText">Evaluadores</Card.Text>
-                            </Card.Body>
-                        </Card>
-                        <Card>
-                            <Card.Body className="cardBody">
-                                <Card.Text className="cardText">Competencias </Card.Text>
-                                <Card.Title className="cardTitle">
-                                    {listResumenEval[0].competenciasEvaluadas}
-                                </Card.Title>
-                                <Card.Text className="cardText">Evaluadas</Card.Text>
-                            </Card.Body>
-                        </Card>
-                        <Card>
+                <div id="tableResumen">
+                    <Table>
 
-                            <Card.Body className="cardBody">
-                                <Card.Text className="cardText">Tiempo</Card.Text>
-                                <Card.Title className="cardTitle">
-                                    <span>{listResumenEval[0].tiempoPromedio}</span>
-                                    <p className="porcentajeCard">min</p>
-                                </Card.Title>
-                                <Card.Text className="cardText">Promedio</Card.Text>
-                            </Card.Body>
-                        </Card>
-                        
-                        {/* <Card>
-                            <Card.Body className="cardBody">
-                                <Card.Text className="cardText">Satisfacción </Card.Text>
-                                <Card.Title className="cardTitle">
-                                    {listResumenEval[0].referentesEvaluados}
-                                </Card.Title>
-                                <Card.Text className="cardText">inge</Card.Text>
-                            </Card.Body>
-                        </Card> */}
+                        <tr >
+                            <td >
+                                <CircularProgressbarWithChildren
+                                    maxValue={100}
+                                    value={listResumenEval[0].porcSatisfaccion}
+                                    background
+                                    // text={`${80}%`}
+                                    strokeWidth={10}
+                                    styles={buildStyles({
+                                        strokeLinecap: 'butt',
+                                        pathColor: "#94FF01",
+                                        trailColor: "#E5E7E9",
+                                        backgroundColor: 'white',
 
-                    </div>
-                   
+
+                                    })}
+                                >
+
+                                    <div style={{ fontSize: 20, textAlign: 'center' }}>
+                                        <strong>Satisfacción</strong>
+                                        <br></br>
+                                        <strong> {listResumenEval[0].porcSatisfaccion}%</strong>
+                                        <br></br>
+                                        <strong>General</strong>
+                                    </div>
+                                    <RadialSeparators
+                                        count={10}
+                                        style={{
+
+                                            background: "#fff",
+                                            width: "2px",
+                                            // This needs to be equal to props.strokeWidth
+                                            height: `${10}%`
+                                        }}
+                                    />
+                                </CircularProgressbarWithChildren>
+                            </td>
+                            <td>
+                                <CircularProgressbarWithChildren
+                                    maxValue={listResumenEval[0].referentesEvaluados}
+                                    value={listResumenEval[0].referentesEvaluados}
+                                    background
+
+                                    strokeWidth={10}
+                                    styles={buildStyles({
+                                        pathColor: "#FFE700",
+                                        trailColor: "#E5E7E9",
+                                        strokeLinecap: 'butt',
+                                        backgroundColor: 'white'
+                                    })}
+                                >
+                                    <div style={{ fontSize: 20, textAlign: 'center' }}>
+                                        <strong>Referentes</strong>
+                                        <br></br>
+                                        <strong>{listResumenEval[0].referentesEvaluados}</strong>
+                                        <br></br>
+                                        <strong>Evaluadores</strong>
+                                    </div>
+                                    <RadialSeparators
+                                        count={10}
+                                        style={{
+                                            background: "#fff",
+                                            width: "2px",
+                                            // This needs to be equal to props.strokeWidth
+                                            height: `${10}%`
+                                        }}
+                                    />
+                                </CircularProgressbarWithChildren>
+                            </td>
+                            <td>
+                                <CircularProgressbarWithChildren
+                                    value={100}
+                                    background
+                                    // text={`${80}%`}
+                                    strokeWidth={10}
+                                    styles={buildStyles({
+                                        strokeLinecap: 'butt',
+                                        pathColor: "#02C101",
+                                        trailColor: "grey",
+                                        backgroundColor: 'white'
+                                    })}
+                                >
+                                    <div style={{ fontSize: 20, textAlign: 'center' }}>
+                                        <strong>Competencias</strong>
+                                        <br></br>
+                                        <strong>{listResumenEval[0].competenciasEvaluadas}</strong>
+                                        <br></br>
+                                        <strong>Evaluadas</strong>
+                                    </div>
+                                    <RadialSeparators
+                                        count={10}
+                                        style={{
+                                            background: "#fff",
+                                            width: "2px",
+                                            // This needs to be equal to props.strokeWidth
+                                            height: `${10}%`
+                                        }}
+                                    />
+                                </CircularProgressbarWithChildren>
+                            </td>
+
+                            <td>
+                                <CircularProgressbarWithChildren
+                                    maxValue={listConfigTiempoPromedio[0].datoNoVisible}
+                                    value={(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}
+                                    background
+                                    // text={`${80}%`}
+                                    strokeWidth={10}
+                                    styles={buildStyles({
+                                        strokeLinecap: 'butt',
+                                        pathColor: "#FF7300",
+                                        trailColor: "#E5E7E9",
+                                        backgroundColor: 'white'
+                                    })}
+                                >
+                                    <div style={{ fontSize: 20, textAlign: 'center' }}>
+                                        <strong>Tiempo</strong>
+                                        <br></br>
+                                        <strong><span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}</span>
+                                            <p className="porcentajeCard">min</p></strong>
+                                        <br></br>
+                                        <strong>Promedio</strong>
+                                    </div>
+                                    <RadialSeparators
+                                        count={10}
+                                        style={{
+                                            background: "#fff",
+                                            width: "2px",
+                                            // This needs to be equal to props.strokeWidth
+                                            height: `${10}%`
+                                        }}
+                                    />
+                                </CircularProgressbarWithChildren>
+                            </td>
+                        </tr>
+
+                    </Table>
                 </div>
-                
+
             );
         } else {
             return <h1>Loading</h1>;
         }
     }
+
     function ArrowsTemplate({ porcAprobComp }) {
         if (loadedDataColor && loadedDataRango) {
-        var auxRango = "0"; //posiciones
-        var auxColor = "0"; //posiciones
-        var varRango = ""; //arriba / abajo /dato visible
-        var varColor = ""; //color /dato visible
-        let listColor = listConfigCompColorFlechas.map((orden) => orden).reverse();
-        let listRango = listConfigCompRangoFlechas.map((orden) => orden).reverse();
-
-        listRango.map((rango) => {
-            if (auxRango === "0") {
-                // console.log("result", eval(porcAprobComp + rango.datoNoVisible), porcAprobComp, rango.datoNoVisible);
-                if (eval(porcAprobComp + rango.datoNoVisible)) {  // eval(30 + > 80) --> eval 30 >= 80
-                    varRango = rango.datoVisible;
-                    auxRango = "1";
-                }
-            }
-        });
-
-        listColor.map((color1) => {
-            if (auxColor === "0") {
-                if (eval(porcAprobComp + color1.datoNoVisible)) {
-                    varColor = color1.datoVisible;
-                    auxColor = "1";
-                }
-            };
-        });
 
 
+            var auxRango = "0"; //posiciones
+            var varRango = ""; //arriba / abajo /dato visible
+            let listRango = listConfigCompRangoFlechas.map((orden) => orden).reverse();
 
-        return (
-            <>
-                <div
-                    style={
-                        varRango === "ARRIBA"
-                            ? {
-                                borderColor: `transparent transparent ${varColor} transparent`,
-                            }
-                            : {
-                                borderColor: `${varColor} transparent transparent  transparent`,
-                            }
+            listRango.map((rango) => {
+                if (auxRango === "0") {
+                    // console.log("result", eval(porcAprobComp + rango.datoNoVisible), porcAprobComp, rango.datoNoVisible);
+                    if (eval(porcAprobComp + rango.datoNoVisible)) {  // eval(30 + > 80) --> eval 30 >= 80
+                        varRango = rango.datoVisible;
+                        auxRango = "1";
                     }
-                    className={varRango === "ARRIBA" ? "flechaArriba" : "flechaAbajo"}
-                >
-                </div>
-            </>
-        );
-    }}
+                }
+            });
+
+
+            const carita_exc1 = varRango === 'carita_excelente' ? <img id="faceStyleReferenteTodas" src={carita_excelente}></img> : '';
+            const carita_mej1 = varRango === 'carita_mejora' ? <img id="faceStyleReferenteTodas" src={carita_mejora}></img> : '';
+            const carita_atenc1 = varRango === 'carita_atencion' ? <img id="faceStyleReferenteTodas" src={carita_atencion}></img> : '';
+            const carita_sit1 = varRango === 'carita_situacion' ? <img id="faceStyleReferenteTodas" src={carita_situacion}></img> : '';
+            const carita_aler1 = varRango === 'carita_alerta' ? <img id="faceStyleReferenteTodas" src={carita_alerta}></img> : '';
+
+
+            return (
+                <>
+                    <div>
+                        {carita_exc1}
+                        {carita_mej1}
+                        {carita_atenc1}
+                        {carita_sit1}
+                        {carita_aler1}
+                    </div>
+                </>
+            );
+
+        }
+    }
+
+
+
     function InfoArrows() {
-        if (loadedDataLeyenda && loadedDataRango && loadedDataColor) {
+        if (loadedDataLeyenda && loadedDataRango) {
             const tableRows = [];
             const uniqueDatoNoVisibleValues = new Set();
 
@@ -231,64 +339,64 @@ export default function GraficosDashboard() {
                 uniqueDatoNoVisibleValues.add(rango.datoNoVisible);
             });
 
-            listConfigCompColorFlechas.forEach((color) => {
-                uniqueDatoNoVisibleValues.add(color.datoNoVisible);
-            });
+            // listConfigCompColorFlechas.forEach((color) => {
+            //   uniqueDatoNoVisibleValues.add(color.datoNoVisible);
+            // });
 
             uniqueDatoNoVisibleValues.forEach((datoNoVisible) => {
                 const matchingLey = listConfigCompRangoLeyenda.find(ley => ley.datoNoVisible === datoNoVisible);
                 const matchingRango = listConfigCompRangoFlechas.find(rango => rango.datoNoVisible === datoNoVisible);
-                const matchingColor = listConfigCompColorFlechas.find(color => color.datoNoVisible === datoNoVisible);
+                // const matchingColor = listConfigCompColorFlechas.find(color => color.datoNoVisible === datoNoVisible);
 
-                if (matchingLey && matchingRango && matchingColor) {
+                if (matchingLey && matchingRango) {
+                    const carita_exc = matchingRango.datoVisible === 'carita_excelente' ? <img id="faceStyleReferenteTodas" src={carita_excelente}></img> : '';
+                    const carita_mej = matchingRango.datoVisible === 'carita_mejora' ? <img id="faceStyleReferenteTodas" src={carita_mejora}></img> : '';
+                    const carita_atenc = matchingRango.datoVisible === 'carita_atencion' ? <img id="faceStyleReferenteTodas" src={carita_atencion}></img> : '';
+                    const carita_sit = matchingRango.datoVisible === 'carita_situacion' ? <img id="faceStyleReferenteTodas" src={carita_situacion}></img> : '';
+                    const carita_aler = matchingRango.datoVisible === 'carita_alerta' ? <img id="faceStyleReferenteTodas" src={carita_alerta}></img> : '';
+
+
                     tableRows.push(
-                        <tr>
-                            <td>
-                                <div
-                                    style={
-                                        matchingRango.datoVisible === "ARRIBA"
-                                            ? {
-                                                borderColor: `transparent transparent ${matchingColor.datoVisible} transparent`,
-                                            }
-                                            : {
-                                                borderColor: `${matchingColor.datoVisible} transparent transparent transparent`,
-                                            }
-                                    }
-                                    className={matchingRango.datoVisible === "ARRIBA" ? "flechaArriba" : "flechaAbajo"}
-                                />
+                        <>
+
+                            <br></br>
+
+
+
+                            <td id="infoLinePorcLeyendasREFERENTE">
+                                <b>{matchingLey.datoVisible}</b>
                             </td>
-                            <td style={{ fontSize: '13px', padding: '7px' }}>
-                                {matchingLey.datoVisible}
+                            <td className="linea">
+                                {carita_exc}
+                                {carita_mej}
+                                {carita_atenc}
+                                {carita_sit}
+                                {carita_aler}
                             </td>
-                        </tr>
+
+
+                        </>
                     );
+
+
                 }
             });
 
             return (
-                <div id="bodyContainer">
-                    <div id="container_cardsCompResumen" style={{ width: '45%',marginRight :'-2.3em',marginTop:'-8.2em' }}>
-                        <Card>
-                            <Card.Body>
-                                <Card.Title>
-                                    <table>
-                                        <tbody>
-                                            {tableRows}
-                                        </tbody>
-                                    </table>
-                                </Card.Title>
-                            </Card.Body>
-                        </Card>
-                    </div>
-                </div>
-            );
+                <div>
+                    <br></br>
+                    <table responsive style={{ backgroundColor: 'white', width: '50%', borderRadius: '20px', margin: 'auto' }}>
+
+                        {tableRows}
+
+                    </table><br></br></div>)
         }
     }
 
     function InfoExag2() {
         var list_proc_emp = {};
         var contador = 0;
-        var render = [];
+        var evaluadores = [];
 
         if (loadedDataCompetencias) {
             listCompetencias.forEach((item) => {
@@ -305,82 +413,105 @@ export default function GraficosDashboard() {
                         [item.nomEmpleado]: [item.porcAprobComp],
                     };
                 }
-                // console.log(list_proc_emp);
 
                 if (Object.keys(listCompetencias).length === contador) {
-                    render.push(
-                        <div id="bodyContainer">
-                            <div id="container_cardsCompResumen">
-                                {Object.keys(list_proc_emp).reduce((rows, evaluador, index) => {
-                                    if (index % 2 === 0) rows.push([]);
-                                    rows[rows.length - 1].push(evaluador);
-                                    return rows;
-                                }, []).map((row, rowIndex) => (
-                                    <div key={rowIndex} className="row">
-                                        {row.map((evaluador) => (
-                                            <div key={evaluador} className="col-md-7       ">
-                                                <h2 style={{ color: 'white', fontSize: '25px' }}>
-                                                    Evaluador:<br /> {evaluador}
-                                                </h2>
-                                                {Object.keys(list_proc_emp[evaluador]).map((empleado) => {
-                                                    const porcentajes = list_proc_emp[evaluador][empleado];
-                                                    const suma = porcentajes.reduce((total, porcentaje) => total + parseFloat(porcentaje), 0);
-                                                    const promedio = suma / porcentajes.length;
-
-                                                    return (
-                                                        <Card key={empleado} style={{ width: '247px' }}>
-                                                            <Card.Body className="cardBody1">
-                                                                <Card.Title
-                                                                    
-                                                                >
-                                                                    <div className="container">
-                                                                        <div className="row">
-                                                                            <div className="col cardBody1">
-                                                                                {empleado}
-                                                                            </div>
-
-                                                                            <div className="col-4">
-                                                                                <div>
-                                                                                    <div style={{ fontSize: "12pt", alignItems: "center", marginLeft: '-14px' }}>
-                                                                                        <ArrowsTemplate porcAprobComp={promedio} />
-                                                                                        {promedio.toFixed(2)} %
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    
-                                                                </Card.Title>
-                                                            </Card.Body>
-                                                            
-                                                        </Card>
-                                                        
-                                                    );
-                                                })}
-                                            </div>
-                                            
-                                        ))}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    );
+                    evaluadores = Object.keys(list_proc_emp);
                 }
             });
-        } return render;
+        }
+
+        // Función para dividir en grupos de 3 evaluadores por fila
+        function chunkArray(arr, chunkSize) {
+            const result = [];
+            for (let i = 0; i < arr.length; i += chunkSize) {
+                result.push(arr.slice(i, i + chunkSize));
+            }
+            return result;
+        }
+
+        const evaluadoresPorFila = chunkArray(evaluadores, 3);
+
+        return (
+            <table id="table" responsive >
+                <div>
+                    {evaluadoresPorFila.map((filaEvaluadores, index) => (
+                        <div key={index} style={{ display: 'flex' }}>
+                            {filaEvaluadores.map((evaluador) => (
+                                <table
+                                    key={evaluador}
+                                    style={{
+                                        backgroundColor: 'white',
+                                        width: '26em',
+                                        borderRadius: '10px',
+                                        margin: '5px', // Espacio entre tablas
+                                    }}
+                                    responsive
+                                >
+                                    <thead>
+                                        <tr>
+                                            <td valign="top" style={{ width: '10em' }}>
+                                                <table>
+                                                    <th style={{ padding: '1em' }} >REFERENTE
+                                                        <td>{evaluador}</td>
+                                                    </th>
+                                                </table>
+                                            </td>
+                                            <td style={{ width: '16em' }}>
+                                                <table style={{ width: '100%' }}>
+                                                    <tr style={{ borderBottom: '1px #808080 solid' }}>
+                                                        <th style={{ padding: '1em' }}>COLABORADOR</th>
+                                                    </tr>
+                                                    <tbody>
+                                                        {Object.keys(list_proc_emp[evaluador]).map((empleado) => {
+                                                            // console.log('list_proc_emp',list_proc_emp);
+                                                            const porcentajes = list_proc_emp[evaluador][empleado];
+                                                            const suma = porcentajes.reduce((total, porcentaje) => total + parseFloat(porcentaje), 0);
+                                                            const promedio = suma / porcentajes.length;
+
+                                                            return (
+                                                                <tr style={{ borderTop: '1px #DCDCDC solid' }}>
+                                                                    <td style={{ fontSize: '11pt', padding: '3px', fontWeight: '400', fontFamily: 'arial' }}>
+                                                                        {empleado} &nbsp;
+                                                                        <td id="infoLinePorc" style={{ width: '13em' }}>
+                                                                            <ProgressBar className='lightGreen-progress-bar' now={promedio} label={`${promedio.toFixed(2)}%`} />
+                                                                        </td>
+                                                                    </td>
+                                                                    <td>
+                                                                        <td >
+                                                                            <ArrowsTemplate porcAprobComp={promedio} />
+
+                                                                        </td>
+
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </table>
+        );
     }
+
 
     useEffect(
         function () {
             GetDataResumenEval();
             GetDataCompetencias();
-
+            GetConfigTiempoPromedio();
             GetConfigCompColorFlechas();
             GetConfigCompRangoFlechas();
             GetConfigCompRangoLeyenda()
 
         },
-        [loadedDataCompetencias, loadedDataResumenEval, loadedDataRango, loadedDataColor, loadedDataLeyenda, idEDDEvaluacion, nomEvaluacion,idEDDProyecto]
+        [loadedDataCompetencias, loadedDataResumenEval, loadedDataRango, loadedDataColor, loadedDataLeyenda, idEDDEvaluacion, nomEvaluacion, idEDDProyecto]
     );
 
     return userData.statusConected || userData !== null ? (
@@ -388,29 +519,32 @@ export default function GraficosDashboard() {
 
             <Header></Header>
             <a
-            type="submit"
-            id="btnAtrasEvaluacion"
-            value="Registrar"
-            href="/listadoEddEvalProyEmp/0">Volver
-          </a>
+                type="submit"
+                id="btnAtrasEvaluacion"
+                value="Registrar"
+                href="/listadoEddEvalProyEmp/0">Volver
+            </a>
             <h4>Resumen evaluación : {nomEvaluacion}</h4>
             <BodyResumen2></BodyResumen2>
-            <Table >
-                <td id="mainTableGrafDash">
-                    <th><div><InfoExag2></InfoExag2></div><InfoArrows></InfoArrows></th>
-                    <th><div></div></th>
-                    <th><div></div></th>
 
-                    <th>
-                        <div class="bg-light mx-auto px-2 border border-2 border-secondary"
-                            style = {{ width: "50em", height: "27em" }}>
-                            <GrafChart idEDDEvaluacion={idEDDEvaluacion} idEDDProyecto={idEDDProyecto} />
-                        </div>
-                    </th>
-                </td>
-                
-            </Table>
-            
+            {/* LEYENDAS */}
+            <InfoArrows></InfoArrows>
+            {/* FIN LEYENDAS */}
+
+            <InfoExag2></InfoExag2>
+
+            {/* <InfoArrows></InfoArrows> */}
+
+
+
+            <div class="bg-light mx-auto px-2"
+                style={{ width: "50em", height: "27em" }}>
+                <GrafChart idEDDEvaluacion={idEDDEvaluacion} idEDDProyecto={idEDDProyecto} />
+            </div>
+
+
+
+
         </div>
 
     ) : (
