@@ -34,30 +34,17 @@ export default function FormularioEvaluacionExterno() {
   // const [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState("");
 
   const idEDDEvaluacion = params && params.idEvaluacion ? params.idEvaluacion : "";
-  const idEDDProyEmpEvaluado = params && params.idEDDProyEmpEvaluado ? params.idEDDProyEmpEvaluado : "";
+  // const idEDDProyEmpEvaluado = params && params.idEDDProyEmpEvaluado ? params.idEDDProyEmpEvaluado : "";
   const idEDDProyEmpEvaluador = params && params.idEDDProyEmpEvaluador ? params.idEDDProyEmpEvaluador : "";
+  const [loadedDataEvaluado, setLoadedDataEvaluado] = useState(false);
+  const [evaluadoresRestantes, setEvaluadoresRestantes] = useState(0);
+
 
   const [fechaInicioExamen, setfechaInicioExamen] = useState("");
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const navigate = useNavigate();
 
-  function GetData() {
-    var url = "pages/listados/listadoRespPregEvaluaciones.php";
-    var operationUrl = "listadoRespPregEvaluaciones";
-    var data = {
-      idEvaluacion: idEDDEvaluacion,
-      idEmpleado: idEDDProyEmpEvaluador,
-      idEDDProyEmpEvaluado: idEDDProyEmpEvaluado
 
-    };
-    // console.log("getdata", data);
-    SendDataService(url, operationUrl, data).then((data) => {
-      setidEDDEvalPregunta(data);
-      setLoadedData(true); //Cambio el estado del booleano
-      ConfirmAlert();
-      // console.log(data);
-    });
-  }
 
   function handleLogout() {
     logout();
@@ -68,7 +55,7 @@ export default function FormularioEvaluacionExterno() {
       Swal.fire({
         title: "IMPORTANTE",
         html: `
-        <p>Esta evaluación puede ser resuelta por única vez y los resultados NO podrán ser modificados.</p>
+        <p>Esta evaluación puede ser respondida por única vez y los resultados NO podrán ser modificados posteriormente.</p>
         <p>¿Deseas continuar?</p>
         `,
         icon: "warning",
@@ -91,24 +78,45 @@ export default function FormularioEvaluacionExterno() {
     }
   }
 
+
+
   function ConfirmAlertEnvio() {
+    var txtAgradecer = '<p>Gracias por llenar el formulario.</p>';
+    var txtFinalizo = "<p>Has completado la lista asiganada de evaluados.</p>"
+    var msj = ''
+
+    if (evaluadoresRestantes === 1) {
+      msj = txtAgradecer + txtFinalizo;
+    } else { msj = txtAgradecer }
+
     if (loadedData) {
       Swal.fire({
-        html: `
-        <p>Gracias por llenar el formulario.</p>
-        `,
+        html:
+          msj
+        ,
         icon: "success",
         showCancelButton: false,
+        allowOutsideClick: false,
+        allowEnterKey: false,
         confirmButtonColor: "#3085d6",
         confirmButtonText: "Continuar",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate("/login");
-          handleLogout();
+          if (evaluadoresRestantes === 1) {
+            navigate("/login");
+            handleLogout();
+          } else {
+            // Recargar la página después de un breve período de tiempo (por ejemplo, 2 segundos)
+            setTimeout(() => {
+              window.location.reload();
+            }, 1200);
+          }
         }
       });
     }
   }
+
+
   function guardaRespEval(idPreg, registro) {
     let itemId = respuestasAEnviar.findIndex((item) => item.id === idPreg);
     if (itemId > -1) {
@@ -120,7 +128,7 @@ export default function FormularioEvaluacionExterno() {
 
   function SendData(e) {
     e.preventDefault();
-    ConfirmAlertAll('¿Confirma el envío de los datos?', 'No podrás cambiar los resultados.', 'warning').then((response) => {
+    ConfirmAlertAll('¿Confirmas el envío de los datos?', 'No podrás cambiar los resultados.', 'warning').then((response) => {
       if (response === true) {
         const url = "pages/insertar/insertarEddEvalProyResp.php";
         const operationUrl = "insertarEddEvalProyResp";
@@ -135,13 +143,13 @@ export default function FormularioEvaluacionExterno() {
             idEDDEvaluacion: idEDDEvaluacion,
             usuarioCreacion: userData.usuario,
             idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
+            idEDDEvalProyEmp: idEDDEvaluado,
             isActive: true,
           },
         };
-        console.log(data);
         SendDataService(url, operationUrl, data).then((response) => {
-          console.log("respuestaServer:", response);
           ConfirmAlertEnvio();
+          
         });
       }
     });
@@ -156,22 +164,46 @@ export default function FormularioEvaluacionExterno() {
       idEvaluacion: idEDDEvaluacion,
       idEDDProyEmpEvaluador: idEDDProyEmpEvaluador
     };
-    console.log('data', data);
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log('response', response);
-      setlistEDDEvaluado(response)
 
+      if (response.length === 0 || '') {
+        navigate('/CargaSinDatos')
+      }
+
+      setEvaluadoresRestantes(response.length);
+      setLoadedDataEvaluado(true);
+      setlistEDDEvaluado(response);
+     
+    });
+
+  }
+  function GetData() {
+    var url = "pages/listados/listadoRespPregEvaluacionesExt.php";
+    var operationUrl = "listadoRespPregEvaluacionesExt";
+    if (Array.isArray(listEDDEvaluado) && listEDDEvaluado.length > 0) {
+      const idEDDProyEmpEvaluado = listEDDEvaluado[0].idEDDProyEmpEvaluado;
+      var data = {
+
+        idEvaluacion: idEDDEvaluacion,
+        idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
+        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado, // Aquí estableces el valor correcto
+      }
+
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setidEDDEvalPregunta(data);
+      setLoadedData(true); //Cambio el estado del booleano
+      ConfirmAlert();
     });
   }
 
-
-
   useEffect(
     function () {
-      GetData();
+    
       obtenerEvaluadorEval();
+      GetData();
     },
-    [idEDDEvaluacion, loadedData]
+    [idEDDEvaluacion, loadedData, loadedDataEvaluado]
   );
 
   var auxIdPregunta = "0";
@@ -218,15 +250,10 @@ export default function FormularioEvaluacionExterno() {
                   <p id="encabezadoEnd" style={{ color: 'white' }}>
                     {auxDesc = idEDDEvalPregunta.descFormulario}
                   </p>
-
                 </>
-
               )
-
             }
           })}
-
-
         </Container>
         <Container id="fondoTabla1">
 
@@ -244,31 +271,40 @@ export default function FormularioEvaluacionExterno() {
 
                   if (!selectMostrado) {
                     selectMostrado = true; // Cambia el valor para que no se muestre más
-                  
+
                     // Obtén el primer valor de nomEvaluador (asumiendo que es el mismo para todos los elementos)
                     const primerNomEvaluador = listEDDEvaluado.length > 0 ? listEDDEvaluado[0].nomEvaluador : '';
-                  
+
                     return (
                       <>
-                      <br></br>
-                        <h5>Evaluador: {primerNomEvaluador}</h5>
+                        <br></br>
+                        <h5 style={{ backgroundColor: '#E5E8E8', padding: '5px' }}>Evaluador: {primerNomEvaluador}</h5>
                         <tr key="select">
                           <td>
                             <div className="form-group">
-                              <label htmlFor="evalaudo">Seleccione el evaluado: </label>
+                              <label htmlFor="evaluado">Seleccione el evaluado: </label>
                               <select
                                 required
                                 className="form-control"
-                                name="evalaudo"
-                                id="evalaudo"
-                                placeholder="Seleccione el evalaudo"
-                                onChange={({ target }) => setidEDDEvaluado(target.value)}
+                                name="evaluado"
+                                id="evaluado"
+                                placeholder="Seleccione el evaluado"
+
+
+                                onChange={({ target }) => {
+                                  let EDDEvaluado = target.value;
+                                  setidEDDEvaluado(EDDEvaluado); // Actualiza el estado con el idEDDEvaluado seleccionado
+                                  guardaRespEval(idEDDEvaluado, {  // Envía el idEDDEvaluado como target
+                                    idEDDEvalProyEmp: EDDEvaluado,
+
+                                  });
+                                }}
                               >
                                 <option hidden value="">
                                   Desplegar lista
                                 </option>
                                 {listEDDEvaluado.map((valor) => (
-                                  <option key={valor.idEDDProyEmpEvaluado} value={valor.idEDDProyEmpEvaluado}>
+                                  <option key={valor.idEDDProyEmpEvaluado} value={valor.idEDDEvalProyEmp}>
                                     {valor.nomEvaluado}
                                   </option>
                                 ))}
@@ -276,12 +312,10 @@ export default function FormularioEvaluacionExterno() {
                             </div>
                           </td>
                         </tr>
-                     </>
+                      </>
                     );
                   }
-                
-                  
-                  
+
                   return (
                     <>
 
@@ -334,7 +368,7 @@ export default function FormularioEvaluacionExterno() {
                                           idEDDEvalPregunta.tipoResp,
                                         respuesta: respuestaTexto,
                                         idEDDEvalProyEmp:
-                                          idEDDEvalPregunta.idEDDEvalProyEmp,
+                                          idEDDEvaluado,
                                         idEDDProyEmpEvaluador:
                                           idEDDEvalPregunta.idEDDProyEmpEvaluador,
                                       }
@@ -392,7 +426,7 @@ export default function FormularioEvaluacionExterno() {
                                           idEDDEvalPregunta.tipoResp,
                                         respuesta: respuestaTexto,
                                         idEDDEvalProyEmp:
-                                          idEDDEvalPregunta.idEDDEvalProyEmp,
+                                          idEDDEvaluado,
                                         idEDDProyEmpEvaluador:
                                           idEDDEvalPregunta.idEDDProyEmpEvaluador,
                                       }
@@ -438,7 +472,7 @@ export default function FormularioEvaluacionExterno() {
                                         idEDDEvalPregunta.tipoResp,
                                       respuesta: respuestaTexto,
                                       idEDDEvalProyEmp:
-                                        idEDDEvalPregunta.idEDDEvalProyEmp,
+                                        idEDDEvaluado,
                                       idEDDProyEmpEvaluador:
                                         idEDDEvalPregunta.idEDDProyEmpEvaluador,
                                     }

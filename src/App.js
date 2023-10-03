@@ -49,6 +49,7 @@ import UnReferenteDiseño from "./Edd/pages/DiseñoDashboard/1Ref";
 import RedirectErrorMail from "./Edd/pages/Listados/ListadoEddEvalProyEmp/RedirectErrorMail"
 import LoginVerif from "./pages/login/loginVerif";
 import FormularioEvaluacionExterno from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacionExterno";
+import CargaSinDatos from "./Edd/pages/Listados/FormularioEvaluacion/CargaSinDatos";
 
 function App() {
   return (
@@ -61,7 +62,7 @@ function App() {
 
         
           <Route element={<RedirectErrorMail />} path="/RedirectErrorMail"></Route>
-
+          <Route element={<CargaSinDatos />} path="/CargaSinDatos"></Route>
           <Route
             element={<FormularioEvaluacionExterno />}
             path="/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador"

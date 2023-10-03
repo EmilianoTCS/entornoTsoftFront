@@ -393,7 +393,7 @@ export default function GraficosDashboard() {
             value="Registrar"
             href="/listadoEddEvalProyEmp/0">Volver
           </a>
-            <h4 style={{ color: 'white' }}>Resumen evaluación : {nomEvaluacion}</h4>
+            <h4>Resumen evaluación : {nomEvaluacion}</h4>
             <BodyResumen2></BodyResumen2>
             <Table >
                 <td id="mainTableGrafDash">

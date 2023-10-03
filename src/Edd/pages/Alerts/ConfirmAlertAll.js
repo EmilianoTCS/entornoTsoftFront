@@ -10,7 +10,12 @@ export default function ConfirmAlertAll(title, text, icon) {
       icon: icon,
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
       confirmButtonText: "Continuar",
+      cancelButtonText: "Cancelar",
+    allowOutsideClick:false,
+      allowEnterKey:false,
+
     }).then((response) => {
       if (response.isConfirmed) {
         resolve(true);

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "../ListadoEddEvalProyEmp/Insertar.css";
 import SendDataService from "../../../../services/SendDataService";
 import getDataService from "../../../../services/GetDataService";
-
+import Swal from "sweetalert2";
 import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -31,7 +31,21 @@ const EnviarCorreoColab = ({
 
     // ----------------------FUNCIONES----------------------------
 
-
+    function ConfirmAlertEnvio() {
+        Swal.fire({
+          html: `
+          <p>Los correos han sido enviados</p>
+          `,
+          icon: "success",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Continuar",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            <></>
+          }
+        });
+    }
 
     function SendDataEmail(e) {
         e.preventDefault();
@@ -47,9 +61,11 @@ const EnviarCorreoColab = ({
             isActive: true,
         };
         console.log(data);
+        handleClose();
+        ConfirmAlertEnvio();
         SendDataService(url, operationUrl, data).then((response) => {
-            // TopAlerts("successCreated");
-            console.log(response);
+            
+            
         });
     }
 
