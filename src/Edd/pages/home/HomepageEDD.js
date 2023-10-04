@@ -39,7 +39,7 @@ export default function HomePageEDD() {
   const [listConfigCompRangoLeyenda, setListConfigCompRangoLeyenda] =
     useState("");
 
-    const [listConfigTiempoPromedio, setListConfigTiempoPromedio] =
+  const [listConfigTiempoPromedio, setListConfigTiempoPromedio] =
     useState("");
 
 
@@ -212,34 +212,19 @@ export default function HomePageEDD() {
 
           tableRows.push(
             <>
-
               <br></br>
-
-
-
-
-
               <td id="infoLinePorcLeyendasREFERENTE">
                 <b>{matchingLey.datoVisible}</b>
               </td>
-
-              
               <td className="linea">
                 <td>{carita_exc}</td>
                 <td> {carita_mej}</td>
                 <td> {carita_atenc}</td>
                 <td> {carita_sit}</td>
                 <td> {carita_aler}</td>
-               
-             
-               
               </td>
-
-
             </>
           );
-
-
         }
       });
 
@@ -253,6 +238,67 @@ export default function HomePageEDD() {
           </table><br></br></div>)
     }
   }
+
+  
+  function ProgressBarColor(porcAprobComp) {
+    if (loadedDataLeyenda && loadedDataRango) {
+      const tableRows = [];
+      const uniqueDatoNoVisibleValues = new Set();
+
+      listConfigCompRangoLeyenda.forEach((ley) => {
+        uniqueDatoNoVisibleValues.add(ley.datoNoVisible);
+      });
+
+      listConfigCompRangoFlechas.forEach((rango) => {
+        uniqueDatoNoVisibleValues.add(rango.datoNoVisible);
+      });
+
+      listConfigCompColorFlechas.forEach((color) => {
+        uniqueDatoNoVisibleValues.add(color.datoNoVisible);
+      });
+
+      uniqueDatoNoVisibleValues.forEach((datoNoVisible) => {
+        const matchingLey = listConfigCompRangoLeyenda.find(ley => ley.datoNoVisible === datoNoVisible);
+        const matchingRango = listConfigCompRangoFlechas.find(rango => rango.datoNoVisible === datoNoVisible);
+        const matchingColor = listConfigCompColorFlechas.find(color => color.datoNoVisible === datoNoVisible);
+
+        if (matchingLey && matchingRango) {
+          const carita_exc = matchingRango.datoVisible === 'carita_excelente' ? <img id="faceStyleReferenteTodas" src={carita_excelente}></img> : '';
+          const carita_mej = matchingRango.datoVisible === 'carita_mejora' ? <img id="faceStyleReferenteTodas" src={carita_mejora}></img> : '';
+          const carita_atenc = matchingRango.datoVisible === 'carita_atencion' ? <img id="faceStyleReferenteTodas" src={carita_atencion}></img> : '';
+          const carita_sit = matchingRango.datoVisible === 'carita_situacion' ? <img id="faceStyleReferenteTodas" src={carita_situacion}></img> : '';
+          const carita_aler = matchingRango.datoVisible === 'carita_alerta' ? <img id="faceStyleReferenteTodas" src={carita_alerta}></img> : '';
+
+
+          tableRows.push(
+            <>
+              <br></br>
+              <td id="infoLinePorcLeyendasREFERENTE">
+                <b>{matchingLey.datoVisible}</b>
+              </td>
+              <td className="linea">
+                <td>{carita_exc}</td>
+                <td> {carita_mej}</td>
+                <td> {carita_atenc}</td>
+                <td> {carita_sit}</td>
+                <td> {carita_aler}</td>
+              </td>
+            </>
+          );
+        }
+      });
+
+      return (
+        <div>
+
+          <table style={{ backgroundColor: 'white', width: '50%', borderRadius: '20px', margin: 'auto' }}>
+
+            {tableRows}
+
+          </table><br></br></div>)
+    }
+  }
+
 
   function Porcentajes() {
     var list_eval_comp_porc = {};
@@ -379,7 +425,7 @@ export default function HomePageEDD() {
       return (
         <div>
           <div>
-            
+
             <InfoArrows></InfoArrows>
           </div>
           <div>
@@ -396,11 +442,11 @@ export default function HomePageEDD() {
     if (loadedDataResumenEval && loadedDataTiempoPromedio) {
       const splitReferentes = listResumenEval[0].referentesEvaluados;
       var totalSplit = splitReferentes.split('/');
-  
+
       var cant = totalSplit[0];
       var totalRef = totalSplit[1];
-  
-      console.log('can',cant,'tot',totalRef);
+
+      console.log('can', cant, 'tot', totalRef);
       return (
         <div id="tableResumen">
           <Table>
@@ -541,7 +587,7 @@ export default function HomePageEDD() {
           </Table>
         </div>
 
-       
+
       );
     } else {
       return <h1>Loading</h1>;
@@ -572,8 +618,9 @@ export default function HomePageEDD() {
         value="Registrar"
         href="/listadoEddEvalProyEmp/0">Volver
       </a>
-      <h4>Resumen evaluación : {nomEvaluacion}</h4>
-
+      <div style={{ backgroundColor: 'white', width: '50%', margin: 'auto',borderRadius:'10px' }}><strong><p style={{textAlign:'center'}}>Resumen evaluación : {nomEvaluacion}</p></strong>
+      </div>
+      
       {/* <InfoArrows></InfoArrows> */}
       <BodyResumen></BodyResumen>
       <div

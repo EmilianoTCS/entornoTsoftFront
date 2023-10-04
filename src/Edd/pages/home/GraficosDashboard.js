@@ -36,7 +36,7 @@ export default function GraficosDashboard() {
         useState("");
     const [listConfigCompRangoLeyenda, setListConfigCompRangoLeyenda] =
         useState("");
-        const [listConfigTiempoPromedio, setListConfigTiempoPromedio] =
+    const [listConfigTiempoPromedio, setListConfigTiempoPromedio] =
         useState("");
     const [loadedDataLeyenda, setLoadedDataLeyenda] = useState(false);
 
@@ -50,17 +50,17 @@ export default function GraficosDashboard() {
         var url = "pages/listados/listadoConfigDatos.php";
         var operationUrl = "listadoConfigDatos";
         var data = {
-          tipoConfDato: "EDD",
-          subTipoConfDato: "TIEMPO_LIMITE",
+            tipoConfDato: "EDD",
+            subTipoConfDato: "TIEMPO_LIMITE",
         };
         SendDataService(url, operationUrl, data).then((data) => {
-          // console.log(data);
-          setListConfigTiempoPromedio(data);
-    
-          setLoadedDataTiempoPromedio(true)
-    
+            // console.log(data);
+            setListConfigTiempoPromedio(data);
+
+            setLoadedDataTiempoPromedio(true)
+
         });
-      }
+    }
 
     function GetDataResumenEval() {
         var url = "pages/listados/listadoResumenEval.php";
@@ -132,7 +132,7 @@ export default function GraficosDashboard() {
 
     function BodyResumen2() {
 
-console.log(listResumenEval);
+        console.log(listResumenEval);
         if (loadedDataResumenEval && loadedDataTiempoPromedio) {
             return (
                 <div id="tableResumen">
@@ -524,7 +524,11 @@ console.log(listResumenEval);
                 value="Registrar"
                 href="/listadoEddEvalProyEmp/0">Volver
             </a>
-            <h4>Resumen evaluación : {nomEvaluacion}</h4>
+
+
+            <div style={{ backgroundColor: 'white', width: '50%', margin: 'auto', borderRadius: '10px' }}><strong><p style={{ textAlign: 'center' }}>Resumen evaluación : {nomEvaluacion}</p></strong>
+            </div>
+
             <BodyResumen2></BodyResumen2>
 
             {/* LEYENDAS */}
@@ -542,7 +546,7 @@ console.log(listResumenEval);
                 <GrafChart idEDDEvaluacion={idEDDEvaluacion} idEDDProyecto={idEDDProyecto} />
             </div>
 
-
+            <br></br>
 
 
         </div>
