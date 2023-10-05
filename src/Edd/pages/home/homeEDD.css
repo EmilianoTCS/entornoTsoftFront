@@ -5,9 +5,9 @@ text-align: right;
 }
 
 /* LINEA */
-.linea{
-height: 7px;
-border-right: 2px ridge rgba(151, 151, 151, 0.568);
+.linea:not(:last-child) {
+  height: 7px;
+  border-right: 2px ridge rgba(151, 151, 151, 0.568);
 }
 
 /* --- */
@@ -38,6 +38,7 @@ border-right: 2px ridge rgba(151, 151, 151, 0.568);
   font-size: 12pt;
   
 }
+
 #tableLeyendasREFERENTE {
   text-align: left;
   border-collapse: collapse;
@@ -101,6 +102,10 @@ margin-bottom: 3px;
   margin-left: 0.5em;
 }
 
+#faceStyleLeyendas {
+width: 2em;
+}
+
 #sizeCaritasReferentes {
   width: 30px;
   margin-right: 1em;
@@ -160,22 +165,20 @@ margin-bottom: 3px;
   margin-right: 1em;
 }
 /* -------------- */
-
-/* COLORES BARRAS DASHBOARD TABLA CON LINEA PORC*/
+/* 
+COLORES BARRAS DASHBOARD TABLA CON LINEA PORC*/
 .yellow-progress-bar .progress-bar {
   background-color: #e9dc65;
   color: black;
   font-size: 11pt;
   font-weight: 700;
 }
-
 .lightGreen-progress-bar .progress-bar {
   background-color: #94ff01;
   color: black;
   font-size: 11pt;
   font-weight: 700;
 }
-
 .red-progress-bar .progress-bar {
   background-color: #f71717;
   color: rgb(255, 255, 255);
@@ -190,7 +193,7 @@ margin-bottom: 3px;
   background-color: #ff7300;
   color: rgb(0, 0, 0);
   font-size: 11pt; font-weight: 700;
-}
+} 
 /* ----------- */
 
 

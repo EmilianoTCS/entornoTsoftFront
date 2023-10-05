@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Header from "../../../templates/Header/Header";
 import SendDataService from "../../../services/SendDataService";
 import Card from "react-bootstrap/Card";
@@ -13,11 +13,6 @@ import { Container, Table } from 'react-bootstrap';
 import { useRoute } from "wouter";
 import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import RadialSeparators from "./RadialSeparators";
-import carita_excelente from "../Smileys/carita_excelente.png"
-import carita_mejora from "../Smileys/carita_mejora.png"
-import carita_atencion from "../Smileys/carita_atencion.png"
-import carita_situacion from "../Smileys/carita_situacion.png"
-import carita_alerta from "../Smileys/carita_alerta.png"
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export default function HomePageEDD() {
@@ -59,7 +54,7 @@ export default function HomePageEDD() {
       subTipoConfDato: "TIEMPO_LIMITE",
     };
     SendDataService(url, operationUrl, data).then((data) => {
-      // console.log(data);
+
       setListConfigTiempoPromedio(data);
 
       setLoadedDataTiempoPromedio(true)
@@ -76,7 +71,7 @@ export default function HomePageEDD() {
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setListConfigCompRangoLeyenda(data);
-      // console.log("configRango", data);
+
       setLoadedDataLeyenda(true)
     });
   }
@@ -87,7 +82,6 @@ export default function HomePageEDD() {
       idEvaluacion: idEDDEvaluacion,
       idProyecto: idEDDProyecto,
     };
-    // console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       setListResumenEval(data);
       setLoadedDataResumenEval(true);
@@ -103,11 +97,11 @@ export default function HomePageEDD() {
       idProyecto: idEDDProyecto,
 
     };
-    // console.log(data);
+
     SendDataService(url, operationUrl, data).then((data) => {
       setListCompetencias(data);
       setLoadedDataCompetencias(true);
-      // console.log('DATA', data);
+
     });
   }
 
@@ -121,7 +115,7 @@ export default function HomePageEDD() {
     SendDataService(url, operationUrl, data).then((data) => {
       setListConfigCompColorFlechas(data);
       setLoadedDataColor(true)
-      // console.log("configColor", data);
+
     });
   }
 
@@ -134,51 +128,40 @@ export default function HomePageEDD() {
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setListConfigCompRangoFlechas(data);
-      // console.log("configRango", data);
+
       setLoadedDataRango(true)
     });
   }
 
   function ArrowsTemplate({ porcAprobComp }) {
+
     if (loadedDataColor && loadedDataRango) {
-
-
       var auxRango = "0"; //posiciones
       var varRango = ""; //arriba / abajo /dato visible
       let listRango = listConfigCompRangoFlechas.map((orden) => orden).reverse();
 
       listRango.map((rango) => {
         if (auxRango === "0") {
-          // console.log("result", eval(porcAprobComp + rango.datoNoVisible), porcAprobComp, rango.datoNoVisible);
           if (eval(porcAprobComp + rango.datoNoVisible)) {  // eval(30 + > 80) --> eval 30 >= 80
             varRango = rango.datoVisible;
-            auxRango = "1";
+            auxRango = '1';
           }
         }
+
       });
-
-
-      const carita_exc1 = varRango === 'carita_excelente' ? <img id="faceStyleReferenteTodas" src={carita_excelente}></img> : '';
-      const carita_mej1 = varRango === 'carita_mejora' ? <img id="faceStyleReferenteTodas" src={carita_mejora}></img> : '';
-      const carita_atenc1 = varRango === 'carita_atencion' ? <img id="faceStyleReferenteTodas" src={carita_atencion}></img> : '';
-      const carita_sit1 = varRango === 'carita_situacion' ? <img id="faceStyleReferenteTodas" src={carita_situacion}></img> : '';
-      const carita_aler1 = varRango === 'carita_alerta' ? <img id="faceStyleReferenteTodas" src={carita_alerta}></img> : '';
-
+      var carita = <img id="faceStyleReferenteTodas" src={require(`../Smileys/${varRango}.png`)}></img>;
 
       return (
         <>
           <div>
-            {carita_exc1}
-            {carita_mej1}
-            {carita_atenc1}
-            {carita_sit1}
-            {carita_aler1}
+            {carita}
           </div>
         </>
       );
-
     }
   }
+
+
 
   function InfoArrows() {
     if (loadedDataLeyenda && loadedDataRango) {
@@ -193,121 +176,294 @@ export default function HomePageEDD() {
         uniqueDatoNoVisibleValues.add(rango.datoNoVisible);
       });
 
-      // listConfigCompColorFlechas.forEach((color) => {
-      //   uniqueDatoNoVisibleValues.add(color.datoNoVisible);
-      // });
 
       uniqueDatoNoVisibleValues.forEach((datoNoVisible) => {
+
         const matchingLey = listConfigCompRangoLeyenda.find(ley => ley.datoNoVisible === datoNoVisible);
         const matchingRango = listConfigCompRangoFlechas.find(rango => rango.datoNoVisible === datoNoVisible);
-        // const matchingColor = listConfigCompColorFlechas.find(color => color.datoNoVisible === datoNoVisible);
 
         if (matchingLey && matchingRango) {
-          const carita_exc = matchingRango.datoVisible === 'carita_excelente' ? <img id="faceStyleReferenteTodas" src={carita_excelente}></img> : '';
-          const carita_mej = matchingRango.datoVisible === 'carita_mejora' ? <img id="faceStyleReferenteTodas" src={carita_mejora}></img> : '';
-          const carita_atenc = matchingRango.datoVisible === 'carita_atencion' ? <img id="faceStyleReferenteTodas" src={carita_atencion}></img> : '';
-          const carita_sit = matchingRango.datoVisible === 'carita_situacion' ? <img id="faceStyleReferenteTodas" src={carita_situacion}></img> : '';
-          const carita_aler = matchingRango.datoVisible === 'carita_alerta' ? <img id="faceStyleReferenteTodas" src={carita_alerta}></img> : '';
-
+          var carita_gral = matchingRango.datoNoVisible === matchingLey.datoNoVisible ? <img id="faceStyleLeyendas"
+            src={require(`../Smileys/${matchingRango.datoVisible}.png`)}></img> : '';
 
           tableRows.push(
             <>
               <br></br>
+
               <td id="infoLinePorcLeyendasREFERENTE">
                 <b>{matchingLey.datoVisible}</b>
               </td>
               <td className="linea">
-                <td>{carita_exc}</td>
-                <td> {carita_mej}</td>
-                <td> {carita_atenc}</td>
-                <td> {carita_sit}</td>
-                <td> {carita_aler}</td>
+                <td>{carita_gral}</td>
               </td>
+
             </>
           );
         }
       });
-
       return (
         <div>
 
-          <table style={{ backgroundColor: 'white', width: '50%', borderRadius: '20px', margin: 'auto' }}>
+          <table style={{ backgroundColor: 'white', width: '63%', borderRadius: '20px', margin: 'auto' }}>
 
             {tableRows}
 
           </table><br></br></div>)
     }
   }
-
-  
   function ProgressBarColor(porcAprobComp) {
-    if (loadedDataLeyenda && loadedDataRango) {
-      const tableRows = [];
-      const uniqueDatoNoVisibleValues = new Set();
+    if (loadedDataColor) {
+      var auxColor = "0"; //posiciones
+      var varColor = ""; //color /dato visible
 
-      listConfigCompRangoLeyenda.forEach((ley) => {
-        uniqueDatoNoVisibleValues.add(ley.datoNoVisible);
+      // Ordena la lista utilizando la función de comparación
+      function compararPorOrden(a, b) {
+        return parseInt(b.orden) - parseInt(a.orden);
+      }
+      var listColor = listConfigCompColorFlechas.sort(compararPorOrden);
+
+      listColor.map((color1) => {
+        if (auxColor === "0") {
+          if (eval(porcAprobComp + color1.datoNoVisible)) {
+            varColor = color1.datoVisible;
+            auxColor = "1";
+          }
+        };
       });
-
-      listConfigCompRangoFlechas.forEach((rango) => {
-        uniqueDatoNoVisibleValues.add(rango.datoNoVisible);
-      });
-
-      listConfigCompColorFlechas.forEach((color) => {
-        uniqueDatoNoVisibleValues.add(color.datoNoVisible);
-      });
-
-      uniqueDatoNoVisibleValues.forEach((datoNoVisible) => {
-        const matchingLey = listConfigCompRangoLeyenda.find(ley => ley.datoNoVisible === datoNoVisible);
-        const matchingRango = listConfigCompRangoFlechas.find(rango => rango.datoNoVisible === datoNoVisible);
-        const matchingColor = listConfigCompColorFlechas.find(color => color.datoNoVisible === datoNoVisible);
-
-        if (matchingLey && matchingRango) {
-          const carita_exc = matchingRango.datoVisible === 'carita_excelente' ? <img id="faceStyleReferenteTodas" src={carita_excelente}></img> : '';
-          const carita_mej = matchingRango.datoVisible === 'carita_mejora' ? <img id="faceStyleReferenteTodas" src={carita_mejora}></img> : '';
-          const carita_atenc = matchingRango.datoVisible === 'carita_atencion' ? <img id="faceStyleReferenteTodas" src={carita_atencion}></img> : '';
-          const carita_sit = matchingRango.datoVisible === 'carita_situacion' ? <img id="faceStyleReferenteTodas" src={carita_situacion}></img> : '';
-          const carita_aler = matchingRango.datoVisible === 'carita_alerta' ? <img id="faceStyleReferenteTodas" src={carita_alerta}></img> : '';
-
-
-          tableRows.push(
-            <>
-              <br></br>
-              <td id="infoLinePorcLeyendasREFERENTE">
-                <b>{matchingLey.datoVisible}</b>
-              </td>
-              <td className="linea">
-                <td>{carita_exc}</td>
-                <td> {carita_mej}</td>
-                <td> {carita_atenc}</td>
-                <td> {carita_sit}</td>
-                <td> {carita_aler}</td>
-              </td>
-            </>
-          );
-        }
-      });
-
-      return (
-        <div>
-
-          <table style={{ backgroundColor: 'white', width: '50%', borderRadius: '20px', margin: 'auto' }}>
-
-            {tableRows}
-
-          </table><br></br></div>)
+      return varColor;
     }
   }
 
+
+
+
+  function ProgressColorInfo(porcAprobC) {
+    if (loadedDataColor) {
+      var auxColor = "0"; //posiciones
+      var varColor = ""; //color /dato visible
+
+      // Ordena la lista utilizando la función de comparación
+      function compararPorOrden(a, b) {
+        return parseInt(b.orden) - parseInt(a.orden);
+      }
+      var listColor = listConfigCompColorFlechas.sort(compararPorOrden);
+
+      listColor.map((color1) => {
+        if (auxColor === "0") {
+          if (eval(porcAprobC + color1.datoNoVisible)) {
+            varColor = color1.datoVisible;
+            auxColor = "1";
+          }
+        };
+      });
+
+      return varColor;
+    }
+  }
+
+  // function Porcentajes() {
+  //   var list_eval_comp_porc = {};
+  //   var total_porcentajes = {};
+  //   var cantidad_comp_por_empleado = {};
+  //   var result_list = {};
+
+  //   // Iterar a través de la listCompetencias array
+  //   for (const item of Object.values(listCompetencias)) {
+  //     if (item.nomEmpleado in list_eval_comp_porc) {
+  //       if (item.nomCompetencia in list_eval_comp_porc[item.nomEmpleado]) {
+  //         list_eval_comp_porc[item.nomEmpleado][item.nomCompetencia].push(item.porcAprobComp);
+  //       } else {
+  //         list_eval_comp_porc[item.nomEmpleado][item.nomCompetencia] = [item.porcAprobComp];
+  //       }
+  //     } else {
+  //       list_eval_comp_porc[item.nomEmpleado] = {
+  //         [item.nomCompetencia]: [item.porcAprobComp]
+  //       };
+  //     }
+  //   }
+
+  //   // Crear un array de objetos para ordenar las tablas
+  //   const tableData = [];
+  //   for (const [key, value] of Object.entries(list_eval_comp_porc)) {
+  //     total_porcentajes[key] = 0;
+  //     cantidad_comp_por_empleado[key] = Object.keys(value).length;
+  //     result_list[key] = {};
+
+  //     const empleadoRows = [];
+  //     const empleadoRows2 = [];
+  //     for (const [key1, value1] of Object.entries(value)) {
+  //       const suma = value1.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0) / value1.length;
+
+  //       result_list[key][key1] = suma;
+  //       total_porcentajes[key] += suma;
+
+
+  //       const color = ProgressColorInfo(suma);
+
+  //       // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
+  //       const ref = useRef();
+
+  //       useEffect(() => {
+  //         if (ref.current) {
+  //           const inner = ref.current.querySelector(".progress-bar");
+  //           if (inner) {
+  //             if (color === '#008000' || color === '#FF0000') {
+  //               inner.style.backgroundColor = color;
+  //               inner.style.fontSize = '11pt';
+  //               inner.style.color = 'white';
+  //               inner.style.fontWeight = '700'
+  //             } else {
+  //               inner.style.backgroundColor = color;
+  //               inner.style.fontSize = '11pt';
+  //               inner.style.color = 'black';
+  //               inner.style.fontWeight = '700'
+  //             }
+  //           }
+  //         }
+  //       }, [ref]);
+  //       // ----------------------------------------------------
+
+  //       <ProgressBar ref={ref} now={20} /* other stuff */ />
+  //       empleadoRows.push(
+  //         <tr style={{ borderTop: '1px #DCDCDC solid' }}>
+  //           <td style={{ paddingLeft: '1em' }}>{key1} </td>
+  //           <td style={{ textAlign: 'center' }}> 
+  //           <div style={{ marginTop: '10px' }}>
+  //             {suma.toFixed(2)}%
+  //           </div>
+  //           <ProgressBar id="infoLinePorcREFERENTE" ref={ref} now={suma}  />
+           
+  //           </td>
+  //           <td><img id="faceStyleReferenteTodas"></img></td>
+  //           <td>
+  //             <ArrowsTemplate porcAprobComp={suma} />
+  //           </td>
+  //         </tr>
+  //       );
+  //     }
+
+  //     const color1 = ProgressColorInfo(total_porcentajes[key] / cantidad_comp_por_empleado[key]);
+
+  //     // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
+  //     const ref1 = useRef();
+
+  //     useEffect(() => {
+  //       if (ref1.current) {
+  //         const inner = ref1.current.querySelector(".progress-bar");
+
+  //         if (inner) {
+  //           if (color1 === '#008000' || color1 === '#FF0000') {
+  //             inner.style.backgroundColor = color1;
+  //             inner.style.fontSize = '11pt';
+  //             inner.style.color = 'white';
+  //             inner.style.fontWeight = '700'
+  //           } else {
+  //             inner.style.backgroundColor = color1;
+  //             inner.style.fontSize = '11pt';
+  //             inner.style.color = 'black';
+  //             inner.style.fontWeight = '700'
+  //           }
+  //         }
+  //       }
+  //     }, [ref1]);
+  //     // ----------------------------------------------------
+
+  //     empleadoRows2.push(
+  //       <tr style={{ borderBottom: '2px #808080 solid' }}>
+  //         <th style={{ paddingLeft: '1em', width: '12em', height: '50px' }}>{key.toUpperCase()} </th>
+  //         <td style={{ textAlign: 'center' }}>
+  //           <div style={{ marginTop: '5px' }}>
+  //             {((total_porcentajes[key] / cantidad_comp_por_empleado[key])).toFixed(2)}%
+  //           </div>
+  //           <ProgressBar id="infoLinePorcREFERENTE" ref={ref1} now={((total_porcentajes[key] / cantidad_comp_por_empleado[key]))} />
+            
+  //         </td>
+  //         <td ><img id="faceStyleReferenteTodas" ></img></td>
+  //         <td >
+  //           <ArrowsTemplate porcAprobComp={total_porcentajes[key] / cantidad_comp_por_empleado[key]} />
+  //         </td>
+  //       </tr>
+  //     );
+
+  //     tableData.push({ key, content: [empleadoRows2, empleadoRows] });
+  //   }
+
+  //   // Ordenar el array de objetos alfabéticamente por key
+  //   tableData.sort((a, b) => a.key.localeCompare(b.key));
+
+  //   // Renderizar las tablas en el orden correcto
+  //   const render = [];
+  //   const maxEvaluadoresPorFila = 3;
+  //   let evaluadoresEnFila = 0;
+  //   let filaEvaluadores = [];
+
+  //   for (const data of tableData) {
+  //     filaEvaluadores.push(
+  //       <td>
+  //         <table style={{
+  //           backgroundColor: 'white',
+  //           width: '26em',
+  //           borderRadius: '10px',
+  //           margin: '5px', // Espacio entre tablas
+  //         }}>
+  //           <thead>
+  //             <tr>
+  //               <th style={{ paddingLeft: '0.8em', fontSize: '15pt' }}>REFERENTE</th>
+  //             </tr>
+  //           </thead>
+  //           <tbody>
+  //             <tr>
+  //               <tr >
+  //                 {data.content[0]}
+  //               </tr>
+  //               <tr>
+  //                 {data.content[1]}
+  //               </tr>
+  //             </tr>
+  //           </tbody>
+  //         </table>
+  //       </td>
+  //     );
+
+  //     evaluadoresEnFila++;
+  //     if (evaluadoresEnFila === maxEvaluadoresPorFila) {
+  //       render.push(<tr>{filaEvaluadores}</tr>);
+  //       filaEvaluadores = [];
+  //       evaluadoresEnFila = 0;
+  //     }
+  //   }
+
+  //   if (evaluadoresEnFila > 0) {
+  //     render.push(<tr>{filaEvaluadores}</tr>);
+  //   }
+
+  //   // Obtener el número total de tablas
+  //   const numTablas = tableData.length;
+
+  //   // Calcular el número de tablas por fila (máximo 3)
+  //   // const tablasPorFila = Math.min(numTablas, 3);
+
+  //   // Centrar las tablas en la pantalla si hay menos de 3
+  //   const centrarTablas = numTablas < 3;
+
+  //   return (
+  //     <div style={{ display: 'flex', justifyContent: centrarTablas ? 'center' : 'flex-start' }}>
+  //       <table responsive>
+  //         <tbody>
+  //           {render}
+  //         </tbody>
+  //       </table>
+  //     </div>
+  //   );
+  // }
 
   function Porcentajes() {
     var list_eval_comp_porc = {};
     var total_porcentajes = {};
     var cantidad_comp_por_empleado = {};
     var result_list = {};
-    var contador = 0;
 
-    // Iterate through the listCompetencias array
+    // Iterar a través de la listCompetencias array
     for (const item of Object.values(listCompetencias)) {
       if (item.nomEmpleado in list_eval_comp_porc) {
         if (item.nomCompetencia in list_eval_comp_porc[item.nomEmpleado]) {
@@ -322,11 +478,8 @@ export default function HomePageEDD() {
       }
     }
 
-    const render = [];
-    const maxEvaluadoresPorFila = 3;
-    let evaluadoresEnFila = 0;
-    let filaEvaluadores = [];
-
+    // Crear un array de objetos para ordenar las tablas
+    const tableData = [];
     for (const [key, value] of Object.entries(list_eval_comp_porc)) {
       total_porcentajes[key] = 0;
       cantidad_comp_por_empleado[key] = Object.keys(value).length;
@@ -341,10 +494,36 @@ export default function HomePageEDD() {
         total_porcentajes[key] += suma;
 
 
+        const color = ProgressColorInfo(suma);
+
+        // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
+        const ref = useRef();
+
+        useEffect(() => {
+          if (ref.current) {
+            const inner = ref.current.querySelector(".progress-bar");
+            if (inner) {
+              if (color === '#008000' || color === '#FF0000') {
+                inner.style.backgroundColor = color;
+                inner.style.fontSize = '11pt';
+                inner.style.color = 'white';
+                inner.style.fontWeight = '700'
+              } else {
+                inner.style.backgroundColor = color;
+                inner.style.fontSize = '11pt';
+                inner.style.color = 'black';
+                inner.style.fontWeight = '700'
+              }
+            }
+          }
+        }, [ref]);
+        // ----------------------------------------------------
+
+        <ProgressBar ref={ref} now={20} /* other stuff */ />
         empleadoRows.push(
           <tr style={{ borderTop: '1px #DCDCDC solid' }}>
             <td style={{ paddingLeft: '1em' }}>{key1} </td>
-            <td><ProgressBar id="infoLinePorcREFERENTE" className='lightGreen-progress-bar' now={suma} label={`${suma.toFixed(2)}%`} /></td>
+            <td><ProgressBar id="infoLinePorcREFERENTE" ref={ref} now={suma} label={`${suma.toFixed(2)}%`} /></td>
             <td><img id="faceStyleReferenteTodas"></img></td>
             <td>
               <ArrowsTemplate porcAprobComp={suma} />
@@ -353,24 +532,58 @@ export default function HomePageEDD() {
         );
       }
 
+      const color1 = ProgressColorInfo(total_porcentajes[key] / cantidad_comp_por_empleado[key]);
+
+      // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
+      const ref1 = useRef();
+
+      useEffect(() => {
+        if (ref1.current) {
+          const inner = ref1.current.querySelector(".progress-bar");
+
+          if (inner) {
+            if (color1 === '#008000' || color1 === '#FF0000') {
+              inner.style.backgroundColor = color1;
+              inner.style.fontSize = '11pt';
+              inner.style.color = 'white';
+              inner.style.fontWeight = '700'
+            } else {
+              inner.style.backgroundColor = color1;
+              inner.style.fontSize = '11pt';
+              inner.style.color = 'black';
+              inner.style.fontWeight = '700'
+            }
+          }
+        }
+      }, [ref1]);
+      // ----------------------------------------------------
 
       empleadoRows2.push(
         <tr style={{ borderBottom: '2px #808080 solid' }}>
-
           <th style={{ paddingLeft: '1em', width: '12em', height: '50px' }}>{key.toUpperCase()} </th>
-          <td><ProgressBar id="infoLinePorcREFERENTE" className='yellow-progress-bar' now={((total_porcentajes[key] / cantidad_comp_por_empleado[key]))} label={`${((total_porcentajes[key] / cantidad_comp_por_empleado[key])).toFixed(2)}%`} /></td>
+          <td>
+            <ProgressBar id="infoLinePorcREFERENTE" ref={ref1} now={((total_porcentajes[key] / cantidad_comp_por_empleado[key]))} label={`${((total_porcentajes[key] / cantidad_comp_por_empleado[key])).toFixed(2)}%`} />
+            </td>
           <td ><img id="faceStyleReferenteTodas" ></img></td>
-
-
-
           <td >
             <ArrowsTemplate porcAprobComp={total_porcentajes[key] / cantidad_comp_por_empleado[key]} />
-            {/* <img id="faceStyleReferenteTodas" src={carita_situacion}></img> */}
           </td>
+        </tr>
+      );
 
+      tableData.push({ key, content: [empleadoRows2, empleadoRows] });
+    }
 
-        </tr>);
+    // Ordenar el array de objetos alfabéticamente por key
+    tableData.sort((a, b) => a.key.localeCompare(b.key));
 
+    // Renderizar las tablas en el orden correcto
+    const render = [];
+    const maxEvaluadoresPorFila = 3;
+    let evaluadoresEnFila = 0;
+    let filaEvaluadores = [];
+
+    for (const data of tableData) {
       filaEvaluadores.push(
         <td>
           <table style={{
@@ -387,10 +600,10 @@ export default function HomePageEDD() {
             <tbody>
               <tr>
                 <tr >
-                  {empleadoRows2}
+                  {data.content[0]}
                 </tr>
                 <tr>
-                  {empleadoRows}
+                  {data.content[1]}
                 </tr>
               </tr>
             </tbody>
@@ -410,16 +623,29 @@ export default function HomePageEDD() {
       render.push(<tr>{filaEvaluadores}</tr>);
     }
 
+    // Obtener el número total de tablas
+    const numTablas = tableData.length;
+
+    // Calcular el número de tablas por fila (máximo 3)
+    // const tablasPorFila = Math.min(numTablas, 3);
+
+    // Centrar las tablas en la pantalla si hay menos de 3
+    const centrarTablas = numTablas < 3;
+
     return (
-
-      <table responsive>
-        <tbody>
-          {render}
-        </tbody>
-      </table>
-
+      <div style={{ display: 'flex', justifyContent: centrarTablas ? 'center' : 'flex-start' }}>
+        <table responsive>
+          <tbody>
+            {render}
+          </tbody>
+        </table>
+      </div>
     );
   }
+
+
+
+
   function CompetenciasResumen() {
     if (loadedDataCompetencias) {
       return (
@@ -430,6 +656,7 @@ export default function HomePageEDD() {
           </div>
           <div>
             <Porcentajes></Porcentajes>
+            <br></br>
           </div>
         </div>
       );
@@ -446,7 +673,7 @@ export default function HomePageEDD() {
       var cant = totalSplit[0];
       var totalRef = totalSplit[1];
 
-      console.log('can', cant, 'tot', totalRef);
+
       return (
         <div id="tableResumen">
           <Table>
@@ -459,14 +686,13 @@ export default function HomePageEDD() {
                   strokeWidth={10}
                   styles={buildStyles({
                     strokeLinecap: 'butt',
-                    pathColor: "#94FF01",
+                    pathColor: ProgressBarColor(listResumenEval[0].porcSatisfaccion),
                     trailColor: "#E5E7E9",
                     backgroundColor: 'white',
 
 
                   })}
                 >
-
                   <div style={{ fontSize: 20, textAlign: 'center' }}>
                     <strong>Satisfacción</strong>
                     <br></br>
@@ -489,11 +715,11 @@ export default function HomePageEDD() {
               <td>
                 <CircularProgressbarWithChildren
                   maxValue={eval(totalRef)}
-                  value={cant}
+                  value={(cant * 100) / totalRef}
                   background
                   strokeWidth={10}
                   styles={buildStyles({
-                    pathColor: "#FFE700",
+                    pathColor: ProgressBarColor((cant * 100) / totalRef),
                     trailColor: "#E5E7E9",
                     strokeLinecap: 'butt',
                     backgroundColor: 'white'
@@ -521,11 +747,10 @@ export default function HomePageEDD() {
                 <CircularProgressbarWithChildren
                   value={100}
                   background
-                  // text={`${80}%`}
                   strokeWidth={10}
                   styles={buildStyles({
                     strokeLinecap: 'butt',
-                    pathColor: "#02C101",
+                    pathColor: "#008000",
                     trailColor: "grey",
                     backgroundColor: 'white'
                   })}
@@ -551,14 +776,17 @@ export default function HomePageEDD() {
 
               <td>
                 <CircularProgressbarWithChildren
+                  // Valor maximo del cirucularProgress
                   maxValue={listConfigTiempoPromedio[0].datoNoVisible}
+                  // Borde de color (visual)
                   value={(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}
                   background
-                  // text={`${80}%`}
+                  // Rayas del borde
                   strokeWidth={10}
                   styles={buildStyles({
                     strokeLinecap: 'butt',
-                    pathColor: "#FF7300",
+                    // Color del borde-llenado
+                    pathColor: ProgressBarColor(listResumenEval[0].tiempoPromedio > listConfigTiempoPromedio[0].datoNoVisible ? 100 : ((listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible)),
                     trailColor: "#E5E7E9",
                     backgroundColor: 'white'
                   })}
@@ -566,6 +794,7 @@ export default function HomePageEDD() {
                   <div style={{ fontSize: 20, textAlign: 'center' }}>
                     <strong>Tiempo</strong>
                     <br></br>
+                    {/* Valor que se ve dentro del circulo, en minutos */}
                     <strong><span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}</span>
                       <p className="porcentajeCard">min</p></strong>
                     <br></br>
@@ -618,9 +847,10 @@ export default function HomePageEDD() {
         value="Registrar"
         href="/listadoEddEvalProyEmp/0">Volver
       </a>
-      <div style={{ backgroundColor: 'white', width: '50%', margin: 'auto',borderRadius:'10px' }}><strong><p style={{textAlign:'center'}}>Resumen evaluación : {nomEvaluacion}</p></strong>
+      <div style={{ backgroundColor: 'white', width: '60%', margin: 'auto', borderRadius: '10px' }}><strong><p style={{ textAlign: 'left', paddingLeft: '10px' }}>
+        Dashboard Referentes:<br></br>{nomEvaluacion}</p></strong>
       </div>
-      
+
       {/* <InfoArrows></InfoArrows> */}
       <BodyResumen></BodyResumen>
       <div
