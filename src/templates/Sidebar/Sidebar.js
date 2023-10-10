@@ -276,6 +276,16 @@ export default function SideBar(props) {
                         </Link>
                       </li>
                       {/* --------------------------------------------------- */}
+                       {/* --------------------------------------------------- */}
+                       <li id="textLeftSelect">
+                        <Link to="/listadoCompProy">
+                          <button id="submenuSidebar">
+                            <ImBook id="icons" />
+                            Comparación Proyectos
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
                       {/* <li id="textLeftSelect">
                         <Link to="/homePageEDD">
                           <button id="submenuSidebar">

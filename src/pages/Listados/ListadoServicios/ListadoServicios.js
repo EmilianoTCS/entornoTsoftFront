@@ -101,7 +101,7 @@ export default function ListadoServicio() {
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de servicios</h1>
           <h6 style={{ color: "gray" }}>
-            Factory Devops {"->"} Listado de Servicios
+            Eval desempeño {"->"} Servicios
           </h6>
           <br></br>
 
@@ -177,7 +177,7 @@ export default function ListadoServicio() {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Nombre del cliente</th> 
+                <th>Nombre del cliente</th>
                 <th>Nombre del servicio</th>
                 <th>Operaciones</th>
               </tr>
@@ -186,7 +186,7 @@ export default function ListadoServicio() {
               {servicio.map((Servicio) => (
                 <tr key={Servicio.idServicio}>
                   <td>{Servicio.idServicio}</td>
-                  <td>{Servicio.nomCliente}</td> 
+                  <td>{Servicio.nomCliente}</td>
                   <td>{Servicio.nomServicio}</td>
                   <td>
                     <button
@@ -202,7 +202,7 @@ export default function ListadoServicio() {
                         <MdContactMail id="icons" />
                       </button>
                     </Link>
-                    <Link to={`/listadoEddProyecto/${Servicio.idServicio}`} > 
+                    <Link to={`/listadoEddProyecto/${Servicio.idServicio}`} >
                       <button data-title="Proyectos relacionados" id="OperationBtns">
                         <RiEditBoxFill id="icons" />
                       </button>

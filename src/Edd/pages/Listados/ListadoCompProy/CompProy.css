@@ -1,0 +1,31 @@
+.btn-General-Pag {
+  background-color: #e10b1c;
+  border-style: none none none none;
+  font-size: 12pt;
+  border: #e10b1c solid 1px;
+  border-radius: 7px;
+  padding: 0.5em;
+  color: white;
+  margin-left: 1em;
+}
+
+.btn-General-Pag:hover {
+  background-color: #ffffff;
+  color: #e10b1c;
+}
+
+#espacioEntreOpciones {
+  padding-left: 1em;
+}
+
+#tableResumen {
+  border-radius: 10px;
+  border: 1px grey solid;
+  width: 100%;
+  margin: auto;
+  background-color: #f3f2f2;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+}

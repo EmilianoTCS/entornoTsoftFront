@@ -207,3 +207,12 @@ export default function GrafChart({idEDDEvaluacion,idEDDProyecto}) {
         <Porcentajes></Porcentajes>
     </Line>
 }
+
+
+
+
+
+
+
+
+

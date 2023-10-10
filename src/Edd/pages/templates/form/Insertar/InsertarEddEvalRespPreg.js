@@ -48,11 +48,9 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
       idEDDEvalPregunta: idEDDEvalPregunta,
       isActive: true
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
       TopAlerts('successCreated');
       actualizarEDDEvalRespPreg(EDDEvalRespPreg);
-      console.log(response);
     });
   }
 
@@ -84,9 +82,12 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
 
                 onChange={({ target }) => setidEDDEvalPregunta(target.value)}
               >
+                 <option hidden value="">
+                  Desplegar lista
+                </option>
                 {listEDDEvalPregunta.map((valor) => (
                   <option
-                    selected={valor.idEDDEvalPregunta === idEDDEvalPregunta ? "selected" : ""}
+                    // selected={valor.idEDDEvalPregunta === idEDDEvalPregunta ? "selected" : ""}
                     value={valor.idEDDEvalPregunta}
                   >
                     {valor.nomPregunta}

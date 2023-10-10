@@ -37,45 +37,19 @@ export default function HomePage() {
       <table style={{ width: '60%', margin: 'auto' }}>
         <tr>
           <td>
-            <h4 class="column left-column" style={{color:'black'}}>MAQUETAS<br></br> DASHBOARD</h4>
+            <h4></h4>
           </td>
         </tr>
-<br></br>
+        <br></br>
         <tr>
           <td>
-            <div style={{ width: '40%', margin: 'auto' }}>
-              <table style={{ border: 'black 2px solid' ,backgroundColor:'white'}}>
-                <td style={{ border: 'black 2px solid', padding: '1em' }} border={2}>
-                  <h4 style={{ color: 'black' }}>Colaborador</h4>
-                  <br></br>
+            <div >
+              <table >
+                <td >
+                </td>
+                <td>
                   <tr>
-                    <a
-                      type="submit"
-                      id="btnAtras"
-
-                      href="/DiseñoDashboardTablaConLineasPorc">DiseñoCol
-                    </a>
                   </tr>
-
-                  
-</td>
-                  
-
-                <td style={{ border: 'black 1px solid', padding: '1em' }}>
-                  <tr>
-                    <h4 style={{ color: 'black' }}>Referente</h4>
-
-                    <br></br>
-                    <a
-
-                      type="submit"
-                      id="btnAtras"
-
-                      href="/DiseñoTablaLineaReferente">DiseñoReferente
-                    </a>
-                  </tr>
-
-
                 </td>
               </table>
             </div>

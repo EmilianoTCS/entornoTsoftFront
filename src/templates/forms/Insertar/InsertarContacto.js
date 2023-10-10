@@ -50,10 +50,10 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
       idServicio: idServicio,
       isActive:true,
     };
-    console.log(data);
+   
     SendDataService(url, operationUrl, data).then((response) => {
       TopAlerts('successCreated');
-      actualizarContacto(contacto);console.log(response);
+      actualizarContacto(contacto);
     });
   }
 
@@ -146,7 +146,7 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
                style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
                 value={fechaIni || ""}
-                type="datetime"
+                type="date"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"

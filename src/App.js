@@ -50,6 +50,9 @@ import RedirectErrorMail from "./Edd/pages/Listados/ListadoEddEvalProyEmp/Redire
 import LoginVerif from "./pages/login/loginVerif";
 import FormularioEvaluacionExterno from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacionExterno";
 import CargaSinDatos from "./Edd/pages/Listados/FormularioEvaluacion/CargaSinDatos";
+import ListadoCompProy from "./Edd/pages/Listados/ListadoCompProy/ListadoCompProy";
+import DashboardCompProy from "./Edd/pages/Listados/ListadoCompProy/DashboardCompProy";
+
 
 function App() {
   return (
@@ -134,19 +137,10 @@ function App() {
             <Route element={<HomePageEDD />} path="/homePageEDD/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
             <Route element={<GraficosDashboard />} path="/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
             <Route element={<ComentariosDashboard />} path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
-
-            {/* PRUEBA DE DASHBOARD */}
-
-            <Route element={<DiseñoDashboardTablaConLineasPorc />} path="/DiseñoDashboardTablaConLineasPorc"></Route>
-            <Route element={<DiseñoDashboardGrafico />} path="/DiseñoDashboardGrafico"></Route>
-            <Route element={<DiseñoDashboardTabla />} path="/DiseñoDashboardTabla"></Route>
-            <Route element={<DiseñoTablaLineaReferente />} path="/DiseñoTablaLineaReferente"></Route>
-            <Route element={<UnReferenteDiseño />} path="/UnReferenteDiseño"></Route>
-
-
-
             {/* ------------------- */}
 
+            <Route element={<ListadoCompProy />} path="/listadoCompProy"></Route>
+            <Route element={<DashboardCompProy />} path="/DashboardCompProy"></Route>
 
 
             <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto"></Route>

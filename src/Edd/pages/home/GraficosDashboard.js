@@ -512,7 +512,7 @@ export default function GraficosDashboard() {
                                   <tr style={{ borderTop: '1px #DCDCDC solid' }}>
                                     <td style={{ fontSize: '11pt', padding: '3px', fontWeight: '400', fontFamily: 'arial' }}>
                                       {empleado} &nbsp;
-                                      <td id="infoLinePorc" style={{ width: '13em' }}>
+                                      <td id="infoLinePorc" style={{ width: '20em' }}>
                                         <ProgressBar ref={ref} now={promedio} label={`${promedio.toFixed(2)}%`} />
                                       </td>
                                     </td>

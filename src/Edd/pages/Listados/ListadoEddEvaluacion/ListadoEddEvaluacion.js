@@ -130,7 +130,7 @@ export default function ListadoEDDEvaluacion() {
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de evaluaciones</h1>
           <h6 style={{ color: "gray" }}>
-            EDD {"->"} Listado de evaluaciones
+          Eval desempeño {"->"} Evaluaciones
           </h6>
           <br></br>
 

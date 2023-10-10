@@ -204,7 +204,7 @@ export default function HomePageEDD() {
       return (
         <div>
 
-          <table style={{ backgroundColor: 'white', width: '63%', borderRadius: '20px', margin: 'auto' }}>
+          <table style={{ backgroundColor: 'white', width: '61%', borderRadius: '20px', margin: 'auto' }}>
 
             {tableRows}
 
@@ -261,201 +261,7 @@ export default function HomePageEDD() {
     }
   }
 
-  // function Porcentajes() {
-  //   var list_eval_comp_porc = {};
-  //   var total_porcentajes = {};
-  //   var cantidad_comp_por_empleado = {};
-  //   var result_list = {};
 
-  //   // Iterar a través de la listCompetencias array
-  //   for (const item of Object.values(listCompetencias)) {
-  //     if (item.nomEmpleado in list_eval_comp_porc) {
-  //       if (item.nomCompetencia in list_eval_comp_porc[item.nomEmpleado]) {
-  //         list_eval_comp_porc[item.nomEmpleado][item.nomCompetencia].push(item.porcAprobComp);
-  //       } else {
-  //         list_eval_comp_porc[item.nomEmpleado][item.nomCompetencia] = [item.porcAprobComp];
-  //       }
-  //     } else {
-  //       list_eval_comp_porc[item.nomEmpleado] = {
-  //         [item.nomCompetencia]: [item.porcAprobComp]
-  //       };
-  //     }
-  //   }
-
-  //   // Crear un array de objetos para ordenar las tablas
-  //   const tableData = [];
-  //   for (const [key, value] of Object.entries(list_eval_comp_porc)) {
-  //     total_porcentajes[key] = 0;
-  //     cantidad_comp_por_empleado[key] = Object.keys(value).length;
-  //     result_list[key] = {};
-
-  //     const empleadoRows = [];
-  //     const empleadoRows2 = [];
-  //     for (const [key1, value1] of Object.entries(value)) {
-  //       const suma = value1.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0) / value1.length;
-
-  //       result_list[key][key1] = suma;
-  //       total_porcentajes[key] += suma;
-
-
-  //       const color = ProgressColorInfo(suma);
-
-  //       // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
-  //       const ref = useRef();
-
-  //       useEffect(() => {
-  //         if (ref.current) {
-  //           const inner = ref.current.querySelector(".progress-bar");
-  //           if (inner) {
-  //             if (color === '#008000' || color === '#FF0000') {
-  //               inner.style.backgroundColor = color;
-  //               inner.style.fontSize = '11pt';
-  //               inner.style.color = 'white';
-  //               inner.style.fontWeight = '700'
-  //             } else {
-  //               inner.style.backgroundColor = color;
-  //               inner.style.fontSize = '11pt';
-  //               inner.style.color = 'black';
-  //               inner.style.fontWeight = '700'
-  //             }
-  //           }
-  //         }
-  //       }, [ref]);
-  //       // ----------------------------------------------------
-
-  //       <ProgressBar ref={ref} now={20} /* other stuff */ />
-  //       empleadoRows.push(
-  //         <tr style={{ borderTop: '1px #DCDCDC solid' }}>
-  //           <td style={{ paddingLeft: '1em' }}>{key1} </td>
-  //           <td style={{ textAlign: 'center' }}> 
-  //           <div style={{ marginTop: '10px' }}>
-  //             {suma.toFixed(2)}%
-  //           </div>
-  //           <ProgressBar id="infoLinePorcREFERENTE" ref={ref} now={suma}  />
-           
-  //           </td>
-  //           <td><img id="faceStyleReferenteTodas"></img></td>
-  //           <td>
-  //             <ArrowsTemplate porcAprobComp={suma} />
-  //           </td>
-  //         </tr>
-  //       );
-  //     }
-
-  //     const color1 = ProgressColorInfo(total_porcentajes[key] / cantidad_comp_por_empleado[key]);
-
-  //     // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
-  //     const ref1 = useRef();
-
-  //     useEffect(() => {
-  //       if (ref1.current) {
-  //         const inner = ref1.current.querySelector(".progress-bar");
-
-  //         if (inner) {
-  //           if (color1 === '#008000' || color1 === '#FF0000') {
-  //             inner.style.backgroundColor = color1;
-  //             inner.style.fontSize = '11pt';
-  //             inner.style.color = 'white';
-  //             inner.style.fontWeight = '700'
-  //           } else {
-  //             inner.style.backgroundColor = color1;
-  //             inner.style.fontSize = '11pt';
-  //             inner.style.color = 'black';
-  //             inner.style.fontWeight = '700'
-  //           }
-  //         }
-  //       }
-  //     }, [ref1]);
-  //     // ----------------------------------------------------
-
-  //     empleadoRows2.push(
-  //       <tr style={{ borderBottom: '2px #808080 solid' }}>
-  //         <th style={{ paddingLeft: '1em', width: '12em', height: '50px' }}>{key.toUpperCase()} </th>
-  //         <td style={{ textAlign: 'center' }}>
-  //           <div style={{ marginTop: '5px' }}>
-  //             {((total_porcentajes[key] / cantidad_comp_por_empleado[key])).toFixed(2)}%
-  //           </div>
-  //           <ProgressBar id="infoLinePorcREFERENTE" ref={ref1} now={((total_porcentajes[key] / cantidad_comp_por_empleado[key]))} />
-            
-  //         </td>
-  //         <td ><img id="faceStyleReferenteTodas" ></img></td>
-  //         <td >
-  //           <ArrowsTemplate porcAprobComp={total_porcentajes[key] / cantidad_comp_por_empleado[key]} />
-  //         </td>
-  //       </tr>
-  //     );
-
-  //     tableData.push({ key, content: [empleadoRows2, empleadoRows] });
-  //   }
-
-  //   // Ordenar el array de objetos alfabéticamente por key
-  //   tableData.sort((a, b) => a.key.localeCompare(b.key));
-
-  //   // Renderizar las tablas en el orden correcto
-  //   const render = [];
-  //   const maxEvaluadoresPorFila = 3;
-  //   let evaluadoresEnFila = 0;
-  //   let filaEvaluadores = [];
-
-  //   for (const data of tableData) {
-  //     filaEvaluadores.push(
-  //       <td>
-  //         <table style={{
-  //           backgroundColor: 'white',
-  //           width: '26em',
-  //           borderRadius: '10px',
-  //           margin: '5px', // Espacio entre tablas
-  //         }}>
-  //           <thead>
-  //             <tr>
-  //               <th style={{ paddingLeft: '0.8em', fontSize: '15pt' }}>REFERENTE</th>
-  //             </tr>
-  //           </thead>
-  //           <tbody>
-  //             <tr>
-  //               <tr >
-  //                 {data.content[0]}
-  //               </tr>
-  //               <tr>
-  //                 {data.content[1]}
-  //               </tr>
-  //             </tr>
-  //           </tbody>
-  //         </table>
-  //       </td>
-  //     );
-
-  //     evaluadoresEnFila++;
-  //     if (evaluadoresEnFila === maxEvaluadoresPorFila) {
-  //       render.push(<tr>{filaEvaluadores}</tr>);
-  //       filaEvaluadores = [];
-  //       evaluadoresEnFila = 0;
-  //     }
-  //   }
-
-  //   if (evaluadoresEnFila > 0) {
-  //     render.push(<tr>{filaEvaluadores}</tr>);
-  //   }
-
-  //   // Obtener el número total de tablas
-  //   const numTablas = tableData.length;
-
-  //   // Calcular el número de tablas por fila (máximo 3)
-  //   // const tablasPorFila = Math.min(numTablas, 3);
-
-  //   // Centrar las tablas en la pantalla si hay menos de 3
-  //   const centrarTablas = numTablas < 3;
-
-  //   return (
-  //     <div style={{ display: 'flex', justifyContent: centrarTablas ? 'center' : 'flex-start' }}>
-  //       <table responsive>
-  //         <tbody>
-  //           {render}
-  //         </tbody>
-  //       </table>
-  //     </div>
-  //   );
-  // }
 
   function Porcentajes() {
     var list_eval_comp_porc = {};
@@ -524,7 +330,6 @@ export default function HomePageEDD() {
           <tr style={{ borderTop: '1px #DCDCDC solid' }}>
             <td style={{ paddingLeft: '1em' }}>{key1} </td>
             <td><ProgressBar id="infoLinePorcREFERENTE" ref={ref} now={suma} label={`${suma.toFixed(2)}%`} /></td>
-            <td><img id="faceStyleReferenteTodas"></img></td>
             <td>
               <ArrowsTemplate porcAprobComp={suma} />
             </td>
@@ -564,7 +369,6 @@ export default function HomePageEDD() {
           <td>
             <ProgressBar id="infoLinePorcREFERENTE" ref={ref1} now={((total_porcentajes[key] / cantidad_comp_por_empleado[key]))} label={`${((total_porcentajes[key] / cantidad_comp_por_empleado[key])).toFixed(2)}%`} />
             </td>
-          <td ><img id="faceStyleReferenteTodas" ></img></td>
           <td >
             <ArrowsTemplate porcAprobComp={total_porcentajes[key] / cantidad_comp_por_empleado[key]} />
           </td>
@@ -644,21 +448,222 @@ export default function HomePageEDD() {
   }
 
 
+// function Porcentajes() {
+//     var list_eval_comp_porc = {};
+//     var total_porcentajes = {};
+//     var cantidad_comp_por_empleado = {};
+//     var result_list = {};
+
+//     // Iterar a través de la listCompetencias array
+//     for (const item of Object.values(listCompetencias)) {
+//       if (item.nomEmpleado in list_eval_comp_porc) {
+//         if (item.nomCompetencia in list_eval_comp_porc[item.nomEmpleado]) {
+//           list_eval_comp_porc[item.nomEmpleado][item.nomCompetencia].push(item.porcAprobComp);
+//         } else {
+//           list_eval_comp_porc[item.nomEmpleado][item.nomCompetencia] = [item.porcAprobComp];
+//         }
+//       } else {
+//         list_eval_comp_porc[item.nomEmpleado] = {
+//           [item.nomCompetencia]: [item.porcAprobComp]
+//         };
+//       }
+//     }
+
+//     // Crear un array de objetos para ordenar las tablas
+//     const tableData = [];
+//     for (const [key, value] of Object.entries(list_eval_comp_porc)) {
+//       total_porcentajes[key] = 0;
+//       cantidad_comp_por_empleado[key] = Object.keys(value).length;
+//       result_list[key] = {};
+
+//       const empleadoRows = [];
+//       const empleadoRows2 = [];
+//       for (const [key1, value1] of Object.entries(value)) {
+//         const suma = value1.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0) / value1.length;
+
+//         result_list[key][key1] = suma;
+//         total_porcentajes[key] += suma;
+
+
+//         const color = ProgressColorInfo(suma);
+
+//         // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
+//         const ref = useRef();
+
+//         useEffect(() => {
+//           if (ref.current) {
+//             const inner = ref.current.querySelector(".progress-bar");
+//             if (inner) {
+//               if (color === '#008000' || color === '#FF0000') {
+//                 inner.style.backgroundColor = color;
+//                 inner.style.fontSize = '11pt';
+//                 inner.style.color = 'white';
+//                 inner.style.fontWeight = '700'
+//               } else {
+//                 inner.style.backgroundColor = color;
+//                 inner.style.fontSize = '11pt';
+//                 inner.style.color = 'black';
+//                 inner.style.fontWeight = '700'
+//               }
+//             }
+//           }
+//         }, [ref]);
+//         // ----------------------------------------------------
+
+//         <ProgressBar ref={ref} now={20} /* other stuff */ />
+//         empleadoRows.push(
+//           <tr style={{ borderTop: '1px #DCDCDC solid' }}>
+//             <td style={{ paddingLeft: '1em' }}>{key1} </td>
+//             <td style={{ textAlign: 'center' }}> 
+//             <div style={{ marginTop: '10px' }}>
+//               {suma.toFixed(2)}%
+//             </div>
+//             <ProgressBar id="infoLinePorcREFERENTE" ref={ref} now={suma}  />
+           
+//             </td>
+//             <td><img id="faceStyleReferenteTodas"></img></td>
+//             <td>
+//               <ArrowsTemplate porcAprobComp={suma} />
+//             </td>
+//           </tr>
+//         );
+//       }
+
+//       const color1 = ProgressColorInfo(total_porcentajes[key] / cantidad_comp_por_empleado[key]);
+
+//       // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
+//       const ref1 = useRef();
+
+//       useEffect(() => {
+//         if (ref1.current) {
+//           const inner = ref1.current.querySelector(".progress-bar");
+
+//           if (inner) {
+//             if (color1 === '#008000' || color1 === '#FF0000') {
+//               inner.style.backgroundColor = color1;
+//               inner.style.fontSize = '11pt';
+//               inner.style.color = 'white';
+//               inner.style.fontWeight = '700'
+//             } else {
+//               inner.style.backgroundColor = color1;
+//               inner.style.fontSize = '11pt';
+//               inner.style.color = 'black';
+//               inner.style.fontWeight = '700'
+//             }
+//           }
+//         }
+//       }, [ref1]);
+//       // ----------------------------------------------------
+
+//       empleadoRows2.push(
+//         <tr style={{ borderBottom: '2px #808080 solid' }}>
+//           <th style={{ paddingLeft: '1em', width: '12em', height: '50px' }}>{key.toUpperCase()} </th>
+//           <td style={{ textAlign: 'center' }}>
+//             <div style={{ marginTop: '5px' }}>
+//               {((total_porcentajes[key] / cantidad_comp_por_empleado[key])).toFixed(2)}%
+//             </div>
+//             <ProgressBar id="infoLinePorcREFERENTE" ref={ref1} now={((total_porcentajes[key] / cantidad_comp_por_empleado[key]))} />
+            
+//           </td>
+//           <td ><img id="faceStyleReferenteTodas" ></img></td>
+//           <td >
+//             <ArrowsTemplate porcAprobComp={total_porcentajes[key] / cantidad_comp_por_empleado[key]} />
+//           </td>
+//         </tr>
+//       );
+
+//       tableData.push({ key, content: [empleadoRows2, empleadoRows] });
+//     }
+
+//     // Ordenar el array de objetos alfabéticamente por key
+//     tableData.sort((a, b) => a.key.localeCompare(b.key));
+
+//     // Renderizar las tablas en el orden correcto
+//     const render = [];
+//     const maxEvaluadoresPorFila = 3;
+//     let evaluadoresEnFila = 0;
+//     let filaEvaluadores = [];
+
+//     for (const data of tableData) {
+//       filaEvaluadores.push(
+//         <td>
+//           <table style={{
+//             backgroundColor: 'white',
+//             width: '26em',
+//             borderRadius: '10px',
+//             margin: '5px', // Espacio entre tablas
+//           }}>
+//             <thead>
+//               <tr>
+//                 <th style={{ paddingLeft: '0.8em', fontSize: '15pt' }}>REFERENTE</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               <tr>
+//                 <tr >
+//                   {data.content[0]}
+//                 </tr>
+//                 <tr>
+//                   {data.content[1]}
+//                 </tr>
+//               </tr>
+//             </tbody>
+//           </table>
+//         </td>
+//       );
+
+//       evaluadoresEnFila++;
+//       if (evaluadoresEnFila === maxEvaluadoresPorFila) {
+//         render.push(<tr>{filaEvaluadores}</tr>);
+//         filaEvaluadores = [];
+//         evaluadoresEnFila = 0;
+//       }
+//     }
+
+//     if (evaluadoresEnFila > 0) {
+//       render.push(<tr>{filaEvaluadores}</tr>);
+//     }
+
+//     // Obtener el número total de tablas
+//     const numTablas = tableData.length;
+
+//     // Calcular el número de tablas por fila (máximo 3)
+//     // const tablasPorFila = Math.min(numTablas, 3);
+
+//     // Centrar las tablas en la pantalla si hay menos de 3
+//     const centrarTablas = numTablas < 3;
+
+//     return (
+//       <div style={{ display: 'flex', justifyContent: centrarTablas ? 'center' : 'flex-start' }}>
+//         <table responsive>
+//           <tbody>
+//             {render}
+//           </tbody>
+//         </table>
+//       </div>
+//     );
+//   }
+
+
 
 
   function CompetenciasResumen() {
     if (loadedDataCompetencias) {
       return (
-        <div>
-          <div>
+        <table>
 
+          <tr>
             <InfoArrows></InfoArrows>
-          </div>
-          <div>
+          </tr>
+          <tr>
             <Porcentajes></Porcentajes>
             <br></br>
-          </div>
-        </div>
+          </tr>
+
+        </table>
+
+
+        
       );
     } else {
       return <h1>Loading</h1>;

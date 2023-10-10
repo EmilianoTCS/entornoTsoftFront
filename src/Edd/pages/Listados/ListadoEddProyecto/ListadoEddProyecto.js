@@ -105,7 +105,7 @@ export default function ListadoEddProyecto() {
       <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de proyectos</h1>
-          <h6 style={{color:'gray'}}>EDD {'->'} Listado de proyectos</h6>
+          <h6 style={{color:'gray'}}>Eval desempeño {'->'} Proyectos</h6>
           <br></br>
 
           <div id="selectPaginador">
