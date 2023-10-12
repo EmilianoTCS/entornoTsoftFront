@@ -5,6 +5,32 @@ export default function TopAlerts(props) {
   const MySwal = withReactContent(Swal);
 
   switch (props) {
+    // ListCompProy.js Para llos listados
+    case "AlMenosDosClientes":
+      return MySwal.fire({
+        title: "¡Debes seleccionar al menos 2 clientes!",
+        // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
+        icon: "warning",
+        showConfirmButton: true,
+        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok!',
+      });
+      case "AlMenosDosServicios":
+        return MySwal.fire({
+          title: "¡Debes seleccionar al menos 2 servicios!",
+          // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
+          icon: "warning",
+          showConfirmButton: true,
+          confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok!',
+        });
+        case "AlMenosDosProyectos":
+          return MySwal.fire({
+            title: "¡Debes seleccionar al menos 2 proyectos!",
+            // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
+            icon: "warning",
+            showConfirmButton: true,
+            confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok!',
+          });
+    // 
     case "successCreated":
       return MySwal.fire({
         title: "Se ha creado el registro",
@@ -31,7 +57,7 @@ export default function TopAlerts(props) {
     case "SuccessfulDelivery":
       return MySwal.fire({
         title: "¡Bien!",
-        text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
+        // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
         icon: "success",
         showConfirmButton: true,
         confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok!',

@@ -24,10 +24,19 @@ export default function DashboardCompProy() {
     border-color: red;
   `;
   
+  const centerStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh', // Esto centra verticalmente en la pantalla
+  };
+  
   const LoadingIcon = () => {
     return (
-      <div className="loading-icon">
-        <ClipLoader color={'#000'} loading={true} css={override} size={50} />
+      <div style={centerStyle}>
+        <div className="loading-icon">
+          <ClipLoader color={'#000'} loading={true} css={override} size={50} />
+        </div>
       </div>
     );
   };
@@ -36,8 +45,6 @@ export default function DashboardCompProy() {
     return userData.statusConected || userData !== null ? (
         <>
             <Header></Header>
-            <br></br>
-            <br></br>
             <LoadingIcon></LoadingIcon>
         </>
     ) : (

@@ -123,7 +123,7 @@ export default function ListadoEddEvalProyResp() {
         cantidadPorPagina: cantidadPorPagina,
         idEDDProyEmp: idEDDProyEmp,
         idEDDEvaluacion: idEDDEvaluacion,
-        idEDDEvalPregunta,idEDDEvalPregunta,
+        idEDDEvalPregunta:idEDDEvalPregunta,
         idEDDEvalProyEmp:idEDDEvalProyEmp,
         idEDDEvalRespPreg:idEDDEvalRespPreg
       };

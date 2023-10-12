@@ -27,27 +27,37 @@ import "../ListadoCompProy/CompProy.css"
 
 export default function ListadoCompProy() {
 
-    const [num_boton, setNumBoton] = useState(1);
+    // const [num_boton, setNumBoton] = useState(1);
     const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-    const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
-    const [cantidadPaginas, setCantidadPaginas] = useState([]);
+    // const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
+    // const [cantidadPaginas, setCantidadPaginas] = useState([]);
     const nombreTabla = "eddevalproyemp";
 
     const [EDDCompProy, setEDDCompProy] = useState([""]);
 
-    const [tipoComparacion, setTipoComparacion] = useState([""]);
-    const [tipoCargo, setTipoCargo] = useState([""]);
-    const [fechaIni, setFechaIni] = useState([""]);
-    const [fechaFin, setFechaFin] = useState([""]);
+    const [tipoComparacion, setTipoComparacion] = useState("");
+    const [tipoCargo, setTipoCargo] = useState("");
+    const [fechaIni, setFechaIni] = useState("");
+    const [fechaFin, setFechaFin] = useState("");
 
-    const [idCliente, setidCliente] = useState([""]);
+    const [idCliente, setidCliente] = useState("");
     const [listCliente, setlistCliente] = useState([""]);
 
-    const [idProyecto, setidProyecto] = useState([""]);
+    const [idProyecto, setidProyecto] = useState("");
     const [listProyecto, setlistProyecto] = useState([""]);
 
-    const [idServicio, setidServicio] = useState([""]);
+    const [idServicio, setidServicio] = useState("");
     const [listServicio, setlistServicio] = useState([""]);
+
+    const [selectedClients, setSelectedClients] = useState([]);
+    const selectedClientsString = selectedClients.join(',');
+
+
+    const [selectedServicio, setSelectedServicio] = useState([]);
+    const selectedServicioString = selectedServicio.join(',');
+
+    const [selectedProyecto, setSelectedProyecto] = useState([]);
+    const selectedProyString = selectedProyecto.join(',');
 
 
     function obtenerCliente() {
@@ -59,20 +69,31 @@ export default function ListadoCompProy() {
     }
 
     function obtenerProyecto() {
-        const url = "pages/auxiliares/listadoProyectoForms.php";
-        const operationUrl = "listados";
-        getDataService(url, operationUrl).then((response) =>
-            setlistProyecto(response)
-        );
+        if (selectedServicio.length > 0) {
+            const url = "pages/auxiliares/listadoProyectoForms.php";
+            const operationUrl = "listados";
+            var data = {
+                idServicio: selectedServicioString,
+            };
+            SendDataService(url, operationUrl, data).then((data) => {
+                setlistProyecto(data);
+            });
+        }
     }
 
     function obtenerServicio() {
-        const url = "pages/auxiliares/listadoServicioForms.php";
-        const operationUrl = "listados";
-        getDataService(url, operationUrl).then((response) =>
-            setlistServicio(response)
-        );
+        if (selectedClients.length > 0) {
+            const url = "pages/auxiliares/listadoServicioForms.php";
+            const operationUrl = "listados";
+            var data = {
+                idCliente: selectedClientsString,
+            };
+            SendDataService(url, operationUrl, data).then((data) => {
+                setlistServicio(data);
+            });
+        }
     }
+
     // ELIMINAR
     function desactivar(ID) {
         ConfirmAlert().then((response) => {
@@ -100,59 +121,89 @@ export default function ListadoCompProy() {
             obtenerServicio();
         },
         [
-            num_boton,
-            cantidadPorPagina,
+            // num_boton,
+            // cantidadPorPagina,
+            selectedClientsString,
+            selectedServicioString,
+            selectedProyString
         ]
     );
 
     function SendData() {
-        var url = "pages/auxiliares/listadoCompetenciasGeneralEval.php";
-        var operationUrl = "listados";
 
-        if (userData.nomRol === 'alumno') {
-            var data = {
-                num_boton: num_boton,
-                cantidadPorPagina: cantidadPorPagina,
-                idCliente: idCliente,
-                idServicio: idServicio,
-                idProyecto: idProyecto,
-                tipoComparacion: tipoComparacion,
-                tipoCargo: tipoCargo,
-                fechaIni: fechaIni,
-                fechaFin: fechaFin,
-            }
-        } else
-            var data = {
-                num_boton: num_boton,
-                cantidadPorPagina: cantidadPorPagina,
-                idCliente: idCliente,
-                idServicio: idServicio,
-                idProyecto: idProyecto,
-                tipoComparacion: tipoComparacion,
-                tipoCargo: tipoCargo,
-                fechaIni: fechaIni,
-                fechaFin: fechaFin,
-            };
-        console.log('data',data);
+        // Validación de fechas
+        if (new Date(fechaFin) < new Date(fechaIni)) {
+            console.log("La fechaFin debe ser mayor o igual a la fechaInicio.");
+            return;
+        }
+
+        var url = "pages/listados/listadoCompetenciasGeneralEval.php";
+        var operationUrl = "listadoCompetenciasGeneralEval";
+
+        var data = {
+            // num_boton: num_boton,
+            // cantidadPorPagina: cantidadPorPagina,
+
+            idCliente: selectedClientsString,
+            idServicio: selectedServicioString,
+            idProyecto: selectedProyString,
+            tipoComparacion: tipoComparacion,
+            tipoCargo: tipoCargo,
+            fechaIni: fechaIni,
+            fechaFin: fechaFin,
+        }
+
+        console.log('data', data);
         SendDataService(url, operationUrl, data).then((data) => {
-
-            const { paginador, ...datos } = data;
-            setCantidadPaginas(paginador.cantPaginas);
-            setEDDCompProy(datos.datos)
-            console.log('response',data);
+            // const { paginador, ...datos } = data;
+            // setCantidadPaginas(paginador.cantPaginas);
+            setEDDCompProy(data)
         });
     }
 
+    const buscarClick = () => {
+    //   EXPRESION
+            if (selectedServicioString === "" && selectedProyString === "") {
+                if (selectedClients.length < 2 || /^,(.*)/.test(selectedClients)|| /.*,,.*/.test(selectedClients)) {
+                    TopAlerts('AlMenosDosClientes')
+                    return;
+                }
+            } else if (selectedProyString === "") {
+                if (selectedServicio.length < 2 || /^,(.*)/.test(selectedServicio)|| /.*,,.*/.test(selectedServicio)) {
+                    TopAlerts('AlMenosDosServicios')
+                    return;
+                }
+            } else if (selectedProyecto.length < 2 || /^,(.*)/.test(selectedProyecto) || /.*,,.*/.test(selectedProyecto)) {
+                TopAlerts('AlMenosDosProyectos')
+                return;
+
+            }
+
+            SendData();
+
+    };
+
+
+    // Restablecer los valores
     const limpiarClick = () => {
-        // Restablecer los estados a su valor inicial (vacío o predeterminado)
-        setidCliente("");
-        setidProyecto("");
+
+        setSelectedClients([]);
+        setSelectedServicio([]);
+        setSelectedProyecto([]);np
+        setidProyecto('0');
         setTipoComparacion("");
         setTipoCargo("");
         setFechaIni("");
         setFechaFin("");
-      };
-       //PAGINADOR ---------------------
+    };
+    const resetProjects = () => {
+        setSelectedProyecto([]);
+        setidProyecto('');
+    };
+    const resetServices = () => {
+        setSelectedServicio([]);
+    };
+    // FINNN Restablecer los valores
 
     return userData.statusConected || userData !== null ? (
         <>
@@ -166,7 +217,7 @@ export default function ListadoCompProy() {
                         type="submit"
                         id="btnAtras"
                         value="Registrar"
-                        href="/ListadoEddProyEmp/0">Volver
+                        href="/home">Volver
                     </a>
                     <h1 id="TitlesPages">
                         Listado de comparación de proyectos
@@ -176,107 +227,97 @@ export default function ListadoCompProy() {
                     </h6>
                     <br></br>
 
-                    <table style={{ marginRight: 'auto' }}>
+                    <table style={{ width: '100%' }}>
                         <tr>
-                            <td style={{ width: '7em' }}>
-                                
-                                    <label htmlFor="input_CantidadRegistros">
-                                        Cant registros:
-                                    </label>
-                                    <select
-                                        // value={cantidadPorPagina || ""}
-                                        className="form-control"
-                                        name="input_CantidadRegistros"
-                                        id="input_CantidadRegistros"
-                                        onChange={({ target }) => {
-                                            setcantidadPorPagina(target.value);
-                                            setNumBoton(1);
-                                        }}
-                                        required
-                                    >
-                                        <option hidden value="">
-                                            {cantidadPorPagina}
+
+                            <td style={{ width: '16em' }}>
+
+                                <label htmlFor="input_CantidadR">Clientes: </label>
+                                <select
+                                    multiple
+                                    required
+                                    type="text"
+                                    className="form-control"
+                                    onChange={({ target }) => {
+                                        const selectedOptions = Array.from(target.selectedOptions, option => option.value);
+                                        setSelectedClients(selectedOptions);
+                                        // setNumBoton(1);
+                                        resetProjects();
+                                        resetServices();
+                                    }}
+                                >
+                                    <option disabled hidden>Clientes</option>
+                                    <option value="">Ninguno</option>
+                                    {listCliente.map((valor) => (
+                                        <option
+                                            selected={selectedClients.includes(valor.idCliente) ? "selected" : ""}
+                                            value={valor.idCliente}
+                                        >
+                                            {valor.nomCliente}
                                         </option>
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                
+                                    ))}
+                                </select>
+
                             </td>
-                            <td id="espacioEntreOpciones">
-                               
-                                    <label htmlFor="input_CantidadR">Clientes: </label>
 
-                                    <select
-                                        required
-                                        type="text"
-                                        className="form-control"
-                                        onChange={({ target }) => {
-                                            setidCliente(target.value);
-                                            setNumBoton(1);
-                                        }}
-                                    >
 
-                                        <option disabled hidden>Clientes</option>
-                                        <option value="0">Todos</option>
+                            <td id="espacioEntreOpciones" style={{ width: '16em' }}>
 
-                                        {listCliente.map((valor) => (
-                                            <option
-                                                selected={valor.idCliente === idCliente ? "selected" : ""}
-                                                value={valor.idCliente}
-                                            >
-                                                {valor.nomCliente}
-                                            </option>
-                                        ))}
-                                    </select>
-                                
+                                <label htmlFor="input_CantidadR">Servicios: </label>
+                                <select
+                                    multiple
+                                    required
+                                    type="text"
+                                    className="form-control"
+
+                                    onChange={({ target }) => {
+                                        const selectedOptions = Array.from(target.selectedOptions, option => option.value);
+                                        setSelectedServicio(selectedOptions);
+                                        // setNumBoton(1);
+                                        resetProjects();
+                                    }}
+                                >
+                                    <option disabled hidden>Servicios</option>
+                                    <option value="">Ninguno</option>
+                                    {listServicio.map((valor) => (
+                                        <option
+                                            selected={selectedServicio.includes(valor.idServicio) ? "selected" : ""}
+
+                                            value={valor.idServicio}
+                                        >
+                                            {valor.nomServicio}
+                                        </option>
+                                    ))}
+                                </select>
+
                             </td>
-                        
-                            <td id="espacioEntreOpciones">
 
-                                    <label htmlFor="input_CantidadR">Proyectos:</label>
+                            <td id="espacioEntreOpciones" style={{ width: '16em' }}>
 
-                                    <select
-                                        required
-                                        type="text"
-                                        className="form-control"
-                                        onChange={({ target }) => { setidProyecto(target.value); setNumBoton(1); }}
-                                    >
-                                        <option disabled hidden>Proyectos</option>
-                                        <option value="0">Todos</option>
-                                        {listProyecto.map((valor) => (
-                                            <option
-                                                selected={(valor.idProyecto === idProyecto ? "selected" : "")}
-                                                value={valor.idProyecto}
-                                            >
-                                                {valor.nomProyecto}
-                                            </option>
-                                        ))}
-                                    </select>
-                               
-                            </td>
-                            <td id="espacioEntreOpciones">
-                               
-                                    <label htmlFor="input_CantidadR">Servicios: </label>
-                                    <select
-                                        required
-                                        type="text"
-                                        className="form-control"
-                                        onChange={({ target }) => { setidServicio(target.value); setNumBoton(1); }}
-                                    >
-                                        <option disabled hidden>Servicios</option>
-                                        <option value="0">Todos</option>
-                                        {listServicio.map((valor) => (
-                                            <option
-                                                selected={(valor.idServicio === idServicio ? "selected" : "")}
-                                                value={valor.idServicio}
-                                            >
-                                                {valor.nomServicio}
-                                            </option>
-                                        ))}
-                                    </select>
-                               
+                                <label htmlFor="input_CantidadR">Proyectos:</label>
+
+                                <select
+                                    multiple
+                                    required
+                                    type="text"
+                                    className="form-control"
+                                    onChange={({ target }) => {
+                                        const selectedOptions = Array.from(target.selectedOptions, option => option.value);
+                                        setSelectedProyecto(selectedOptions);
+                                    }}
+                                >
+                                    <option disabled hidden>Proyectos</option>
+                                    <option value="">Ninguno</option>
+                                    {listProyecto.map((valor) => (
+                                        <option
+                                            selected={selectedProyecto.includes(valor.idEDDProyecto) ? "selected" : ""}
+                                            value={valor.idEDDProyecto}
+                                        >
+                                            {valor.nomProyecto}
+                                        </option>
+                                    ))}
+                                </select>
+
                             </td>
                             <td id="espacioEntreOpciones">
                                 <label>Fecha inicio:</label>
@@ -299,17 +340,44 @@ export default function ListadoCompProy() {
                                     onChange={(e) => setFechaFin(e.target.value)}
                                 />
                             </td>
+
                             <td>
                                 <option disabled></option>
                                 <button data-title="Limpiar filtros" type="button" class="btn-General-Pag" onClick={limpiarClick}
                                 >Limpiar</button>
                             </td>
+                            {/* <td style={{ width: '12em' }} id='espacioEntreOpcionesCantReg'>
+
+                                <label htmlFor="input_CantidadRegistros">
+                                    Cant registros:
+                                </label>
+                                <select
+                                    // value={cantidadPorPagina || ""}
+                                    className="form-control"
+                                    name="input_CantidadRegistros"
+                                    id="input_CantidadRegistros"
+                                    onChange={({ target }) => {
+                                        setcantidadPorPagina(target.value);
+                                        setNumBoton(1);
+                                    }}
+                                    required
+                                >
+                                    <option hidden value="">
+                                        {cantidadPorPagina}
+                                    </option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+
+                            </td> */}
                         </tr>
                     </table>
 
                     <br></br>
 
-                    <table style={{ marginRight: 'auto' }}>
+                    <table style={{ width: '100%' }}>
                         <tr>
                             <td><div id="tableResumen">
                                 <table>
@@ -321,32 +389,32 @@ export default function ListadoCompProy() {
                                             type="radio"
                                             id="general"
                                             name="tipoComparacion"
-                                            value="general"
-                                            checked={tipoComparacion === "general"}
+                                            value="GENERAL"
+                                            checked={tipoComparacion === "GENERAL"}
                                             onChange={(e) => setTipoComparacion(e.target.value)}
                                         />
-                                        <label htmlFor="general">General</label></td>
+                                        <label htmlFor="general">&nbsp;General</label></td>
 
                                     <td id="espacioEntreOpciones">
                                         <input
                                             type="radio"
                                             id="mes"
                                             name="tipoComparacion"
-                                            value="mes"
-                                            checked={tipoComparacion === "mes"}
+                                            value="MES"
+                                            checked={tipoComparacion === "MES"}
                                             onChange={(e) => setTipoComparacion(e.target.value)}
                                         />
-                                        <label htmlFor="mes">Mes</label></td>
+                                        <label htmlFor="mes">&nbsp;Mes</label></td>
                                     <td id="espacioEntreOpciones">
                                         <input
                                             type="radio"
                                             id="año"
                                             name="tipoComparacion"
-                                            value="año"
-                                            checked={tipoComparacion === "año"}
+                                            value="AÑO"
+                                            checked={tipoComparacion === "AÑO"}
                                             onChange={(e) => setTipoComparacion(e.target.value)}
                                         />
-                                        <label htmlFor="año">Año</label></td>
+                                        <label htmlFor="año">&nbsp;Año</label></td>
 
                                 </table>
                             </div>
@@ -362,51 +430,48 @@ export default function ListadoCompProy() {
                                                 type="radio"
                                                 id="referentes"
                                                 name="tipoCargo"
-                                                value="referentes"
-                                                checked={tipoCargo === "referentes"}
+                                                value="REFERENTE"
+                                                checked={tipoCargo === "REFERENTE"}
                                                 onChange={(e) => setTipoCargo(e.target.value)}
                                             />
-                                            <label htmlFor="referentes">Referentes</label></td>
+                                            <label htmlFor="referentes">&nbsp;Referente</label></td>
                                         <td id="espacioEntreOpciones">
                                             <input
                                                 type="radio"
                                                 id="colaborador"
                                                 name="tipoCargo"
-                                                value="colaborador"
-                                                checked={tipoCargo === "colaborador"}
+                                                value="COLABORADOR"
+                                                checked={tipoCargo === "COLABORADOR"}
                                                 onChange={(e) => setTipoCargo(e.target.value)}
                                             />
-                                            <label htmlFor="colaborador">Colaborador</label></td>
+                                            <label htmlFor="colaborador">&nbsp;Colaborador</label></td>
 
                                         <td id="espacioEntreOpciones">
                                             <input
                                                 type="radio"
                                                 id="ambos"
                                                 name="tipoCargo"
-                                                value="ambos"
-                                                checked={tipoCargo === "ambos"}
+                                                value="TODOS"
+                                                checked={tipoCargo === "TODOS"}
                                                 onChange={(e) => setTipoCargo(e.target.value)}
                                             />
-                                            <label htmlFor="ambos">Ambos</label></td>
+                                            <label htmlFor="ambos">&nbsp;Ambos</label></td>
                                     </table>
                                 </div>
                             </td>
                             <td >
                                 <button data-title="Buscar" type="button" class="btn-General-Pag"
-                                    onClick={SendData}
+                                    onClick={buscarClick} // Aquí se agrega el manejador de eventos
                                 >Buscar</button>
                             </td>
 
-                            <td>
+                            <td >
                                 <Link to='/DashboardCompProy'>
-                                <button data-title="Desplegar dashboard"  type="button" class="btn-General-Pag" 
-                                >Desplegar Dashboard</button></Link>
+                                    <button data-title="Desplegar dashboard" type="button" class="btn-General-Pag"
+                                    >Desplegar Dashboard</button></Link>
                             </td>
                         </tr>
                     </table>
-
-
-
                     <Table id="mainTable" hover responsive>
                         <thead>
                             <tr>
@@ -420,27 +485,31 @@ export default function ListadoCompProy() {
                                 <th>% Total Colaboradores</th>
                                 <th >Cant Referentes</th>
                                 <th>Cant Colaboradores</th>
-                                <th>Operaciones</th>
+                                {/* <th>Operaciones</th> */}
 
                             </tr>
                         </thead>
                         <tbody>
                             {EDDCompProy.map((idEDDCompProy) => (
-                                <tr key={idEDDCompProy.nomCliente}>
+                                <tr key={idEDDCompProy.idCliente}>
+                                    <td>{idEDDCompProy.nomCliente}</td>
                                     <td>{idEDDCompProy.nomServicio}</td>
                                     <td>{idEDDCompProy.nomProyecto}</td>
                                     <td>{idEDDCompProy.epeFechaIni}</td>
                                     <td>{idEDDCompProy.epeFechaFin}</td>
-                                    <td>{idEDDCompProy.porcAprobComp}</td>
+                                    <td>{idEDDCompProy.porcAprobRef}</td>
+                                    <td>{idEDDCompProy.porcAprobColab}</td>
+                                    <td>{idEDDCompProy.cantReferentes}</td>
+                                    <td>{idEDDCompProy.cantColaboradores}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </Table>
-                    <Paginador
+                    {/* <Paginador
                         paginas={cantidadPaginas}
                         cambiarNumero={setNumBoton}
                         num_boton={num_boton}
-                    ></Paginador>
+                    ></Paginador> */}
                 </div>
             </div >
         </>

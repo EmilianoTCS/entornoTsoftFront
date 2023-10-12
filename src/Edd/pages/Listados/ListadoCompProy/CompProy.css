@@ -14,9 +14,16 @@
   color: #e10b1c;
 }
 
+
+
 #espacioEntreOpciones {
   padding-left: 1em;
 }
+
+#espacioEntreOpcionesCantReg {
+    padding-left: 5em;
+  }
+  
 
 #tableResumen {
   border-radius: 10px;
