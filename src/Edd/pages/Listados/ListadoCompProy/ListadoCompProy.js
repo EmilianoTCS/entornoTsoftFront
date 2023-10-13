@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Container, Table, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
 import { useRoute } from "wouter";
 
@@ -14,6 +14,7 @@ import { MdDashboard } from "react-icons/md";
 import { SiSubstack } from "react-icons/si";
 import { FaComments } from "react-icons/fa";
 import { BiSolidSend } from "react-icons/bi";
+import { FaQuestionCircle } from "react-icons/fa";
 
 import Select from 'react-select';
 
@@ -69,7 +70,7 @@ export default function ListadoCompProy() {
     }
 
     function obtenerProyecto() {
-        if (selectedServicio.length > 0) {
+        if (selectedServicio.length > 0 && !selectedClients.includes("0")) { // Verifica si "Ninguno" está seleccionado
             const url = "pages/auxiliares/listadoProyectoForms.php";
             const operationUrl = "listados";
             var data = {
@@ -78,8 +79,11 @@ export default function ListadoCompProy() {
             SendDataService(url, operationUrl, data).then((data) => {
                 setlistProyecto(data);
             });
+        } else {
+            setlistProyecto([]); // Establece la lista de proyectos en vacío
         }
     }
+
 
     function obtenerServicio() {
         if (selectedClients.length > 0) {
@@ -129,17 +133,48 @@ export default function ListadoCompProy() {
         ]
     );
 
-    function SendData() {
-
-        // Validación de fechas
-        if (new Date(fechaFin) < new Date(fechaIni)) {
-            console.log("La fechaFin debe ser mayor o igual a la fechaInicio.");
-            return;
-        }
-
+    function SendData(data) {
         var url = "pages/listados/listadoCompetenciasGeneralEval.php";
         var operationUrl = "listadoCompetenciasGeneralEval";
 
+
+
+        console.log('data', data);
+        SendDataService(url, operationUrl, data).then((data) => {
+            // const { paginador, ...datos } = data;
+            // setCantidadPaginas(paginador.cantPaginas);
+            setEDDCompProy(data)
+        });
+    }
+
+    const buscarClick = () => {
+        // Validación de fechas
+        if (new Date(fechaFin) < new Date(fechaIni)) {
+            TopAlerts('FechaFinMayorInicio')
+            return;
+        }
+
+        //   EXPRESION
+        if (selectedServicioString === "" && selectedProyString === "") {
+            if (selectedClients.length < 2 || /^,(.*)/.test(selectedClients) || /.*,,.*/.test(selectedClients) || /[0]/.test(selectedClients)) {
+                TopAlerts('AlMenosDosClientes')
+                return;
+            }
+        } else if (selectedProyString === "") {
+            if (selectedServicio.length < 2 || /^,(.*)/.test(selectedServicio) || /.*,,.*/.test(selectedServicio) || /[0]/.test(selectedServicio)) {
+                TopAlerts('AlMenosDosServicios')
+                return;
+            }
+        } else if (selectedProyecto.length < 2 || /^,(.*)/.test(selectedProyecto) || /.*,,.*/.test(selectedProyecto) || /[0]/.test(selectedProyecto)) {
+            TopAlerts('AlMenosDosProyectos')
+            return;
+
+        }
+
+        if (!fechaIni || !fechaFin || !tipoComparacion || !tipoCargo) {
+            TopAlerts('CamposLlenos')
+            return; // Salir de la función si los campos no están llenos
+        }
         var data = {
             // num_boton: num_boton,
             // cantidadPorPagina: cantidadPorPagina,
@@ -152,50 +187,27 @@ export default function ListadoCompProy() {
             fechaIni: fechaIni,
             fechaFin: fechaFin,
         }
-
-        console.log('data', data);
-        SendDataService(url, operationUrl, data).then((data) => {
-            // const { paginador, ...datos } = data;
-            // setCantidadPaginas(paginador.cantPaginas);
-            setEDDCompProy(data)
-        });
-    }
-
-    const buscarClick = () => {
-    //   EXPRESION
-            if (selectedServicioString === "" && selectedProyString === "") {
-                if (selectedClients.length < 2 || /^,(.*)/.test(selectedClients)|| /.*,,.*/.test(selectedClients)) {
-                    TopAlerts('AlMenosDosClientes')
-                    return;
-                }
-            } else if (selectedProyString === "") {
-                if (selectedServicio.length < 2 || /^,(.*)/.test(selectedServicio)|| /.*,,.*/.test(selectedServicio)) {
-                    TopAlerts('AlMenosDosServicios')
-                    return;
-                }
-            } else if (selectedProyecto.length < 2 || /^,(.*)/.test(selectedProyecto) || /.*,,.*/.test(selectedProyecto)) {
-                TopAlerts('AlMenosDosProyectos')
-                return;
-
-            }
-
-            SendData();
+        SendData(data);
 
     };
 
 
     // Restablecer los valores
     const limpiarClick = () => {
-
         setSelectedClients([]);
         setSelectedServicio([]);
-        setSelectedProyecto([]);np
+        setSelectedProyecto([]);
         setidProyecto('0');
+        setidServicio('0');
         setTipoComparacion("");
         setTipoCargo("");
         setFechaIni("");
         setFechaFin("");
+        setlistServicio([]);
+        // Reset the EDDCompProy to its default state (an empty array)
+        setEDDCompProy([]);
     };
+
     const resetProjects = () => {
         setSelectedProyecto([]);
         setidProyecto('');
@@ -205,6 +217,9 @@ export default function ListadoCompProy() {
     };
     // FINNN Restablecer los valores
 
+    const queryString = `?selectedClients=${selectedClients}&selectedServicio=${selectedServicio}&selectedProyecto=${selectedProyecto}&tipoComparacion=${tipoComparacion}&tipoCargo=${tipoCargo}&fechaIni=${fechaIni}&fechaFin=${fechaFin}`;
+
+    const mensajeCtrl = "Utilice Ctrl y haga click en las opciones o deslice el mouse para seleccionar más de un ítem.";
     return userData.statusConected || userData !== null ? (
         <>
             <Header></Header>
@@ -231,8 +246,10 @@ export default function ListadoCompProy() {
                         <tr>
 
                             <td style={{ width: '16em' }}>
-
                                 <label htmlFor="input_CantidadR">Clientes: </label>
+                                <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
+                                    <span> <FaQuestionCircle id="icons" /></span>
+                                </OverlayTrigger>
                                 <select
                                     multiple
                                     required
@@ -240,14 +257,23 @@ export default function ListadoCompProy() {
                                     className="form-control"
                                     onChange={({ target }) => {
                                         const selectedOptions = Array.from(target.selectedOptions, option => option.value);
-                                        setSelectedClients(selectedOptions);
-                                        // setNumBoton(1);
+
+                                        if (selectedOptions.includes("todos")) {
+                                            // Si "Todos" está seleccionado, selecciona todas las demás opciones excepto "Ninguno"
+                                            setSelectedClients(listCliente.filter(valor => valor.idCliente !== "0").map(valor => valor.idCliente));
+                                        } else if (selectedOptions.includes("0")) {
+                                            // Si "Ninguno" está seleccionado, deselecciona todas las demás opciones
+                                            setSelectedClients(["0"]);
+                                        } else {
+                                            setSelectedClients(selectedOptions);
+                                        }
                                         resetProjects();
                                         resetServices();
                                     }}
                                 >
                                     <option disabled hidden>Clientes</option>
-                                    <option value="">Ninguno</option>
+                                    <option value="0">Ninguno</option>
+                                    <option value="todos">-- Todos --</option> {/* Agrega la opción "Todos" */}
                                     {listCliente.map((valor) => (
                                         <option
                                             selected={selectedClients.includes(valor.idCliente) ? "selected" : ""}
@@ -264,25 +290,35 @@ export default function ListadoCompProy() {
                             <td id="espacioEntreOpciones" style={{ width: '16em' }}>
 
                                 <label htmlFor="input_CantidadR">Servicios: </label>
+                                <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
+                                    <span> <FaQuestionCircle id="icons" /></span>
+                                </OverlayTrigger>
                                 <select
                                     multiple
                                     required
                                     type="text"
                                     className="form-control"
-
                                     onChange={({ target }) => {
                                         const selectedOptions = Array.from(target.selectedOptions, option => option.value);
-                                        setSelectedServicio(selectedOptions);
-                                        // setNumBoton(1);
+
+                                        if (selectedOptions.includes("todos")) {
+                                            // Si "Todos" está seleccionado, selecciona todas las demás opciones excepto "Ninguno"
+                                            setSelectedServicio(listServicio.filter(valor => valor.idServicio !== "0").map(valor => valor.idServicio));
+                                        } else if (selectedOptions.includes("0")) {
+                                            // Si "Ninguno" está seleccionado, deselecciona todas las demás opciones
+                                            setSelectedServicio(["0"]);
+                                        } else {
+                                            setSelectedServicio(selectedOptions);
+                                        }
                                         resetProjects();
                                     }}
                                 >
                                     <option disabled hidden>Servicios</option>
-                                    <option value="">Ninguno</option>
+                                    <option value="0">Ninguno</option>
+                                    <option value="todos">-- Todos --</option> {/* Agrega la opción "Todos" */}
                                     {listServicio.map((valor) => (
                                         <option
                                             selected={selectedServicio.includes(valor.idServicio) ? "selected" : ""}
-
                                             value={valor.idServicio}
                                         >
                                             {valor.nomServicio}
@@ -295,6 +331,9 @@ export default function ListadoCompProy() {
                             <td id="espacioEntreOpciones" style={{ width: '16em' }}>
 
                                 <label htmlFor="input_CantidadR">Proyectos:</label>
+                                <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
+                                    <span> <FaQuestionCircle id="icons" /></span>
+                                </OverlayTrigger>
 
                                 <select
                                     multiple
@@ -303,11 +342,21 @@ export default function ListadoCompProy() {
                                     className="form-control"
                                     onChange={({ target }) => {
                                         const selectedOptions = Array.from(target.selectedOptions, option => option.value);
-                                        setSelectedProyecto(selectedOptions);
+
+                                        if (selectedOptions.includes("todos")) {
+                                            // Si "Todos" está seleccionado, selecciona todas las demás opciones excepto "Ninguno"
+                                            setSelectedProyecto(listProyecto.filter(valor => valor.idEDDProyecto !== "0").map(valor => valor.idEDDProyecto));
+                                        } else if (selectedOptions.includes("0")) {
+                                            // Si "Ninguno" está seleccionado, deselecciona todas las demás opciones
+                                            setSelectedProyecto(["0"]);
+                                        } else {
+                                            setSelectedProyecto(selectedOptions);
+                                        }
                                     }}
                                 >
                                     <option disabled hidden>Proyectos</option>
-                                    <option value="">Ninguno</option>
+                                    <option value="0">Ninguno</option>
+                                    <option value="todos">-- Todos --</option> {/* Agrega la opción "Todos" */}
                                     {listProyecto.map((valor) => (
                                         <option
                                             selected={selectedProyecto.includes(valor.idEDDProyecto) ? "selected" : ""}
@@ -466,9 +515,14 @@ export default function ListadoCompProy() {
                             </td>
 
                             <td >
-                                <Link to='/DashboardCompProy'>
-                                    <button data-title="Desplegar dashboard" type="button" class="btn-General-Pag"
-                                    >Desplegar Dashboard</button></Link>
+                                <Link to={{
+                                    pathname: '/dashboardCompProy',
+                                    search: queryString,
+                                }}>
+                                    <button data-title="Desplegar dashboard" type="button" className="btn-General-Pag">
+                                        Desplegar Dashboard
+                                    </button>
+                                </Link>
                             </td>
                         </tr>
                     </table>

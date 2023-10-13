@@ -14,40 +14,33 @@ import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+import queryString from 'query-string';
 
-export default function DashboardCompProy() {
-    const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
+const DashboardCompProy = ({ location }) => {
+  const parsed = queryString.parse(location.search);
+  const selectedClients = parsed.selectedClients;
+  const selectedServicio = parsed.selectedServicio;
+  const selectedProyecto = parsed.selectedProyecto;
+  const tipoComparacion = parsed.tipoComparacion;
+  const tipoCargo = parsed.tipoCargo;
+  const fechaIni = parsed.fechaIni;
+  const fechaFin = parsed.fechaFin;
 
-    const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: red;
-  `;
-  
-  const centerStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh', // Esto centra verticalmente en la pantalla
-  };
-  
-  const LoadingIcon = () => {
-    return (
-      <div style={centerStyle}>
-        <div className="loading-icon">
-          <ClipLoader color={'#000'} loading={true} css={override} size={50} />
-        </div>
-      </div>
-    );
-  };
-    //PAGINADOR ---------------------
+  // Haz lo que necesites con los valores
+  console.log("selectedClients:", selectedClients);
+  console.log("selectedServicio:", selectedServicio);
+  // ...
 
-    return userData.statusConected || userData !== null ? (
-        <>
-            <Header></Header>
-            <LoadingIcon></LoadingIcon>
-        </>
-    ) : (
-        <Navigate to="/login"></Navigate>
-    );
-}
+  return (
+    <div>
+      {/* Contenido de tu componente */}
+    </div>
+  );
+};
+
+export default DashboardCompProy;
+
+
+
+
+

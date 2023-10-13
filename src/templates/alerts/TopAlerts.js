@@ -8,28 +8,46 @@ export default function TopAlerts(props) {
     // ListCompProy.js Para llos listados
     case "AlMenosDosClientes":
       return MySwal.fire({
-        title: "¡Debes seleccionar al menos 2 clientes!",
+        // title: "Debes seleccionar al menos 2 clientes",
+        text: "Debes seleccionar al menos 2 clientes.",
+        icon: "warning",
+        showConfirmButton: true,
+        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
+      });
+    case "AlMenosDosServicios":
+      return MySwal.fire({
+        text: "Debes seleccionar al menos 2 servicios.",
         // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
         icon: "warning",
         showConfirmButton: true,
-        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok!',
+        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
       });
-      case "AlMenosDosServicios":
-        return MySwal.fire({
-          title: "¡Debes seleccionar al menos 2 servicios!",
-          // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
-          icon: "warning",
-          showConfirmButton: true,
-          confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok!',
-        });
-        case "AlMenosDosProyectos":
-          return MySwal.fire({
-            title: "¡Debes seleccionar al menos 2 proyectos!",
-            // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
-            icon: "warning",
-            showConfirmButton: true,
-            confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok!',
-          });
+    case "AlMenosDosProyectos":
+      return MySwal.fire({
+        text: "Debes seleccionar al menos 2 proyectos.",
+        // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
+        icon: "warning",
+        showConfirmButton: true,
+        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
+      });
+    case "FechaFinMayorInicio":
+      return MySwal.fire({
+        text: "La fecha de fin debe ser mayor a la fecha de incio.",
+        // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
+        icon: "warning",
+        showConfirmButton: true,
+        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
+      });
+
+    case "CamposLlenos":
+      return MySwal.fire({
+        text: "Por favor, complete todos los filtros antes de buscar.",
+        // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
+        icon: "warning",
+        showConfirmButton: true,
+        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
+      });
+
     // 
     case "successCreated":
       return MySwal.fire({
