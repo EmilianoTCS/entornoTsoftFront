@@ -140,7 +140,7 @@ function App() {
             {/* ------------------- */}
 
             <Route element={<ListadoCompProy />} path="/listadoCompProy"></Route>
-            <Route element={<DashboardCompProy />} path="/DashboardCompProy"></Route>
+            <Route element={<DashboardCompProy />} path="/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin"></Route>
 
 
             <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto"></Route>
@@ -149,7 +149,7 @@ function App() {
             element={<FormularioEvaluacion />}
             path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
           ></Route>
-
+            
             <Route
               element={<ListadoEddProyecto />}
               path="/listadoEddProyecto/:params"

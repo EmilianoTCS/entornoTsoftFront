@@ -216,9 +216,6 @@ export default function ListadoCompProy() {
         setSelectedServicio([]);
     };
     // FINNN Restablecer los valores
-
-    const queryString = `?selectedClients=${selectedClients}&selectedServicio=${selectedServicio}&selectedProyecto=${selectedProyecto}&tipoComparacion=${tipoComparacion}&tipoCargo=${tipoCargo}&fechaIni=${fechaIni}&fechaFin=${fechaFin}`;
-
     const mensajeCtrl = "Utilice Ctrl y haga click en las opciones o deslice el mouse para seleccionar más de un ítem.";
     return userData.statusConected || userData !== null ? (
         <>
@@ -515,10 +512,8 @@ export default function ListadoCompProy() {
                             </td>
 
                             <td >
-                                <Link to={{
-                                    pathname: '/dashboardCompProy',
-                                    search: queryString,
-                                }}>
+                                <Link to={
+                                    `/dashboardCompProy/${selectedClients}/${selectedServicio}/${selectedProyecto}/${tipoComparacion}/${tipoCargo}/${fechaIni}/${fechaFin}`}>
                                     <button data-title="Desplegar dashboard" type="button" className="btn-General-Pag">
                                         Desplegar Dashboard
                                     </button>
