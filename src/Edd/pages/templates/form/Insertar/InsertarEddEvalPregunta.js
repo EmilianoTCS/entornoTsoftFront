@@ -33,6 +33,8 @@ const InsertarEDDEvalPregunta = ({
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
+
+
   const handleClose = () => cambiarEstado(false);
 
   // ----------------------FUNCIONES----------------------------
@@ -53,14 +55,21 @@ const InsertarEDDEvalPregunta = ({
   }
 
   function SendData(e) {
-    // e.preventDefault();
+    e.preventDefault();
     const url = "pages/insertar/insertarEddEvalPregunta.php";
     const operationUrl = "insertarEddEvalPregunta";
+  
+    let competenciaValue = idEDDEvalCompetencia;
+    if (tipoResp === 'T') {
+      // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
+      competenciaValue = '0';
+    }
+  
     var data = {
       usuarioCreacion: userData.usuario,
       nomPregunta: nomPregunta,
       ordenPregunta: ordenPregunta,
-      idEDDEvalCompetencia: idEDDEvalCompetencia,
+      idEDDEvalCompetencia: competenciaValue,
       idEDDEvaluacion: idEDDEvaluacion,
       tipoResp: tipoResp,
       preguntaObligatoria: preguntaObligatoria,
@@ -68,12 +77,12 @@ const InsertarEDDEvalPregunta = ({
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts("successCreated");
+      // TopAlerts("successCreated");
       actualizarEDDEvalPregunta(EDDEvalPregunta);
       console.log(response);
     });
   }
-
+  
   function actualizarEDDEvalPregunta(response) {
     listEDDEvalPregunta.push(response);
   }
@@ -82,6 +91,10 @@ const InsertarEDDEvalPregunta = ({
     obtenerEDDEvalCompetencia();
     obtenerEDDEvaluacion();
   }, []);
+
+
+  const [competenciaEnabled, setCompetenciaEnabled] = useState(true);
+
 
   // ----------------------RENDER----------------------------
   return (
@@ -145,6 +158,31 @@ const InsertarEDDEvalPregunta = ({
 
 
             <div className="form-group">
+              <label htmlFor="input_TipRESP">Tipo de respuesta: </label>
+              <select
+                required
+                className="form-control"
+                name="input_TipRESP"
+                id="input_TipRESP"
+                onChange={({ target }) => {
+                  settipoResp(target.value);
+                  if (target.value === 'T') {
+                    setCompetenciaEnabled(false);
+                  } else {
+                    setCompetenciaEnabled(true);
+                  }
+                }}
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+                <option value="A">ALTERNATIVA</option>
+                <option value="T">TEXTO</option>
+              </select>
+            </div>
+
+
+            <div className="form-group">
               <label htmlFor="input_comp">Competencia: </label>
               <select
                 required
@@ -153,11 +191,14 @@ const InsertarEDDEvalPregunta = ({
                 id="input_comp"
                 placeholder="Seleccione la competencia"
                 onChange={({ target }) => setidEDDEvalCompetencia(target.value)}
+                disabled={!competenciaEnabled}
               >
                 <option hidden value="">
                   Desplegar lista
                 </option>
-
+                <option value='0'>
+                  Ninguno
+                </option>
                 {listEDDEvalCompetencia.map((valor) => (
                   <option value={valor.idEDDEvalCompetencia}>
                     {valor.nomCompetencia}
@@ -166,27 +207,7 @@ const InsertarEDDEvalPregunta = ({
               </select>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="input_TipRESP">Tipo de respuesta: </label>
-              <select
-                required
-                className="form-control"
-                name="input_TipRESP"
-                id="input_TipRESP"
-                onChange={({ target }) => settipoResp(target.value)}
-              >
-                <option hidden value="">
-                  Desplegar lista
-                </option>
 
-                <option value="A">
-                  ALTERNATIVA
-                </option>                
-                <option value="T">
-                  TEXTO
-                </option>
-              </select>
-            </div>
 
             <div className="form-group">
               <label htmlFor="input_comp">Pregunta obligatoria: </label>
@@ -203,7 +224,7 @@ const InsertarEDDEvalPregunta = ({
 
                 <option value="1">
                   SI
-                </option>                
+                </option>
                 <option value="0">
                   NO
                 </option>

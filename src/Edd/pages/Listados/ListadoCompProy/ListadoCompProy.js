@@ -119,7 +119,7 @@ export default function ListadoCompProy() {
 
     useEffect(
         function () {
-           
+
             obtenerCliente();
             obtenerProyecto();
             obtenerServicio();
@@ -141,11 +141,12 @@ export default function ListadoCompProy() {
             // const { paginador, ...datos } = data;
             // setCantidadPaginas(paginador.cantPaginas);
             setEDDCompProy(data)
-            console.log('Info',data);
+            console.log('Info', data);
         });
     }
 
     const buscarClick = () => {
+
         // Validación de fechas
         if (new Date(fechaFin) < new Date(fechaIni)) {
             TopAlerts('FechaFinMayorInicio')
@@ -164,6 +165,8 @@ export default function ListadoCompProy() {
             TopAlerts('CamposLlenos')
             return; // Salir de la función si los campos no están llenos
         }
+        // Resetear la tabla
+        setEDDCompProy([]);
         var data = {
             // num_boton: num_boton,
             // cantidadPorPagina: cantidadPorPagina,
@@ -195,7 +198,7 @@ export default function ListadoCompProy() {
         setlistServicio([]);
         setEDDCompProy([]); // Esto eliminará los datos de la tabla
     };
-    
+
 
     const resetProjects = () => {
         setSelectedProyecto([]);
@@ -237,7 +240,7 @@ export default function ListadoCompProy() {
                                     <span> <FaQuestionCircle id="icons" /></span>
                                 </OverlayTrigger> */}
                                 <select
-                                    
+
                                     required
                                     type="text"
                                     className="form-control"
@@ -280,7 +283,7 @@ export default function ListadoCompProy() {
                                     <span> <FaQuestionCircle id="icons" /></span>
                                 </OverlayTrigger> */}
                                 <select
-                                    
+
                                     required
                                     type="text"
                                     className="form-control"
@@ -322,7 +325,7 @@ export default function ListadoCompProy() {
                                 </OverlayTrigger>
  */}
                                 <select
-                                    
+
                                     required
                                     type="text"
                                     className="form-control"
@@ -517,6 +520,7 @@ export default function ListadoCompProy() {
                                 <th>Cliente</th>
                                 <th>Servicio</th>
                                 <th>Proyecto</th>
+                                <th>Competencia</th>
                                 <th>Fecha Inicio</th>
                                 <th>Fecha Fin</th>
                                 <th>% Total Referentes</th>
@@ -533,6 +537,7 @@ export default function ListadoCompProy() {
                                     <td>{idEDDCompProy.nomCliente}</td>
                                     <td>{idEDDCompProy.nomServicio}</td>
                                     <td>{idEDDCompProy.nomProyecto}</td>
+                                    <td>{idEDDCompProy.nomCompetencia}</td>
                                     <td>{idEDDCompProy.epeFechaIni}</td>
                                     <td>{idEDDCompProy.epeFechaFin}</td>
                                     <td>{idEDDCompProy.porcAprobRef}</td>

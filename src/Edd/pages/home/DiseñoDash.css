@@ -1,0 +1,25 @@
+#tableResumen{
+  border-radius: 10px;
+  border: 1px grey solid;
+  width: 60%;
+  margin: auto;
+  background-color: #AAB7B8;
+  padding-top:1em ;
+}
+
+#tarjetasInfo{
+  border-radius: 10px;
+  border: 1px rgb(0, 0, 0) solid;
+  margin: auto;
+  background-color: #ffffff;
+
+}
+
+#leyendas{
+  border-radius: 10px;
+  border: 1px rgb(0, 0, 0) solid;
+  margin: auto;
+  background-color: #ffffff;
+  width: 70%;
+
+}

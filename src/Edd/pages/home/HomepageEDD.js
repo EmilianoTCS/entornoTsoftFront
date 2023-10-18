@@ -7,7 +7,7 @@ import "./homeEDD.css";
 import "../DiseñoDashboard/DiseñoDash.css";
 import "../Listados/BtnInsertar.css";
 import "./GraficosDashboard"
-import "./../DiseñoDashboard/DiseñoDash.css"
+import "./DiseñoDash.css"
 import { Link } from "react-router-dom";
 import { ImBook } from "react-icons/im";
 import { Container, Table } from 'react-bootstrap';

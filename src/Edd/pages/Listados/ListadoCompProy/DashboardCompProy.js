@@ -95,7 +95,7 @@ export default function DashboardCompProy() {
     SendDataService(url, operationUrl, data).then((data) => {
       // comparacionPor = MostrarInfo(idCliente, idServicio, idProyecto);
       setDashCompProy(data)
-      // console.log('InformaciónReponse', data);
+      console.log('InformaciónReponse', data);
     });
   }
 
@@ -106,7 +106,7 @@ export default function DashboardCompProy() {
   // GRAFICOS
 
   var predefinedColors = [
-            
+
     // FUERTE
     "#B71C1C", // Rojo              1
     "#303F9F", // Azul              2
@@ -118,7 +118,7 @@ export default function DashboardCompProy() {
     "#EF6C00", // Naranja              8
     "#03A9F4", // Celeste              9
     "#795548", // Verde agua            10
-        
+
     // CLAROS
     "#EF9A9A", // Rojo              1
     "#9FA8DA", // Azul              2
@@ -144,54 +144,68 @@ export default function DashboardCompProy() {
     "#795548", // Verde agua            10
 
     // Agrega más colores según sea necesario
-];
-  
+  ];
+
+  function formatDateToDDMMYYYY(date) {
+    const parsedDate = new Date(date);
+    const day = String(parsedDate.getDate()).padStart(2, '0');
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0'); // Sumar 1 ya que los meses comienzan desde 0
+    const year = parsedDate.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
   function BarrasChart() {
-    const fechas = DashCompProy.map(item => item.epeFechaFin);
+    
+    const fechasConDatos = [...new Set(DashCompProy.map(item => formatDateToDDMMYYYY(item.epeFechaFin)))];
+
     const competencias = [...new Set(DashCompProy.map(item => item.nomCompetencia))];
-    const fechasConDatos = [...new Set(DashCompProy.map(item => item.epeFechaFin))];
-  
+
+
+    
     const datasets = competencias.map((competencia, index) => {
       const data = fechasConDatos.map(fecha => {
         const porcentaje = DashCompProy
-          .filter(item => item.nomCompetencia === competencia && item.epeFechaFin === fecha)
+          .filter(item => item.nomCompetencia === competencia && formatDateToDDMMYYYY(item.epeFechaFin) === fecha)
           .map(item => item.porcAprobComp)[0] || 0;
         return porcentaje;
       });
-  
+
       return {
         label: competencia,
         data: data,
         backgroundColor: predefinedColors[index % predefinedColors.length],
       };
     });
-  
+
     const data = {
-      labels: fechasConDatos,
+      labels: fechasConDatos.map(date => formatDateToDDMMYYYY(date)), // Formatear las fechas antes de mostrarlas
       datasets: datasets,
     };
-  
+
     const options = {
       responsive: true,
       animation: false,
       plugins: {
         legend: {
-          display: true
-        }
+          display: true,
+        },
       },
       scales: {
         y: {
           min: 0,
-          max: 100
+          max: 100,
         },
         x: {
-          ticks: { color: 'black' }
-        }
-      }};
-    
+          ticks: { color: 'black' },
+        },
+      },
+    };
+
+
     return <Bar data={data} options={options} />;
   }
-  
+
+
   // FIN GRAFICOS
 
 
@@ -210,7 +224,7 @@ export default function DashboardCompProy() {
           </div>
         </tr>
 
-       
+
       </table>
 
 

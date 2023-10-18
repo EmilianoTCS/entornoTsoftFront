@@ -24,7 +24,7 @@ export default function TopAlerts(props) {
       });
     case "AlMenosDosProyectos":
       return MySwal.fire({
-        text: "Debes seleccionar al menos 1 proyectos.",
+        text: "Debes seleccionar al menos 1 proyecto.",
         // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
         icon: "warning",
         showConfirmButton: true,
@@ -38,7 +38,14 @@ export default function TopAlerts(props) {
         showConfirmButton: true,
         confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
       });
-
+      case "MismoEvaludorYEvaluado":
+        return MySwal.fire({
+          // title: "Debes seleccionar al menos 2 clientes",
+          text: "No se puede seleccionar el mismo evaluador como evaluado.",
+          icon: "warning",
+          showConfirmButton: true,
+          confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
+        });
     case "CamposLlenos":
       return MySwal.fire({
         text: "Por favor, complete todos los filtros antes de buscar.",

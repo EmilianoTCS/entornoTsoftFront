@@ -84,6 +84,13 @@ const editarEDDEvalPregunta = ({
     e.preventDefault();
     var url = "pages/editar/editarEddEvalPregunta.php";
     var operationUrl = "editarEddEvalPregunta";
+
+    let competenciaValue = idEDDEvalCompetencia;
+    if (tipoResp === 'T') {
+      // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
+      competenciaValue = '0';
+    }
+
     var data = {
       usuarioModificacion: userData.usuario,
       idEDDEvalPregunta: idEDDEvalPregunta,
@@ -91,14 +98,13 @@ const editarEDDEvalPregunta = ({
       ordenPregunta: ordenPregunta === "" ? responseID[0].ordenPregunta : ordenPregunta,
       tipoResp: tipoResp === "" ? responseID[0].tipoResp : tipoResp,
       preguntaObligatoria: preguntaObligatoria === "" ? responseID[0].preguntaObligatoria : preguntaObligatoria,
-      
-      idEDDEvalCompetencia: idEDDEvalCompetencia === "" ? responseID[0].idEDDEvalCompetencia : idEDDEvalCompetencia,
+      idEDDEvalCompetencia: competenciaValue,
       idEDDEvaluacion: idEDDEvaluacion === "" ? responseID[0].idEDDEvaluacion : idEDDEvaluacion,
       isActive: true,
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts("successEdited");
+      // TopAlerts("successEdited");
       actualizarEDDEvalPregunta(EDDEvalPregunta);
       console.log(response);
     });
@@ -111,6 +117,7 @@ const editarEDDEvalPregunta = ({
     }
   }
 
+
   useEffect(
     function () {
       if (idEDDEvalPregunta !== null) {
@@ -122,6 +129,8 @@ const editarEDDEvalPregunta = ({
     [idEDDEvalPregunta]
   );
 
+  const [competenciaEnabled, setCompetenciaEnabled] = useState(true);
+
   // ----------------------RENDER----------------------------
   return (
     <>
@@ -131,7 +140,7 @@ const editarEDDEvalPregunta = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div className="form-group">
+            <div className="form-group">
               <label htmlFor="input_eval">Evaluación: </label>
               <select
                 required
@@ -181,8 +190,29 @@ const editarEDDEvalPregunta = ({
                 required
               />
             </div>
+            <div className="form-group">
+              <label htmlFor="input_TipRESP">Tipo de respuesta: </label>
+              <select
+                required
+                className="form-control"
+                name="input_TipRESP"
+                id="input_TipRESP"
+                value={tipoResp || ""}
+                onChange={({ target }) => {
+                  settipoResp(target.value);
+                  if (target.value === 'T') {
+                    setCompetenciaEnabled(false);
+                  } else {
+                    setCompetenciaEnabled(true);
+                  }
+                }}
+              >
+                <option value="A">ALTERNATIVA</option>
+                <option value="T">TEXTO</option>
+              </select>
+            </div>
 
-           
+
             <div className="form-group">
               <label htmlFor="input_comp">Competencia: </label>
               <select
@@ -192,7 +222,9 @@ const editarEDDEvalPregunta = ({
                 id="input_comp"
                 placeholder="Seleccione la Competencia"
                 onChange={({ target }) => setidEDDEvalCompetencia(target.value)}
+                disabled={!competenciaEnabled}
               >
+                
                 {listEDDEvalCompetencia.map((valor) => (
                   <option
                     selected={valor.idEDDEvalCompetencia === idEDDEvalCompetencia ? "selected" : ""}
@@ -200,28 +232,16 @@ const editarEDDEvalPregunta = ({
                   >
                     {valor.nomCompetencia}
                   </option>
+                  
                 ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="input_TipRESP">Tipo de respuesta: </label>
-              <select
-                required
-                className="form-control"
-                name="input_TipRESP"
-                id="input_TipRESP"
-                value={tipoResp || ""}
-                onChange={({ target }) => settipoResp(target.value)}
-              >
-                <option value="A">
-                ALTERNATIVA
-                </option>                
-                <option value="T">
-                TEXTO
+                 <option value='0'>
+                  Ninguno
                 </option>
               </select>
             </div>
+
+
+
 
             <div className="form-group">
               <label htmlFor="input_comp">Pregunta obligatoria: </label>
@@ -235,7 +255,7 @@ const editarEDDEvalPregunta = ({
               >
                 <option value="1">
                   SI
-                </option>                
+                </option>
                 <option value="0">
                   NO
                 </option>
