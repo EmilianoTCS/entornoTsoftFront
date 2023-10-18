@@ -37,13 +37,27 @@ export default function ListadoEddProyecto() {
 
   const [listServicio, setlistServicio] = useState([""]);
 
+  // function obtenerServicio() {
+  //   const url = "pages/auxiliares/listadoServicioForms.php";
+  //   const operationUrl = "listados";
+  //   getDataService(url, operationUrl).then((response) =>
+  //     setlistServicio(response)
+  //   );
+  // }
+
+
   function obtenerServicio() {
-    const url = "pages/auxiliares/listadoServicioForms.php";
-    const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistServicio(response)
-    );
-  }
+   
+        const url = "pages/auxiliares/listadoServicioForms.php";
+        const operationUrl = "listados";
+        var data = {
+            idCliente: '',
+        };
+        SendDataService(url, operationUrl, data).then((data) => {
+            setlistServicio(data);
+        });
+  
+}
 
   function insertarEDDProyecto() {
     setIsActiveInsertEDDProyecto(!isActiveInsertEDDProyecto);

@@ -24,7 +24,7 @@ export default function TopAlerts(props) {
       });
     case "AlMenosDosProyectos":
       return MySwal.fire({
-        text: "Debes seleccionar al menos 2 proyectos.",
+        text: "Debes seleccionar al menos 1 proyectos.",
         // text: "Hemos enviado un correo a la dirección escrita, revísalo para poder continuar con la operación. Puedes cerrar esta pestaña.",
         icon: "warning",
         showConfirmButton: true,

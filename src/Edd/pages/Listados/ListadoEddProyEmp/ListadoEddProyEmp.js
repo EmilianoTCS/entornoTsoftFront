@@ -40,12 +40,24 @@ export default function ListadoEDDProyEmp() {
 
   const [listEmpleado, setlistEmpleado] = useState([""]);
 
+  // function obtenerProyecto() {
+  //   const url = "pages/auxiliares/listadoProyectoForms.php";
+  //   const operationUrl = "listados";
+  //   getDataService(url, operationUrl).then((response) =>
+  //     setlistProyecto(response)
+  //   );
+  // }
+
+
   function obtenerProyecto() {
     const url = "pages/auxiliares/listadoProyectoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistProyecto(response)
-    );
+    var data = {
+      idServicio: '',
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setlistProyecto(data);
+    });
   }
   function obtenerEmpleado() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
@@ -118,7 +130,7 @@ export default function ListadoEDDProyEmp() {
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
-        <a
+          <a
             type="submit"
             id="btnAtras"
             value="Registrar"
@@ -242,11 +254,11 @@ export default function ListadoEDDProyEmp() {
 
 
 
-                      <Link to={EDDProyEmp.idProyecto !== 'empty / vacio' ? `/listadoEddEvalProyEmp/${EDDProyEmp.idProyecto}`: ''}>
-                        <button disabled={EDDProyEmp.nomProyecto !== 'empty / vacio' ? false : true} data-title="Evaluaciones relacionadas" id="OperationBtns">
-                          <AiFillBook id="icons" />
-                        </button>
-                      </Link >
+                    <Link to={EDDProyEmp.idProyecto !== 'empty / vacio' ? `/listadoEddEvalProyEmp/${EDDProyEmp.idProyecto}` : ''}>
+                      <button disabled={EDDProyEmp.nomProyecto !== 'empty / vacio' ? false : true} data-title="Evaluaciones relacionadas" id="OperationBtns">
+                        <AiFillBook id="icons" />
+                      </button>
+                    </Link >
 
 
 

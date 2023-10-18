@@ -66,12 +66,24 @@ export default function ListadoEDDEvalProyEmp() {
   // const [listEDDProyEmpEvaluado, setlistEDDProyEmpEvaluado] = useState([""]);
   // const [listEDDEvaluacion, setlistEDDEvaluacion] = useState([""]);
 
+  // function obtenerProyecto() {
+  //   const url = "pages/auxiliares/listadoProyectoForms.php";
+  //   const operationUrl = "listados";
+  //   getDataService(url, operationUrl).then((response) =>
+  //     setlistProyecto(response)
+  //   );
+  // }
+
+
   function obtenerProyecto() {
     const url = "pages/auxiliares/listadoProyectoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistProyecto(response)
-    );
+    var data = {
+      idServicio: '',
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setlistProyecto(data);
+    });
   }
 
   function obtenerEvaluadorEvaluado() {

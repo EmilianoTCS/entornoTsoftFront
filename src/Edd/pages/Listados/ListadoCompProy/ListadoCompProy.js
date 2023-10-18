@@ -119,7 +119,7 @@ export default function ListadoCompProy() {
 
     useEffect(
         function () {
-            SendData();
+           
             obtenerCliente();
             obtenerProyecto();
             obtenerServicio();
@@ -136,14 +136,12 @@ export default function ListadoCompProy() {
     function SendData(data) {
         var url = "pages/listados/listadoCompetenciasGeneralEval.php";
         var operationUrl = "listadoCompetenciasGeneralEval";
-
-
-
         console.log('data', data);
         SendDataService(url, operationUrl, data).then((data) => {
             // const { paginador, ...datos } = data;
             // setCantidadPaginas(paginador.cantPaginas);
             setEDDCompProy(data)
+            console.log('Info',data);
         });
     }
 
@@ -156,16 +154,7 @@ export default function ListadoCompProy() {
 
         //   EXPRESION
         if (selectedServicioString === "" && selectedProyString === "") {
-            if (selectedClients.length < 2 || /^,(.*)/.test(selectedClients) || /.*,,.*/.test(selectedClients) || /[0]/.test(selectedClients)) {
-                TopAlerts('AlMenosDosClientes')
-                return;
-            }
-        } else if (selectedProyString === "") {
-            if (selectedServicio.length < 2 || /^,(.*)/.test(selectedServicio) || /.*,,.*/.test(selectedServicio) || /[0]/.test(selectedServicio)) {
-                TopAlerts('AlMenosDosServicios')
-                return;
-            }
-        } else if (selectedProyecto.length < 2 || /^,(.*)/.test(selectedProyecto) || /.*,,.*/.test(selectedProyecto) || /[0]/.test(selectedProyecto)) {
+        } if (selectedProyecto.length < 1 || /^,(.*)/.test(selectedProyecto) || /.*,,.*/.test(selectedProyecto) || /[0]/.test(selectedProyecto)) {
             TopAlerts('AlMenosDosProyectos')
             return;
 
@@ -204,9 +193,9 @@ export default function ListadoCompProy() {
         setFechaIni("");
         setFechaFin("");
         setlistServicio([]);
-        // Reset the EDDCompProy to its default state (an empty array)
-        setEDDCompProy([]);
+        setEDDCompProy([]); // Esto eliminará los datos de la tabla
     };
+    
 
     const resetProjects = () => {
         setSelectedProyecto([]);
@@ -216,7 +205,7 @@ export default function ListadoCompProy() {
         setSelectedServicio([]);
     };
     // FINNN Restablecer los valores
-    const mensajeCtrl = "Utilice Ctrl y haga click en las opciones o deslice el mouse para seleccionar más de un ítem.";
+    // const mensajeCtrl = "Utilice Ctrl y haga click en las opciones o deslice el mouse para seleccionar más de un ítem.";
     return userData.statusConected || userData !== null ? (
         <>
             <Header></Header>
@@ -244,11 +233,11 @@ export default function ListadoCompProy() {
 
                             <td style={{ width: '16em' }}>
                                 <label htmlFor="input_CantidadR">Clientes: </label>
-                                <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
+                                {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
                                     <span> <FaQuestionCircle id="icons" /></span>
-                                </OverlayTrigger>
+                                </OverlayTrigger> */}
                                 <select
-                                    multiple
+                                    
                                     required
                                     type="text"
                                     className="form-control"
@@ -270,7 +259,7 @@ export default function ListadoCompProy() {
                                 >
                                     <option disabled hidden>Clientes</option>
                                     <option value="0">Ninguno</option>
-                                    <option value="todos">-- Todos --</option> {/* Agrega la opción "Todos" */}
+                                    {/* <option value="todos">-- Todos --</option> Agrega la opción "Todos" */}
                                     {listCliente.map((valor) => (
                                         <option
                                             selected={selectedClients.includes(valor.idCliente) ? "selected" : ""}
@@ -287,11 +276,11 @@ export default function ListadoCompProy() {
                             <td id="espacioEntreOpciones" style={{ width: '16em' }}>
 
                                 <label htmlFor="input_CantidadR">Servicios: </label>
-                                <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
+                                {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
                                     <span> <FaQuestionCircle id="icons" /></span>
-                                </OverlayTrigger>
+                                </OverlayTrigger> */}
                                 <select
-                                    multiple
+                                    
                                     required
                                     type="text"
                                     className="form-control"
@@ -312,7 +301,7 @@ export default function ListadoCompProy() {
                                 >
                                     <option disabled hidden>Servicios</option>
                                     <option value="0">Ninguno</option>
-                                    <option value="todos">-- Todos --</option> {/* Agrega la opción "Todos" */}
+                                    {/* <option value="todos">-- Todos --</option> Agrega la opción "Todos" */}
                                     {listServicio.map((valor) => (
                                         <option
                                             selected={selectedServicio.includes(valor.idServicio) ? "selected" : ""}
@@ -328,12 +317,12 @@ export default function ListadoCompProy() {
                             <td id="espacioEntreOpciones" style={{ width: '16em' }}>
 
                                 <label htmlFor="input_CantidadR">Proyectos:</label>
-                                <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
+                                {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
                                     <span> <FaQuestionCircle id="icons" /></span>
                                 </OverlayTrigger>
-
+ */}
                                 <select
-                                    multiple
+                                    
                                     required
                                     type="text"
                                     className="form-control"
@@ -353,7 +342,7 @@ export default function ListadoCompProy() {
                                 >
                                     <option disabled hidden>Proyectos</option>
                                     <option value="0">Ninguno</option>
-                                    <option value="todos">-- Todos --</option> {/* Agrega la opción "Todos" */}
+                                    {/* <option value="todos">-- Todos --</option> Agrega la opción "Todos" */}
                                     {listProyecto.map((valor) => (
                                         <option
                                             selected={selectedProyecto.includes(valor.idEDDProyecto) ? "selected" : ""}
@@ -430,7 +419,7 @@ export default function ListadoCompProy() {
                                     <td>
                                         <strong>Comparación por:</strong>
                                     </td>
-                                    <td id="espacioEntreOpciones">
+                                    {/* <td id="espacioEntreOpciones">
                                         <input
                                             type="radio"
                                             id="general"
@@ -439,7 +428,7 @@ export default function ListadoCompProy() {
                                             checked={tipoComparacion === "GENERAL"}
                                             onChange={(e) => setTipoComparacion(e.target.value)}
                                         />
-                                        <label htmlFor="general">&nbsp;General</label></td>
+                                        <label htmlFor="general">&nbsp;General</label></td> */}
 
                                     <td id="espacioEntreOpciones">
                                         <input
@@ -492,7 +481,7 @@ export default function ListadoCompProy() {
                                             />
                                             <label htmlFor="colaborador">&nbsp;Colaborador</label></td>
 
-                                        <td id="espacioEntreOpciones">
+                                        {/* <td id="espacioEntreOpciones">
                                             <input
                                                 type="radio"
                                                 id="ambos"
@@ -501,7 +490,7 @@ export default function ListadoCompProy() {
                                                 checked={tipoCargo === "TODOS"}
                                                 onChange={(e) => setTipoCargo(e.target.value)}
                                             />
-                                            <label htmlFor="ambos">&nbsp;Ambos</label></td>
+                                            <label htmlFor="ambos">&nbsp;Ambos</label></td> */}
                                     </table>
                                 </div>
                             </td>

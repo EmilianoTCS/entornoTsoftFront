@@ -6,6 +6,7 @@ import Card from "react-bootstrap/Card";
 import { Navigate } from "react-router-dom";
 import "./homeEDD.css";
 import GrafChart from "./GrafChart";
+import "./../DiseñoDashboard/DiseñoDash.css"
 import { useRoute } from "wouter";
 import { Container, Table } from "react-bootstrap";
 import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
@@ -590,9 +591,7 @@ export default function GraficosDashboard() {
         Dashboard Colaboradores:<br></br>{nomEvaluacion}</p></strong>
       </div>
 
-
       <BodyResumen2></BodyResumen2>
-
 
       <div
         style={{

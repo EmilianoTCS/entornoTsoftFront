@@ -78,7 +78,6 @@ export default function DashboardCompProy() {
     }
   }
 
-  const comparacionPor = '';
 
   function SendData() {
     var url = "pages/listados/listadoCompetenciasGeneralEval.php";
@@ -92,11 +91,11 @@ export default function DashboardCompProy() {
       fechaIni: fechaIni,
       fechaFin: fechaFin,
     };
-    console.log('DataSendData', data);
+    // console.log('DataSendData', data);
     SendDataService(url, operationUrl, data).then((data) => {
-      comparacionPor = MostrarInfo(idCliente, idServicio, idProyecto);
+      // comparacionPor = MostrarInfo(idCliente, idServicio, idProyecto);
       setDashCompProy(data)
-      console.log('InformaciónReponse', data);
+      // console.log('InformaciónReponse', data);
     });
   }
 
@@ -105,8 +104,9 @@ export default function DashboardCompProy() {
   }, []);
   //---------------------
   // GRAFICOS
-  var predefinedColors = [
 
+  var predefinedColors = [
+            
     // FUERTE
     "#B71C1C", // Rojo              1
     "#303F9F", // Azul              2
@@ -118,7 +118,7 @@ export default function DashboardCompProy() {
     "#EF6C00", // Naranja              8
     "#03A9F4", // Celeste              9
     "#795548", // Verde agua            10
-
+        
     // CLAROS
     "#EF9A9A", // Rojo              1
     "#9FA8DA", // Azul              2
@@ -142,71 +142,36 @@ export default function DashboardCompProy() {
     "#FF9800", // Naranja              8
     "#4FC3F7", // Celeste              9
     "#795548", // Verde agua            10
-  ];
 
-  function LineasChart() {
-
-    var General = [15, 30, 55, 50, 55, 60, 20, 45, 15, 55, 40, 40];
-
-    var Joaquín = [10, 50, 20, 30, 80, 40, 30, 20, 20, 30, 10, 60];
-    var Marco = [20, 10, 90, 70, 30, 80, 10, 70, 10, 80, 70, 20];
-    var meses = ["AUTONOMIA", "CAPACIDAD ANALITICA", "CAPACIDAD DE APRENDIZAJE", "COMUNICACIÓN", "CONFIANZA", "DESEMPEÑO", "DISPOSICION/ACTITUD", "EMPODERAMIENTO"];
-
-    var midata = {
-      labels: meses,
-      datasets: [ // Cada una de las líneas del gráfico
-        {
-          label: 'Joaquín Aguirre',
-          data: Joaquín,
-          borderColor: 'green',
-          backgroundColor: 'green',
-          pointRadius: 5,
-          pointBorderColor: 'green',
-          pointBackgroundColor: 'green',
-        },
-        {
-          label: 'Marco Díaz',
-          data: Marco,
-          borderColor: 'red',
-          backgroundColor: 'red',
-          pointRadius: 5,
-          pointBorderColor: 'red',
-          pointBackgroundColor: 'red',
-        },
-        {
-          label: 'General',
-          data: General,
-          borderColor: 'blue',
-          backgroundColor: 'blue',
-          pointRadius: 5,
-          pointBorderColor: 'blue',
-          pointBackgroundColor: 'blue',
-        },
-
-      ],
-    };
-
-    var misoptions = {
-      responsive: true,
-      scales: {
-        y: {
-          min: 0
-        },
-        x: {
-          ticks: { color: 'black' }
-        }
-      }
-    };
-    return <Line data={midata} options={misoptions} />
-  }
-
+    // Agrega más colores según sea necesario
+];
+  
   function BarrasChart() {
-
-    var beneficios = [22, 57, 26, 15, 10, 90, 60, -50, 95, 50, 72, 10];
-    var beneficios2 = [20, 10, 90, 70, 30, 80, 10, 70, 10, 80, 70, 20];
-    var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-
-    var misoptions = {
+    const fechas = DashCompProy.map(item => item.epeFechaFin);
+    const competencias = [...new Set(DashCompProy.map(item => item.nomCompetencia))];
+    const fechasConDatos = [...new Set(DashCompProy.map(item => item.epeFechaFin))];
+  
+    const datasets = competencias.map((competencia, index) => {
+      const data = fechasConDatos.map(fecha => {
+        const porcentaje = DashCompProy
+          .filter(item => item.nomCompetencia === competencia && item.epeFechaFin === fecha)
+          .map(item => item.porcAprobComp)[0] || 0;
+        return porcentaje;
+      });
+  
+      return {
+        label: competencia,
+        data: data,
+        backgroundColor: predefinedColors[index % predefinedColors.length],
+      };
+    });
+  
+    const data = {
+      labels: fechasConDatos,
+      datasets: datasets,
+    };
+  
+    const options = {
       responsive: true,
       animation: false,
       plugins: {
@@ -216,64 +181,17 @@ export default function DashboardCompProy() {
       },
       scales: {
         y: {
-          min: -25,
+          min: 0,
           max: 100
         },
         x: {
-          ticks: { color: 'rgba(0, 220, 195)' }
+          ticks: { color: 'black' }
         }
-      }
-    };
-
-    var midata = {
-      labels: meses,
-      datasets: [
-        {
-          label: 'Beneficios',
-          data: beneficios,
-          backgroundColor: 'orange'
-        },
-        {
-          label: 'Beneficios2',
-          data: beneficios2,
-          backgroundColor: 'green'
-        }
-      ]
-    };
-    return <Bar data={midata} options={misoptions} />
+      }};
+    
+    return <Bar data={data} options={options} />;
   }
-
-  function DonutChart() {
-    const data = {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [
-        {
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
-
-
-    return <Doughnut data={data} />;
-  }
+  
   // FIN GRAFICOS
 
 
@@ -292,20 +210,7 @@ export default function DashboardCompProy() {
           </div>
         </tr>
 
-        <tr>
-          <br></br>
-          <div className="bg-light mx-auto px-2 border " style={{ width: "800px", height: "400px" }}>
-            {LineasChart()}
-          </div>
-        </tr>
-
-
-        <tr>
-          <br></br>
-          <div className="bg-light mx-auto px-2 border " style={{ width: "400px", height: "400px" }}>
-            {DonutChart()}
-          </div>
-        </tr>
+       
       </table>
 
 
