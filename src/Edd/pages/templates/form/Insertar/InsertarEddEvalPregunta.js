@@ -77,7 +77,7 @@ const InsertarEDDEvalPregunta = ({
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts("successCreated");
+      TopAlerts("successCreated");
       actualizarEDDEvalPregunta(EDDEvalPregunta);
       console.log(response);
     });

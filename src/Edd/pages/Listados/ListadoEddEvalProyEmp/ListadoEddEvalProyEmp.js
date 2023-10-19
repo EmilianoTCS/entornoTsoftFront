@@ -538,7 +538,7 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.CorreoLinkEnviadoColab}</td>
 
                   <td align="center">
-                    {EDDEvalProyEmp.evalRespondida === 'NO' ?
+                    {EDDEvalProyEmp.evalRespondida === 'SÍ' ?
                       (
                         <button
                           data-title="Editar evaluación de proyecto - colaborador"
@@ -654,23 +654,23 @@ export default function ListadoEDDEvalProyEmp() {
 
                     {EDDEvalProyEmp.evalRespondida === 'SÍ' ? (
                       <Link to={`/AlertasOporDes/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.tipoEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
-                      <button data-title="Desempeño" id="OperationBtns">
-                        <SiSubstack id="icons" />
-                      </button>
-                    </Link>
+                        <button data-title="Desempeño" id="OperationBtns">
+                          <SiSubstack id="icons" />
+                        </button>
+                      </Link>
                     ) : (
                       <Link to={`/AlertasOporDes/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.tipoEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
-                      <button data-title="Desempeño" id="OperationBtns" disabled>
-                        <SiSubstack id="icons" />
-                      </button>
-                    </Link>
+                        <button data-title="Desempeño" id="OperationBtns" disabled>
+                          <SiSubstack id="icons" />
+                        </button>
+                      </Link>
                     )}
 
 
 
 
 
-                   
+
 
                     {/* <Link to={`/AlertasOporDes/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.tipoEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
                       <button data-title="Desempeño" id="OperationBtns">

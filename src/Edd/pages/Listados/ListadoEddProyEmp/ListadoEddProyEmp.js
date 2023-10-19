@@ -177,7 +177,10 @@ export default function ListadoEDDProyEmp() {
                 required
                 type="text"
                 className="form-control"
-                onChange={({ target }) => { setidProyecto(target.value); setNumBoton(1); }}
+                onChange={({ target }) => {
+                  setidProyecto(target.value);
+                  setNumBoton(1);
+                }}
               >
                 <option value="">Todos</option>
                 {listProyecto.map((valor) => (

@@ -35,9 +35,12 @@ const InsertarEDDProyEmp = ({
   function obtenerProyecto() {
     const url = "pages/auxiliares/listadoProyectoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistProyecto(response)
-    );
+    var data = {
+      idServicio: '',
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setlistProyecto(data);
+    });
   }
   function obtenerEmpleado() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
@@ -92,6 +95,7 @@ const InsertarEDDProyEmp = ({
                 name="input_Empleado"
                 id="input_Empleado"
                 placeholder="Seleccione el Empleado"
+                
                 onChange={({ target }) => setidProyecto(target.value)}
               >
                 <option hidden value="">

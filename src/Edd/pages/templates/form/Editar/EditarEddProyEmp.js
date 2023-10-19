@@ -34,9 +34,9 @@ const EditarEDDProyEmp = ({
 
   const handleClose = () => {
     cambiarEstado(false);
-    setcargoEnProy("");
-    setidProyecto("");
-    setidEmpleado("");
+    setcargoEnProy(responseID[0].cargoEnProy);
+    setidProyecto(responseID[0].idProyecto);
+    setidEmpleado(responseID[0].idEmpleado);
     setReset(true)
   };
 
@@ -44,9 +44,12 @@ const EditarEDDProyEmp = ({
   function obtenerProyecto() {
     const url = "pages/auxiliares/listadoProyectoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistProyecto(response)
-    );
+    var data = {
+      idServicio: '',
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setlistProyecto(data);
+    });
   }
   function obtenerEmpleado() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
@@ -124,12 +127,13 @@ const EditarEDDProyEmp = ({
                 name="input_Empleado"
                 id="input_Empleado"
                 placeholder="Seleccione el proyecto"
+                value={idProyecto || ""}
                 onChange={({ target }) => setidProyecto(target.value)}
               >
                 {listProyecto.map((valor) => (
                   <option
-                    selected={valor.idProyecto === idProyecto ? "selected" : ""}
-                    value={valor.idProyecto}
+                    selected={valor.idEDDProyecto === idProyecto ? "selected" : ""}
+                    value={valor.idEDDProyecto}
                   >
                     {valor.nomProyecto}
                   </option>

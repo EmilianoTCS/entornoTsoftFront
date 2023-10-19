@@ -104,7 +104,7 @@ const editarEDDEvalPregunta = ({
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts("successEdited");
+      TopAlerts("successEdited");
       actualizarEDDEvalPregunta(EDDEvalPregunta);
       console.log(response);
     });

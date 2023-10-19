@@ -29,12 +29,17 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
   // ----------------------FUNCIONES----------------------------
 
   function obtenerServicio() {
+   
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistServicio(response)
-    );
-  }
+    var data = {
+        idCliente: '',
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+        setlistServicio(data);
+    });
+
+}
 
 
   function SendData(e) {

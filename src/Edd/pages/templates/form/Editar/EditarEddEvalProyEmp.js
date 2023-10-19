@@ -165,7 +165,7 @@ const EditarEddEvalProyEmp = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar evaluación al <br></br>proyecto - colaborador</Modal.Title>
+          <Modal.Title>Editar evaluación al <br></br> proyecto - colaborador.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
@@ -202,6 +202,7 @@ const EditarEddEvalProyEmp = ({
                 id="input_proyemp"
                 placeholder="Seleccione la Proyecto"
                 onChange={({ target }) => {
+                  setidProyecto(target.value);
                   setSelectedProyecto(target.value);
                   obtenerEvaluado(target.value); // Llama a la función para obtener evaluados
                   obtenerEvaluador(target.value); // Llama a la función para obtener evaluadores
@@ -215,8 +216,6 @@ const EditarEddEvalProyEmp = ({
                   </option>
                 ))}
               </select>
-
-
             </div>
 
             <div className="form-group">
@@ -239,6 +238,7 @@ const EditarEddEvalProyEmp = ({
                 ))}
               </select>
             </div>
+
             <div className="form-group">
               <label htmlFor="input_proyemp">Proyecto - Evaluado: </label>
               <select
