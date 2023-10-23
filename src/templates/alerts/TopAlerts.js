@@ -6,6 +6,14 @@ export default function TopAlerts(props) {
 
   switch (props) {
     // ListCompProy.js Para llos listados
+    case "AsociaciónYaExiste":
+      return MySwal.fire({
+        // title: "Debes seleccionar al menos 2 clientes",
+        text: "Asociación seleccionada ya existe para este proyecto.",
+        icon: "warning",
+        showConfirmButton: true,
+        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
+      });
     case "AlMenosDosClientes":
       return MySwal.fire({
         // title: "Debes seleccionar al menos 2 clientes",
@@ -124,7 +132,7 @@ export default function TopAlerts(props) {
       });
     case "successDeleted":
       return MySwal.fire({
-        title: "Se ha eliminado el registro",
+        title: "Se ha desactivado el registro",
         icon: "success",
         position: "top-right",
         timer: 1000,

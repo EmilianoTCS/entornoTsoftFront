@@ -57,9 +57,8 @@ export default function ListadoEDDEvalProyEmp() {
   const [listEvaluadores, setlistEvaluadores] = useState('');
   const [listEvaluados, setlistEvaluados] = useState('');
 
-
-
-  const [listEvaluadorEvaluado, setlistEvaluadorEvaluado] = useState([""]);
+  const [cicloEvaluacion, setcicloEvaluacion] = useState('');
+  const [listcicloEvaluacion, setlistcicloEvaluacion] = useState([""]);
 
   const [loadedData, setloadedData] = useState(false);
 
@@ -74,6 +73,17 @@ export default function ListadoEDDEvalProyEmp() {
   //     setlistProyecto(response)
   //   );
   // }
+
+  function obtenerCicloEvaluacion() {
+    const url = "pages/auxiliares/listadoCiclosEval.php";
+    const operationUrl = "listados";
+    getDataService(url, operationUrl).then((response) => {
+      console.log('1',response);
+      setlistcicloEvaluacion(response);
+    }
+    );
+  }
+
 
 
   function obtenerProyecto() {
@@ -91,15 +101,15 @@ export default function ListadoEDDEvalProyEmp() {
     const url = "pages/auxiliares/listadoEvaluadoresEvaluados.php";
     const operationUrl = "listadoEvaluadoresEvaluados";
     getDataService(url, operationUrl).then((response) => {
-      console.log(response);
+      // console.log(response);
       const { evaluadores, evaluados } = response
       setlistEvaluadores(evaluadores)
       setlistEvaluados(evaluados)
       setloadedData(true)
-
     }
     );
   }
+
   function enviarCorreo() {
     setIsActiveInsertEDDEnviarCorreo(!isActiveInsertEDDEnviarCorreo);
   }
@@ -139,6 +149,7 @@ export default function ListadoEDDEvalProyEmp() {
       handleChangePaginador();
       obtenerEvaluadorEvaluado();
       obtenerProyecto();
+      obtenerCicloEvaluacion();
     },
     [
       num_boton,
@@ -146,6 +157,7 @@ export default function ListadoEDDEvalProyEmp() {
       idProyecto,
       idEvaluado,
       idEvaluador,
+      cicloEvaluacion,
       loadedData
     ]
   );
@@ -164,6 +176,7 @@ export default function ListadoEDDEvalProyEmp() {
         idEDDProyEmpEvaluado: idEvaluado,
         idEDDEvaluacion: idEDDEvaluacion,
         idProyecto: idProyecto,
+        cicloEvaluacion: cicloEvaluacion,
       }
     } else
       var data = {
@@ -172,11 +185,12 @@ export default function ListadoEDDEvalProyEmp() {
         idEDDProyEmpEvaluado: idEvaluado,
         idEDDProyEmpEvaluador: idEvaluador,
         idEDDEvaluacion: idEDDEvaluacion,
-        idProyecto, idProyecto,
+        idProyecto: idProyecto,
+        cicloEvaluacion: cicloEvaluacion,
       };
     // console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
-      console.log(data);
+      // console.log(data);
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setEDDEvalProyEmp(datos.datos);
@@ -323,7 +337,31 @@ export default function ListadoEDDEvalProyEmp() {
                   </select>
                 </div>
               </td>
+              <td>
+              <div className="form-group" id="btn2">
+                <label htmlFor="Ciclo">Ciclo de evaluación: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setcicloEvaluacion(target.value); setNumBoton(1);
+                  }}
+                >
+                  <option value="0">Todos</option>
+                  {
+                    listcicloEvaluacion.map((valor) => (
+                      <option
+                        value={valor.cicloEvaluacion}
+                      >
+                        {valor.cicloEvaluacion}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            </td>
             </tr>
+
           </table>
 
 
@@ -368,6 +406,8 @@ export default function ListadoEDDEvalProyEmp() {
                 <th>Evaluado</th>
 
                 <th >Resp</th>
+                <th >Ciclo eval</th>
+
                 <th>Fecha respuesta eval</th>
                 {/* <th>Total min</th> */}
 
@@ -422,6 +462,8 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.nomEmpleadoEvaluado}</td>
 
                   <td>{EDDEvalProyEmp.evalRespondida}</td>
+                  <td>{EDDEvalProyEmp.cicloEvaluacion}</td>
+
 
 
 
@@ -538,7 +580,7 @@ export default function ListadoEDDEvalProyEmp() {
                   <td>{EDDEvalProyEmp.CorreoLinkEnviadoColab}</td>
 
                   <td align="center">
-                    {EDDEvalProyEmp.evalRespondida === 'SÍ' ?
+                    {EDDEvalProyEmp.evalRespondida !== 'SÍ' && EDDEvalProyEmp.CorreoLinkEnviadoRef !== 'SÍ' && EDDEvalProyEmp.CorreoLinkEnviadoColab !== 'SÍ' ?
                       (
                         <button
                           data-title="Editar evaluación de proyecto - colaborador"

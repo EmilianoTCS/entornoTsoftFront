@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
-import { Container, Table } from "react-bootstrap";
+import { Container, Table, Card } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
 import { useRoute } from "wouter";
 
@@ -58,26 +58,7 @@ export default function DashboardCompProy() {
   const tipoCargo = params.tipoCargo;
   const fechaIni = params.fechaIni;
   const fechaFin = params.fechaFin;
-
-
-
   const [DashCompProy, setDashCompProy] = useState([""]);
-
-  function MostrarInfo(idClientes, idServicios, idProyectos) {
-    if (idClientes && idServicios && idProyectos) {
-      // Caso 1: Cuando tienes datos en los tres parámetros, retornar proyectos
-      return 'nomProyecto';
-    } else if (idClientes && idServicios && !idProyectos) {
-      // Caso 2: Cuando tienes idClientes y idServicios, pero idProyectos está vacío, retornar servicios
-      return 'nomServicio';
-    } else if (idClientes && !idServicios && !idProyectos) {
-      // Caso 3: Cuando solo tienes idClientes, y idServicios e idProyectos están vacíos, retornar idClientes
-      return 'nomCliente';
-    } else {
-      return "No se cumple ninguna condición";
-    }
-  }
-
 
   function SendData() {
     var url = "pages/listados/listadoCompetenciasGeneralEval.php";
@@ -91,20 +72,18 @@ export default function DashboardCompProy() {
       fechaIni: fechaIni,
       fechaFin: fechaFin,
     };
-    // console.log('DataSendData', data);
+    console.log('DataSendData', data);
     SendDataService(url, operationUrl, data).then((data) => {
       // comparacionPor = MostrarInfo(idCliente, idServicio, idProyecto);
       setDashCompProy(data)
       console.log('InformaciónReponse', data);
     });
   }
-
   useEffect(() => {
     SendData();
   }, []);
   //---------------------
   // GRAFICOS
-
   var predefinedColors = [
 
     // FUERTE
@@ -145,43 +124,39 @@ export default function DashboardCompProy() {
 
     // Agrega más colores según sea necesario
   ];
-
-  function formatDateToDDMMYYYY(date) {
-    const parsedDate = new Date(date);
-    const day = String(parsedDate.getDate()).padStart(2, '0');
-    const month = String(parsedDate.getMonth() + 1).padStart(2, '0'); // Sumar 1 ya que los meses comienzan desde 0
-    const year = parsedDate.getFullYear();
-    return `${day}-${month}-${year}`;
-  }
-
   function BarrasChart() {
-    
-    const fechasConDatos = [...new Set(DashCompProy.map(item => formatDateToDDMMYYYY(item.epeFechaFin)))];
-
+    const fechasConDatos = [...new Set(DashCompProy.map(item => item.epeFechaFin))];
     const competencias = [...new Set(DashCompProy.map(item => item.nomCompetencia))];
-
-
-    
+    const tipoComparacion = [...new Set(DashCompProy.map(item => item.tipoComparacion))];
+    console.log(tipoComparacion);
+    // Formatear las fechas según el tipo de comparación
+    const formattedFechasConDatos = fechasConDatos.map(fecha => {
+      if (tipoComparacion === 'AÑO') {
+        return fecha.substring(0, 4); // Obtener solo el año (YYYY)
+      } else if (tipoComparacion === 'MES') {
+        const [year, month] = fecha.split('-');
+        return `${month}-${year}`; // Formato MM-YYYY
+      } else {
+        return fecha; // Sin cambios para otros tipos de comparación
+      }
+    });
     const datasets = competencias.map((competencia, index) => {
-      const data = fechasConDatos.map(fecha => {
+      const data = formattedFechasConDatos.map(fecha => {
         const porcentaje = DashCompProy
-          .filter(item => item.nomCompetencia === competencia && formatDateToDDMMYYYY(item.epeFechaFin) === fecha)
+          .filter(item => item.nomCompetencia === competencia && item.epeFechaFin === fecha)
           .map(item => item.porcAprobComp)[0] || 0;
         return porcentaje;
       });
-
       return {
         label: competencia,
         data: data,
         backgroundColor: predefinedColors[index % predefinedColors.length],
       };
     });
-
     const data = {
-      labels: fechasConDatos.map(date => formatDateToDDMMYYYY(date)), // Formatear las fechas antes de mostrarlas
+      labels: formattedFechasConDatos,
       datasets: datasets,
     };
-
     const options = {
       responsive: true,
       animation: false,
@@ -198,41 +173,93 @@ export default function DashboardCompProy() {
         x: {
           ticks: { color: 'black' },
         },
-      },
+      }
     };
-
-
     return <Bar data={data} options={options} />;
+  }
+  function Info() {
+    // Supongo que DashCompProy es un array de objetos que contienen la propiedad "nomCliente"
+    const uniqueClientes = new Set();
+    const tableRows = DashCompProy.map((item, index) => {
+      if (!uniqueClientes.has(item.nomCliente)) {
+        uniqueClientes.add(item.nomCliente);
+        return (
+          <tr key={index} >
+            <tr><h5>Cliente:&nbsp; {item.nomCliente}</h5></tr>
+            <tr><h5>Servicio:&nbsp; {item.nomServicio}</h5></tr>
+            <tr><h5>Proyecto:&nbsp; {item.nomProyecto}</h5></tr>
+          </tr>
+        );
+      }
+      return null; // No se agregará a la tabla si es un valor duplicado
+    });
+
+    return (
+      <table>
+        <tbody>
+          {tableRows}
+        </tbody>
+      </table>
+    );
   }
 
 
-  // FIN GRAFICOS
+  function InfCantRefColab() {
+    // Supongo que DashCompProy es un array de objetos que contienen las propiedades "cantColaboradores" y "cantReferentes"
+    const uniqueCombinations = new Set();
+    const tableRows = DashCompProy.map((item, index) => {
+      const combination = `${item.cantColaboradores}-${item.cantReferentes}`;
+      if (!uniqueCombinations.has(combination)) {
+        uniqueCombinations.add(combination);
+        return (
+          <tr key={index}>
+            <tr><h5>Cantidad de referentes:&nbsp; {item.cantColaboradores}</h5></tr>
+            <tr><h5>Cantidad de colaboradores:&nbsp; {item.cantReferentes}</h5></tr>
+          </tr>
+        );
+      }
+      return null; // No se agregará a la tabla si es una combinación duplicada
+    });
+
+    return (
+      <table>
+        <tbody>
+          {tableRows}
+        </tbody>
+      </table>
+    );
+  }
 
 
-
-
-
+  // En tu componente principal, puedes usar la función Info dentro de tu tabla
   return userData.statusConected || userData !== null ? (
     <>
       <Header></Header>
-
       <table style={{ margin: 'auto' }}>
+        <br></br>
         <tr>
           <br></br>
-          <div className="bg-light mx-auto px-2 border " style={{ width: "800px", height: "400px" }}>
-            {BarrasChart()}
-          </div>
+          <td>
+            <Card style={{padding:'1em'}}>
+              <tbody>
+                <Info />
+                <br></br>
+                <InfCantRefColab></InfCantRefColab>
+              </tbody>
+            </Card>
+          </td>
+
+          <td>
+            <div className="bg-light mx-auto px-2 border " style={{ width: "800px", height: "400px" }}>
+              {BarrasChart()}
+            </div>
+          </td>
         </tr>
 
-
-      </table>
-
-
-
-
-
+      </table >
     </>
   ) : (
     <Navigate to="/login"></Navigate>
   );
-}
+
+}  

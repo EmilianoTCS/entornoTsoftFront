@@ -4,12 +4,12 @@ export default function ConfirmAlert(props) {
   const MySwal = withReactContent(Swal);
   const promise1 = new Promise((resolve, reject) => {
     MySwal.fire({
-      title: "¿Deseas eliminar este registro?",
-      text: "Puedes volver a habilitarlo en la página Administrador",
+      title: "¿Deseas desactivar este registro?",
+      text: "Puedes volver a habilitarlo en la página Administrador.",
       icon: "warning",
       iconColor: "#e10b1c",
       showConfirmButton: true,
-      confirmButtonText: "Eliminar",
+      confirmButtonText: "Desactivar",
       confirmButtonColor: "red",
       showCancelButton: true,
       cancelButtonColor: "dark-gray",

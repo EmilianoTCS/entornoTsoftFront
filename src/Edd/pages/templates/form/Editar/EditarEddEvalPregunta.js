@@ -62,7 +62,7 @@ const editarEDDEvalPregunta = ({
     );
   }
 
-  const getData = useCallback(() => {
+  function getData(){
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idEDDEvalPregunta, nombreTabla: nombreTabla };
@@ -73,12 +73,11 @@ const editarEDDEvalPregunta = ({
       setordenPregunta(response[0].ordenPregunta);
       settipoResp(response[0].tipoResp);
       setpreguntaObligatoria(response[0].preguntaObligatoria);
-
       setidEDDEvalCompetencia(response[0].idEDDEvalCompetencia);
       setidEDDEvaluacion(response[0].idEDDEvaluacion);
 
     });
-  }, [idEDDEvalPregunta]);
+  };
 
   function SendData(e) {
     e.preventDefault();
@@ -104,12 +103,13 @@ const editarEDDEvalPregunta = ({
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
+      console.log(response);
       TopAlerts("successEdited");
       actualizarEDDEvalPregunta(EDDEvalPregunta);
-      console.log(response);
     });
 
     function actualizarEDDEvalPregunta(EDDEvalPregunta) {
+      console.log(EDDEvalPregunta);
       const nuevosEDDEvalPregunta = listEDDEvalPregunta.map((c) =>
         c.idEDDEvalPregunta === EDDEvalPregunta.idEDDEvalPregunta ? EDDEvalPregunta : c
       );

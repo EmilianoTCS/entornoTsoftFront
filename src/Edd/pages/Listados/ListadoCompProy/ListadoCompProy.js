@@ -170,7 +170,6 @@ export default function ListadoCompProy() {
         var data = {
             // num_boton: num_boton,
             // cantidadPorPagina: cantidadPorPagina,
-
             idCliente: selectedClientsString,
             idServicio: selectedServicioString,
             idProyecto: selectedProyString,
@@ -179,6 +178,7 @@ export default function ListadoCompProy() {
             fechaIni: fechaIni,
             fechaFin: fechaFin,
         }
+        console.log('data',data);
         SendData(data);
 
     };
@@ -322,8 +322,7 @@ export default function ListadoCompProy() {
                                 <label htmlFor="input_CantidadR">Proyectos:</label>
                                 {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
                                     <span> <FaQuestionCircle id="icons" /></span>
-                                </OverlayTrigger>
- */}
+                                </OverlayTrigger>*/}
                                 <select
 
                                     required
@@ -358,7 +357,7 @@ export default function ListadoCompProy() {
 
                             </td>
                             <td id="espacioEntreOpciones">
-                                <label>Fecha inicio:</label>
+                                <label>Fecha inicio desde:</label>
                                 <br></br>
                                 <input
                                     className="form-control"
@@ -369,7 +368,7 @@ export default function ListadoCompProy() {
                                 />
                             </td>
                             <td id="espacioEntreOpciones">
-                                <span>Fecha fin:</span>
+                                <span>Fecha inicio hasta:</span>
                                 <br></br>
                                 <input
                                     className="form-control"

@@ -7,6 +7,7 @@ import getDataService from "../../../../../services/GetDataService";
 import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../../../../templates/alerts/TopAlertsError";
 
 const InsertarEDDEvalProyEmp = ({
   isActiveEDDEvalProyEmp,
@@ -40,7 +41,7 @@ const InsertarEDDEvalProyEmp = ({
   const [listProyecto, setlistProyecto] = useState([""]);
   const [selectedProyecto, setSelectedProyecto] = useState("");
 
-  
+
   // ----------------------FUNCIONES----------------------------
 
   function obtenerProyecto() {
@@ -51,11 +52,35 @@ const InsertarEDDEvalProyEmp = ({
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setlistProyecto(data);
-      console.log(data);
+      // console.log(data);
     });
   }
 
-  function obtenerEvaluado(idProyecto) {
+  // function obtenerEvaluado(idProyecto) {
+  //   const url = "pages/auxiliares/listadoEddProyEmp.php";
+  //   const operationUrl = "listados";
+  //   var data = {
+  //     idProyecto: idProyecto, // Usar el proyecto seleccionado
+  //   };
+  //   SendDataService(url, operationUrl, data).then((response) => {
+  //     setlistEDDProyEmpEvaluado(response);
+  //   });
+  // }
+
+  // function obtenerEvaluador(idProyecto) {
+  //   const url = "pages/auxiliares/listadoEddProyEmp.php";
+  //   const operationUrl = "listados";
+  //   var data = {
+  //     idProyecto: idProyecto, // Usar el proyecto seleccionado
+  //   };
+  //   SendDataService(url, operationUrl, data).then((response) => {
+  //     setlistEDDProyEmpEvaluador(response);
+  //   });
+  // }
+
+
+
+  function obtenerEvaluadorEvaluado(idProyecto) {
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
     var data = {
@@ -63,20 +88,9 @@ const InsertarEDDEvalProyEmp = ({
     };
     SendDataService(url, operationUrl, data).then((response) => {
       setlistEDDProyEmpEvaluado(response);
-    });
-  }
-
-  function obtenerEvaluador(idProyecto) {
-    const url = "pages/auxiliares/listadoEddProyEmp.php";
-    const operationUrl = "listados";
-    var data = {
-      idProyecto: idProyecto, // Usar el proyecto seleccionado
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
       setlistEDDProyEmpEvaluador(response);
     });
   }
-
 
   function obtenerEvaluacion() {
     const url = "pages/auxiliares/listadoEddEvaluacion.php";
@@ -105,13 +119,19 @@ const InsertarEDDEvalProyEmp = ({
         idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
         idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
         idEDDEvaluacion: idEDDEvaluacion,
+        cicloEvaluacion: 0,
         isActive: true,
       };
       console.log(data);
       SendDataService(url, operationUrl, data).then((response) => {
-        TopAlerts("successCreated");
-        actualizarEDDEvalProyEmp(EDDEvalProyEmp);
-        console.log(response);
+
+        if (response[0].OUT_CODRESULT !== '00') {
+          TopAlertsError(response[0].OUT_CODRESULT, response[0].OUT_MJERESULT);
+        } else {
+          TopAlerts("successCreated");
+          actualizarEDDEvalProyEmp(EDDEvalProyEmp);
+          console.log(response);
+        }
       });
     }
   }
@@ -123,8 +143,9 @@ const InsertarEDDEvalProyEmp = ({
 
   useEffect(function () {
     obtenerEvaluacion();
-    obtenerEvaluado();
-    obtenerEvaluador();
+    obtenerEvaluadorEvaluado();
+    //  obtenerEvaluador();
+    //  obtenerEvaluado();
     obtenerProyecto()
   }, []);
 
@@ -170,9 +191,8 @@ const InsertarEDDEvalProyEmp = ({
                 placeholder="Seleccione la Proyecto"
                 onChange={({ target }) => {
                   setSelectedProyecto(target.value);
-                  obtenerEvaluado(target.value); // Llama a la función para obtener evaluados
-                  obtenerEvaluador(target.value); // Llama a la función para obtener evaluadores
-                }} 
+                  obtenerEvaluadorEvaluado(target.value); // Llama a la función para obtener evaluados
+                }}
               >
                 <option hidden value="">
                   Desplegar lista
