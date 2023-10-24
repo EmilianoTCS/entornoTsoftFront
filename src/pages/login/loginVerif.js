@@ -10,7 +10,9 @@ export default function LoginVerif() {
     var [idEvaluacion, setidEvaluacion] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
     var [idEDDProyEmpEvaluador, setidEDDProyEmpEvaluador] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
     var [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
+    var [cicloEvaluacion, setcicloEvaluacion] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
 
+    
     const username = 'Externo';
     const password = 'Externo123';
 
@@ -37,18 +39,19 @@ export default function LoginVerif() {
                     idEvaluacion = parseInt(valores[0]);
                     idEDDProyEmpEvaluador = parseInt(valores[2]);
                     idEDDProyEmpEvaluado = parseInt(valores[1]);
-
+                    cicloEvaluacion = parseInt(valores[3])
                     
                     console.log(idEvaluacion);
                     console.log(idEDDProyEmpEvaluador);
                     console.log(idEDDProyEmpEvaluado);
+                    console.log(cicloEvaluacion);
 
                 } else {
                     console.error("La cadena no se puede dividir en tres valores.");
                 }
 
 
-                var url = `/listadoRespPregEvaluacionesExterno/${idEvaluacion}/${idEDDProyEmpEvaluador}`;
+                var url = `/listadoRespPregEvaluacionesExterno/${idEvaluacion}/${idEDDProyEmpEvaluador}/${cicloEvaluacion}`;
                 navigate(url);
 
                                 

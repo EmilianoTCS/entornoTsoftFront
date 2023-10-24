@@ -25,6 +25,8 @@ const EnviarCorreo = ({
     const [listEDDContactos, setlistEDDContactos] = useState([""]);
     const [idEDDProyecto, setidEDDProyecto] = useState("");
     const [listEDDProyecto, setlistEDDProyecto] = useState([""]);
+    const [cicloEvaluacion, setcicloEvaluacion] = useState('');
+    const [listcicloEvaluacion, setlistcicloEvaluacion] = useState([""]);
 
     const show = isActiveEDDEnviarCorreo;
 
@@ -70,10 +72,12 @@ const EnviarCorreo = ({
             tipoConfDato: "EMAIL",
             subTipoConfDato: "REFERENTES_GRAL",
             listContactos: listContactosEnviar,
+            cicloEvaluacion:cicloEvaluacion,
             isActive: true,
         };
 
         handleClose();
+
         ConfirmAlertEnvio();
 
         SendDataService(url, operationUrl, data).then((response) => {
@@ -85,6 +89,7 @@ const EnviarCorreo = ({
     const handleClose = () => {
         setidProyecto("");
         setlistEDDContactos([]);
+        setcicloEvaluacion([""])
         cambiarEstado(false);
     };
 
@@ -98,20 +103,31 @@ const EnviarCorreo = ({
             setlistEDDContactos(response)
         });
     }
-
+    function obtenerCicloEvaluacion() {
+        const url = "pages/auxiliares/listadoCiclosEval.php";
+        const operationUrl = "listados";
+        var data = {
+            idProyecto: idEDDProyecto,
+        };
+        SendDataService(url, operationUrl, data).then((data) => {
+            setlistcicloEvaluacion(data);
+        });
+    }
     function obtenerProyecto() {
         const url = "pages/auxiliares/listadoProyectoForms.php";
         const operationUrl = "listados";
-        getDataService(url, operationUrl).then((response) =>
-            setlistEDDProyecto(response)
-        );
+        var data = {
+            idServicio: '',
+        };
+        SendDataService(url, operationUrl, data).then((data) => {
+            setlistEDDProyecto(data);
+        });
     }
+
 
     useEffect(function () {
         obtenerProyecto();
-    }, []);
-
-    useEffect(function () {
+        obtenerCicloEvaluacion();
         if (idEDDProyecto) {
             obtenerContactos(idEDDProyecto);
         }
@@ -126,7 +142,7 @@ const EnviarCorreo = ({
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={SendDataEmail}>
-                        <div className="form-group">
+                    <div className="form-group">
                             <label htmlFor="Proyecto">Proyecto: </label>
                             <select
                                 required
@@ -134,7 +150,7 @@ const EnviarCorreo = ({
                                 name="Proyecto"
                                 id="Proyecto"
                                 placeholder="Seleccione el proyecto"
-                                onChange={({ target }) => {setidEDDProyecto(target.value);  obtenerContactos(target.value);}}
+                                onChange={({ target }) => { setidEDDProyecto(target.value); obtenerContactos(target.value); }}
                             >
                                 <option hidden value="">
                                     Desplegar lista
@@ -147,13 +163,10 @@ const EnviarCorreo = ({
                                 ))}
                             </select>
                         </div>
-
-
-
-
                         <div className="form-group">
                             <label htmlFor="contactos">Seleccione uno o más contactos (Utilice tecla Ctrl): </label>
                             <select
+                                required
                                 className="form-control"
                                 name="contactos"
                                 id="contactos"
@@ -169,7 +182,34 @@ const EnviarCorreo = ({
                                 ))}
                             </select>
                         </div>
+                        <div className="form-group">
+                        <label htmlFor="Ciclo">Ciclo de evaluación: </label>
+                            <select
+                                required
+                                className="form-control"
+                                name="Proyecto"
+                                id="Proyecto"
+                                placeholder="Seleccione el proyecto"
+                                onChange={({ target }) => {
+                                    setcicloEvaluacion(target.value);
+                                }}
+                            >
+                                <option hidden value="">
+                                    Desplegar lista
+                                </option>
 
+                                {
+                                    listcicloEvaluacion.map((valor) => (
+                                        <option
+                                            value={valor.cicloEvaluacion}
+                                        >
+                                            {valor.cicloEvaluacion}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
+
+                        
                         <Button
                             variant="secondary"
                             type="submit"

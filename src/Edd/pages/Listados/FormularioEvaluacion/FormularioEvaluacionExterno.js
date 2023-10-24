@@ -18,7 +18,7 @@ import logoTsoft from "../FormularioEvaluacion/logo/tsoft.png"
 
 
 export default function FormularioEvaluacionExterno() {
-  const [, params] = useRoute("/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador");
+  const [, params] = useRoute("/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador/:cicloEvaluacion");
   const { logout } = useContext(AuthContext);
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
   const [loadedData, setLoadedData] = useState(false); //Bool que determina el recibimiento correcto de los datos
@@ -36,6 +36,8 @@ export default function FormularioEvaluacionExterno() {
   const idEDDEvaluacion = params && params.idEvaluacion ? params.idEvaluacion : "";
   // const idEDDProyEmpEvaluado = params && params.idEDDProyEmpEvaluado ? params.idEDDProyEmpEvaluado : "";
   const idEDDProyEmpEvaluador = params && params.idEDDProyEmpEvaluador ? params.idEDDProyEmpEvaluador : "";
+  const cicloEvaluacion = params && params.cicloEvaluacion ? params.cicloEvaluacion : "";
+
   const [loadedDataEvaluado, setLoadedDataEvaluado] = useState(false);
   const [evaluadoresRestantes, setEvaluadoresRestantes] = useState(0);
 
@@ -145,6 +147,7 @@ export default function FormularioEvaluacionExterno() {
             idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
             idEDDEvalProyEmp: idEDDEvaluado,
             isActive: true,
+            cicloEvaluacion:cicloEvaluacion,
           },
         };
         SendDataService(url, operationUrl, data).then((response) => {

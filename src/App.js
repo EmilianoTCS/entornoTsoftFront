@@ -68,7 +68,7 @@ function App() {
           <Route element={<CargaSinDatos />} path="/CargaSinDatos"></Route>
           <Route
             element={<FormularioEvaluacionExterno />}
-            path="/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador"
+            path="/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador/:cicloEvaluacion"
           ></Route>
           
           <Route element={<PrivateRoute />}>
@@ -147,7 +147,7 @@ function App() {
             {/* EDD */}
             <Route
             element={<FormularioEvaluacion />}
-            path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
+            path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion"
           ></Route>
             
             <Route
@@ -199,7 +199,7 @@ function App() {
 
             <Route
               element={<FormularioEvaluacionRespondida />}
-              path="/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
+              path="/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion"
             ></Route>
 
             {/* ------------------------------------------------------------------------------------------ */}

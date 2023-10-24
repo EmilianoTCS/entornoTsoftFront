@@ -12,7 +12,7 @@ import "../BtnInsertar.css";
 
 export default function FormularioEvaluacionRespondida() {
   const [, params] = useRoute(
-    "/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador"
+    "/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion"
   );
 
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
@@ -22,6 +22,8 @@ export default function FormularioEvaluacionRespondida() {
   const idEDDProyEmpEvaluado = params.idEDDProyEmpEvaluado;
   const idEDDProyEmpEvaluador = params.idEDDProyEmpEvaluador;
   const idEDDProyecto = params.idEDDProyecto;
+  const cicloEvaluacion = params.cicloEvaluacion;
+
 
   const [inputVerEnDashboard, setInputVerEnDashboard] = useState("");
   const [inputOrdenDashboard, setInputOrdenDashboard] = useState("");
@@ -39,6 +41,7 @@ export default function FormularioEvaluacionRespondida() {
       idEmpleado: idEDDProyEmpEvaluador,
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
       idEDDProyecto: idEDDProyecto,
+      cicloEvaluacion:cicloEvaluacion,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);

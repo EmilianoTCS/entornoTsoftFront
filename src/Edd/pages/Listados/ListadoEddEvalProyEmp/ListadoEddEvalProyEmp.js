@@ -74,16 +74,17 @@ export default function ListadoEDDEvalProyEmp() {
   //   );
   // }
 
+
   function obtenerCicloEvaluacion() {
     const url = "pages/auxiliares/listadoCiclosEval.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => {
-      console.log('1',response);
-      setlistcicloEvaluacion(response);
-    }
-    );
+    var data = {
+      idProyecto: '',
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setlistcicloEvaluacion(data);
+    });
   }
-
 
 
   function obtenerProyecto() {
@@ -609,13 +610,13 @@ export default function ListadoEDDEvalProyEmp() {
                       EDDEvalProyEmp.evalRespondida === 'NO' ? (
 
 
-                        <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${EDDEvalProyEmp.idEDDProyEmpEvaluador}` : ''}>
+                        <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${EDDEvalProyEmp.idEDDProyEmpEvaluador}/${EDDEvalProyEmp.cicloEvaluacion}` : ''}>
                           <button data-title="Evaluacion relacionada" id="OperationBtns" disabled={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' && EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? false : true}>
                             <AiFillBook id="icons" />
                           </button>
                         </Link>
                       ) : (
-                        <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoEvalResp/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${EDDEvalProyEmp.idEDDProyEmpEvaluador}` : ''}>
+                        <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoEvalResp/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${EDDEvalProyEmp.idEDDProyEmpEvaluador}/${EDDEvalProyEmp.cicloEvaluacion}` : ''}>
                           <button data-title="Evaluacion relacionada" id="OperationBtns" >
                             <AiFillBook id="icons" />
                           </button>
@@ -626,13 +627,13 @@ export default function ListadoEDDEvalProyEmp() {
                       EDDEvalProyEmp.evalRespondida === 'NO' ? (
 
 
-                        <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${userData.idEmpleado}` : ''}>
+                        <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${userData.idEmpleado}/${EDDEvalProyEmp.cicloEvaluacion}` : ''}>
                           <button data-title="Evaluacion relacionada" id="OperationBtns" disabled={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' && EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? false : true}>
                             <AiFillBook id="icons" />
                           </button>
                         </Link>
                       ) : (
-                        <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoEvalResp/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${userData.idEmpleado}` : ''}>
+                        <Link to={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' ? `/listadoEvalResp/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${userData.idEmpleado}/${EDDEvalProyEmp.cicloEvaluacion}` : ''}>
                           <button data-title="Evaluacion relacionada" id="OperationBtns" disabled={EDDEvalProyEmp.nomEvaluacion !== 'empty / vacio' && EDDEvalProyEmp.disponibilidadEvaluacion === '1' ? false : true}>
                             <AiFillBook id="icons" />
                           </button>

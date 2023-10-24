@@ -16,7 +16,7 @@ import logoTsoft from "../FormularioEvaluacion/logo/tsoft.png"
 
 
 export default function FormularioEvaluacion() {
-  const [, params] = useRoute("/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador");
+  const [, params] = useRoute("/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion");
 
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
   const [idEDDEvalNomPregunta, setidEDDEvalNomPregunta] = useState(""); //Almacena el listado de preguntas procesado
@@ -25,6 +25,7 @@ export default function FormularioEvaluacion() {
   const idEDDEvaluacion = params.idEvaluacion;
   const idEDDProyEmpEvaluado = params.idEDDProyEmpEvaluado;
   const idEDDProyEmpEvaluador = params.idEDDProyEmpEvaluador;
+  const cicloEvaluacion = params.cicloEvaluacion;
   const [fechaInicioExamen, setfechaInicioExamen] = useState("");
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
@@ -34,7 +35,8 @@ export default function FormularioEvaluacion() {
     var data = {
       idEvaluacion: idEDDEvaluacion,
       idEmpleado: idEDDProyEmpEvaluador,
-      idEDDProyEmpEvaluado: idEDDProyEmpEvaluado
+      idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
+      cicloEvaluacion:cicloEvaluacion,
     };
     console.log("getdata",data);
     SendDataService(url, operationUrl, data).then((data) => {
@@ -73,12 +75,6 @@ export default function FormularioEvaluacion() {
     }
   }
 
- 
-
-
-
-
-
   function ConfirmAlertEnvio() {
     if (loadedData) {
       Swal.fire({
@@ -91,7 +87,7 @@ export default function FormularioEvaluacion() {
         confirmButtonText: "Continuar",
       }).then((result) => {
         if (result.isConfirmed) {
-          window.history.back()
+          window.location = "/listadoEDDEvalProyEmp/0"
         }
       });
     }
@@ -120,6 +116,7 @@ export default function FormularioEvaluacion() {
         fechaFinExamen: fechaFin,
         idEDDEvaluacion: idEDDEvaluacion,
         usuarioCreacion: userData.usuario,
+        cicloEvaluacion:cicloEvaluacion
 
       },
     }; 

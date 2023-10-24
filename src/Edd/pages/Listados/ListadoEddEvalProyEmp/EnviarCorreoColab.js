@@ -16,9 +16,9 @@ const EnviarCorreoColab = ({
     // ----------------------CONSTANTES----------------------------
 
     const listEDDEnviarCorreoColab = EDDEnviarCorreoColab;
-
-    const [idProyecto, setidProyecto] = useState("");
-
+    
+    const [cicloEvaluacion, setcicloEvaluacion] = useState('');
+    const [listcicloEvaluacion, setlistcicloEvaluacion] = useState([""]);
 
     const [idEDDProyecto, setidEDDProyecto] = useState("");
     const [listEDDProyecto, setlistEDDProyecto] = useState([""]);
@@ -33,17 +33,17 @@ const EnviarCorreoColab = ({
 
     function ConfirmAlertEnvio() {
         Swal.fire({
-          html: `
+            html: `
           <p>Los correos han sido enviados</p>
           `,
-          icon: "success",
-          showCancelButton: false,
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Continuar",
+            icon: "success",
+            showCancelButton: false,
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "Continuar",
         }).then((result) => {
-          if (result.isConfirmed) {
-            <></>
-          }
+            if (result.isConfirmed) {
+                <></>
+            }
         });
     }
 
@@ -53,39 +53,47 @@ const EnviarCorreoColab = ({
         const operationUrl = "emailEDD";
         var data = {
             usuarioCreacion: userData.usuario,
-            idProyecto:idEDDProyecto,
+            idProyecto: idEDDProyecto,
             cargoEnProy: 'Colaborador',
             tipoConfDato: "EMAIL",
             subTipoConfDato: "REFERENTES_GRAL",
             listContactos: '',
+            cicloEvaluacion: cicloEvaluacion,
             isActive: true,
         };
         console.log(data);
         handleClose();
         ConfirmAlertEnvio();
         SendDataService(url, operationUrl, data).then((response) => {
-            
-            
+
+
         });
     }
-
-
-
-
+    function obtenerCicloEvaluacion() {
+        const url = "pages/auxiliares/listadoCiclosEval.php";
+        const operationUrl = "listados";
+        var data = {
+          idProyecto: idEDDProyecto,
+        };
+        SendDataService(url, operationUrl, data).then((data) => {
+          setlistcicloEvaluacion(data);
+        });
+      }
 
     function obtenerProyecto() {
         const url = "pages/auxiliares/listadoProyectoForms.php";
         const operationUrl = "listados";
-        getDataService(url, operationUrl).then((response) =>
-            setlistEDDProyecto(response)
-
-        );
+        var data = {
+            idServicio: '',
+        };
+        SendDataService(url, operationUrl, data).then((data) => {
+            setlistEDDProyecto(data);
+        });
     }
-
-
     useEffect(function () {
         obtenerProyecto();
-    }, []);
+        obtenerCicloEvaluacion();
+    }, [idEDDProyecto]);
 
 
     // ----------------------RENDER----------------------------
@@ -118,7 +126,32 @@ const EnviarCorreoColab = ({
                                 ))}
                             </select>
                         </div>
-                       
+                        <div className="form-group">
+                        <label htmlFor="Ciclo">Ciclo de evaluación: </label>
+                            <select
+                                required
+                                className="form-control"
+                                name="Proyecto"
+                                id="Proyecto"
+                                placeholder="Seleccione el proyecto"
+                                onChange={({ target }) => {
+                                    setcicloEvaluacion(target.value);
+                                }}
+                            >
+                                <option hidden value="">
+                                    Desplegar lista
+                                </option>
+
+                                {
+                                    listcicloEvaluacion.map((valor) => (
+                                        <option
+                                            value={valor.cicloEvaluacion}
+                                        >
+                                            {valor.cicloEvaluacion}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
                         <Button
                             variant="secondary"
                             type="submit"
