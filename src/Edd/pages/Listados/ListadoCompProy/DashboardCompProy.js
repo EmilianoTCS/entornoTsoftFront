@@ -4,11 +4,11 @@ import { ClipLoader } from 'react-spinners';
 import { Container, Table, Card } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
 import { useRoute } from "wouter";
-
+import "../TablasStyles.css";
+import "../ListadoCompProy/CompProy.css"
 import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
-import "../TablasStyles.css";
 import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
 import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
@@ -49,7 +49,7 @@ ChartJS.register(
 // 
 export default function DashboardCompProy() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-  const [, params] = useRoute("/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin");
+  const [, params] = useRoute("/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion");
 
   const idCliente = params.selectedClients;
   const idServicio = params.selectedServicio;
@@ -58,6 +58,8 @@ export default function DashboardCompProy() {
   const tipoCargo = params.tipoCargo;
   const fechaIni = params.fechaIni;
   const fechaFin = params.fechaFin;
+  const cicloEvaluacion = params.cicloEvaluacion;
+
   const [DashCompProy, setDashCompProy] = useState([""]);
 
   function SendData() {
@@ -71,6 +73,7 @@ export default function DashboardCompProy() {
       tipoCargo: tipoCargo,
       fechaIni: fechaIni,
       fechaFin: fechaFin,
+      cicloEvaluacion: cicloEvaluacion,
     };
     console.log('DataSendData', data);
     SendDataService(url, operationUrl, data).then((data) => {
@@ -129,17 +132,26 @@ export default function DashboardCompProy() {
     const competencias = [...new Set(DashCompProy.map(item => item.nomCompetencia))];
     const tipoComparacion = [...new Set(DashCompProy.map(item => item.tipoComparacion))];
     console.log(tipoComparacion);
+
+
     // Formatear las fechas según el tipo de comparación
     const formattedFechasConDatos = fechasConDatos.map(fecha => {
       if (tipoComparacion === 'AÑO') {
         return fecha.substring(0, 4); // Obtener solo el año (YYYY)
       } else if (tipoComparacion === 'MES') {
-        const [year, month] = fecha.split('-');
-        return `${month}-${year}`; // Formato MM-YYYY
+        return fecha; // Mantener el formato completo (YYYY-MM)
       } else {
         return fecha; // Sin cambios para otros tipos de comparación
       }
     });
+
+    // Ordenar las fechas de manera ascendente (esto incluye mes y año)
+    formattedFechasConDatos.sort((a, b) => {
+      const dateA = new Date(a);
+      const dateB = new Date(b);
+      return dateA - dateB;
+    });
+
     const datasets = competencias.map((competencia, index) => {
       const data = formattedFechasConDatos.map(fecha => {
         const porcentaje = DashCompProy
@@ -153,10 +165,12 @@ export default function DashboardCompProy() {
         backgroundColor: predefinedColors[index % predefinedColors.length],
       };
     });
+
     const data = {
-      labels: formattedFechasConDatos,
+      labels: formattedFechasConDatos, // Usar las fechas ordenadas
       datasets: datasets,
     };
+
     const options = {
       responsive: true,
       animation: false,
@@ -175,8 +189,12 @@ export default function DashboardCompProy() {
         },
       }
     };
+
     return <Bar data={data} options={options} />;
   }
+
+
+
   function Info() {
     // Supongo que DashCompProy es un array de objetos que contienen la propiedad "nomCliente"
     const uniqueClientes = new Set();
@@ -184,52 +202,153 @@ export default function DashboardCompProy() {
       if (!uniqueClientes.has(item.nomCliente)) {
         uniqueClientes.add(item.nomCliente);
         return (
-          <tr key={index} >
-            <tr><h5>Cliente:&nbsp; {item.nomCliente}</h5></tr>
-            <tr><h5>Servicio:&nbsp; {item.nomServicio}</h5></tr>
-            <tr><h5>Proyecto:&nbsp; {item.nomProyecto}</h5></tr>
-          </tr>
+          <table key={index} style={{ width: '100%' }}>
+
+            <td><h5>Cliente:&nbsp; {item.nomCliente}</h5></td>
+            <td><h5>Servicio:&nbsp; {item.nomServicio}</h5></td>
+            <td><h5>Proyecto:&nbsp; {item.nomProyecto}</h5></td>
+
+          </table>
         );
       }
       return null; // No se agregará a la tabla si es un valor duplicado
     });
 
     return (
-      <table>
-        <tbody>
-          {tableRows}
-        </tbody>
-      </table>
+
+      <>
+        {tableRows}
+
+      </>
     );
   }
-
 
   function InfCantRefColab() {
-    // Supongo que DashCompProy es un array de objetos que contienen las propiedades "cantColaboradores" y "cantReferentes"
-    const uniqueCombinations = new Set();
-    const tableRows = DashCompProy.map((item, index) => {
-      const combination = `${item.cantColaboradores}-${item.cantReferentes}`;
-      if (!uniqueCombinations.has(combination)) {
-        uniqueCombinations.add(combination);
-        return (
-          <tr key={index}>
-            <tr><h5>Cantidad de referentes:&nbsp; {item.cantColaboradores}</h5></tr>
-            <tr><h5>Cantidad de colaboradores:&nbsp; {item.cantReferentes}</h5></tr>
-          </tr>
-        );
-      }
-      return null; // No se agregará a la tabla si es una combinación duplicada
-    });
+    // Crea un conjunto de ciclos únicos
+    const uniqueCiclos = new Set(DashCompProy.map(item => item.cicloEvaluacion));
 
     return (
-      <table>
-        <tbody>
-          {tableRows}
-        </tbody>
-      </table>
+      <div>
+        {[...uniqueCiclos].map(ciclo => {
+          // Filtra los elementos correspondientes a un ciclo específico
+          const cicloData = DashCompProy.filter(item => item.cicloEvaluacion === ciclo);
+
+          // Usa un conjunto para evitar la repetición de información
+          const uniqueInfo = new Set();
+
+          return (
+            <div key={ciclo}>
+              <h5>Ciclo: {ciclo}</h5>
+              {cicloData.map((item, index) => {
+                // Crea una cadena única para evitar repeticiones
+                const infoString = `${item.cantReferentes}-${item.cantColaboradores}`;
+
+                if (!uniqueInfo.has(infoString)) {
+                  uniqueInfo.add(infoString);
+                  return (
+                    <div key={index}>
+                      <h5>Cantidad de referentes: {item.cantReferentes}</h5>
+                      <h5>Cantidad de colaboradores: {item.cantColaboradores}</h5>
+                    </div>
+                  );
+                }
+                return null; // No mostrar información repetida
+              })}
+            </div>
+          );
+        })}
+      </div>
     );
   }
 
+
+
+  // Función para contar las competencias según el ciclo de evaluación
+  function countCompetenciasPorCiclo() {
+    if (cicloEvaluacion === "0") {
+      const competenciasPorCiclo = DashCompProy.reduce((result, item) => {
+        if (!result[item.cicloEvaluacion]) {
+          result[item.cicloEvaluacion] = {
+            competencias: new Set(),
+            fechas: new Set(),
+          };
+        }
+        result[item.cicloEvaluacion].competencias.add(item.nomCompetencia);
+        result[item.cicloEvaluacion].fechas.add(item.epeFechaFin);
+        return result;
+      }, {});
+
+      const infoCiclos = Object.entries(competenciasPorCiclo).map(([cicloEvaluacion, data]) => {
+        const competencias = data.competencias.size;
+        const fechas = [...data.fechas];
+        const formattedFechasPorCiclo = [...new Set(fechas)]; // Eliminar fechas duplicadas
+
+        return (
+          <tr key={cicloEvaluacion}>
+            <tr>
+              <h5>Ciclo: {cicloEvaluacion} </h5>
+            </tr>
+            <tr>
+              <h5>Competencias: {competencias}</h5>
+            </tr>
+            <tr>
+              <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
+            </tr>
+          </tr>
+        );
+      });
+
+      return (
+        <table>
+          <tbody>{infoCiclos}</tbody>
+        </table>
+      );
+    } else {
+      // En otros casos, mostrar la cantidad de competencias únicas sin repetir en el ciclo actual
+      const competenciasPorCiclo = DashCompProy
+        .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
+        .map((item) => item.nomCompetencia);
+
+      const competenciasUnicas = [...new Set(competenciasPorCiclo)];
+
+      // Filtrar las fechas correspondientes al ciclo actual
+      const fechasPorCiclo = DashCompProy
+        .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
+        .map((item) => item.epeFechaFin);
+
+      const formattedFechasPorCiclo = [...new Set(fechasPorCiclo)]; // Eliminar fechas duplicadas
+
+      return (
+        <table>
+          <tbody>
+            <tr>
+              <tr>
+                <h5>Ciclo: {cicloEvaluacion}</h5>
+              </tr>
+              <tr>
+                <h5>Competencias: {competenciasUnicas.length}
+                </h5>
+              </tr>
+              <tr>
+                <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
+              </tr>
+            </tr>
+          </tbody>
+        </table>
+      );
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+  // Llama a la función y muestra el resultado donde sea necesario
 
   // En tu componente principal, puedes usar la función Info dentro de tu tabla
   return userData.statusConected || userData !== null ? (
@@ -240,23 +359,35 @@ export default function DashboardCompProy() {
         <tr>
           <br></br>
           <td>
-            <Card style={{padding:'1em'}}>
-              <tbody>
-                <Info />
-                <br></br>
-                <InfCantRefColab></InfCantRefColab>
-              </tbody>
-            </Card>
-          </td>
-
-          <td>
-            <div className="bg-light mx-auto px-2 border " style={{ width: "800px", height: "400px" }}>
+            <div className="bg-light mx-auto px-2 border " style={{ width: "1200px", height: "600px" }}>
               {BarrasChart()}
             </div>
+            <br></br>
+
+
+
+
+            <div id="fondoTablaDashCompProy">
+              <div id="containerTablasDashCompProy">
+
+                <table style={{ backgroundColor: 'white', width: '100%', margin: 'auto' }}>
+                  {Info()}
+                  <table style={{ width: '100%', margin: 'auto' }}>
+                    <td><p>Cantidad de competencias: {countCompetenciasPorCiclo()}</p></td>
+                    <td><p>Cantidad de ref y colab: {InfCantRefColab()}</p></td>
+                  </table>
+                </table>
+
+              </div>
+            </div>
+
+
+
           </td>
         </tr>
 
       </table >
+      <br></br>
     </>
   ) : (
     <Navigate to="/login"></Navigate>

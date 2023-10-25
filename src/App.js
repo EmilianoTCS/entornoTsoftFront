@@ -140,7 +140,7 @@ function App() {
             {/* ------------------- */}
 
             <Route element={<ListadoCompProy />} path="/listadoCompProy"></Route>
-            <Route element={<DashboardCompProy />} path="/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin"></Route>
+            <Route element={<DashboardCompProy />} path="/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion"></Route>
 
 
             <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto"></Route>

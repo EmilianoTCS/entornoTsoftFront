@@ -1,10 +1,10 @@
+import "../DiseñoDashboard/DiseñoDash.css";
 import React, { useRef, useEffect, useState } from "react";
 import Header from "../../../templates/Header/Header";
 import SendDataService from "../../../services/SendDataService";
 import Card from "react-bootstrap/Card";
 import { Navigate } from "react-router-dom";
 import "./homeEDD.css";
-import "../DiseñoDashboard/DiseñoDash.css";
 import "../Listados/BtnInsertar.css";
 import "./GraficosDashboard"
 import "./DiseñoDash.css"
@@ -45,6 +45,163 @@ export default function HomePageEDD() {
   const [loadedDataColor, setLoadedDataColor] = useState(false);
   const [loadedDataLeyenda, setLoadedDataLeyenda] = useState(false);
   const [loadedDataTiempoPromedio, setLoadedDataTiempoPromedio] = useState(false);
+
+  function BodyResumen() {
+    if (loadedDataResumenEval && loadedDataTiempoPromedio) {
+      const splitReferentes = listResumenEval[0].referentesEvaluados;
+      var totalSplit = splitReferentes.split('/');
+
+      var cant = totalSplit[0];
+      var totalRef = totalSplit[1];
+
+
+      return (
+        <div className="tableResumen">
+          <Table>
+            <tr >
+              <td >
+                <CircularProgressbarWithChildren
+                  value={listResumenEval[0].porcSatisfaccion}
+                  background
+                  strokeWidth={10}
+                  styles={buildStyles({
+                    strokeLinecap: 'butt',
+                    pathColor: ProgressBarColor(listResumenEval[0].porcSatisfaccion),
+                    trailColor: "#E5E7E9",
+                    backgroundColor: 'white',
+
+
+                  })}
+                >
+                  <div style={{ fontSize: 20, textAlign: 'center' }}>
+                    <strong>Satisfacción</strong>
+                    <br></br>
+                    <strong> {listResumenEval[0].porcSatisfaccion}%</strong>
+                    <br></br>
+                    <strong>General</strong>
+                  </div>
+                  <RadialSeparators
+                    count={10}
+                    style={{
+
+                      background: "#fff",
+                      width: "2px",
+                      // This needs to be equal to props.strokeWidth
+                      height: `${10}%`
+                    }}
+                  />
+                </CircularProgressbarWithChildren>
+              </td>
+              <td>
+                <CircularProgressbarWithChildren
+                  maxValue={eval(totalRef)}
+                  value={(cant * 100) / totalRef}
+                  background
+                  strokeWidth={10}
+                  styles={buildStyles({
+                    pathColor: ProgressBarColor((cant * 100) / totalRef),
+                    trailColor: "#E5E7E9",
+                    strokeLinecap: 'butt',
+                    backgroundColor: 'white'
+                  })}
+                >
+                  <div style={{ fontSize: 20, textAlign: 'center' }}>
+                    <strong>Referentes</strong>
+                    <br></br>
+                    <strong>{listResumenEval[0].referentesEvaluados}</strong>
+                    <br></br>
+                    <strong>Evaluadores</strong>
+                  </div>
+                  <RadialSeparators
+                    count={10}
+                    style={{
+                      background: "#fff",
+                      width: "2px",
+                      // This needs to be equal to props.strokeWidth
+                      height: `${10}%`
+                    }}
+                  />
+                </CircularProgressbarWithChildren>
+              </td>
+              <td>
+                <CircularProgressbarWithChildren
+                  value={100}
+                  background
+                  strokeWidth={10}
+                  styles={buildStyles({
+                    strokeLinecap: 'butt',
+                    pathColor: "#008000",
+                    trailColor: "grey",
+                    backgroundColor: 'white'
+                  })}
+                >
+                  <div style={{ fontSize: 20, textAlign: 'center' }}>
+                    <strong>Competencias</strong>
+                    <br></br>
+                    <strong>{listResumenEval[0].competenciasEvaluadas}</strong>
+                    <br></br>
+                    <strong>Evaluadas</strong>
+                  </div>
+                  <RadialSeparators
+                    count={10}
+                    style={{
+                      background: "#fff",
+                      width: "2px",
+                      // This needs to be equal to props.strokeWidth
+                      height: `${10}%`
+                    }}
+                  />
+                </CircularProgressbarWithChildren>
+              </td>
+
+              <td>
+                <CircularProgressbarWithChildren
+                  // Valor maximo del cirucularProgress
+                  maxValue={listConfigTiempoPromedio[0].datoNoVisible}
+                  // Borde de color (visual)
+                  value={(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}
+                  background
+                  // Rayas del borde
+                  strokeWidth={10}
+                  styles={buildStyles({
+                    strokeLinecap: 'butt',
+                    // Color del borde-llenado
+                    pathColor: ProgressBarColor(listResumenEval[0].tiempoPromedio > listConfigTiempoPromedio[0].datoNoVisible ? 100 : ((listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible)),
+                    trailColor: "#E5E7E9",
+                    backgroundColor: 'white'
+                  })}
+                >
+                  <div style={{ fontSize: 20, textAlign: 'center' }}>
+                    <strong>Tiempo</strong>
+                    <br></br>
+                    {/* Valor que se ve dentro del circulo, en minutos */}
+                    <strong><span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}</span>
+                      <p className="porcentajeCard">min</p></strong>
+                    <br></br>
+                    <strong>Promedio</strong>
+                  </div>
+                  <RadialSeparators
+                    count={10}
+                    style={{
+                      background: "#fff",
+                      width: "2px",
+                      // This needs to be equal to props.strokeWidth
+                      height: `${10}%`
+                    }}
+                  />
+                </CircularProgressbarWithChildren>
+              </td>
+            </tr>
+
+          </Table>
+        </div>
+
+
+      );
+    } else {
+      return <h1>Loading</h1>;
+    }
+  }
 
 
   function GetConfigTiempoPromedio() {
@@ -671,163 +828,7 @@ export default function HomePageEDD() {
     }
   }
 
-  function BodyResumen() {
-    if (loadedDataResumenEval && loadedDataTiempoPromedio) {
-      const splitReferentes = listResumenEval[0].referentesEvaluados;
-      var totalSplit = splitReferentes.split('/');
 
-      var cant = totalSplit[0];
-      var totalRef = totalSplit[1];
-
-
-      return (
-        <div id="tableResumen">
-          <Table>
-
-            <tr >
-              <td >
-                <CircularProgressbarWithChildren
-                  value={listResumenEval[0].porcSatisfaccion}
-                  background
-                  strokeWidth={10}
-                  styles={buildStyles({
-                    strokeLinecap: 'butt',
-                    pathColor: ProgressBarColor(listResumenEval[0].porcSatisfaccion),
-                    trailColor: "#E5E7E9",
-                    backgroundColor: 'white',
-
-
-                  })}
-                >
-                  <div style={{ fontSize: 20, textAlign: 'center' }}>
-                    <strong>Satisfacción</strong>
-                    <br></br>
-                    <strong> {listResumenEval[0].porcSatisfaccion}%</strong>
-                    <br></br>
-                    <strong>General</strong>
-                  </div>
-                  <RadialSeparators
-                    count={10}
-                    style={{
-
-                      background: "#fff",
-                      width: "2px",
-                      // This needs to be equal to props.strokeWidth
-                      height: `${10}%`
-                    }}
-                  />
-                </CircularProgressbarWithChildren>
-              </td>
-              <td>
-                <CircularProgressbarWithChildren
-                  maxValue={eval(totalRef)}
-                  value={(cant * 100) / totalRef}
-                  background
-                  strokeWidth={10}
-                  styles={buildStyles({
-                    pathColor: ProgressBarColor((cant * 100) / totalRef),
-                    trailColor: "#E5E7E9",
-                    strokeLinecap: 'butt',
-                    backgroundColor: 'white'
-                  })}
-                >
-                  <div style={{ fontSize: 20, textAlign: 'center' }}>
-                    <strong>Referentes</strong>
-                    <br></br>
-                    <strong>{listResumenEval[0].referentesEvaluados}</strong>
-                    <br></br>
-                    <strong>Evaluadores</strong>
-                  </div>
-                  <RadialSeparators
-                    count={10}
-                    style={{
-                      background: "#fff",
-                      width: "2px",
-                      // This needs to be equal to props.strokeWidth
-                      height: `${10}%`
-                    }}
-                  />
-                </CircularProgressbarWithChildren>
-              </td>
-              <td>
-                <CircularProgressbarWithChildren
-                  value={100}
-                  background
-                  strokeWidth={10}
-                  styles={buildStyles({
-                    strokeLinecap: 'butt',
-                    pathColor: "#008000",
-                    trailColor: "grey",
-                    backgroundColor: 'white'
-                  })}
-                >
-                  <div style={{ fontSize: 20, textAlign: 'center' }}>
-                    <strong>Competencias</strong>
-                    <br></br>
-                    <strong>{listResumenEval[0].competenciasEvaluadas}</strong>
-                    <br></br>
-                    <strong>Evaluadas</strong>
-                  </div>
-                  <RadialSeparators
-                    count={10}
-                    style={{
-                      background: "#fff",
-                      width: "2px",
-                      // This needs to be equal to props.strokeWidth
-                      height: `${10}%`
-                    }}
-                  />
-                </CircularProgressbarWithChildren>
-              </td>
-
-              <td>
-                <CircularProgressbarWithChildren
-                  // Valor maximo del cirucularProgress
-                  maxValue={listConfigTiempoPromedio[0].datoNoVisible}
-                  // Borde de color (visual)
-                  value={(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}
-                  background
-                  // Rayas del borde
-                  strokeWidth={10}
-                  styles={buildStyles({
-                    strokeLinecap: 'butt',
-                    // Color del borde-llenado
-                    pathColor: ProgressBarColor(listResumenEval[0].tiempoPromedio > listConfigTiempoPromedio[0].datoNoVisible ? 100 : ((listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible)),
-                    trailColor: "#E5E7E9",
-                    backgroundColor: 'white'
-                  })}
-                >
-                  <div style={{ fontSize: 20, textAlign: 'center' }}>
-                    <strong>Tiempo</strong>
-                    <br></br>
-                    {/* Valor que se ve dentro del circulo, en minutos */}
-                    <strong><span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}</span>
-                      <p className="porcentajeCard">min</p></strong>
-                    <br></br>
-                    <strong>Promedio</strong>
-                  </div>
-                  <RadialSeparators
-                    count={10}
-                    style={{
-                      background: "#fff",
-                      width: "2px",
-                      // This needs to be equal to props.strokeWidth
-                      height: `${10}%`
-                    }}
-                  />
-                </CircularProgressbarWithChildren>
-              </td>
-            </tr>
-
-          </Table>
-        </div>
-
-
-      );
-    } else {
-      return <h1>Loading</h1>;
-    }
-  }
 
 
 

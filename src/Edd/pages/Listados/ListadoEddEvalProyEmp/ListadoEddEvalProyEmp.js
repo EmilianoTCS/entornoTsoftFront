@@ -195,7 +195,7 @@ export default function ListadoEDDEvalProyEmp() {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setEDDEvalProyEmp(datos.datos);
-
+      console.log(data);
     });
   }
 

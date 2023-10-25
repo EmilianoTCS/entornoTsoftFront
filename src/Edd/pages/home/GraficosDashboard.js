@@ -1,3 +1,5 @@
+import GrafChart from "./GrafChart";
+import "../DiseñoDashboard/DiseñoDash.css";
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../../../templates/Header/Header";
 import getDataService from "../../../services/GetDataService"
@@ -5,8 +7,6 @@ import SendDataService from "../../../services/SendDataService";
 import Card from "react-bootstrap/Card";
 import { Navigate } from "react-router-dom";
 import "./homeEDD.css";
-import GrafChart from "./GrafChart";
-import "./DiseñoDash.css"
 import { useRoute } from "wouter";
 import { Container, Table } from "react-bootstrap";
 import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
@@ -42,139 +42,6 @@ export default function GraficosDashboard() {
   const [loadedDataColor, setLoadedDataColor] = useState(false);
   const [loadedDataTiempoPromedio, setLoadedDataTiempoPromedio] = useState(false);
 
-  function GetConfigTiempoPromedio() {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
-    var data = {
-      tipoConfDato: "EDD",
-      subTipoConfDato: "TIEMPO_LIMITE",
-    };
-    SendDataService(url, operationUrl, data).then((data) => {
-      // console.log(data);
-      setListConfigTiempoPromedio(data);
-
-      setLoadedDataTiempoPromedio(true)
-
-    });
-  }
-
-  function GetDataResumenEval() {
-    var url = "pages/listados/listadoResumenEval.php";
-    var operationUrl = "listadoResumenEval";
-    var data = {
-      idEvaluacion: idEDDEvaluacion,
-      idProyecto: idEDDProyecto,
-    };
-    SendDataService(url, operationUrl, data).then((data) => {
-      setListResumenEval(data);
-      setLoadedDataResumenEval(true);
-    });
-  }
-
-  function GetDataCompetencias() {
-    var url = "pages/listados/listadoCompetenciasEval.php";
-    var operationUrl = "listadoCompetenciasEval";
-    var data = {
-      idEvaluacion: idEDDEvaluacion,
-      idProyecto: idEDDProyecto,
-    };
-    SendDataService(url, operationUrl, data).then((data) => {
-      setListCompetencias(data);
-      setLoadedDataCompetencias(true);
-      // console.log('Response', data);
-    });
-  }
-
-  function GetConfigCompColorFlechas() {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
-    var data = {
-      tipoConfDato: "competencia",
-      subTipoConfDato: "RANGO_COLOR",
-    };
-    SendDataService(url, operationUrl, data).then((data) => {
-      setListConfigCompColorFlechas(data);
-      setLoadedDataColor(true)
-      // console.log("configColor", data);
-    });
-  }
-
-  function GetConfigCompRangoFlechas() {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
-    var data = {
-      tipoConfDato: "competencia",
-      subTipoConfDato: "RANGO_FLECHA",
-    };
-    SendDataService(url, operationUrl, data).then((data) => {
-      setListConfigCompRangoFlechas(data);
-      // console.log("configRango", data);
-      setLoadedDataRango(true)
-    });
-  }
-  function GetConfigCompRangoLeyenda() {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
-    var data = {
-      tipoConfDato: "competencia",
-      subTipoConfDato: "RANGO_LEYENDA",
-    };
-    SendDataService(url, operationUrl, data).then((data) => {
-      setListConfigCompRangoLeyenda(data);
-      // console.log("configRango", data);
-      setLoadedDataLeyenda(true)
-    });
-  }
-  function ProgressColorInfo(porcAprobC) {
-    if (loadedDataColor) {
-      var auxColor = "0"; //posiciones
-      var varColor = ""; //color /dato visible
-
-      // Ordena la lista utilizando la función de comparación
-      function compararPorOrden(a, b) {
-        return parseInt(b.orden) - parseInt(a.orden);
-      }
-      var listColor = listConfigCompColorFlechas.sort(compararPorOrden);
-
-      listColor.map((color1) => {
-        if (auxColor === "0") {
-          if (eval(porcAprobC + color1.datoNoVisible)) {
-            varColor = color1.datoVisible;
-            auxColor = "1";
-          }
-        };
-      });
-
-      return varColor;
-    }
-  }
-
-
-  function ProgressBarColor(porcAprobComp) {
-    if (loadedDataColor) {
-      var auxColor = "0"; //posiciones
-      var varColor = ""; //color /dato visible
-      // let reversed = listConfigCompColorFlechas.map((orden) => orden).reverse();
-
-      function compararPorOrden(a, b) {
-        return parseInt(b.orden) - parseInt(a.orden);
-      }
-
-      // Ordena la lista utilizando la función de comparación
-      var listColor = listConfigCompColorFlechas.sort(compararPorOrden);
-
-      console.log(listColor);
-      listColor.map((color1) => {
-        if (auxColor === "0") {
-          if (eval(porcAprobComp + color1.datoNoVisible)) {
-            varColor = color1.datoVisible;
-            auxColor = "1";
-          }
-        };
-      });
-      return varColor;
-    }
-  }
 
   function BodyResumen2() {
     if (loadedDataResumenEval && loadedDataTiempoPromedio) {
@@ -187,7 +54,7 @@ export default function GraficosDashboard() {
       // console.log('1',ProgressBarColor(listResumenEval[0].porcSatisfaccion));
 
       return (
-        <div id="tableResumen">
+        <div className="tableResumen">
           <Table>
 
             <tr >
@@ -328,6 +195,144 @@ export default function GraficosDashboard() {
       return <h1>Loading</h1>;
     }
   }
+
+
+
+  function GetConfigTiempoPromedio() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "EDD",
+      subTipoConfDato: "TIEMPO_LIMITE",
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      // console.log(data);
+      setListConfigTiempoPromedio(data);
+
+      setLoadedDataTiempoPromedio(true)
+
+    });
+  }
+
+  function GetDataResumenEval() {
+    var url = "pages/listados/listadoResumenEval.php";
+    var operationUrl = "listadoResumenEval";
+    var data = {
+      idEvaluacion: idEDDEvaluacion,
+      idProyecto: idEDDProyecto,
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setListResumenEval(data);
+      setLoadedDataResumenEval(true);
+    });
+  }
+
+  function GetDataCompetencias() {
+    var url = "pages/listados/listadoCompetenciasEval.php";
+    var operationUrl = "listadoCompetenciasEval";
+    var data = {
+      idEvaluacion: idEDDEvaluacion,
+      idProyecto: idEDDProyecto,
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setListCompetencias(data);
+      setLoadedDataCompetencias(true);
+      // console.log('Response', data);
+    });
+  }
+
+  function GetConfigCompColorFlechas() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "competencia",
+      subTipoConfDato: "RANGO_COLOR",
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setListConfigCompColorFlechas(data);
+      setLoadedDataColor(true)
+      // console.log("configColor", data);
+    });
+  }
+
+  function GetConfigCompRangoFlechas() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "competencia",
+      subTipoConfDato: "RANGO_FLECHA",
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setListConfigCompRangoFlechas(data);
+      // console.log("configRango", data);
+      setLoadedDataRango(true)
+    });
+  }
+  function GetConfigCompRangoLeyenda() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "competencia",
+      subTipoConfDato: "RANGO_LEYENDA",
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setListConfigCompRangoLeyenda(data);
+      // console.log("configRango", data);
+      setLoadedDataLeyenda(true)
+    });
+  }
+  function ProgressColorInfo(porcAprobC) {
+    if (loadedDataColor) {
+      var auxColor = "0"; //posiciones
+      var varColor = ""; //color /dato visible
+
+      // Ordena la lista utilizando la función de comparación
+      function compararPorOrden(a, b) {
+        return parseInt(b.orden) - parseInt(a.orden);
+      }
+      var listColor = listConfigCompColorFlechas.sort(compararPorOrden);
+
+      listColor.map((color1) => {
+        if (auxColor === "0") {
+          if (eval(porcAprobC + color1.datoNoVisible)) {
+            varColor = color1.datoVisible;
+            auxColor = "1";
+          }
+        };
+      });
+
+      return varColor;
+    }
+  }
+
+
+  function ProgressBarColor(porcAprobComp) {
+    if (loadedDataColor) {
+      var auxColor = "0"; //posiciones
+      var varColor = ""; //color /dato visible
+      // let reversed = listConfigCompColorFlechas.map((orden) => orden).reverse();
+
+      function compararPorOrden(a, b) {
+        return parseInt(b.orden) - parseInt(a.orden);
+      }
+
+      // Ordena la lista utilizando la función de comparación
+      var listColor = listConfigCompColorFlechas.sort(compararPorOrden);
+
+      console.log(listColor);
+      listColor.map((color1) => {
+        if (auxColor === "0") {
+          if (eval(porcAprobComp + color1.datoNoVisible)) {
+            varColor = color1.datoVisible;
+            auxColor = "1";
+          }
+        };
+      });
+      return varColor;
+    }
+  }
+
+
 
   function ArrowsTemplate({ porcAprobComp }) {
 

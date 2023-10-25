@@ -26,6 +26,7 @@ export default function FormularioEvaluacion() {
   const idEDDProyEmpEvaluado = params.idEDDProyEmpEvaluado;
   const idEDDProyEmpEvaluador = params.idEDDProyEmpEvaluador;
   const cicloEvaluacion = params.cicloEvaluacion;
+
   const [fechaInicioExamen, setfechaInicioExamen] = useState("");
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
@@ -38,7 +39,7 @@ export default function FormularioEvaluacion() {
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
       cicloEvaluacion:cicloEvaluacion,
     };
-    console.log("getdata",data);
+    console.log("getdata", data);
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);
       setLoadedData(true); //Cambio el estado del booleano
@@ -61,7 +62,7 @@ export default function FormularioEvaluacion() {
         cancelButtonColor: "#d33",
         confirmButtonText: "Continuar",
         cancelButtonText: "Cancelar",
-        allowOutsideClick : false,
+        allowOutsideClick: false,
         allowEscapeKey: false
       }).then((result) => {
         if (result.isConfirmed) {
@@ -87,7 +88,7 @@ export default function FormularioEvaluacion() {
         confirmButtonText: "Continuar",
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location = "/listadoEDDEvalProyEmp/0"
+          window.history.back()
         }
       });
     }
@@ -104,29 +105,27 @@ export default function FormularioEvaluacion() {
     e.preventDefault();
     ConfirmAlertAll('¿Confirma el envío de los datos?', 'No podrás cambiar los resultados.', 'warning').then((response) => {
 
-    const url = "pages/insertar/insertarEddEvalProyResp.php";
-    const operationUrl = "insertarEddEvalProyResp";
-    e.preventDefault();
-    let fechaFin = new Date();
+      const url = "pages/insertar/insertarEddEvalProyResp.php";
+      const operationUrl = "insertarEddEvalProyResp";
+      e.preventDefault();
+      let fechaFin = new Date();
 
-    var data = {
-      respuestas: respuestasAEnviar,
-      datosExtra: {
-        fechaInicioExamen: fechaInicioExamen,
-        fechaFinExamen: fechaFin,
-        idEDDEvaluacion: idEDDEvaluacion,
-        usuarioCreacion: userData.usuario,
-        cicloEvaluacion:cicloEvaluacion
+      var data = {
+        respuestas: respuestasAEnviar,
+        datosExtra: {
+          fechaInicioExamen: fechaInicioExamen,
+          fechaFinExamen: fechaFin,
+          idEDDEvaluacion: idEDDEvaluacion,
+          usuarioCreacion: userData.usuario,
+        },
+      };
+      console.log(data);
+      SendDataService(url, operationUrl, data).then((response) => {
+        console.log("respuestaServer:", response);
+        ConfirmAlertEnvio();
 
-      },
-    }; 
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      console.log("respuestaServer:", response);
-      ConfirmAlertEnvio();
-
+      });
     });
-  });
   }
 
   useEffect(
@@ -136,7 +135,7 @@ export default function FormularioEvaluacion() {
     [idEDDEvaluacion, loadedData]
   );
 
-  
+
   var auxIdPregunta = "0";
   var auxEncabezado = "0";
   var auxDesc = "0";
@@ -146,8 +145,8 @@ export default function FormularioEvaluacion() {
       <Header></Header>
       <form onSubmit={SendData}>
         <a
-                style={{ margin: '10px' ,marginTop:'15px',marginLeft:'60px'}}
-                type="submit"
+          style={{ margin: '10px', marginTop: '15px', marginLeft: '60px' }}
+          type="submit"
           id="btnAtras"
           value="Registrar"
           href="javascript: history.go(-1)">Volver
@@ -171,7 +170,7 @@ export default function FormularioEvaluacion() {
                 })}
               </div>
               <div class="col" id="encabezadoRight">
-              <img width="180px" height="100px" src={logoTsoft}></img>
+                <img width="180px" height="100px" src={logoTsoft}></img>
 
               </div>
               {/* src={idEDDEvalPregunta.logoFormulario} */}
@@ -180,7 +179,7 @@ export default function FormularioEvaluacion() {
           {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
 
             if (auxDesc !== idEDDEvalPregunta.descFormulario) {
-              auxDesc= idEDDEvalPregunta.descFormulario
+              auxDesc = idEDDEvalPregunta.descFormulario
               return (
                 <>
                   <p id="encabezadoEnd" style={{ color: 'white' }}>
@@ -189,7 +188,7 @@ export default function FormularioEvaluacion() {
                 </>
 
               )
-              
+
             }
           })}
 
@@ -228,7 +227,7 @@ export default function FormularioEvaluacion() {
                             <tr>
                               <td></td>
                               <td>
-                                
+
                                 <textarea
                                   maxLength="500"
                                   type="textarea"
@@ -299,7 +298,7 @@ export default function FormularioEvaluacion() {
                                   value={idEDDEvalPregunta.nomRespPreg}
                                   required={idEDDEvalPregunta.preguntaObligatoria === "1"}
                                   id="inputNomRespuesta"
-                                  style={{ width: "4em",textTransform: "uppercase"}}
+                                  style={{ width: "4em", textTransform: "uppercase" }}
                                   onChange={({ target }) => {
                                     let respuestaTexto = target.value;
 
@@ -345,7 +344,7 @@ export default function FormularioEvaluacion() {
                                 value={idEDDEvalPregunta.nomRespPreg}
                                 required={idEDDEvalPregunta.preguntaObligatoria === "1"}
                                 id="inputNomRespuesta"
-                                style={{ width: "4em",textTransform: "uppercase"}}
+                                style={{ width: "4em", textTransform: "uppercase" }}
                                 onChange={({ target }) => {
                                   let respuestaTexto = target.value;
 

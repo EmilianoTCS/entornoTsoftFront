@@ -60,6 +60,8 @@ export default function ListadoCompProy() {
     const [selectedProyecto, setSelectedProyecto] = useState([]);
     const selectedProyString = selectedProyecto.join(',');
 
+    const [cicloEvaluacion, setcicloEvaluacion] = useState('');
+    const [listcicloEvaluacion, setlistcicloEvaluacion] = useState([""]);
 
     function obtenerCliente() {
         const url = "pages/auxiliares/listadoClienteForms.php";
@@ -68,7 +70,21 @@ export default function ListadoCompProy() {
             setlistCliente(response)
         );
     }
-
+    function obtenerCicloEvaluacion() {
+        const url = "pages/auxiliares/listadoCiclosEval.php";
+        const operationUrl = "listados";
+        var data = {
+            idProyecto: selectedProyString,
+        };
+        SendDataService(url, operationUrl, data).then((data) => {
+            if (Array.isArray(data)) {
+                setlistcicloEvaluacion(data);
+            } else {
+                setlistcicloEvaluacion([]); // Establece listcicloEvaluacion como un arreglo vacío si data no es un arreglo
+            }
+        });
+    }
+    
     function obtenerProyecto() {
         if (selectedServicio.length > 0 && !selectedClients.includes("0")) { // Verifica si "Ninguno" está seleccionado
             const url = "pages/auxiliares/listadoProyectoForms.php";
@@ -117,21 +133,24 @@ export default function ListadoCompProy() {
     }
     // FIN ELIMINAR
 
-    useEffect(
-        function () {
-
-            obtenerCliente();
-            obtenerProyecto();
-            obtenerServicio();
-        },
-        [
-            // num_boton,
-            // cantidadPorPagina,
-            selectedClientsString,
-            selectedServicioString,
-            selectedProyString
-        ]
-    );
+    useEffect(() => {
+        obtenerCliente();
+        obtenerProyecto();
+        obtenerServicio();
+    
+        if (selectedProyString) { // Verifica si se ha seleccionado un proyecto
+            obtenerCicloEvaluacion();
+        } else {
+            // Si no se ha seleccionado un proyecto, establece listcicloEvaluacion como un arreglo vacío
+            setlistcicloEvaluacion([]);
+        }
+    }, [
+        selectedClientsString,
+        selectedServicioString,
+        selectedProyString,
+        idProyecto,
+    ]);
+    
 
     function SendData(data) {
         var url = "pages/listados/listadoCompetenciasGeneralEval.php";
@@ -177,8 +196,9 @@ export default function ListadoCompProy() {
             tipoCargo: tipoCargo,
             fechaIni: fechaIni,
             fechaFin: fechaFin,
+            cicloEvaluacion: cicloEvaluacion
         }
-        console.log('data',data);
+        console.log('data', data);
         SendData(data);
 
     };
@@ -186,6 +206,7 @@ export default function ListadoCompProy() {
 
     // Restablecer los valores
     const limpiarClick = () => {
+        setcicloEvaluacion(0);
         setSelectedClients([]);
         setSelectedServicio([]);
         setSelectedProyecto([]);
@@ -356,6 +377,28 @@ export default function ListadoCompProy() {
                                 </select>
 
                             </td>
+                            <td id="espacioEntreOpciones" style={{ width: '16em' }}>
+                                 <div className="form-group">
+                                <label htmlFor="Ciclo">Ciclo de evaluación: </label>
+                                <select
+                                    required
+                                    type="text"
+                                    className="form-control"
+                                    onChange={({ target }) => {
+                                        setcicloEvaluacion(target.value);
+                                    }}
+                                >
+                                    <option value="0">Todos</option>
+                                    {
+                                        listcicloEvaluacion.map((valor) => (
+                                            <option
+                                                value={valor.cicloEvaluacion}
+                                            >
+                                                {valor.cicloEvaluacion}
+                                            </option>
+                                        ))}
+                                </select>
+                            </div></td>
                             <td id="espacioEntreOpciones">
                                 <label>Fecha inicio desde:</label>
                                 <br></br>
@@ -377,6 +420,7 @@ export default function ListadoCompProy() {
                                     onChange={(e) => setFechaFin(e.target.value)}
                                 />
                             </td>
+                           
 
                             <td>
                                 <option disabled></option>
@@ -504,7 +548,7 @@ export default function ListadoCompProy() {
 
                             <td >
                                 <Link to={
-                                    `/dashboardCompProy/${selectedClients}/${selectedServicio}/${selectedProyecto}/${tipoComparacion}/${tipoCargo}/${fechaIni}/${fechaFin}`}>
+                                    `/dashboardCompProy/${selectedClients}/${selectedServicio}/${selectedProyecto}/${tipoComparacion}/${tipoCargo}/${fechaIni}/${fechaFin}/${cicloEvaluacion}`}>
                                     <button data-title="Desplegar dashboard" type="button" className="btn-General-Pag">
                                         Desplegar Dashboard
                                     </button>
@@ -519,13 +563,15 @@ export default function ListadoCompProy() {
                                 <th>Cliente</th>
                                 <th>Servicio</th>
                                 <th>Proyecto</th>
+                                <th >Ciclo</th>
                                 <th>Competencia</th>
                                 <th>Fecha Inicio</th>
                                 <th>Fecha Fin</th>
-                                <th>% Total Referentes</th>
-                                <th>% Total Colaboradores</th>
-                                <th >Cant Referentes</th>
-                                <th>Cant Colaboradores</th>
+                                <th>% Total Ref</th>
+                                <th>% Total Colab</th>
+                                <th >Cant Ref</th>
+                                <th>Cant Colab</th>
+
                                 {/* <th>Operaciones</th> */}
 
                             </tr>
@@ -536,6 +582,7 @@ export default function ListadoCompProy() {
                                     <td>{idEDDCompProy.nomCliente}</td>
                                     <td>{idEDDCompProy.nomServicio}</td>
                                     <td>{idEDDCompProy.nomProyecto}</td>
+                                    <td>{idEDDCompProy.cicloEvaluacion}</td>
                                     <td>{idEDDCompProy.nomCompetencia}</td>
                                     <td>{idEDDCompProy.epeFechaIni}</td>
                                     <td>{idEDDCompProy.epeFechaFin}</td>
@@ -543,6 +590,7 @@ export default function ListadoCompProy() {
                                     <td>{idEDDCompProy.porcAprobColab}</td>
                                     <td>{idEDDCompProy.cantReferentes}</td>
                                     <td>{idEDDCompProy.cantColaboradores}</td>
+
                                 </tr>
                             ))}
                         </tbody>
