@@ -7,13 +7,13 @@ import "./homeEDD.css";
 import { useRoute } from "wouter";
 
 export default function AlertOpoDes() {
-  const [, params] = useRoute("/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto");
+  const [, params] = useRoute("/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto/:cicloEvaluacion");
 
   const idEDDEvaluacion = params.idEvaluacion;
   const nomEvaluacion = decodeURI(params.nomEvaluacion);
   const tipoEvaluacion = params.tipoEvaluacion;
   const idEDDProyecto = params.idEDDProyecto;
-
+  const cicloEvaluacion = params.cicloEvaluacion;
 
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -87,6 +87,8 @@ export default function AlertOpoDes() {
     var data = {
       idEvaluacion: idEDDEvaluacion,
       idProyecto:idEDDProyecto,
+      cicloEvaluacion:cicloEvaluacion
+
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setListResumenEval(data);

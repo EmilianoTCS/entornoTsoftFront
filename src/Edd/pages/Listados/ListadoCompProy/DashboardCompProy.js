@@ -202,13 +202,13 @@ export default function DashboardCompProy() {
       if (!uniqueClientes.has(item.nomCliente)) {
         uniqueClientes.add(item.nomCliente);
         return (
-          <table key={index} style={{ width: '100%' }}>
-
-            <td><h5>Cliente:&nbsp; {item.nomCliente}</h5></td>
-            <td><h5>Servicio:&nbsp; {item.nomServicio}</h5></td>
-            <td><h5>Proyecto:&nbsp; {item.nomProyecto}</h5></td>
-
-          </table>
+          <div id="InfoDashCpmpProy">
+            <tr>
+              <td><h5>Cliente:&nbsp; {item.nomCliente}&nbsp;&nbsp;-&nbsp;&nbsp;</h5></td>
+              <td><h5>Servicio:&nbsp; {item.nomServicio}&nbsp;&nbsp;-&nbsp;&nbsp;</h5></td>
+              <td><h5>Proyecto:&nbsp; {item.nomProyecto}</h5></td>
+            </tr >
+          </div>
         );
       }
       return null; // No se agregará a la tabla si es un valor duplicado
@@ -223,118 +223,122 @@ export default function DashboardCompProy() {
     );
   }
 
-  function InfCantRefColab() {
-    // Crea un conjunto de ciclos únicos
-    const uniqueCiclos = new Set(DashCompProy.map(item => item.cicloEvaluacion));
-
-    return (
-      <div>
-        {[...uniqueCiclos].map(ciclo => {
-          // Filtra los elementos correspondientes a un ciclo específico
-          const cicloData = DashCompProy.filter(item => item.cicloEvaluacion === ciclo);
-
-          // Usa un conjunto para evitar la repetición de información
-          const uniqueInfo = new Set();
-
-          return (
-            <div key={ciclo}>
-              <h5>Ciclo: {ciclo}</h5>
-              {cicloData.map((item, index) => {
-                // Crea una cadena única para evitar repeticiones
-                const infoString = `${item.cantReferentes}-${item.cantColaboradores}`;
-
-                if (!uniqueInfo.has(infoString)) {
-                  uniqueInfo.add(infoString);
-                  return (
-                    <div key={index}>
-                      <h5>Cantidad de referentes: {item.cantReferentes}</h5>
-                      <h5>Cantidad de colaboradores: {item.cantColaboradores}</h5>
-                    </div>
-                  );
-                }
-                return null; // No mostrar información repetida
-              })}
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-
 
 
   // Función para contar las competencias según el ciclo de evaluación
-  function countCompetenciasPorCiclo() {
+  function countCompetenciasPorCicloPRUEBA() {
     if (cicloEvaluacion === "0") {
       const competenciasPorCiclo = DashCompProy.reduce((result, item) => {
         if (!result[item.cicloEvaluacion]) {
           result[item.cicloEvaluacion] = {
             competencias: new Set(),
             fechas: new Set(),
+            referentes: new Set(),
+            colaboradores: new Set(),
           };
         }
         result[item.cicloEvaluacion].competencias.add(item.nomCompetencia);
         result[item.cicloEvaluacion].fechas.add(item.epeFechaFin);
+        result[item.cicloEvaluacion].referentes.add(item.cantReferentes);
+        result[item.cicloEvaluacion].colaboradores.add(item.cantColaboradores);
         return result;
       }, {});
 
-      const infoCiclos = Object.entries(competenciasPorCiclo).map(([cicloEvaluacion, data]) => {
-        const competencias = data.competencias.size;
-        const fechas = [...data.fechas];
-        const formattedFechasPorCiclo = [...new Set(fechas)]; // Eliminar fechas duplicadas
+      const infoCiclos = Object.entries(competenciasPorCiclo).map(
+        ([cicloEvaluacion, data], index, array) => {
+          const competencias = data.competencias.size;
+          const fechas = [...data.fechas];
+          const formattedFechasPorCiclo = [...new Set(fechas)];
+          const referentes = [...data.referentes];
+          const colaboradores = [...data.colaboradores];
 
-        return (
-          <tr key={cicloEvaluacion}>
-            <tr>
-              <h5>Ciclo: {cicloEvaluacion} </h5>
-            </tr>
-            <tr>
-              <h5>Competencias: {competencias}</h5>
-            </tr>
-            <tr>
-              <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
-            </tr>
-          </tr>
-        );
-      });
+          // Agregar <hr> solo si no es el último ciclo
+          const separator = index < array.length - 1 ? <hr /> : null;
 
+          return (
+            <tr key={cicloEvaluacion}>
+              <td>
+                <h5>Ciclo: {cicloEvaluacion}</h5>
+                <h5>Fecha: {formattedFechasPorCiclo.join(", ")}&nbsp;&nbsp;</h5>
+                <h5>Competencias: {competencias}&nbsp;&nbsp;</h5>
+                <td>
+                  {tipoCargo === 'REFERENTE' ? (
+                    <h5>Referentes: {referentes.join(", ")}&nbsp;&nbsp;</h5>
+                  ) : (
+                    <h5>Colaboradores: {colaboradores.join(", ")}</h5>
+                  )}
+                </td>              </td>
+              {separator}
+            </tr>
+          );
+        }
+      );
+
+      // Ahora, envuelve todo en una tabla con 3 columnas
       return (
         <table>
-          <tbody>{infoCiclos}</tbody>
+          <tbody>
+            <tr>
+              <td>
+                {infoCiclos.filter((_, index) => index % 3 === 0)}
+              </td>
+              <td>
+                {infoCiclos.filter((_, index) => index % 3 === 1)}
+              </td>
+              <td>
+                {infoCiclos.filter((_, index) => index % 3 === 2)}
+              </td>
+            </tr>
+          </tbody>
         </table>
       );
     } else {
-      // En otros casos, mostrar la cantidad de competencias únicas sin repetir en el ciclo actual
       const competenciasPorCiclo = DashCompProy
         .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
         .map((item) => item.nomCompetencia);
 
       const competenciasUnicas = [...new Set(competenciasPorCiclo)];
 
-      // Filtrar las fechas correspondientes al ciclo actual
       const fechasPorCiclo = DashCompProy
         .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
         .map((item) => item.epeFechaFin);
 
-      const formattedFechasPorCiclo = [...new Set(fechasPorCiclo)]; // Eliminar fechas duplicadas
+      const formattedFechasPorCiclo = [...new Set(fechasPorCiclo)];
+      let referentesSet = new Set();
+      let colaboradoresSet = new Set();
+
+      DashCompProy.forEach((item) => {
+        referentesSet.add(item.cantReferentes);
+        colaboradoresSet.add(item.cantColaboradores);
+      });
+
+      let referentesArray = [...referentesSet];
+      let colaboradoresArray = [...colaboradoresSet];
 
       return (
-        <table>
-          <tbody>
-            <tr>
-              <tr>
-                <h5>Ciclo: {cicloEvaluacion}</h5>
-              </tr>
-              <tr>
-                <h5>Competencias: {competenciasUnicas.length}
-                </h5>
-              </tr>
-              <tr>
-                <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
-              </tr>
-            </tr>
-          </tbody>
-        </table>
+        <tr key={cicloEvaluacion}>
+          <tr>
+            <h5>Ciclo: {cicloEvaluacion} </h5>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td>
+              <h5>Fecha: {formattedFechasPorCiclo.join(", ")}&nbsp;&nbsp;</h5>
+
+            </td>
+            <td>
+              <h5>Competencias: {competenciasUnicas.length}&nbsp;&nbsp;</h5>
+            </td>
+            <td>
+                  {tipoCargo === 'REFERENTE' ? (
+                    <h5>Referentes: {referentesArray.join(", ")}&nbsp;&nbsp;</h5>
+                  ) : (
+                    <h5>Colaboradores: {colaboradoresArray.join(", ")}</h5>
+                  )}
+                </td>
+          </tr>
+        </tr>
       );
     }
   }
@@ -342,8 +346,134 @@ export default function DashboardCompProy() {
 
 
 
+  function countCompetenciasPorCiclo() {
+    if (cicloEvaluacion === "0") {
+      const competenciasPorCiclo = DashCompProy.reduce((result, item) => {
+        if (!result[item.cicloEvaluacion]) {
+          result[item.cicloEvaluacion] = {
+            competencias: new Set(),
+            fechas: new Set(),
+            referentes: new Set(),
+            colaboradores: new Set(),
+          };
+        }
+        result[item.cicloEvaluacion].competencias.add(item.nomCompetencia);
+        result[item.cicloEvaluacion].fechas.add(item.epeFechaFin);
+        result[item.cicloEvaluacion].referentes.add(item.cantReferentes);
+        result[item.cicloEvaluacion].colaboradores.add(item.cantColaboradores);
+        return result;
+      }, {});
+
+      let lastFormattedFecha = null;
+
+      const infoCiclos = Object.entries(competenciasPorCiclo).map(
+        ([cicloEvaluacion, data], index, array) => {
+          const competencias = data.competencias.size;
+          const fechas = [...data.fechas];
+          const formattedFechasPorCiclo = [...new Set(fechas)];
+
+          // Si la fecha es diferente de la fecha en el ciclo anterior, mostrarla, de lo contrario, mostrar un título invisible
+          const shouldShowFecha = formattedFechasPorCiclo.join(", ") !== lastFormattedFecha;
+
+          lastFormattedFecha = formattedFechasPorCiclo.join(", ");
+
+          const referentes = [...data.referentes];
+          const colaboradores = [...data.colaboradores];
+
+          // Agregar <hr> solo si no es el último ciclo
+          const separator = index < array.length - 1 ? <hr /> : null;
+
+          return (
+
+            <tr key={cicloEvaluacion} >
+              <tr>
+                {shouldShowFecha ? (
+                  <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
+                ) : (
+                  <h5 style={{ visibility: "hidden" }}>Fecha: 0000</h5>
+                )}
+              </tr>
+              <tr>
+                <td></td>
+                <td> <h5>Ciclo: {cicloEvaluacion}&nbsp;&nbsp; </h5></td>
+                <td>
+                  <h5>Competencias: {competencias}&nbsp;&nbsp;</h5>
+                </td>
+                <td>
+                  {tipoCargo === 'REFERENTE' ? (
+                    <h5>Referentes: {referentes.join(", ")}&nbsp;&nbsp;</h5>
+                  ) : (
+                    <h5>Colaboradores: {colaboradores.join(", ")}</h5>
+                  )}
+                </td>
+              </tr>
+              {separator}
+            </tr>
+          );
+        }
+      );
+
+      return (
+        <table>
+          <tbody>{infoCiclos}</tbody>
+        </table>
+      );
+    } else {
+      const competenciasPorCiclo = DashCompProy
+        .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
+        .map((item) => item.nomCompetencia);
+
+      const competenciasUnicas = [...new Set(competenciasPorCiclo)];
+
+      const fechasPorCiclo = DashCompProy
+        .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
+        .map((item) => item.epeFechaFin);
+
+      const formattedFechasPorCiclo = [...new Set(fechasPorCiclo)];
+      let referentesSet = new Set();
+      let colaboradoresSet = new Set();
+
+      DashCompProy.forEach((item) => {
+        referentesSet.add(item.cantReferentes);
+        colaboradoresSet.add(item.cantColaboradores);
+      });
+
+      let referentesArray = [...referentesSet];
+      let colaboradoresArray = [...colaboradoresSet];
+
+      return (
+        <tr key={cicloEvaluacion}>
+          <tr>
+            <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td> <h5>Ciclo: {cicloEvaluacion}&nbsp;&nbsp; </h5></td>
+            <td>
+              <h5>Competencias: {competenciasUnicas.length}&nbsp;&nbsp;</h5>
+            </td>
+            <td>
+              {tipoCargo === 'REFERENTE' ? (
+                <h5>Referentes: {referentesArray.join(", ")}&nbsp;&nbsp;</h5>
+              ) : (
+                <h5>Colaboradores: {colaboradoresArray.join(", ")}</h5>
+              )}
+            </td>
+
+          </tr>
 
 
+
+
+
+        </tr>
+
+
+
+      );
+    }
+  }
 
 
 
@@ -354,39 +484,39 @@ export default function DashboardCompProy() {
   return userData.statusConected || userData !== null ? (
     <>
       <Header></Header>
+      <br></br>
+      <h2 style={{ background: 'white', textAlign: 'center', marginLeft: '10em', marginRight: '10em' }}>Dashboard Comparación ciclos de proyectos</h2>
       <table style={{ margin: 'auto' }}>
         <br></br>
         <tr>
           <br></br>
           <td>
-            <div className="bg-light mx-auto px-2 border " style={{ width: "1200px", height: "600px" }}>
+            <div className="bg-light mx-auto px-2 border " style={{ width: "1100px", height: "500px" }}>
               {BarrasChart()}
             </div>
             <br></br>
 
+            {Info()}
+            <br></br>
+            <table id="fondoTablaDashCompProy">
+              <tr>
+                {countCompetenciasPorCiclo()}
+              </tr>
 
+            </table>
+          {/* <br></br>
+            <table id="fondoTablaDashCompProy">
+              <tr>
+                {countCompetenciasPorCicloPRUEBA()}
+              </tr>
 
-
-            <div id="fondoTablaDashCompProy">
-              <div id="containerTablasDashCompProy">
-
-                <table style={{ backgroundColor: 'white', width: '100%', margin: 'auto' }}>
-                  {Info()}
-                  <table style={{ width: '100%', margin: 'auto' }}>
-                    <td><p>Cantidad de competencias: {countCompetenciasPorCiclo()}</p></td>
-                    <td><p>Cantidad de ref y colab: {InfCantRefColab()}</p></td>
-                  </table>
-                </table>
-
-              </div>
-            </div>
-
-
+            </table> */}
 
           </td>
         </tr>
 
       </table >
+
       <br></br>
     </>
   ) : (

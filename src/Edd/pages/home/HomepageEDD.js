@@ -17,11 +17,13 @@ import RadialSeparators from "./RadialSeparators";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export default function HomePageEDD() {
-  const [, params] = useRoute("/homePageEDD/:idEvaluacion/:nomEvaluacion/:idEDDProyecto");
+  const [, params] = useRoute("/homePageEDD/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion");
 
   const idEDDEvaluacion = params.idEvaluacion;
   const nomEvaluacion = decodeURI(params.nomEvaluacion);
   const idEDDProyecto = params.idEDDProyecto;
+  const cicloEvaluacion = params.cicloEvaluacion;
+
 
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -159,14 +161,14 @@ export default function HomePageEDD() {
                   // Valor maximo del cirucularProgress
                   maxValue={listConfigTiempoPromedio[0].datoNoVisible}
                   // Borde de color (visual)
-                  value={(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}
+                  value={(listResumenEval[0].tiempoPromedio * 100/ listConfigTiempoPromedio[0].datoNoVisible) }
                   background
                   // Rayas del borde
                   strokeWidth={10}
                   styles={buildStyles({
                     strokeLinecap: 'butt',
                     // Color del borde-llenado
-                    pathColor: ProgressBarColor(listResumenEval[0].tiempoPromedio > listConfigTiempoPromedio[0].datoNoVisible ? 100 : ((listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible)),
+                    pathColor: ProgressBarColor(listResumenEval[0].tiempoPromedio * 100 / listConfigTiempoPromedio[0].datoNoVisible),
                     trailColor: "#E5E7E9",
                     backgroundColor: 'white'
                   })}
@@ -175,7 +177,8 @@ export default function HomePageEDD() {
                     <strong>Tiempo</strong>
                     <br></br>
                     {/* Valor que se ve dentro del circulo, en minutos */}
-                    <strong><span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}</span>
+                    {/* <strong><span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}</span> */}
+                      <strong><span>{(listResumenEval[0].tiempoPromedio)}</span>
                       <p className="porcentajeCard">min</p></strong>
                     <br></br>
                     <strong>Promedio</strong>
@@ -239,11 +242,14 @@ export default function HomePageEDD() {
     var data = {
       idEvaluacion: idEDDEvaluacion,
       idProyecto: idEDDProyecto,
+      cicloEvaluacion:cicloEvaluacion,
+
     };
+    console.log('data',data);
     SendDataService(url, operationUrl, data).then((data) => {
       setListResumenEval(data);
       setLoadedDataResumenEval(true);
-
+      console.log('response',data);
     });
   }
 

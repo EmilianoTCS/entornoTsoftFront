@@ -60,7 +60,7 @@ export default function ListadoCompProy() {
     const [selectedProyecto, setSelectedProyecto] = useState([]);
     const selectedProyString = selectedProyecto.join(',');
 
-    const [cicloEvaluacion, setcicloEvaluacion] = useState('');
+    const [cicloEvaluacion, setcicloEvaluacion] = useState(0);
     const [listcicloEvaluacion, setlistcicloEvaluacion] = useState([""]);
 
     function obtenerCliente() {
@@ -84,7 +84,7 @@ export default function ListadoCompProy() {
             }
         });
     }
-    
+
     function obtenerProyecto() {
         if (selectedServicio.length > 0 && !selectedClients.includes("0")) { // Verifica si "Ninguno" está seleccionado
             const url = "pages/auxiliares/listadoProyectoForms.php";
@@ -137,7 +137,7 @@ export default function ListadoCompProy() {
         obtenerCliente();
         obtenerProyecto();
         obtenerServicio();
-    
+
         if (selectedProyString) { // Verifica si se ha seleccionado un proyecto
             obtenerCicloEvaluacion();
         } else {
@@ -150,7 +150,7 @@ export default function ListadoCompProy() {
         selectedProyString,
         idProyecto,
     ]);
-    
+
 
     function SendData(data) {
         var url = "pages/listados/listadoCompetenciasGeneralEval.php";
@@ -163,32 +163,29 @@ export default function ListadoCompProy() {
             console.log('Info', data);
         });
     }
-
+    const [busquedaRealizada, setBusquedaRealizada] = useState(false);
     const buscarClick = () => {
-
         // Validación de fechas
         if (new Date(fechaFin) < new Date(fechaIni)) {
-            TopAlerts('FechaFinMayorInicio')
+            TopAlerts('FechaFinMayorInicio');
             return;
         }
-
-        //   EXPRESION
+    
+        // EXPRESION
         if (selectedServicioString === "" && selectedProyString === "") {
         } if (selectedProyecto.length < 1 || /^,(.*)/.test(selectedProyecto) || /.*,,.*/.test(selectedProyecto) || /[0]/.test(selectedProyecto)) {
-            TopAlerts('AlMenosDosProyectos')
+            TopAlerts('AlMenosDosProyectos');
             return;
-
         }
-
+    
         if (!fechaIni || !fechaFin || !tipoComparacion || !tipoCargo) {
-            TopAlerts('CamposLlenos')
+            TopAlerts('CamposLlenos');
             return; // Salir de la función si los campos no están llenos
         }
+    
         // Resetear la tabla
         setEDDCompProy([]);
         var data = {
-            // num_boton: num_boton,
-            // cantidadPorPagina: cantidadPorPagina,
             idCliente: selectedClientsString,
             idServicio: selectedServicioString,
             idProyecto: selectedProyString,
@@ -197,11 +194,14 @@ export default function ListadoCompProy() {
             fechaIni: fechaIni,
             fechaFin: fechaFin,
             cicloEvaluacion: cicloEvaluacion
-        }
-        console.log('data', data);
+        };
+    
+        // Después de realizar la búsqueda, establece el estado de busquedaRealizada en true
+        setBusquedaRealizada(true);
+    
         SendData(data);
-
     };
+    
 
 
     // Restablecer los valores
@@ -218,6 +218,7 @@ export default function ListadoCompProy() {
         setFechaFin("");
         setlistServicio([]);
         setEDDCompProy([]); // Esto eliminará los datos de la tabla
+        setBusquedaRealizada(true);
     };
 
 
@@ -228,8 +229,9 @@ export default function ListadoCompProy() {
     const resetServices = () => {
         setSelectedServicio([]);
     };
+
+
     // FINNN Restablecer los valores
-    // const mensajeCtrl = "Utilice Ctrl y haga click en las opciones o deslice el mouse para seleccionar más de un ítem.";
     return userData.statusConected || userData !== null ? (
         <>
             <Header></Header>
@@ -378,27 +380,27 @@ export default function ListadoCompProy() {
 
                             </td>
                             <td id="espacioEntreOpciones" style={{ width: '16em' }}>
-                                 <div className="form-group">
-                                <label htmlFor="Ciclo">Ciclo de evaluación: </label>
-                                <select
-                                    required
-                                    type="text"
-                                    className="form-control"
-                                    onChange={({ target }) => {
-                                        setcicloEvaluacion(target.value);
-                                    }}
-                                >
-                                    <option value="0">Todos</option>
-                                    {
-                                        listcicloEvaluacion.map((valor) => (
-                                            <option
-                                                value={valor.cicloEvaluacion}
-                                            >
-                                                {valor.cicloEvaluacion}
-                                            </option>
-                                        ))}
-                                </select>
-                            </div></td>
+                                <div className="form-group">
+                                    <label htmlFor="Ciclo">Ciclo de evaluación: </label>
+                                    <select
+                                        required
+                                        type="text"
+                                        className="form-control"
+                                        onChange={({ target }) => {
+                                            setcicloEvaluacion(target.value);
+                                        }}
+                                    >
+                                        <option value={0}>Todos</option>
+                                        {
+                                            listcicloEvaluacion.map((valor) => (
+                                                <option
+                                                    value={valor.cicloEvaluacion}
+                                                >
+                                                    {valor.cicloEvaluacion}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div></td>
                             <td id="espacioEntreOpciones">
                                 <label>Fecha inicio desde:</label>
                                 <br></br>
@@ -420,7 +422,7 @@ export default function ListadoCompProy() {
                                     onChange={(e) => setFechaFin(e.target.value)}
                                 />
                             </td>
-                           
+
 
                             <td>
                                 <option disabled></option>
@@ -549,7 +551,13 @@ export default function ListadoCompProy() {
                             <td >
                                 <Link to={
                                     `/dashboardCompProy/${selectedClients}/${selectedServicio}/${selectedProyecto}/${tipoComparacion}/${tipoCargo}/${fechaIni}/${fechaFin}/${cicloEvaluacion}`}>
-                                    <button data-title="Desplegar dashboard" type="button" className="btn-General-Pag">
+                                    <button
+                                        data-title="Desplegar dashboard"
+                                        type="button"
+                                        className="btn-General-Pag"
+                                        onClick={buscarClick}
+                                        disabled={!busquedaRealizada} // Deshabilita el botón si busquedaRealizada es falso
+                                    >
                                         Desplegar Dashboard
                                     </button>
                                 </Link>

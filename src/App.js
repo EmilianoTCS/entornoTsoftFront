@@ -134,16 +134,16 @@ function App() {
             {/* ------------------------------------------------------------------------------------------ */}
 
             {/* DASHBOARD */}
-            <Route element={<HomePageEDD />} path="/homePageEDD/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
-            <Route element={<GraficosDashboard />} path="/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
-            <Route element={<ComentariosDashboard />} path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto"></Route>
+            <Route element={<HomePageEDD />} path="/homePageEDD/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"></Route>
+            <Route element={<GraficosDashboard />} path="/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"></Route>
+            <Route element={<ComentariosDashboard />} path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"></Route>
             {/* ------------------- */}
 
             <Route element={<ListadoCompProy />} path="/listadoCompProy"></Route>
             <Route element={<DashboardCompProy />} path="/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion"></Route>
 
 
-            <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto"></Route>
+            <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto/:cicloEvaluacion"></Route>
             {/* EDD */}
             <Route
             element={<FormularioEvaluacion />}

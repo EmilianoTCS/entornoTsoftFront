@@ -646,13 +646,13 @@ export default function ListadoEDDEvalProyEmp() {
                     {EDDEvalProyEmp.cargoEnProy !== 'REFERENTE' ? (
 
                       EDDEvalProyEmp.evalRespondida === 'SÍ' ? (
-                        <Link to={`/homePageEDD/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                        <Link to={`/homePageEDD/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}>
                           <button data-title="Información referentes" id="OperationBtns">
                             <MdDashboard id="icons" />
                           </button>
                         </Link>
                       ) : (
-                        <Link to={`/homePageEDD/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                        <Link to={`/homePageEDD/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}>
                           <button data-title="Información referentes" id="OperationBtns" disabled>
                             <MdDashboard id="icons" />
                           </button>
@@ -662,13 +662,13 @@ export default function ListadoEDDEvalProyEmp() {
 
                     ) : (
                       EDDEvalProyEmp.evalRespondida === 'SÍ' ? (
-                        <Link to={`/GraficosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                        <Link to={`/GraficosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}>
                           <button data-title="Información colaboradores" id="OperationBtns">
                             <MdDashboard id="icons" />
                           </button>
                         </Link>
                       ) : (
-                        <Link to={`/GraficosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                        <Link to={`/GraficosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}>
                           <button data-title="Información colaboradores" id="OperationBtns" disabled>
                             <MdDashboard id="icons" />
                           </button>
@@ -681,13 +681,13 @@ export default function ListadoEDDEvalProyEmp() {
 
 
                     {EDDEvalProyEmp.evalRespondida === 'SÍ' ? (
-                      <Link to={`/ComentariosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                      <Link to={`/ComentariosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}>
                         <button data-title="Comentarios" id="OperationBtns">
                           <FaComments id="icons" />
                         </button>
                       </Link>
                     ) : (
-                      <Link to={`/ComentariosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                      <Link to={`/ComentariosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}>
                         <button data-title="Comentarios" id="OperationBtns" disabled>
                           <FaComments id="icons" />
                         </button>
@@ -696,13 +696,13 @@ export default function ListadoEDDEvalProyEmp() {
 
 
                     {EDDEvalProyEmp.evalRespondida === 'SÍ' ? (
-                      <Link to={`/AlertasOporDes/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.tipoEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                      <Link to={`/AlertasOporDes/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.tipoEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}>
                         <button data-title="Desempeño" id="OperationBtns">
                           <SiSubstack id="icons" />
                         </button>
                       </Link>
                     ) : (
-                      <Link to={`/AlertasOporDes/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.tipoEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}`}>
+                      <Link to={`/AlertasOporDes/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.tipoEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}>
                         <button data-title="Desempeño" id="OperationBtns" disabled>
                           <SiSubstack id="icons" />
                         </button>

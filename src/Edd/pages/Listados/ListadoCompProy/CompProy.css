@@ -1,14 +1,25 @@
 #fondoTablaDashCompProy{
   border-radius: 2em; 
-  background-color: #fff;
+  background-color: #ffffff;
   width: 100%;
-  float: right;
-  padding: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+ padding: 1em;
 }
 
-#containerTablasDashCompProy{
-  padding-top: 1em
+
+#InfoDashCpmpProy{
+  border-radius: 2em; 
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+ padding-top: 0.5em;
+ padding-bottom: 0.5em;
+
 }
+
+
 
 .btn-General-Pag {
   background-color: #e10b1c;

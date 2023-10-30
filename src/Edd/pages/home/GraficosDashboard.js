@@ -15,11 +15,13 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 
 
 export default function GraficosDashboard() {
-  const [, params] = useRoute("/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto");
+  const [, params] = useRoute("/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion");
 
   const idEDDEvaluacion = params.idEvaluacion;
   const nomEvaluacion = decodeURI(params.nomEvaluacion);
   const idEDDProyecto = params.idEDDProyecto;
+  const cicloEvaluacion = params.cicloEvaluacion;
+
 
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -46,11 +48,13 @@ export default function GraficosDashboard() {
   function BodyResumen2() {
     if (loadedDataResumenEval && loadedDataTiempoPromedio) {
       const splitReferentes = listResumenEval[0].referentesEvaluados;
+      const time = listResumenEval[0].tiempoPromedio;
+      // console.log('epeFechaFin:', time);
+      // console.log('listConfigTiempoPromedio[0].datoNoVisible', listConfigTiempoPromedio[0].datoNoVisible);
       var totalSplit = splitReferentes.split('/');
-
       var cant = totalSplit[0];
       var totalRef = totalSplit[1];
-      console.log(listResumenEval[0].porcSatisfaccion);
+      // console.log(listResumenEval[0].porcSatisfaccion);
       // console.log('1',ProgressBarColor(listResumenEval[0].porcSatisfaccion));
 
       return (
@@ -58,14 +62,14 @@ export default function GraficosDashboard() {
           <Table>
 
             <tr >
-              <td >
+            <td >
                 <CircularProgressbarWithChildren
-                  value={80}
+                  value={listResumenEval[0].porcSatisfaccion}
                   background
                   strokeWidth={10}
                   styles={buildStyles({
                     strokeLinecap: 'butt',
-                    pathColor: ProgressBarColor(70),
+                    pathColor: ProgressBarColor(listResumenEval[0].porcSatisfaccion),
                     trailColor: "#E5E7E9",
                     backgroundColor: 'white',
 
@@ -155,14 +159,18 @@ export default function GraficosDashboard() {
 
               <td>
                 <CircularProgressbarWithChildren
+                  // Valor maximo del cirucularProgress
                   maxValue={listConfigTiempoPromedio[0].datoNoVisible}
-                  value={(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}
+                  // Borde de color (visual)
+                  value={(listResumenEval[0].tiempoPromedio * 100 / listConfigTiempoPromedio[0].datoNoVisible)}
                   background
-                  // text={`${80}%`}
+                  // Rayas del borde
                   strokeWidth={10}
                   styles={buildStyles({
                     strokeLinecap: 'butt',
-                    pathColor: ProgressBarColor(listResumenEval[0].tiempoPromedio > listConfigTiempoPromedio[0].datoNoVisible ? 100 : ((listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible)),
+                    // Color del borde-llenado
+                   
+                    pathColor: ProgressBarColor(listResumenEval[0].tiempoPromedio * 100 / listConfigTiempoPromedio[0].datoNoVisible),
                     trailColor: "#E5E7E9",
                     backgroundColor: 'white'
                   })}
@@ -170,7 +178,11 @@ export default function GraficosDashboard() {
                   <div style={{ fontSize: 20, textAlign: 'center' }}>
                     <strong>Tiempo</strong>
                     <br></br>
-                    <strong><span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible}</span>
+                    {/* Valor que se ve dentro del circulo, en minutos */}
+                    {/* <span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible} min</span> */}
+
+                    <strong><span>{(listResumenEval[0].tiempoPromedio)}</span>
+
                       <p className="porcentajeCard">min</p></strong>
                     <br></br>
                     <strong>Promedio</strong>
@@ -213,20 +225,22 @@ export default function GraficosDashboard() {
 
     });
   }
-
   function GetDataResumenEval() {
     var url = "pages/listados/listadoResumenEval.php";
     var operationUrl = "listadoResumenEval";
     var data = {
       idEvaluacion: idEDDEvaluacion,
       idProyecto: idEDDProyecto,
+      cicloEvaluacion: cicloEvaluacion
+
     };
+    console.log('data', data);
     SendDataService(url, operationUrl, data).then((data) => {
       setListResumenEval(data);
       setLoadedDataResumenEval(true);
-    });
-  }
+    }); console.log('response', data);
 
+  }
   function GetDataCompetencias() {
     var url = "pages/listados/listadoCompetenciasEval.php";
     var operationUrl = "listadoCompetenciasEval";
@@ -307,6 +321,8 @@ export default function GraficosDashboard() {
 
 
   function ProgressBarColor(porcAprobComp) {
+    console.log('loadedDataColor',loadedDataColor);
+    console.log('porcAprobComp',porcAprobComp);
     if (loadedDataColor) {
       var auxColor = "0"; //posiciones
       var varColor = ""; //color /dato visible
