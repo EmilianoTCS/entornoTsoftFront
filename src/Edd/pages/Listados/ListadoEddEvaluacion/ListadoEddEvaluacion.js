@@ -211,6 +211,7 @@ export default function ListadoEDDEvaluacion() {
                 <th>ID</th>
                 <th>Evaluación</th>
                 <th>Tipo evaluación</th>
+                <th>Descripción evaluación</th>
                 <th>Inicio vigencia</th>
                 <th>Fin vigencia</th>
                 <th>Vigencia</th>
@@ -224,6 +225,8 @@ export default function ListadoEDDEvaluacion() {
                   <td>{EDDEvaluacion.idEDDEvaluacion}</td>
                   <td>{EDDEvaluacion.nomEvaluacion}</td>
                   <td>{EDDEvaluacion.tipoEvaluacion}</td>
+                  <td>{EDDEvaluacion.descFormulario}</td>
+
                   <td>{EDDEvaluacion.fechaIni}</td>
                   <td>{EDDEvaluacion.fechaFin}</td>
                   <td>

@@ -190,6 +190,7 @@ export default function FormularioEvaluacionExterno() {
         idEvaluacion: idEDDEvaluacion,
         idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
         idEDDProyEmpEvaluado: idEDDProyEmpEvaluado, // Aquí estableces el valor correcto
+        cicloEvaluacion:cicloEvaluacion,
       }
 
     };

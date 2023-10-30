@@ -24,6 +24,8 @@ const EditarEDDEvaluacion = ({
 
   const [responseID, setResponseID] = useState([""]);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
+  const [descFormulario, setdescFormulario] = useState("");
+
   const listEDDEvaluacion = EDDEvaluacion;
   var idEDDEvaluacion = idEDDEvaluacion
 
@@ -67,6 +69,8 @@ const EditarEDDEvaluacion = ({
       tipoEvaluacion: tipoEvaluacion === "" ? responseID[0].tipoEvaluacion : tipoEvaluacion,
       fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
       fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
+      descFormulario: descFormulario === "" ? responseID[0].descFormulario : descFormulario,
+
       isActive: true,
     };
     console.log(data);
@@ -136,7 +140,21 @@ const EditarEDDEvaluacion = ({
 
               </select>
             </div>
-
+            <div>
+              <label htmlFor="Descripción">Descripción de la evaluación:</label>
+              <input
+                style={{ textTransform: "uppercase" }}
+                placeholder="Descripción de la evaluación"
+                type="text"
+                value={descFormulario || ""}
+                className="form-control"
+                name="Descripción"
+                id="Descripción"
+                maxLength="50"
+                onChange={({ target }) => setdescFormulario(target.value)}
+                required
+              />
+            </div>
             <div>
               <label htmlFor="input_fechaI">Fecha inicio vigencia:</label>
               <input

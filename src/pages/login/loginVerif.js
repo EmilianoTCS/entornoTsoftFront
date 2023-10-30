@@ -12,16 +12,12 @@ export default function LoginVerif() {
     var [idEDDProyEmpEvaluado, setidEDDProyEmpEvaluado] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
     var [cicloEvaluacion, setcicloEvaluacion] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
 
-    
     const username = 'Externo';
     const password = 'Externo123';
 
-
     const { login, isLogged, nomRol } =
         useContext(AuthContext);
-
     useEffect(() => {
-
         login({ username, password });
         if (isLogged) {
             if (nomRol === "externo") {
@@ -31,14 +27,13 @@ export default function LoginVerif() {
                 // Desencriptar
                 let decodificado = atob(urlCompleta);
                 // console.log(decodificado);
-
                 // var decodificado = '4,10,6';
                 var valores = decodificado.split(',');
-
+                
                 if (valores.length === 4) {
-                    idEvaluacion = parseInt(valores[0]);
-                    idEDDProyEmpEvaluador = parseInt(valores[2]);
+                    idEvaluacion = parseInt(valores[0]); 
                     idEDDProyEmpEvaluado = parseInt(valores[1]);
+                    idEDDProyEmpEvaluador = parseInt(valores[2]);
                     cicloEvaluacion = parseInt(valores[3])
                     
                     console.log(idEvaluacion);
@@ -47,28 +42,20 @@ export default function LoginVerif() {
                     console.log(cicloEvaluacion);
 
                 } else {
-                    console.error("La cadena no se puede dividir en tres valores.");
+                    console.error("La cadena no se puede dividir en cuatro valores.");
                 }
-
-
                 var url = `/listadoRespPregEvaluacionesExterno/${idEvaluacion}/${idEDDProyEmpEvaluador}/${cicloEvaluacion}`;
-                navigate(url);
-
-                                
+                navigate(url);       
                 // var encode = `${idEvaluacion},${idEDDProyEmpEvaluador},${idEDDProyEmpEvaluado}`;
                 // encode = btoa(encode);
                 // var urlFinal = `/listadoRespPregEvaluacionesExterno/${encode}`;
-
-
                 // navigate(urlFinal);
                 // ------------
-
             } else {
                 // navigate("/home");
             }
         }
     }, [isLogged, navigate, nomRol]);
-
     return (
         <div>
             <h1>Cargando</h1>

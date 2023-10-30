@@ -18,6 +18,8 @@ const InsertarEDDEvaluacion = ({
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState("");
   const [tipoEvaluacion, settipoEvaluacion] = useState("");
+  const [descFormulario, setdescFormulario] = useState("");
+
 
   const listEDDEvaluacion = EDDEvaluacion;
 
@@ -40,6 +42,7 @@ const InsertarEDDEvaluacion = ({
       fechaIni: fechaIni,
       fechaFin: fechaFin,
       tipoEvaluacion: tipoEvaluacion,
+      descFormulario:descFormulario,
       isActive: true,
     };
     console.log(data);
@@ -102,7 +105,21 @@ const InsertarEDDEvaluacion = ({
                 </option>   
               </select>
             </div>
-           
+            <div>
+              <label htmlFor="Descripción">Descripción de la evaluación:</label>
+              <input
+                style={{ textTransform: "uppercase" }}
+                placeholder="Descripción de la evaluación"
+                type="text"
+                className="form-control"
+                name="Descripción"
+                id="Descripción"
+                maxLength="50"
+                onChange={({ target }) => setdescFormulario(target.value)}
+                required
+              />
+            </div>
+
             <div>
               <label htmlFor="input_fechaI">Fecha inicio vigencia:</label>
               <input
