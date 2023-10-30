@@ -98,7 +98,7 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
-                type="date"
+                type="datetime"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"
@@ -111,7 +111,7 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha fin"
-                type="date"
+                type="datetime"
                 className="form-control"
                 name="input_fechaF"
                 id="input_fechaF"

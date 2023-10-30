@@ -44,8 +44,13 @@ const EditarContacto = ({
   function obtenerServicio() {
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistServicio(response));
-  }
+    var data = {
+        idCliente: '',
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+        setlistServicio(data);
+    });
+}
 
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";

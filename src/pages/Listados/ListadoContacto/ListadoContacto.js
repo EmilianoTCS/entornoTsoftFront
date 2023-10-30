@@ -212,7 +212,7 @@ export default function ListadoContacto() {
                 <th>Correo</th>
                 <th>Teléfono</th>
                 <th>Fecha inicio</th>
-                <th>Fecha fin</th>
+                {/* <th>Fecha fin</th> */}
                 <th>Servicio</th>
                 <th>Cliente</th>
                 <th>Operaciones</th>
@@ -226,7 +226,7 @@ export default function ListadoContacto() {
                   <td>{contacto.correoContacto}</td>
                   <td>{contacto.telefonoContacto}</td>
                   <td>{contacto.fechaIni}</td>
-                  <td>{contacto.fechaFin}</td>
+                  {/* <td>{contacto.fechaFin}</td> */}
                   <td>{contacto.nomServicio}</td>
                   <td>{contacto.nomCliente}</td>
 

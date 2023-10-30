@@ -37,8 +37,8 @@ export default function LoginVerif() {
 
                 if (valores.length === 3) {
                     idEvaluacion = parseInt(valores[0]);
-                    idEDDProyEmpEvaluador = parseInt(valores[2]);
-                    idEDDProyEmpEvaluado = parseInt(valores[1]);
+                    idEDDProyEmpEvaluado = parseInt(valores[2]);
+                    idEDDProyEmpEvaluador = parseInt(valores[1]);
                     cicloEvaluacion = parseInt(valores[3])
                     
                     console.log(idEvaluacion);

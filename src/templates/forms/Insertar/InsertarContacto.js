@@ -33,8 +33,13 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
   function obtenerServicio() {
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistServicio(response));
-  }
+    var data = {
+        idCliente: '',
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+        setlistServicio(data);
+    });
+}
 
 
   function SendData(e) {
@@ -50,10 +55,11 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
       idServicio: idServicio,
       isActive:true,
     };
-   
+   console.log('data',data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
+      // TopAlerts('successCreated');
       actualizarContacto(contacto);
+      console.log('response',response);
     });
   }
 
@@ -79,7 +85,6 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
               <input
                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre completo del contacto"
-                value={nomContacto || ""}
                 type="text"
                 className="form-control"
                 name="input_nombreDelContacto"
@@ -95,7 +100,6 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
               <input
                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba el correo del contacto"
-                value={correoContacto || ""}
                 type="email"
                 className="form-control"
                 name="input_correo"
@@ -110,7 +114,6 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
 
               <input
                 placeholder="Escriba el teléfono"
-                value={telefonoContacto || ""}
                 type="tel"
                 className="form-control"
                 name="input_telefono"
@@ -125,7 +128,6 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
               <label htmlFor="input_Servicio">Servicio: </label>
               <select
                 required
-                value={idServicio || ""}
                 className="form-control"
                 name="input_Servicio"
                 id="input_Servicio"
@@ -145,7 +147,6 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
               <input
                style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
-                value={fechaIni || ""}
                 type="date"
                 className="form-control"
                 name="input_fechaI"
