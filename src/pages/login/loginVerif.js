@@ -35,10 +35,10 @@ export default function LoginVerif() {
                 // var decodificado = '4,10,6';
                 var valores = decodificado.split(',');
 
-                if (valores.length === 3) {
+                if (valores.length === 4) {
                     idEvaluacion = parseInt(valores[0]);
-                    idEDDProyEmpEvaluado = parseInt(valores[2]);
-                    idEDDProyEmpEvaluador = parseInt(valores[1]);
+                    idEDDProyEmpEvaluador = parseInt(valores[2]);
+                    idEDDProyEmpEvaluado = parseInt(valores[1]);
                     cicloEvaluacion = parseInt(valores[3])
                     
                     console.log(idEvaluacion);
