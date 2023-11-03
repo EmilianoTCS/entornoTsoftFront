@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { css } from '@emotion/react';
-import { ClipLoader } from 'react-spinners';
+import { css } from "@emotion/react";
+import { ClipLoader } from "react-spinners";
 import { Container, Table, Card } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
 import { useRoute } from "wouter";
 import "../TablasStyles.css";
-import "../ListadoCompProy/CompProy.css"
+import "../ListadoCompProy/CompProy.css";
 import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
-import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../../templates/alerts/TopAlerts";
-import Paginador from "../../../../templates/Paginador/Paginador";
-import Button from "react-bootstrap/Button";
+
 import "../BtnInsertar.css";
+import {
+  buildStyles,
+  CircularProgressbarWithChildren,
+} from "react-circular-progressbar";
+
 // GRAFICO LINEAS
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import {  Bar } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 import {
   Chart as ChartJS,
@@ -29,7 +31,7 @@ import {
   Legend,
   Filler,
   ArcElement,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -42,14 +44,15 @@ ChartJS.register(
   Legend,
   Filler
 );
-// 
 
-// GRAFICO BARRA
 
-// 
+
+
 export default function DashboardCompProy() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-  const [, params] = useRoute("/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion");
+  const [, params] = useRoute(
+    "/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion"
+  );
 
   const idCliente = params.selectedClients;
   const idServicio = params.selectedServicio;
@@ -75,20 +78,20 @@ export default function DashboardCompProy() {
       fechaFin: fechaFin,
       cicloEvaluacion: cicloEvaluacion,
     };
-    console.log('DataSendData', data);
+    console.log("DataSendData", data);
     SendDataService(url, operationUrl, data).then((data) => {
       // comparacionPor = MostrarInfo(idCliente, idServicio, idProyecto);
-      setDashCompProy(data)
-      console.log('InformaciónReponse', data);
+      setDashCompProy(data);
+      console.log("InformaciónReponse", data);
     });
   }
   useEffect(() => {
     SendData();
   }, []);
   //---------------------
+
   // GRAFICOS
   var predefinedColors = [
-
     // FUERTE
     "#B71C1C", // Rojo              1
     "#303F9F", // Azul              2
@@ -127,22 +130,30 @@ export default function DashboardCompProy() {
 
     // Agrega más colores según sea necesario
   ];
-  function BarrasChart() {
-    const fechasConDatos = [...new Set(DashCompProy.map(item => item.epeFechaFin))];
-    const competencias = [...new Set(DashCompProy.map(item => item.nomCompetencia))];
-    const tipoComparacion = [...new Set(DashCompProy.map(item => item.tipoComparacion))];
-    console.log(tipoComparacion);
 
+  function BarrasChart() {
+    const fechasConDatos = [
+      ...new Set(DashCompProy.map((item) => item.epeFechaFin)),
+    ];
+    const competencias = [
+      ...new Set(DashCompProy.map((item) => item.nomCompetencia)),
+    ];
+    // const tipoComparacion = [...new Set(DashCompProy.map(item => item.tipoComparacion))];
+    // console.log(DashCompProy);
 
     // Formatear las fechas según el tipo de comparación
-    const formattedFechasConDatos = fechasConDatos.map(fecha => {
-      if (tipoComparacion === 'AÑO') {
-        return fecha.substring(0, 4); // Obtener solo el año (YYYY)
-      } else if (tipoComparacion === 'MES') {
-        return fecha; // Mantener el formato completo (YYYY-MM)
-      } else {
-        return fecha; // Sin cambios para otros tipos de comparación
-      }
+    const formattedFechasConDatos = fechasConDatos.map((fecha) => {
+      // if (tipoComparacion === "AÑO") {
+      //   // return fecha.substring(0, 4); // Obtener solo el año (YYYY)
+
+      //   return fecha; // Obtener solo el año (YYYY)
+      // } else if (tipoComparacion === "MES") {
+      //   return fecha; // Mantener el formato completo (YYYY-MM)
+      // } else {
+      //   return fecha; // Sin cambios para otros tipos de comparación
+      // }
+
+      return fecha;
     });
 
     // Ordenar las fechas de manera ascendente (esto incluye mes y año)
@@ -153,10 +164,12 @@ export default function DashboardCompProy() {
     });
 
     const datasets = competencias.map((competencia, index) => {
-      const data = formattedFechasConDatos.map(fecha => {
-        const porcentaje = DashCompProy
-          .filter(item => item.nomCompetencia === competencia && item.epeFechaFin === fecha)
-          .map(item => item.porcAprobComp)[0] || 0;
+      const data = formattedFechasConDatos.map((fecha) => {
+        const porcentaje =
+          DashCompProy.filter(
+            (item) =>
+              item.nomCompetencia === competencia && item.epeFechaFin === fecha
+          ).map((item) => item.porcAprobComp)[0] || 0;
         return porcentaje;
       });
       return {
@@ -185,15 +198,13 @@ export default function DashboardCompProy() {
           max: 100,
         },
         x: {
-          ticks: { color: 'black' },
+          ticks: { color: "black" },
         },
-      }
+      },
     };
 
     return <Bar data={data} options={options} />;
   }
-
-
 
   function Info() {
     // Supongo que DashCompProy es un array de objetos que contienen la propiedad "nomCliente"
@@ -204,147 +215,146 @@ export default function DashboardCompProy() {
         return (
           <div id="InfoDashCpmpProy">
             <tr>
-              <td><h5>Cliente:&nbsp; {item.nomCliente}&nbsp;&nbsp;-&nbsp;&nbsp;</h5></td>
-              <td><h5>Servicio:&nbsp; {item.nomServicio}&nbsp;&nbsp;-&nbsp;&nbsp;</h5></td>
-              <td><h5>Proyecto:&nbsp; {item.nomProyecto}</h5></td>
-            </tr >
+              <td>
+                <h5>
+                  Cliente:&nbsp; {item.nomCliente}&nbsp;&nbsp;-&nbsp;&nbsp;
+                </h5>
+              </td>
+              <td>
+                <h5>
+                  Servicio:&nbsp; {item.nomServicio}&nbsp;&nbsp;-&nbsp;&nbsp;
+                </h5>
+              </td>
+              <td>
+                <h5>Proyecto:&nbsp; {item.nomProyecto}</h5>
+              </td>
+            </tr>
           </div>
         );
       }
       return null; // No se agregará a la tabla si es un valor duplicado
     });
 
-    return (
-
-      <>
-        {tableRows}
-
-      </>
-    );
+    return <>{tableRows}</>;
   }
-
-
 
   // Función para contar las competencias según el ciclo de evaluación
-  function countCompetenciasPorCicloPRUEBA() {
-    if (cicloEvaluacion === "0") {
-      const competenciasPorCiclo = DashCompProy.reduce((result, item) => {
-        if (!result[item.cicloEvaluacion]) {
-          result[item.cicloEvaluacion] = {
-            competencias: new Set(),
-            fechas: new Set(),
-            referentes: new Set(),
-            colaboradores: new Set(),
-          };
-        }
-        result[item.cicloEvaluacion].competencias.add(item.nomCompetencia);
-        result[item.cicloEvaluacion].fechas.add(item.epeFechaFin);
-        result[item.cicloEvaluacion].referentes.add(item.cantReferentes);
-        result[item.cicloEvaluacion].colaboradores.add(item.cantColaboradores);
-        return result;
-      }, {});
+  // function countCompetenciasPorCicloPRUEBA() {
+  //   if (cicloEvaluacion === "0") {
+  //     const competenciasPorCiclo = DashCompProy.reduce((result, item) => {
+  //       if (!result[item.cicloEvaluacion]) {
+  //         result[item.cicloEvaluacion] = {
+  //           competencias: new Set(),
+  //           fechas: new Set(),
+  //           referentes: new Set(),
+  //           colaboradores: new Set(),
+  //         };
+  //       }
+  //       result[item.cicloEvaluacion].competencias.add(item.nomCompetencia);
+  //       result[item.cicloEvaluacion].fechas.add(item.epeFechaFin);
+  //       result[item.cicloEvaluacion].referentes.add(item.cantReferentes);
+  //       result[item.cicloEvaluacion].colaboradores.add(item.cantColaboradores);
+  //       return result;
+  //     }, {});
 
-      const infoCiclos = Object.entries(competenciasPorCiclo).map(
-        ([cicloEvaluacion, data], index, array) => {
-          const competencias = data.competencias.size;
-          const fechas = [...data.fechas];
-          const formattedFechasPorCiclo = [...new Set(fechas)];
-          const referentes = [...data.referentes];
-          const colaboradores = [...data.colaboradores];
+  //     const infoCiclos = Object.entries(competenciasPorCiclo).map(
+  //       ([cicloEvaluacion, data], index, array) => {
+  //         const competencias = data.competencias.size;
+  //         const fechas = [...data.fechas];
+  //         const formattedFechasPorCiclo = [...new Set(fechas)];
+  //         const referentes = [...data.referentes];
+  //         const colaboradores = [...data.colaboradores];
 
-          // Agregar <hr> solo si no es el último ciclo
-          const separator = index < array.length - 1 ? <hr /> : null;
+  //         // Agregar <hr> solo si no es el último ciclo
+  //         const separator = index < array.length - 1 ? <hr /> : null;
 
-          return (
-            <tr key={cicloEvaluacion}>
-              <td>
-                <h5>Ciclo: {cicloEvaluacion}</h5>
-                <h5>Fecha: {formattedFechasPorCiclo.join(", ")}&nbsp;&nbsp;</h5>
-                <h5>Competencias: {competencias}&nbsp;&nbsp;</h5>
-                <td>
-                  {tipoCargo === 'REFERENTE' ? (
-                    <h5>Referentes: {referentes.join(", ")}&nbsp;&nbsp;</h5>
-                  ) : (
-                    <h5>Colaboradores: {colaboradores.join(", ")}</h5>
-                  )}
-                </td>              </td>
-              {separator}
-            </tr>
-          );
-        }
-      );
+  //         return (
+  //           <tr key={cicloEvaluacion}>
+  //             <td>
+  //               <h5>Ciclo: {cicloEvaluacion}</h5>
+  //               <h5>Fecha: {formattedFechasPorCiclo.join(", ")}&nbsp;&nbsp;</h5>
+  //               <h5>Competencias: {competencias}&nbsp;&nbsp;</h5>
+  //               <td>
+  //                 {tipoCargo === 'REFERENTE' ? (
+  //                   <h5>Referentes: {referentes.join(", ")}&nbsp;&nbsp;</h5>
+  //                 ) : (
+  //                   <h5>Colaboradores: {colaboradores.join(", ")}</h5>
+  //                 )}
+  //               </td>              </td>
+  //             {separator}
+  //           </tr>
+  //         );
+  //       }
+  //     );
 
-      // Ahora, envuelve todo en una tabla con 3 columnas
-      return (
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                {infoCiclos.filter((_, index) => index % 3 === 0)}
-              </td>
-              <td>
-                {infoCiclos.filter((_, index) => index % 3 === 1)}
-              </td>
-              <td>
-                {infoCiclos.filter((_, index) => index % 3 === 2)}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      );
-    } else {
-      const competenciasPorCiclo = DashCompProy
-        .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
-        .map((item) => item.nomCompetencia);
+  //     // Ahora, envuelve todo en una tabla con 3 columnas
+  //     return (
+  //       <table>
+  //         <tbody>
+  //           <tr>
+  //             <td>
+  //               {infoCiclos.filter((_, index) => index % 3 === 0)}
+  //             </td>
+  //             <td>
+  //               {infoCiclos.filter((_, index) => index % 3 === 1)}
+  //             </td>
+  //             <td>
+  //               {infoCiclos.filter((_, index) => index % 3 === 2)}
+  //             </td>
+  //           </tr>
+  //         </tbody>
+  //       </table>
+  //     );
+  //   } else {
+  //     const competenciasPorCiclo = DashCompProy
+  //       .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
+  //       .map((item) => item.nomCompetencia);
 
-      const competenciasUnicas = [...new Set(competenciasPorCiclo)];
+  //     const competenciasUnicas = [...new Set(competenciasPorCiclo)];
 
-      const fechasPorCiclo = DashCompProy
-        .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
-        .map((item) => item.epeFechaFin);
+  //     const fechasPorCiclo = DashCompProy
+  //       .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
+  //       .map((item) => item.epeFechaFin);
 
-      const formattedFechasPorCiclo = [...new Set(fechasPorCiclo)];
-      let referentesSet = new Set();
-      let colaboradoresSet = new Set();
+  //     const formattedFechasPorCiclo = [...new Set(fechasPorCiclo)];
+  //     let referentesSet = new Set();
+  //     let colaboradoresSet = new Set();
 
-      DashCompProy.forEach((item) => {
-        referentesSet.add(item.cantReferentes);
-        colaboradoresSet.add(item.cantColaboradores);
-      });
+  //     DashCompProy.forEach((item) => {
+  //       referentesSet.add(item.cantReferentes);
+  //       colaboradoresSet.add(item.cantColaboradores);
+  //     });
 
-      let referentesArray = [...referentesSet];
-      let colaboradoresArray = [...colaboradoresSet];
+  //     let referentesArray = [...referentesSet];
+  //     let colaboradoresArray = [...colaboradoresSet];
 
-      return (
-        <tr key={cicloEvaluacion}>
-          <tr>
-            <h5>Ciclo: {cicloEvaluacion} </h5>
-          </tr>
-          <tr>
-            <td>
-            </td>
-            <td>
-              <h5>Fecha: {formattedFechasPorCiclo.join(", ")}&nbsp;&nbsp;</h5>
+  //     return (
+  //       <tr key={cicloEvaluacion}>
+  //         <tr>
+  //           <h5>Ciclo: {cicloEvaluacion} </h5>
+  //         </tr>
+  //         <tr>
+  //           <td>
+  //           </td>
+  //           <td>
+  //             <h5>Fecha: {formattedFechasPorCiclo.join(", ")}&nbsp;&nbsp;</h5>
 
-            </td>
-            <td>
-              <h5>Competencias: {competenciasUnicas.length}&nbsp;&nbsp;</h5>
-            </td>
-            <td>
-                  {tipoCargo === 'REFERENTE' ? (
-                    <h5>Referentes: {referentesArray.join(", ")}&nbsp;&nbsp;</h5>
-                  ) : (
-                    <h5>Colaboradores: {colaboradoresArray.join(", ")}</h5>
-                  )}
-                </td>
-          </tr>
-        </tr>
-      );
-    }
-  }
-
-
-
+  //           </td>
+  //           <td>
+  //             <h5>Competencias: {competenciasUnicas.length}&nbsp;&nbsp;</h5>
+  //           </td>
+  //           <td>
+  //                 {tipoCargo === 'REFERENTE' ? (
+  //                   <h5>Referentes: {referentesArray.join(", ")}&nbsp;&nbsp;</h5>
+  //                 ) : (
+  //                   <h5>Colaboradores: {colaboradoresArray.join(", ")}</h5>
+  //                 )}
+  //               </td>
+  //         </tr>
+  //       </tr>
+  //     );
+  //   }
+  // }
 
   function countCompetenciasPorCiclo() {
     if (cicloEvaluacion === "0") {
@@ -361,6 +371,7 @@ export default function DashboardCompProy() {
         result[item.cicloEvaluacion].fechas.add(item.epeFechaFin);
         result[item.cicloEvaluacion].referentes.add(item.cantReferentes);
         result[item.cicloEvaluacion].colaboradores.add(item.cantColaboradores);
+
         return result;
       }, {});
 
@@ -373,7 +384,8 @@ export default function DashboardCompProy() {
           const formattedFechasPorCiclo = [...new Set(fechas)];
 
           // Si la fecha es diferente de la fecha en el ciclo anterior, mostrarla, de lo contrario, mostrar un título invisible
-          const shouldShowFecha = formattedFechasPorCiclo.join(", ") !== lastFormattedFecha;
+          const shouldShowFecha =
+            formattedFechasPorCiclo.join(", ") !== lastFormattedFecha;
 
           lastFormattedFecha = formattedFechasPorCiclo.join(", ");
 
@@ -384,8 +396,7 @@ export default function DashboardCompProy() {
           const separator = index < array.length - 1 ? <hr /> : null;
 
           return (
-
-            <tr key={cicloEvaluacion} >
+            <tr key={cicloEvaluacion}>
               <tr>
                 {shouldShowFecha ? (
                   <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
@@ -393,14 +404,18 @@ export default function DashboardCompProy() {
                   <h5 style={{ visibility: "hidden" }}>Fecha: 0000</h5>
                 )}
               </tr>
+
               <tr>
                 <td></td>
-                <td> <h5>Ciclo: {cicloEvaluacion}&nbsp;&nbsp; </h5></td>
+                <td>
+                  {" "}
+                  <h5>Ciclo: {cicloEvaluacion}&nbsp;&nbsp; </h5>
+                </td>
                 <td>
                   <h5>Competencias: {competencias}&nbsp;&nbsp;</h5>
                 </td>
                 <td>
-                  {tipoCargo === 'REFERENTE' ? (
+                  {tipoCargo === "REFERENTE" ? (
                     <h5>Referentes: {referentes.join(", ")}&nbsp;&nbsp;</h5>
                   ) : (
                     <h5>Colaboradores: {colaboradores.join(", ")}</h5>
@@ -419,15 +434,15 @@ export default function DashboardCompProy() {
         </table>
       );
     } else {
-      const competenciasPorCiclo = DashCompProy
-        .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
-        .map((item) => item.nomCompetencia);
+      const competenciasPorCiclo = DashCompProy.filter(
+        (item) => item.cicloEvaluacion === cicloEvaluacion
+      ).map((item) => item.nomCompetencia);
 
       const competenciasUnicas = [...new Set(competenciasPorCiclo)];
 
-      const fechasPorCiclo = DashCompProy
-        .filter((item) => item.cicloEvaluacion === cicloEvaluacion)
-        .map((item) => item.epeFechaFin);
+      const fechasPorCiclo = DashCompProy.filter(
+        (item) => item.cicloEvaluacion === cicloEvaluacion
+      ).map((item) => item.epeFechaFin);
 
       const formattedFechasPorCiclo = [...new Set(fechasPorCiclo)];
       let referentesSet = new Set();
@@ -447,80 +462,119 @@ export default function DashboardCompProy() {
             <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
           </tr>
           <tr>
+            <td></td>
             <td>
+              {" "}
+              <h5>Ciclo: {cicloEvaluacion}&nbsp;&nbsp; </h5>
             </td>
-            <td> <h5>Ciclo: {cicloEvaluacion}&nbsp;&nbsp; </h5></td>
             <td>
               <h5>Competencias: {competenciasUnicas.length}&nbsp;&nbsp;</h5>
             </td>
             <td>
-              {tipoCargo === 'REFERENTE' ? (
+              {tipoCargo === "REFERENTE" ? (
                 <h5>Referentes: {referentesArray.join(", ")}&nbsp;&nbsp;</h5>
               ) : (
                 <h5>Colaboradores: {colaboradoresArray.join(", ")}</h5>
               )}
             </td>
-
           </tr>
-
-
-
-
-
         </tr>
-
-
-
       );
     }
   }
 
+  function calcularPromedioCompetencias(datos) {
+    // Agrupar los datos por ciclo
+    const ciclos = {};
+    datos.forEach((item) => {
+      if (!ciclos[item.cicloEvaluacion]) {
+        ciclos[item.cicloEvaluacion] = [];
+      }
+      ciclos[item.cicloEvaluacion].push(item);
+    });
 
+    // Calcular el promedio de todas las competencias por ciclo
+    const promediosPorCiclo = {};
+    for (const ciclo in ciclos) {
+      const competenciasPorCiclo = ciclos[ciclo];
+      const totalCompetencias = competenciasPorCiclo.length;
+      const promedioPorCiclo =
+        competenciasPorCiclo.reduce((total, competencia) => {
+          return total + parseFloat(competencia.porcAprobComp);
+        }, 0) / totalCompetencias;
+      promediosPorCiclo[ciclo] = promedioPorCiclo.toFixed(2);
+    }
 
+    return promediosPorCiclo;
+  }
 
-  // Llama a la función y muestra el resultado donde sea necesario
+  function PromedioCompetenciasTabla({ datos }) {
+    const promediosPorCiclo = calcularPromedioCompetencias(datos);
+    return (
+      <table className="tabla-promedios">
+        <thead>
+          <tr>
+            <th>Ciclo</th>
+            <th>Promedio de Competencias</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(promediosPorCiclo).map(([ciclo, promedio], index) => (
+            <tr key={index}>
+              <Card>
+                
+              </Card>
+              <td>{ciclo}</td>
+              <td>{promedio}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  }
 
   // En tu componente principal, puedes usar la función Info dentro de tu tabla
   return userData.statusConected || userData !== null ? (
     <>
       <Header></Header>
       <br></br>
-      <h2 style={{ background: 'white', textAlign: 'center', marginLeft: '10em', marginRight: '10em' }}>Dashboard Comparación ciclos de proyectos</h2>
-      <table style={{ margin: 'auto' }}>
+      <h2
+        style={{
+          background: "white",
+          textAlign: "center",
+          marginLeft: "10em",
+          marginRight: "10em",
+        }}
+      >
+        Dashboard Comparación ciclos de proyectos
+      </h2>
+      <table style={{ margin: "auto" }}>
         <br></br>
         <tr>
           <br></br>
           <td>
-            <div className="bg-light mx-auto px-2 border " style={{ width: "1100px", height: "500px" }}>
+            <div
+              className="bg-light mx-auto px-2 border "
+              style={{ width: "1100px", height: "500px" }}
+            >
               {BarrasChart()}
             </div>
             <br></br>
-
             {Info()}
             <br></br>
             <table id="fondoTablaDashCompProy">
-              <tr>
-                {countCompetenciasPorCiclo()}
+              <tr>{countCompetenciasPorCiclo()}</tr>
+              <tr style={{marginLeft: "10px"}}>
+                <PromedioCompetenciasTabla datos={DashCompProy} />
               </tr>
-
             </table>
-          {/* <br></br>
-            <table id="fondoTablaDashCompProy">
-              <tr>
-                {countCompetenciasPorCicloPRUEBA()}
-              </tr>
-
-            </table> */}
-
           </td>
         </tr>
-
-      </table >
+      </table>
 
       <br></br>
     </>
   ) : (
     <Navigate to="/login"></Navigate>
   );
-
-}  
+}

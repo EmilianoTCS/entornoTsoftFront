@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useRoute } from "wouter";
 
 import SendDataService from "../../../../services/SendDataService";
-import getDataService from "../../../../services/GetDataService";
+
 import HeaderExterno from "../../../../templates/Header/HeaderExterno";
 import "../TablasStyles.css";
 import "./formStyle.css";

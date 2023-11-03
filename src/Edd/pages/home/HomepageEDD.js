@@ -809,8 +809,6 @@ export default function HomePageEDD() {
 //   }
 
 
-
-
   function CompetenciasResumen() {
     if (loadedDataCompetencias) {
       return (

@@ -1,25 +1,23 @@
-#fondoTablaDashCompProy{
-  border-radius: 2em; 
+#fondoTablaDashCompProy {
+  border-radius: 2em;
   background-color: #ffffff;
   width: 100%;
   text-align: center;
   display: flex;
-  justify-content: center;
- padding: 1em;
+  justify-content: left;
+  padding: 2em;
+  border-collapse: separate;
+  border-spacing: 5px;
 }
 
-
-#InfoDashCpmpProy{
-  border-radius: 2em; 
+#InfoDashCpmpProy {
+  border-radius: 2em;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
- padding-top: 0.5em;
- padding-bottom: 0.5em;
-
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
-
-
 
 .btn-General-Pag {
   background-color: #e10b1c;
@@ -37,16 +35,13 @@
   color: #e10b1c;
 }
 
-
-
 #espacioEntreOpciones {
   padding-left: 1em;
 }
 
 #espacioEntreOpcionesCantReg {
-    padding-left: 5em;
-  }
-  
+  padding-left: 5em;
+}
 
 #tableResumen {
   border-radius: 10px;
@@ -58,4 +53,16 @@
   padding-bottom: 1em;
   padding-left: 1em;
   padding-right: 1em;
+}
+
+.tabla-promedios {
+  border-collapse: separate;
+  border-spacing: 5px;
+  text-align: left;
+  width: 250px;
+}
+
+.tabla-promedios th,
+.tabla-promedios td {
+  padding: 5px;
 }
