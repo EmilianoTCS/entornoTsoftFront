@@ -12,11 +12,13 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
   // ----------------------CONSTANTES----------------------------
   const [nomProyecto, setnomProyecto] = useState("");
   const [fechaIni, setfechaIni] = useState("");
-  const [fechaFin, setfechaFin] = useState("");
+  const [fechaFin, setfechaFin] = useState(null);
+  const [tipoProyecto, setTipoProyecto] = useState("");
 
   const [idServicio, setidServicio] = useState("");
 
   const [listServicio, setlistServicio] = useState([""]);
+  const [listTipoProyectos, setlistTipoProyectos] = useState([""]);
 
   const listEDDProyecto = EDDProyecto;
 
@@ -29,7 +31,6 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
   // ----------------------FUNCIONES----------------------------
 
   function obtenerServicio() {
-   
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
     var data = {
@@ -41,6 +42,14 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
 
 }
 
+function obtenerTipoProyecto() {
+  const url = "pages/auxiliares/listadoTipoProyectos.php";
+  const operationUrl = "listados";
+  
+  getDataService(url,operationUrl).then((data) => {
+    setlistTipoProyectos(data);
+  });
+}
 
   function SendData(e) {
     e.preventDefault();
@@ -51,12 +60,14 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
       nomProyecto: nomProyecto,
       fechaIni: fechaIni,
       fechaFin: fechaFin,
+      tipoProyecto: tipoProyecto,
       idServicio:idServicio,
       isActive:true
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
+      // TopAlerts('successCreated');
+      console.log(response);
       actualizarEDDProyecto(EDDProyecto);console.log(response);
     });
   }
@@ -67,6 +78,7 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
 
   useEffect(function () {
     obtenerServicio();
+    obtenerTipoProyecto()
   }, []);
 
   // ----------------------RENDER----------------------------
@@ -98,7 +110,7 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
-                type="datetime"
+                type="date"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"
@@ -111,13 +123,32 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha fin"
-                type="datetime"
+                type="date"
                 className="form-control"
                 name="input_fechaF"
                 id="input_fechaF"
                 onChange={({ target }) => setfechaFin(target.value)}
-                required
+                // required
               />
+            </div>
+            <div className="form-group">
+              <label htmlFor="input_tipoProyecto">Tipo de proyecto: </label>
+              <select
+                required
+                className="form-control"
+                name="input_tipoProyecto"
+                id="input_tipoProyecto"
+                placeholder="Seleccione el Tipo de proyecto"
+                onChange={({ target }) => setTipoProyecto(target.value)}
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+
+                {listTipoProyectos.map((valor) => (
+                  <option value={valor.subTipoConfDato}>{valor.subTipoConfDato}</option>
+                ))}
+              </select>
             </div>
             <div className="form-group">
               <label htmlFor="input_serv">Servicio del cliente: </label>

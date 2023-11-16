@@ -49,23 +49,21 @@ const EnviarCorreoColab = ({
 
     function SendDataEmail(e) {
         e.preventDefault();
-        const url = "pages/scripts/emailEDD.php";
-        const operationUrl = "emailEDD";
+        const url = "pages/scripts/eventCiclosEval_manual.php";
+        const operationUrl = "eventCiclosEval_manual";
         var data = {
-            usuarioCreacion: userData.usuario,
             idProyecto: idEDDProyecto,
             cargoEnProy: 'Colaborador',
             tipoConfDato: "EMAIL",
-            subTipoConfDato: "REFERENTES_GRAL",
+            subTipoConfDato: "",
             listContactos: '',
-            cicloEvaluacion: cicloEvaluacion,
             isActive: true,
         };
         console.log(data);
         handleClose();
         ConfirmAlertEnvio();
         SendDataService(url, operationUrl, data).then((response) => {
-
+            console.log(response);
 
         });
     }
@@ -126,7 +124,7 @@ const EnviarCorreoColab = ({
                                 ))}
                             </select>
                         </div>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                         <label htmlFor="Ciclo">Ciclo de evaluación: </label>
                             <select
                                 required
@@ -151,7 +149,7 @@ const EnviarCorreoColab = ({
                                         </option>
                                     ))}
                             </select>
-                        </div>
+                        </div> */}
                         <Button
                             variant="secondary"
                             type="submit"

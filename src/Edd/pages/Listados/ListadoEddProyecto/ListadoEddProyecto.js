@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table } from "react-bootstrap";
-import { Navigate,Link } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { useRoute } from "wouter";
 
 import getDataService from "../../../../services/GetDataService";
@@ -9,7 +9,6 @@ import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillProject } from "react-icons/ai";
-
 
 import "../TablasStyles.css";
 import InsertarEddProyecto from "../../templates/form/Insertar/InsertarEddProyecto";
@@ -24,7 +23,8 @@ export default function ListadoEddProyecto() {
   const [, params] = useRoute("/listadoEddProyecto/:params");
 
   const [EDDProyecto, setEDDProyecto] = useState([""]);
-  const [isActiveInsertEDDProyecto, setIsActiveInsertEDDProyecto] = useState(false);
+  const [isActiveInsertEDDProyecto, setIsActiveInsertEDDProyecto] =
+    useState(false);
   const [isActiveEditEDDProyecto, setIsActiveEditEDDProyecto] = useState(false);
   const [idEDDProyecto, setidEDDProyecto] = useState(null);
   const [num_boton, setNumBoton] = useState(1);
@@ -45,19 +45,16 @@ export default function ListadoEddProyecto() {
   //   );
   // }
 
-
   function obtenerServicio() {
-   
-        const url = "pages/auxiliares/listadoServicioForms.php";
-        const operationUrl = "listados";
-        var data = {
-            idCliente: '',
-        };
-        SendDataService(url, operationUrl, data).then((data) => {
-            setlistServicio(data);
-        });
-  
-}
+    const url = "pages/auxiliares/listadoServicioForms.php";
+    const operationUrl = "listados";
+    var data = {
+      idCliente: "",
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setlistServicio(data);
+    });
+  }
 
   function insertarEDDProyecto() {
     setIsActiveInsertEDDProyecto(!isActiveInsertEDDProyecto);
@@ -78,7 +75,7 @@ export default function ListadoEddProyecto() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts('successEdited');
+          TopAlerts("successEdited");
         });
       }
     });
@@ -89,7 +86,7 @@ export default function ListadoEddProyecto() {
       handleChangePaginador();
       obtenerServicio();
     },
-    [num_boton, cantidadPorPagina,idServicio]
+    [num_boton, cantidadPorPagina, idServicio]
   );
 
   //PAGINADOR ---------------------
@@ -100,7 +97,7 @@ export default function ListadoEddProyecto() {
     var data = {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
-      idServicio:idServicio
+      idServicio: idServicio,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
@@ -119,7 +116,7 @@ export default function ListadoEddProyecto() {
       <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de proyectos</h1>
-          <h6 style={{color:'gray'}}>Eval desempeño {'->'} Proyectos</h6>
+          <h6 style={{ color: "gray" }}>Eval desempeño {"->"} Proyectos</h6>
           <br></br>
 
           <div id="selectPaginador">
@@ -157,21 +154,24 @@ export default function ListadoEddProyecto() {
                 required
                 type="text"
                 className="form-control"
-                onChange={({ target }) => {setidServicio(target.value);setNumBoton(1);}}
+                onChange={({ target }) => {
+                  setidServicio(target.value);
+                  setNumBoton(1);
+                }}
               >
                 <option value="">Todos</option>
                 {listServicio.map((valor) => (
                   <option
-                  selected={(valor.idServicio === idServicio ? "selected" : "")}
-                  value={valor.idServicio}
-                >
-                  {valor.nomServicio}
-                </option>
-              ))}
+                    selected={valor.idServicio === idServicio ? "selected" : ""}
+                    value={valor.idServicio}
+                  >
+                    {valor.nomServicio}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
-        
+
           <InsertarEddProyecto
             isActiveEDDProyecto={isActiveInsertEDDProyecto}
             cambiarEstado={setIsActiveInsertEDDProyecto}
@@ -194,6 +194,7 @@ export default function ListadoEddProyecto() {
                 <th>Proyecto</th>
                 <th>Fecha Inicio</th>
                 <th>Fecha Fin</th>
+                <th>Tipo Proyecto</th>
                 <th>Servicio del cliente</th>
                 <th>Operaciones</th>
               </tr>
@@ -205,17 +206,25 @@ export default function ListadoEddProyecto() {
                   <td>{EDDProyecto.nomProyecto}</td>
                   <td>{EDDProyecto.fechaIni}</td>
                   <td>{EDDProyecto.fechaFin}</td>
+                  <td>{EDDProyecto.tipoProyecto}</td>
                   <td>{EDDProyecto.nomServicio}</td>
                   <td>
                     <button
                       data-title="Editar proyecto"
                       id="OperationBtns"
-                      onClick={() => editarEDDProyecto(EDDProyecto.idEDDProyecto)}
+                      onClick={() =>
+                        editarEDDProyecto(EDDProyecto.idEDDProyecto)
+                      }
                     >
                       <RiEditBoxFill id="icons" />
                     </button>
-                    <Link to={`/listadoEDDProyEmp/${EDDProyecto.idEDDProyecto}`} >
-                      <button data-title="Proy. colaborador relacionados" id="OperationBtns">
+                    <Link
+                      to={`/listadoEDDProyEmp/${EDDProyecto.idEDDProyecto}`}
+                    >
+                      <button
+                        data-title="Proy. colaborador relacionados"
+                        id="OperationBtns"
+                      >
                         <AiFillProject id="icons" />
                       </button>
                     </Link>

@@ -165,7 +165,8 @@ export default function FormularioEvaluacionExterno() {
     const operationUrl = "listadoEvaluadoEval";
     var data = {
       idEvaluacion: idEDDEvaluacion,
-      idEDDProyEmpEvaluador: idEDDProyEmpEvaluador
+      idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
+      cicloEvaluacion: cicloEvaluacion
     };
     SendDataService(url, operationUrl, data).then((response) => {
 

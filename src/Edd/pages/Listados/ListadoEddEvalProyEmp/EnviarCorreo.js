@@ -63,25 +63,19 @@ const EnviarCorreo = ({
 
     function SendDataEmail(e) {
         e.preventDefault();
-        const url = "pages/scripts/emailEDD.php";
-        const operationUrl = "emailEDD";
+        const url = "pages/scripts/eventCiclosEval_manual.php";
+        const operationUrl = "eventCiclosEval_manual";
         var data = {
-            usuarioCreacion: userData.usuario,
             idProyecto: idEDDProyecto,
             cargoEnProy: 'Referente',
             tipoConfDato: "EMAIL",
-            subTipoConfDato: "REFERENTES_GRAL",
+            subTipoConfDato: "",
             listContactos: listContactosEnviar,
-            cicloEvaluacion:cicloEvaluacion,
             isActive: true,
         };
-
         handleClose();
-
         ConfirmAlertEnvio();
-
         SendDataService(url, operationUrl, data).then((response) => {
-
             setlistEDDContactos([]);
         });
     }
@@ -182,7 +176,7 @@ const EnviarCorreo = ({
                                 ))}
                             </select>
                         </div>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                         <label htmlFor="Ciclo">Ciclo de evaluación: </label>
                             <select
                                 required
@@ -207,7 +201,7 @@ const EnviarCorreo = ({
                                         </option>
                                     ))}
                             </select>
-                        </div>
+                        </div> */}
 
                         
                         <Button

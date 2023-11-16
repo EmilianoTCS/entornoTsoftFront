@@ -19,9 +19,11 @@ const EditarEDDProyecto = ({
   const [nomProyecto, setnomProyecto] = useState("");
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState("");
+  const [tipoProyecto, setTipoProyecto] = useState("");
 
   const [idServicio, setidServicio] = useState("");
 
+  const [listTipoProyectos, setlistTipoProyectos] = useState([""]);
   const [listServicio, setlistServicio] = useState([""]);
   const [responseID, setResponseID] = useState([""]);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -35,11 +37,11 @@ const EditarEDDProyecto = ({
     setfechaIni(responseID[0].fechaIni);
     setfechaFin(responseID[0].fechaFin);
     setidServicio(responseID[0].idServicio);
+    setTipoProyecto(responseID[0].tipoProyecto);
   };
 
   // ----------------------FUNCIONES----------------------------
   function obtenerServicio() {
-   
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
     var data = {
@@ -48,7 +50,15 @@ const EditarEDDProyecto = ({
     SendDataService(url, operationUrl, data).then((data) => {
         setlistServicio(data);
     });
+}
 
+function obtenerTipoProyecto() {
+  const url = "pages/auxiliares/listadoTipoProyectos.php";
+  const operationUrl = "listados";
+  
+  getDataService(url,operationUrl).then((data) => {
+    setlistTipoProyectos(data);
+  });
 }
 
   const getData = useCallback(() => {
@@ -62,6 +72,7 @@ const EditarEDDProyecto = ({
       setfechaIni(response[0].fechaIni);
       setfechaFin(response[0].fechaFin);
       setidServicio(response[0].idServicio);
+      setTipoProyecto(response[0].tipoProyecto);
 
     });
   }, [idEDDProyecto]);
@@ -76,12 +87,14 @@ const EditarEDDProyecto = ({
       nomProyecto: nomProyecto === "" ? responseID[0].nomProyecto : nomProyecto,
       fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
       fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
+      tipoProyecto: tipoProyecto === "" ? responseID[0].tipoProyecto : tipoProyecto,
       idServicio: idServicio === "" ? responseID[0].idServicio : idServicio,
       isActive:true,
     };
 console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
+console.log(response);
+// TopAlerts('successEdited');
       actualizarEDDProyecto(EDDProyecto);
     });
 
@@ -98,6 +111,7 @@ console.log(data);
       if (idEDDProyecto !== null) {
         getData();
         obtenerServicio();
+        obtenerTipoProyecto()
       }
     },
     [idEDDProyecto]
@@ -153,9 +167,32 @@ console.log(data);
                 id="input_fechaF"
                 value={fechaFin || ""}
                 onChange={({ target }) => setfechaFin(target.value)}
-                required
+                // required
               />
             </div>
+            <div className="form-group">
+              <label htmlFor="input_tipoProyecto">Tipo de proyecto: </label>
+              <select
+                required
+                className="form-control"
+                name="input_tipoProyecto"
+                id="input_tipoProyecto"
+                placeholder="Seleccione el Tipo de proyecto"
+                onChange={({ target }) => setTipoProyecto(target.value)}
+              >
+        
+                {listTipoProyectos.map((valor) => (
+                 <option
+                 selected={valor.subTipoConfDato === tipoProyecto ? "selected" : ""}
+                 value={valor.subTipoConfDato}
+               >
+                 {valor.subTipoConfDato}
+               </option>
+                ))}
+              </select>
+            </div>
+
+            
             <div className="form-group">
               <label htmlFor="input_serv">Servicio del cliente: </label>
               <select

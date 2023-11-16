@@ -7,7 +7,7 @@ import getDataService from "../../../../../services/GetDataService";
 import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import TopAlertsError from "../../../../../templates/alerts/TopAlertsError";
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 
 const InsertarEDDEvalProyEmp = ({
   isActiveEDDEvalProyEmp,

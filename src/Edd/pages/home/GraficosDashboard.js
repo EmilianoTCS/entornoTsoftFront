@@ -2,27 +2,29 @@ import GrafChart from "./GrafChart";
 import "../DiseñoDashboard/DiseñoDash.css";
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../../../templates/Header/Header";
-import getDataService from "../../../services/GetDataService"
+import getDataService from "../../../services/GetDataService";
 import SendDataService from "../../../services/SendDataService";
 import Card from "react-bootstrap/Card";
 import { Navigate } from "react-router-dom";
 import "./homeEDD.css";
 import { useRoute } from "wouter";
 import { Container, Table } from "react-bootstrap";
-import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
+import {
+  buildStyles,
+  CircularProgressbarWithChildren,
+} from "react-circular-progressbar";
 import RadialSeparators from "./RadialSeparators";
-import ProgressBar from 'react-bootstrap/ProgressBar';
-
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 export default function GraficosDashboard() {
-  const [, params] = useRoute("/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion");
+  const [, params] = useRoute(
+    "/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"
+  );
 
   const idEDDEvaluacion = params.idEvaluacion;
   const nomEvaluacion = decodeURI(params.nomEvaluacion);
   const idEDDProyecto = params.idEDDProyecto;
   const cicloEvaluacion = params.cicloEvaluacion;
-
-
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [listResumenEval, setListResumenEval] = useState("");
@@ -34,16 +36,15 @@ export default function GraficosDashboard() {
     useState("");
   const [listConfigCompRangoLeyenda, setListConfigCompRangoLeyenda] =
     useState("");
-  const [listConfigTiempoPromedio, setListConfigTiempoPromedio] =
-    useState("");
+  const [listConfigTiempoPromedio, setListConfigTiempoPromedio] = useState("");
   const [loadedDataLeyenda, setLoadedDataLeyenda] = useState(false);
 
   const [loadedDataResumenEval, setLoadedDataResumenEval] = useState(false);
   const [loadedDataCompetencias, setLoadedDataCompetencias] = useState(false);
   const [loadedDataRango, setLoadedDataRango] = useState(false);
   const [loadedDataColor, setLoadedDataColor] = useState(false);
-  const [loadedDataTiempoPromedio, setLoadedDataTiempoPromedio] = useState(false);
-
+  const [loadedDataTiempoPromedio, setLoadedDataTiempoPromedio] =
+    useState(false);
 
   function BodyResumen2() {
     if (loadedDataResumenEval && loadedDataTiempoPromedio) {
@@ -51,7 +52,7 @@ export default function GraficosDashboard() {
       const time = listResumenEval[0].tiempoPromedio;
       // console.log('epeFechaFin:', time);
       // console.log('listConfigTiempoPromedio[0].datoNoVisible', listConfigTiempoPromedio[0].datoNoVisible);
-      var totalSplit = splitReferentes.split('/');
+      var totalSplit = splitReferentes.split("/");
       var cant = totalSplit[0];
       var totalRef = totalSplit[1];
       // console.log(listResumenEval[0].porcSatisfaccion);
@@ -60,23 +61,22 @@ export default function GraficosDashboard() {
       return (
         <div className="tableResumen">
           <Table>
-
-            <tr >
-            <td >
+            <tr>
+              <td>
                 <CircularProgressbarWithChildren
                   value={listResumenEval[0].porcSatisfaccion}
                   background
                   strokeWidth={10}
                   styles={buildStyles({
-                    strokeLinecap: 'butt',
-                    pathColor: ProgressBarColor(listResumenEval[0].porcSatisfaccion),
+                    strokeLinecap: "butt",
+                    pathColor: ProgressBarColor(
+                      listResumenEval[0].porcSatisfaccion
+                    ),
                     trailColor: "#E5E7E9",
-                    backgroundColor: 'white',
-
-
+                    backgroundColor: "white",
                   })}
                 >
-                  <div style={{ fontSize: 20, textAlign: 'center' }}>
+                  <div style={{ fontSize: 20, textAlign: "center" }}>
                     <strong>Satisfacción</strong>
                     <br></br>
                     <strong> {listResumenEval[0].porcSatisfaccion}%</strong>
@@ -86,11 +86,10 @@ export default function GraficosDashboard() {
                   <RadialSeparators
                     count={10}
                     style={{
-
                       background: "#fff",
                       width: "2px",
                       // This needs to be equal to props.strokeWidth
-                      height: `${10}%`
+                      height: `${10}%`,
                     }}
                   />
                 </CircularProgressbarWithChildren>
@@ -104,11 +103,11 @@ export default function GraficosDashboard() {
                   styles={buildStyles({
                     pathColor: ProgressBarColor((cant * 100) / totalRef),
                     trailColor: "#E5E7E9",
-                    strokeLinecap: 'butt',
-                    backgroundColor: 'white'
+                    strokeLinecap: "butt",
+                    backgroundColor: "white",
                   })}
                 >
-                  <div style={{ fontSize: 20, textAlign: 'center' }}>
+                  <div style={{ fontSize: 20, textAlign: "center" }}>
                     <strong>Referentes</strong>
                     <br></br>
                     <strong>{listResumenEval[0].referentesEvaluados}</strong>
@@ -121,7 +120,7 @@ export default function GraficosDashboard() {
                       background: "#fff",
                       width: "2px",
                       // This needs to be equal to props.strokeWidth
-                      height: `${10}%`
+                      height: `${10}%`,
                     }}
                   />
                 </CircularProgressbarWithChildren>
@@ -132,13 +131,13 @@ export default function GraficosDashboard() {
                   background
                   strokeWidth={10}
                   styles={buildStyles({
-                    strokeLinecap: 'butt',
+                    strokeLinecap: "butt",
                     pathColor: "#008000",
                     trailColor: "grey",
-                    backgroundColor: 'white'
+                    backgroundColor: "white",
                   })}
                 >
-                  <div style={{ fontSize: 20, textAlign: 'center' }}>
+                  <div style={{ fontSize: 20, textAlign: "center" }}>
                     <strong>Competencias</strong>
                     <br></br>
                     <strong>{listResumenEval[0].competenciasEvaluadas}</strong>
@@ -151,7 +150,7 @@ export default function GraficosDashboard() {
                       background: "#fff",
                       width: "2px",
                       // This needs to be equal to props.strokeWidth
-                      height: `${10}%`
+                      height: `${10}%`,
                     }}
                   />
                 </CircularProgressbarWithChildren>
@@ -160,30 +159,37 @@ export default function GraficosDashboard() {
               <td>
                 <CircularProgressbarWithChildren
                   // Valor maximo del cirucularProgress
-                  maxValue={listConfigTiempoPromedio[0].datoNoVisible}
+                  maxValue={100}
                   // Borde de color (visual)
                   value={(listResumenEval[0].tiempoPromedio * 100 / listConfigTiempoPromedio[0].datoNoVisible)}
+                  // value={(5 * 100) / listConfigTiempoPromedio[0].datoNoVisible}
                   background
                   // Rayas del borde
                   strokeWidth={10}
                   styles={buildStyles({
-                    strokeLinecap: 'butt',
+                    strokeLinecap: "butt",
                     // Color del borde-llenado
-                   
+
                     pathColor: ProgressBarColor(listResumenEval[0].tiempoPromedio * 100 / listConfigTiempoPromedio[0].datoNoVisible),
+                    // pathColor: ProgressBarColor(
+                    //   (5 * 100) / listConfigTiempoPromedio[0].datoNoVisible
+                    // ),
                     trailColor: "#E5E7E9",
-                    backgroundColor: 'white'
+                    backgroundColor: "white",
                   })}
                 >
-                  <div style={{ fontSize: 20, textAlign: 'center' }}>
+                  <div style={{ fontSize: 20, textAlign: "center" }}>
                     <strong>Tiempo</strong>
                     <br></br>
                     {/* Valor que se ve dentro del circulo, en minutos */}
                     {/* <span>{(listResumenEval[0].tiempoPromedio * 100) / listConfigTiempoPromedio[0].datoNoVisible} min</span> */}
 
-                    <strong><span>{(listResumenEval[0].tiempoPromedio)}</span>
+                    <strong>
+                      <span>{listResumenEval[0].tiempoPromedio}</span>
+                     
 
-                      <p className="porcentajeCard">min</p></strong>
+                      <p className="porcentajeCard">min</p>
+                    </strong>
                     <br></br>
                     <strong>Promedio</strong>
                   </div>
@@ -193,13 +199,12 @@ export default function GraficosDashboard() {
                       background: "#fff",
                       width: "2px",
                       // This needs to be equal to props.strokeWidth
-                      height: `${10}%`
+                      height: `${10}%`,
                     }}
                   />
                 </CircularProgressbarWithChildren>
               </td>
             </tr>
-
           </Table>
         </div>
       );
@@ -207,8 +212,6 @@ export default function GraficosDashboard() {
       return <h1>Loading</h1>;
     }
   }
-
-
 
   function GetConfigTiempoPromedio() {
     var url = "pages/listados/listadoConfigDatos.php";
@@ -221,8 +224,7 @@ export default function GraficosDashboard() {
       // console.log(data);
       setListConfigTiempoPromedio(data);
 
-      setLoadedDataTiempoPromedio(true)
-
+      setLoadedDataTiempoPromedio(true);
     });
   }
   function GetDataResumenEval() {
@@ -231,15 +233,14 @@ export default function GraficosDashboard() {
     var data = {
       idEvaluacion: idEDDEvaluacion,
       idProyecto: idEDDProyecto,
-      cicloEvaluacion: cicloEvaluacion
-
+      cicloEvaluacion: cicloEvaluacion,
     };
-    console.log('data', data);
+    console.log("data", data);
     SendDataService(url, operationUrl, data).then((data) => {
       setListResumenEval(data);
       setLoadedDataResumenEval(true);
-    }); console.log('response', data);
-
+    });
+    console.log("response", data);
   }
   function GetDataCompetencias() {
     var url = "pages/listados/listadoCompetenciasEval.php";
@@ -264,7 +265,7 @@ export default function GraficosDashboard() {
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setListConfigCompColorFlechas(data);
-      setLoadedDataColor(true)
+      setLoadedDataColor(true);
       // console.log("configColor", data);
     });
   }
@@ -279,7 +280,7 @@ export default function GraficosDashboard() {
     SendDataService(url, operationUrl, data).then((data) => {
       setListConfigCompRangoFlechas(data);
       // console.log("configRango", data);
-      setLoadedDataRango(true)
+      setLoadedDataRango(true);
     });
   }
   function GetConfigCompRangoLeyenda() {
@@ -292,7 +293,7 @@ export default function GraficosDashboard() {
     SendDataService(url, operationUrl, data).then((data) => {
       setListConfigCompRangoLeyenda(data);
       // console.log("configRango", data);
-      setLoadedDataLeyenda(true)
+      setLoadedDataLeyenda(true);
     });
   }
   function ProgressColorInfo(porcAprobC) {
@@ -312,17 +313,16 @@ export default function GraficosDashboard() {
             varColor = color1.datoVisible;
             auxColor = "1";
           }
-        };
+        }
       });
 
       return varColor;
     }
   }
 
-
   function ProgressBarColor(porcAprobComp) {
-    console.log('loadedDataColor',loadedDataColor);
-    console.log('porcAprobComp',porcAprobComp);
+    console.log("loadedDataColor", loadedDataColor);
+    console.log("porcAprobComp", porcAprobComp);
     if (loadedDataColor) {
       var auxColor = "0"; //posiciones
       var varColor = ""; //color /dato visible
@@ -342,43 +342,43 @@ export default function GraficosDashboard() {
             varColor = color1.datoVisible;
             auxColor = "1";
           }
-        };
+        }
       });
       return varColor;
     }
   }
 
-
-
   function ArrowsTemplate({ porcAprobComp }) {
-
     if (loadedDataColor && loadedDataRango) {
       var auxRango = "0"; //posiciones
       var varRango = ""; //arriba / abajo /dato visible
-      let listRango = listConfigCompRangoFlechas.map((orden) => orden).reverse();
+      let listRango = listConfigCompRangoFlechas
+        .map((orden) => orden)
+        .reverse();
 
       listRango.map((rango) => {
         if (auxRango === "0") {
-          if (eval(porcAprobComp + rango.datoNoVisible)) {  // eval(30 + > 80) --> eval 30 >= 80
+          if (eval(porcAprobComp + rango.datoNoVisible)) {
+            // eval(30 + > 80) --> eval 30 >= 80
             varRango = rango.datoVisible;
-            auxRango = '1';
+            auxRango = "1";
           }
         }
-
       });
-      var carita = <img id="faceStyleReferenteTodas" src={require(`../Smileys/${varRango}.png`)}></img>;
+      var carita = (
+        <img
+          id="faceStyleReferenteTodas"
+          src={require(`../Smileys/${varRango}.png`)}
+        ></img>
+      );
 
       return (
         <>
-          <div>
-            {carita}
-          </div>
+          <div>{carita}</div>
         </>
       );
     }
   }
-
-
 
   function InfoArrows() {
     if (loadedDataLeyenda && loadedDataRango) {
@@ -393,15 +393,24 @@ export default function GraficosDashboard() {
         uniqueDatoNoVisibleValues.add(rango.datoNoVisible);
       });
 
-
       uniqueDatoNoVisibleValues.forEach((datoNoVisible) => {
-
-        const matchingLey = listConfigCompRangoLeyenda.find(ley => ley.datoNoVisible === datoNoVisible);
-        const matchingRango = listConfigCompRangoFlechas.find(rango => rango.datoNoVisible === datoNoVisible);
+        const matchingLey = listConfigCompRangoLeyenda.find(
+          (ley) => ley.datoNoVisible === datoNoVisible
+        );
+        const matchingRango = listConfigCompRangoFlechas.find(
+          (rango) => rango.datoNoVisible === datoNoVisible
+        );
 
         if (matchingLey && matchingRango) {
-          var carita_gral = matchingRango.datoNoVisible === matchingLey.datoNoVisible ? <img id="faceStyleLeyendas"
-            src={require(`../Smileys/${matchingRango.datoVisible}.png`)}></img> : '';
+          var carita_gral =
+            matchingRango.datoNoVisible === matchingLey.datoNoVisible ? (
+              <img
+                id="faceStyleLeyendas"
+                src={require(`../Smileys/${matchingRango.datoVisible}.png`)}
+              ></img>
+            ) : (
+              ""
+            );
 
           tableRows.push(
             <>
@@ -413,20 +422,25 @@ export default function GraficosDashboard() {
               <td className="linea">
                 <td>{carita_gral}</td>
               </td>
-
             </>
           );
         }
       });
       return (
-
         <>
-          <table style={{ backgroundColor: 'white', width: '63%', borderRadius: '20px', margin: 'auto' }}>
-
+          <table
+            style={{
+              backgroundColor: "white",
+              width: "63%",
+              borderRadius: "20px",
+              margin: "auto",
+            }}
+          >
             {tableRows}
-
-          </table><br></br>
-        </>)
+          </table>
+          <br></br>
+        </>
+      );
     }
   }
   function InfoExag2() {
@@ -440,9 +454,13 @@ export default function GraficosDashboard() {
 
         if (item.nomEvaluador in list_proc_emp) {
           if (item.nomEmpleado in list_proc_emp[item.nomEvaluador]) {
-            list_proc_emp[item.nomEvaluador][item.nomEmpleado].push(item.porcAprobComp);
+            list_proc_emp[item.nomEvaluador][item.nomEmpleado].push(
+              item.porcAprobComp
+            );
           } else {
-            list_proc_emp[item.nomEvaluador][item.nomEmpleado] = [item.porcAprobComp];
+            list_proc_emp[item.nomEvaluador][item.nomEmpleado] = [
+              item.porcAprobComp,
+            ];
           }
         } else {
           list_proc_emp[item.nomEvaluador] = {
@@ -455,7 +473,6 @@ export default function GraficosDashboard() {
         }
       });
     }
-
 
     // Función para dividir en grupos de 3 evaluadores por fila
     function chunkArray(arr, chunkSize) {
@@ -472,39 +489,44 @@ export default function GraficosDashboard() {
       <table id="table" responsive>
         <div>
           {evaluadoresPorFila.map((filaEvaluadores, index) => (
-            <div key={index} style={{ display: 'flex' }}>
+            <div key={index} style={{ display: "flex" }}>
               {filaEvaluadores.map((evaluador) => (
                 <table
                   key={evaluador}
                   style={{
-                    backgroundColor: 'white',
-                    width: '26em',
-                    borderRadius: '10px',
-                    margin: '5px', // Espacio entre tablas
+                    backgroundColor: "white",
+                    width: "26em",
+                    borderRadius: "10px",
+                    margin: "5px", // Espacio entre tablas
                   }}
                   responsive
                 >
                   <thead>
                     <tr>
-                      <td valign="top" style={{ width: '10em' }}>
+                      <td valign="top" style={{ width: "10em" }}>
                         <table>
-                          <th style={{ padding: '1em' }}>
+                          <th style={{ padding: "1em" }}>
                             REFERENTE
                             <td>{evaluador}</td>
                           </th>
                         </table>
                       </td>
-                      <td style={{ width: '16em' }}>
-                        <table style={{ width: '100%' }}>
-                          <tr style={{ borderBottom: '1px #808080 solid' }}>
-                            <th style={{ padding: '1em' }}>COLABORADOR</th>
+                      <td style={{ width: "16em" }}>
+                        <table style={{ width: "100%" }}>
+                          <tr style={{ borderBottom: "1px #808080 solid" }}>
+                            <th style={{ padding: "1em" }}>COLABORADOR</th>
                           </tr>
                           <tbody>
                             {Object.keys(list_proc_emp[evaluador])
                               .sort() // Ordena alfabéticamente los empleados
                               .map((empleado) => {
-                                const porcentajes = list_proc_emp[evaluador][empleado];
-                                const suma = porcentajes.reduce((total, porcentaje) => total + parseFloat(porcentaje), 0);
+                                const porcentajes =
+                                  list_proc_emp[evaluador][empleado];
+                                const suma = porcentajes.reduce(
+                                  (total, porcentaje) =>
+                                    total + parseFloat(porcentaje),
+                                  0
+                                );
                                 const promedio = suma / porcentajes.length;
 
                                 const color = ProgressColorInfo(promedio);
@@ -513,34 +535,58 @@ export default function GraficosDashboard() {
 
                                 useEffect(() => {
                                   if (ref.current) {
-                                    const inner = ref.current.querySelector(".progress-bar");
+                                    const inner =
+                                      ref.current.querySelector(
+                                        ".progress-bar"
+                                      );
                                     if (inner) {
-                                      if (color === '#008000' || color === '#FF0000') {
+                                      if (
+                                        color === "#008000" ||
+                                        color === "#FF0000"
+                                      ) {
                                         inner.style.backgroundColor = color;
-                                        inner.style.fontSize = '11pt';
-                                        inner.style.color = 'white';
-                                        inner.style.fontWeight = '700'
+                                        inner.style.fontSize = "11pt";
+                                        inner.style.color = "white";
+                                        inner.style.fontWeight = "700";
                                       } else {
                                         inner.style.backgroundColor = color;
-                                        inner.style.fontSize = '11pt';
-                                        inner.style.color = 'black';
-                                        inner.style.fontWeight = '700'
+                                        inner.style.fontSize = "11pt";
+                                        inner.style.color = "black";
+                                        inner.style.fontWeight = "700";
                                       }
                                     }
                                   }
                                 }, [ref]);
                                 // ----------------------------------------------------
                                 return (
-                                  <tr style={{ borderTop: '1px #DCDCDC solid' }}>
-                                    <td style={{ fontSize: '11pt', padding: '3px', fontWeight: '400', fontFamily: 'arial' }}>
+                                  <tr
+                                    style={{ borderTop: "1px #DCDCDC solid" }}
+                                  >
+                                    <td
+                                      style={{
+                                        fontSize: "11pt",
+                                        padding: "3px",
+                                        fontWeight: "400",
+                                        fontFamily: "arial",
+                                      }}
+                                    >
                                       {empleado} &nbsp;
-                                      <td id="infoLinePorc" style={{ width: '20em' }}>
-                                        <ProgressBar ref={ref} now={promedio} label={`${promedio.toFixed(2)}%`} />
+                                      <td
+                                        id="infoLinePorc"
+                                        style={{ width: "20em" }}
+                                      >
+                                        <ProgressBar
+                                          ref={ref}
+                                          now={promedio}
+                                          label={`${promedio.toFixed(2)}%`}
+                                        />
                                       </td>
                                     </td>
                                     <td>
                                       <td>
-                                        <ArrowsTemplate porcAprobComp={promedio} />
+                                        <ArrowsTemplate
+                                          porcAprobComp={promedio}
+                                        />
                                       </td>
                                     </td>
                                   </tr>
@@ -560,14 +606,11 @@ export default function GraficosDashboard() {
     );
   }
 
-
   function CompetenciasResumen() {
     if (loadedDataCompetencias) {
       return (
         <div>
           <div>
-
-
             {/* LEYENDAS */}
             <InfoArrows></InfoArrows>
             {/* FIN LEYENDAS */}
@@ -583,7 +626,6 @@ export default function GraficosDashboard() {
     }
   }
 
-
   useEffect(
     function () {
       GetDataResumenEval();
@@ -591,25 +633,46 @@ export default function GraficosDashboard() {
       GetConfigTiempoPromedio();
       GetConfigCompColorFlechas();
       GetConfigCompRangoFlechas();
-      GetConfigCompRangoLeyenda()
-
+      GetConfigCompRangoLeyenda();
     },
-    [loadedDataCompetencias, loadedDataResumenEval, loadedDataRango, loadedDataColor, loadedDataLeyenda, idEDDEvaluacion, nomEvaluacion, idEDDProyecto]
+    [
+      loadedDataCompetencias,
+      loadedDataResumenEval,
+      loadedDataRango,
+      loadedDataColor,
+      loadedDataLeyenda,
+      idEDDEvaluacion,
+      nomEvaluacion,
+      idEDDProyecto,
+    ]
   );
 
   return userData.statusConected || userData !== null ? (
     <div>
-
       <Header></Header>
       <a
         type="submit"
         id="btnAtrasEvaluacion"
         value="Registrar"
-        href="/listadoEddEvalProyEmp/0">Volver
+        href="/listadoEddEvalProyEmp/0"
+      >
+        Volver
       </a>
 
-      <div style={{ backgroundColor: 'white', width: '60%', margin: 'auto', borderRadius: '10px' }}><strong><p style={{ textAlign: 'left', paddingLeft: '10px' }}>
-        Dashboard Colaboradores:<br></br>{nomEvaluacion}</p></strong>
+      <div
+        style={{
+          backgroundColor: "white",
+          width: "60%",
+          margin: "auto",
+          borderRadius: "10px",
+        }}
+      >
+        <strong>
+          <p style={{ textAlign: "left", paddingLeft: "10px" }}>
+            Dashboard Colaboradores:<br></br>
+            {nomEvaluacion}
+          </p>
+        </strong>
       </div>
 
       <BodyResumen2></BodyResumen2>
@@ -623,24 +686,22 @@ export default function GraficosDashboard() {
       >
         {/* segun cuantos referentes sean mostrar informacion de sus competencias por columna */}
         <CompetenciasResumen></CompetenciasResumen>
-
-      </div>
-
-
-      <br></br>
-      <div class="bg-light mx-auto px-2"
-        style={{ width: "50em", height: "27em" }}>
-        <GrafChart idEDDEvaluacion={idEDDEvaluacion} idEDDProyecto={idEDDProyecto} />
       </div>
 
       <br></br>
+      <div
+        class="bg-light mx-auto px-2"
+        style={{ width: "50em", height: "27em" }}
+      >
+        <GrafChart
+          idEDDEvaluacion={idEDDEvaluacion}
+          idEDDProyecto={idEDDProyecto}
+        />
+      </div>
 
-
+      <br></br>
     </div>
-
   ) : (
     <Navigate to="/login"></Navigate>
-
   );
 }
-
