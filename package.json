@@ -25,7 +25,8 @@
     "sweetalert2": "^11.9.0",
     "sweetalert2-react-content": "^5.0.7",
     "web-vitals": "^2.1.4",
-    "wouter": "^2.12.1"
+    "wouter": "^2.12.1",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

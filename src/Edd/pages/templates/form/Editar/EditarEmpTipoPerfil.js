@@ -56,7 +56,6 @@ const EditarEmpTipoPerfil = ({
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idEmpTipoPerfil, nombreTabla: nombreTabla};
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
       setidTipoPerfil(response[0].idTipoPerfil);
       setidEmpleado(response[0].idEmpleado);
@@ -77,8 +76,9 @@ const EditarEmpTipoPerfil = ({
     };
 console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      actualizarEmpTipoPerfil(EmpTipoPerfil);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEmpTipoPerfil(datos);
     });
 
     function actualizarEmpTipoPerfil(EmpTipoPerfil) {

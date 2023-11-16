@@ -42,7 +42,6 @@ const editarEDDEvalPregunta = ({
 
     setidEDDEvalCompetencia(responseID[0].idEDDEvalCompetencia);
     setidEDDEvaluacion(responseID[0].idEDDEvaluacion);
-
   };
 
   // ----------------------FUNCIONES----------------------------
@@ -62,12 +61,12 @@ const editarEDDEvalPregunta = ({
     );
   }
 
-  function getData(){
+  function getData() {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idEDDEvalPregunta, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
+
       setResponseID(response);
       setnomPregunta(response[0].nomPregunta);
       setordenPregunta(response[0].ordenPregunta);
@@ -75,9 +74,8 @@ const editarEDDEvalPregunta = ({
       setpreguntaObligatoria(response[0].preguntaObligatoria);
       setidEDDEvalCompetencia(response[0].idEDDEvalCompetencia);
       setidEDDEvaluacion(response[0].idEDDEvaluacion);
-
     });
-  };
+  }
 
   function SendData(e) {
     e.preventDefault();
@@ -85,45 +83,53 @@ const editarEDDEvalPregunta = ({
     var operationUrl = "editarEddEvalPregunta";
 
     let competenciaValue = idEDDEvalCompetencia;
-    if (tipoResp === 'T') {
+    if (tipoResp === "T") {
       // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
-      competenciaValue = '0';
+      competenciaValue = "0";
     }
 
     var data = {
       usuarioModificacion: userData.usuario,
       idEDDEvalPregunta: idEDDEvalPregunta,
       nomPregunta: nomPregunta === "" ? responseID[0].nomPregunta : nomPregunta,
-      ordenPregunta: ordenPregunta === "" ? responseID[0].ordenPregunta : ordenPregunta,
+      ordenPregunta:
+        ordenPregunta === "" ? responseID[0].ordenPregunta : ordenPregunta,
       tipoResp: tipoResp === "" ? responseID[0].tipoResp : tipoResp,
-      preguntaObligatoria: preguntaObligatoria === "" ? responseID[0].preguntaObligatoria : preguntaObligatoria,
+      preguntaObligatoria:
+        preguntaObligatoria === ""
+          ? responseID[0].preguntaObligatoria
+          : preguntaObligatoria,
       idEDDEvalCompetencia: competenciaValue,
-      idEDDEvaluacion: idEDDEvaluacion === "" ? responseID[0].idEDDEvaluacion : idEDDEvaluacion,
+      idEDDEvaluacion:
+        idEDDEvaluacion === ""
+          ? responseID[0].idEDDEvaluacion
+          : idEDDEvaluacion,
       isActive: true,
     };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
-      TopAlerts("successEdited");
-      actualizarEDDEvalPregunta(EDDEvalPregunta);
-    });
 
-    function actualizarEDDEvalPregunta(EDDEvalPregunta) {
-      console.log(EDDEvalPregunta);
-      const nuevosEDDEvalPregunta = listEDDEvalPregunta.map((c) =>
-        c.idEDDEvalPregunta === EDDEvalPregunta.idEDDEvalPregunta ? EDDEvalPregunta : c
-      );
-      setEDDEvalPregunta(nuevosEDDEvalPregunta);
-    }
+    SendDataService(url, operationUrl, data).then((response) => {
+
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDEvalPregunta(datos);
+    });
   }
 
+  function actualizarEDDEvalPregunta(EDDEvalPregunta) {
+    const nuevosEDDEvalPregunta = listEDDEvalPregunta.map((c) =>
+      c.idEDDEvalPregunta === EDDEvalPregunta.idEDDEvalPregunta
+        ? EDDEvalPregunta
+        : c
+    );
+    setEDDEvalPregunta(nuevosEDDEvalPregunta);
+  }
 
   useEffect(
     function () {
       if (idEDDEvalPregunta !== null) {
         getData();
         obtenerEDDEvalCompetencia();
-        obtenerEDDEvaluacion()
+        obtenerEDDEvaluacion();
       }
     },
     [idEDDEvalPregunta]
@@ -152,7 +158,11 @@ const editarEDDEvalPregunta = ({
               >
                 {listEDDEvaluacion.map((valor) => (
                   <option
-                    selected={valor.idEDDEvaluacion === idEDDEvaluacion ? "selected" : ""}
+                    selected={
+                      valor.idEDDEvaluacion === idEDDEvaluacion
+                        ? "selected"
+                        : ""
+                    }
                     value={valor.idEDDEvaluacion}
                   >
                     {valor.nomEvaluacion}
@@ -200,7 +210,7 @@ const editarEDDEvalPregunta = ({
                 value={tipoResp || ""}
                 onChange={({ target }) => {
                   settipoResp(target.value);
-                  if (target.value === 'T') {
+                  if (target.value === "T") {
                     setCompetenciaEnabled(false);
                   } else {
                     setCompetenciaEnabled(true);
@@ -211,7 +221,6 @@ const editarEDDEvalPregunta = ({
                 <option value="T">TEXTO</option>
               </select>
             </div>
-
 
             <div className="form-group">
               <label htmlFor="input_comp">Competencia: </label>
@@ -224,24 +233,21 @@ const editarEDDEvalPregunta = ({
                 onChange={({ target }) => setidEDDEvalCompetencia(target.value)}
                 disabled={!competenciaEnabled}
               >
-                
                 {listEDDEvalCompetencia.map((valor) => (
                   <option
-                    selected={valor.idEDDEvalCompetencia === idEDDEvalCompetencia ? "selected" : ""}
+                    selected={
+                      valor.idEDDEvalCompetencia === idEDDEvalCompetencia
+                        ? "selected"
+                        : ""
+                    }
                     value={valor.idEDDEvalCompetencia}
                   >
                     {valor.nomCompetencia}
                   </option>
-                  
                 ))}
-                 <option value='0'>
-                  Ninguno
-                </option>
+                <option value="0">Ninguno</option>
               </select>
             </div>
-
-
-
 
             <div className="form-group">
               <label htmlFor="input_comp">Pregunta obligatoria: </label>
@@ -253,12 +259,8 @@ const editarEDDEvalPregunta = ({
                 value={preguntaObligatoria || ""}
                 onChange={({ target }) => setpreguntaObligatoria(target.value)}
               >
-                <option value="1">
-                  SI
-                </option>
-                <option value="0">
-                  NO
-                </option>
+                <option value="1">SI</option>
+                <option value="0">NO</option>
               </select>
             </div>
 

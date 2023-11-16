@@ -124,40 +124,40 @@ export default function DashboardCompProy() {
 
   var predefinedColors = [
     // FUERTE
-    "#B71C1C", // Rojo              1
-    "#303F9F", // Azul              2
+    // "#B71C1C", // Rojo              1
+    // "#303F9F", // Azul              2
     "#8BC34A", // Verde               3
-    "#FDD835", // Amarillo              4
+    // "#FDD835", // Amarillo              4
     "#F48FB1", // Rosa              5
     "#00796B", // Cyan                  6
-    "#8E24AA", // Violeta              7
+    // "#8E24AA", // Violeta              7
     "#EF6C00", // Naranja              8
     "#03A9F4", // Celeste              9
     "#795548", // Verde agua            10
 
     // CLAROS
-    "#EF9A9A", // Rojo              1
-    "#9FA8DA", // Azul              2
-    "#558B2F", // Verde               3
-    "#FFF59D", // Amarillo              4
-    "#E91E63", // Rosa              5
-    "#80CBC4", // Cyan                   6
-    "#CE93D8", // Violeta              7
-    "#FFB74D", // Naranja              8
-    "#B3E5FC", // Celeste              9
-    "#BCAAA4", // Verde agua            10
+    // "#EF9A9A", // Rojo              1
+    // "#9FA8DA", // Azul              2
+    // "#558B2F", // Verde               3
+    // "#FFF59D", // Amarillo              4
+    // "#E91E63", // Rosa              5
+    // "#80CBC4", // Cyan                   6
+    // "#CE93D8", // Violeta              7
+    // "#FFB74D", // Naranja              8
+    // "#B3E5FC", // Celeste              9
+    // "#BCAAA4", // Verde agua            10
 
     // MEDIOS
-    "#F44336", // Rojo              1
-    "#3F51B5", // Azul              2
-    "#C5E1A5", // Verde               3
-    "#FFF176", // Amarillo              4
-    "#F06292", // Rosa              5
-    "#26A69A", // Cyan                  6
-    "#AB47BC", // Violeta              7
-    "#FF9800", // Naranja              8
-    "#4FC3F7", // Celeste              9
-    "#795548", // Verde agua            10
+    // "#F44336", // Rojo              1
+    // "#3F51B5", // Azul              2
+    // "#C5E1A5", // Verde               3
+    // "#FFF176", // Amarillo              4
+    // "#F06292", // Rosa              5
+    // "#26A69A", // Cyan                  6
+    // "#AB47BC", // Violeta              7
+    // "#FF9800", // Naranja              8
+    // "#4FC3F7", // Celeste              9
+    // "#795548", // Verde agua            10
 
     // Agrega más colores según sea necesario
   ];

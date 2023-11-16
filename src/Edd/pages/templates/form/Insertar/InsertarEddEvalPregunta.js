@@ -19,10 +19,8 @@ const InsertarEDDEvalPregunta = ({
   const [tipoResp, settipoResp] = useState([""]);
   const [preguntaObligatoria, setpreguntaObligatoria] = useState([""]);
 
-
   const [idEDDEvalCompetencia, setidEDDEvalCompetencia] = useState([""]);
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState([""]);
-
 
   const [listEDDEvaluacion, setlistEDDEvaluacion] = useState([""]);
   const [listEDDEvalCompetencia, setlistEDDEvalCompetencia] = useState([""]);
@@ -32,8 +30,6 @@ const InsertarEDDEvalPregunta = ({
   const show = isActiveEDDEvalPregunta;
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-
-
 
   const handleClose = () => cambiarEstado(false);
 
@@ -58,13 +54,13 @@ const InsertarEDDEvalPregunta = ({
     e.preventDefault();
     const url = "pages/insertar/insertarEddEvalPregunta.php";
     const operationUrl = "insertarEddEvalPregunta";
-  
+
     let competenciaValue = idEDDEvalCompetencia;
-    if (tipoResp === 'T') {
+    if (tipoResp === "T") {
       // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
-      competenciaValue = '0';
+      competenciaValue = "0";
     }
-  
+
     var data = {
       usuarioCreacion: userData.usuario,
       nomPregunta: nomPregunta,
@@ -75,14 +71,13 @@ const InsertarEDDEvalPregunta = ({
       preguntaObligatoria: preguntaObligatoria,
       isActive: true,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts("successCreated");
-      actualizarEDDEvalPregunta(EDDEvalPregunta);
-      console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDEvalPregunta(datos);
     });
   }
-  
+
   function actualizarEDDEvalPregunta(response) {
     listEDDEvalPregunta.push(response);
   }
@@ -92,9 +87,7 @@ const InsertarEDDEvalPregunta = ({
     obtenerEDDEvaluacion();
   }, []);
 
-
   const [competenciaEnabled, setCompetenciaEnabled] = useState(true);
-
 
   // ----------------------RENDER----------------------------
   return (
@@ -156,7 +149,6 @@ const InsertarEDDEvalPregunta = ({
               />
             </div>
 
-
             <div className="form-group">
               <label htmlFor="input_TipRESP">Tipo de respuesta: </label>
               <select
@@ -166,7 +158,7 @@ const InsertarEDDEvalPregunta = ({
                 id="input_TipRESP"
                 onChange={({ target }) => {
                   settipoResp(target.value);
-                  if (target.value === 'T') {
+                  if (target.value === "T") {
                     setCompetenciaEnabled(false);
                   } else {
                     setCompetenciaEnabled(true);
@@ -180,7 +172,6 @@ const InsertarEDDEvalPregunta = ({
                 <option value="T">TEXTO</option>
               </select>
             </div>
-
 
             <div className="form-group">
               <label htmlFor="input_comp">Competencia: </label>
@@ -196,9 +187,7 @@ const InsertarEDDEvalPregunta = ({
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value='0'>
-                  Ninguno
-                </option>
+                <option value="0">Ninguno</option>
                 {listEDDEvalCompetencia.map((valor) => (
                   <option value={valor.idEDDEvalCompetencia}>
                     {valor.nomCompetencia}
@@ -206,8 +195,6 @@ const InsertarEDDEvalPregunta = ({
                 ))}
               </select>
             </div>
-
-
 
             <div className="form-group">
               <label htmlFor="input_comp">Pregunta obligatoria: </label>
@@ -222,12 +209,8 @@ const InsertarEDDEvalPregunta = ({
                   Desplegar lista
                 </option>
 
-                <option value="1">
-                  SI
-                </option>
-                <option value="0">
-                  NO
-                </option>
+                <option value="1">SI</option>
+                <option value="0">NO</option>
               </select>
             </div>
 

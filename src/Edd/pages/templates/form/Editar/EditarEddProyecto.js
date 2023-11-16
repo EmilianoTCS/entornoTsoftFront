@@ -45,35 +45,33 @@ const EditarEDDProyecto = ({
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
     var data = {
-        idCliente: '',
+      idCliente: "",
     };
     SendDataService(url, operationUrl, data).then((data) => {
-        setlistServicio(data);
+      setlistServicio(data);
     });
-}
+  }
 
-function obtenerTipoProyecto() {
-  const url = "pages/auxiliares/listadoTipoProyectos.php";
-  const operationUrl = "listados";
-  
-  getDataService(url,operationUrl).then((data) => {
-    setlistTipoProyectos(data);
-  });
-}
+  function obtenerTipoProyecto() {
+    const url = "pages/auxiliares/listadoTipoProyectos.php";
+    const operationUrl = "listados";
+
+    getDataService(url, operationUrl).then((data) => {
+      setlistTipoProyectos(data);
+    });
+  }
 
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idEDDProyecto, nombreTabla: nombreTabla};
+    var data = { idRegistro: idEDDProyecto, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
       setnomProyecto(response[0].nomProyecto);
       setfechaIni(response[0].fechaIni);
       setfechaFin(response[0].fechaFin);
       setidServicio(response[0].idServicio);
       setTipoProyecto(response[0].tipoProyecto);
-
     });
   }, [idEDDProyecto]);
 
@@ -87,15 +85,15 @@ function obtenerTipoProyecto() {
       nomProyecto: nomProyecto === "" ? responseID[0].nomProyecto : nomProyecto,
       fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
       fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
-      tipoProyecto: tipoProyecto === "" ? responseID[0].tipoProyecto : tipoProyecto,
+      tipoProyecto:
+        tipoProyecto === "" ? responseID[0].tipoProyecto : tipoProyecto,
       idServicio: idServicio === "" ? responseID[0].idServicio : idServicio,
-      isActive:true,
+      isActive: true,
     };
-console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-console.log(response);
-// TopAlerts('successEdited');
-      actualizarEDDProyecto(EDDProyecto);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDProyecto(datos);
     });
 
     function actualizarEDDProyecto(EDDProyecto) {
@@ -111,7 +109,7 @@ console.log(response);
       if (idEDDProyecto !== null) {
         getData();
         obtenerServicio();
-        obtenerTipoProyecto()
+        obtenerTipoProyecto();
       }
     },
     [idEDDProyecto]
@@ -126,10 +124,10 @@ console.log(response);
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_nombreDelEDDProyecto">Proyecto:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre proyecto"
                 type="text"
                 className="form-control"
@@ -180,19 +178,19 @@ console.log(response);
                 placeholder="Seleccione el Tipo de proyecto"
                 onChange={({ target }) => setTipoProyecto(target.value)}
               >
-        
                 {listTipoProyectos.map((valor) => (
-                 <option
-                 selected={valor.subTipoConfDato === tipoProyecto ? "selected" : ""}
-                 value={valor.subTipoConfDato}
-               >
-                 {valor.subTipoConfDato}
-               </option>
+                  <option
+                    selected={
+                      valor.subTipoConfDato === tipoProyecto ? "selected" : ""
+                    }
+                    value={valor.subTipoConfDato}
+                  >
+                    {valor.subTipoConfDato}
+                  </option>
                 ))}
               </select>
             </div>
 
-            
             <div className="form-group">
               <label htmlFor="input_serv">Servicio del cliente: </label>
               <select

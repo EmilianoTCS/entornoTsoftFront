@@ -47,16 +47,15 @@ const EditarEmpSubsist = ({
     const url = "pages/auxiliares/listadoSubsistemaForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistSubsistema(response)
+      setlistSubsistema(response)
     );
   }
 
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idEmpSubsist, nombreTabla: nombreTabla};
+    var data = { idRegistro: idEmpSubsist, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
       setidEmpleado(response[0].idEmpleado);
       setidSubsistema(response[0].idSubsistema);
@@ -71,13 +70,15 @@ const EditarEmpSubsist = ({
       usuarioModificacion: userData.usuario,
       idEmpSubsist: idEmpSubsist,
       idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
-      idSubsistema: idSubsistema === "" ? responseID[0].idSubsistema : idSubsistema,
-      isActive:true,
+      idSubsistema:
+        idSubsistema === "" ? responseID[0].idSubsistema : idSubsistema,
+      isActive: true,
     };
-console.log(data);
+  
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      actualizarEmpSubsist(EmpSubsist);console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEmpSubsist(datos);
     });
 
     function actualizarEmpSubsist(EmpSubsist) {
@@ -104,11 +105,10 @@ console.log(data);
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-        <Modal.Title>Editar empleado a subsistema</Modal.Title>
+          <Modal.Title>Editar empleado a subsistema</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-
             <div className="form-group">
               <label htmlFor="input_Empleado">Empleado: </label>
               <select
@@ -141,7 +141,9 @@ console.log(data);
               >
                 {listSubsistema.map((valor) => (
                   <option
-                    selected={valor.idSubsistema === idSubsistema ? "selected" : ""}
+                    selected={
+                      valor.idSubsistema === idSubsistema ? "selected" : ""
+                    }
                     value={valor.idSubsistema}
                   >
                     {valor.nomSubsistema}

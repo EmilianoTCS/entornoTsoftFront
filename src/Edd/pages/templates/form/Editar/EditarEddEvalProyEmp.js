@@ -34,9 +34,8 @@ const EditarEddEvalProyEmp = ({
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const listEDDEvalProyEmp = EDDEvalProyEmp;
 
-  var [idProyecto, setidProyecto] = useState('0');
+  var [idProyecto, setidProyecto] = useState("0");
   const [listProyecto, setlistProyecto] = useState([""]);
-
 
   const show = isActiveEditEDDEvalProyEmp;
 
@@ -52,16 +51,14 @@ const EditarEddEvalProyEmp = ({
 
   // ----------------------FUNCIONES----------------------------
 
-
   function obtenerProyecto() {
     const url = "pages/auxiliares/listadoProyectoForms.php";
     const operationUrl = "listados";
     var data = {
-      idServicio: '',
+      idServicio: "",
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setlistProyecto(data);
-
     });
   }
 
@@ -77,14 +74,11 @@ const EditarEddEvalProyEmp = ({
     });
   }
 
-
-
   function obtenerEvaluacion() {
     const url = "pages/auxiliares/listadoEddEvaluacion.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
       setlistEDDEvaluacion(response)
-
     );
   }
   const getData = () => {
@@ -94,7 +88,6 @@ const EditarEddEvalProyEmp = ({
     var data = { idRegistro: idEDDEvalProyEmp, nombreTabla: nombreTabla };
 
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log('Info', response);
       setResponseID(response);
       setidProyecto(response[0].idProyecto);
       setidEDDEvaluacion(response[0].idEDDEvaluacion);
@@ -104,7 +97,6 @@ const EditarEddEvalProyEmp = ({
       setcicloEvaluacion(response[0].cicloEvaluacion);
     });
   };
-
 
   // function ExisteAsocProy(idEDDProyEmpEvaluado,idEDDProyEmpEvaluador,idProyecto) {
   //   var url = "";
@@ -117,7 +109,7 @@ const EditarEddEvalProyEmp = ({
 
     if (idEDDProyEmpEvaluado === idEDDProyEmpEvaluador) {
       // Los valores son iguales, mostrar una alerta
-      TopAlerts('MismoEvaludorYEvaluado')
+      TopAlerts("MismoEvaludorYEvaluado");
     }
     // else if (!ExisteAsocProy(idEDDProyEmpEvaluado,idEDDProyEmpEvaluador,idProyecto)) {
     // e.preventDefault();
@@ -126,40 +118,37 @@ const EditarEddEvalProyEmp = ({
     var data = {
       usuarioModificacion: userData.usuario,
       idEDDEvalProyEmp: idEDDEvalProyEmp,
-      evalRespondida:
-        evalRespondida === "" ? responseID[0].evalRespondida : 0,
+      evalRespondida: evalRespondida === "" ? responseID[0].evalRespondida : 0,
       idEDDEvaluacion:
         idEDDEvaluacion === ""
           ? responseID[0].idEDDEvaluacion
           : idEDDEvaluacion,
       idEDDProyEmpEvaluado:
-        idEDDProyEmpEvaluado === "" ? responseID[0].idEDDProyEmpEvaluado : idEDDProyEmpEvaluado,
+        idEDDProyEmpEvaluado === ""
+          ? responseID[0].idEDDProyEmpEvaluado
+          : idEDDProyEmpEvaluado,
 
       idEDDProyEmpEvaluador:
-        idEDDProyEmpEvaluador === "" ? responseID[0].idEDDProyEmpEvaluador : idEDDProyEmpEvaluador,
+        idEDDProyEmpEvaluador === ""
+          ? responseID[0].idEDDProyEmpEvaluador
+          : idEDDProyEmpEvaluador,
 
-        cicloEvaluacion:
-        cicloEvaluacion === "" ? responseID[0].cicloEvaluacion : cicloEvaluacion,
-
+      cicloEvaluacion:
+        cicloEvaluacion === ""
+          ? responseID[0].cicloEvaluacion
+          : cicloEvaluacion,
 
       isActive: true,
     };
-    // console.log('data', data);
     SendDataService(url, operationUrl, data).then((response) => {
-      if (response[0].OUT_CODRESULT !== '00') {
+      if (response[0].OUT_CODRESULT !== "00") {
         TopAlertsError(response[0].OUT_CODRESULT, response[0].OUT_MJERESULT);
-        console.log(response);
       } else {
         TopAlerts("successEdited");
-        actualizarEDDEvalProyEmp(EDDEvalProyEmp); console.log('response', response);
+        actualizarEDDEvalProyEmp(EDDEvalProyEmp);
       }
     });
-    // }else{
-    // TopAlerts('AsociaciónYaExiste')
-    // }
   }
-
-
 
   function actualizarEDDEvalProyEmp(EDDEvalProyEmp) {
     const nuevosEDDEvalProyEmp = listEDDEvalProyEmp.map((c) =>
@@ -170,11 +159,8 @@ const EditarEddEvalProyEmp = ({
     setEDDEvalProyEmp(nuevosEDDEvalProyEmp);
   }
 
-
-
   useEffect(
     function () {
-      console.log(idEDDEvalProyEmp);
       if (idEDDEvalProyEmp !== null) {
         getData();
         obtenerEvaluacion();
@@ -190,12 +176,12 @@ const EditarEddEvalProyEmp = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar evaluación al <br></br> proyecto - colaborador.</Modal.Title>
+          <Modal.Title>
+            Editar evaluación al <br></br> proyecto - colaborador.
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-
-
             <div className="form-group">
               <label htmlFor="input_Evaluacion">Evaluación: </label>
               <select
@@ -208,7 +194,11 @@ const EditarEddEvalProyEmp = ({
               >
                 {listEDDEvaluacion.map((valor) => (
                   <option
-                    selected={valor.idEDDEvaluacion === idEDDEvaluacion ? "selected" : ""}
+                    selected={
+                      valor.idEDDEvaluacion === idEDDEvaluacion
+                        ? "selected"
+                        : ""
+                    }
                     value={valor.idEDDEvaluacion}
                   >
                     {valor.nomEvaluacion}
@@ -216,7 +206,6 @@ const EditarEddEvalProyEmp = ({
                 ))}
               </select>
             </div>
-
 
             <div className="form-group">
               <label htmlFor="input_proyemp">Proyecto: </label>
@@ -230,12 +219,17 @@ const EditarEddEvalProyEmp = ({
                   idProyecto = target.value;
                   obtenerEvaluadorEvaluado(); // Llama a la función para obtener evaluados
                   setidProyecto(target.value);
-                }} value={idProyecto}
+                }}
+                value={idProyecto}
               >
-
                 {listProyecto.map((valor) => (
-                  <option key={valor.idEDDProyecto} value={valor.idEDDProyecto}
-                    selected={valor.idEDDProyecto === idProyecto ? "selected" : ""}>
+                  <option
+                    key={valor.idEDDProyecto}
+                    value={valor.idEDDProyecto}
+                    selected={
+                      valor.idEDDProyecto === idProyecto ? "selected" : ""
+                    }
+                  >
                     {valor.nomProyecto}
                   </option>
                 ))}
@@ -250,13 +244,20 @@ const EditarEddEvalProyEmp = ({
                 name="input_proyemp"
                 id="input_proyemp"
                 placeholder="Seleccione la Proyecto + Evaluador"
-                onChange={({ target }) => setidEDDProyEmpEvaluador(target.value)}
-              ><option hidden value="">
+                onChange={({ target }) =>
+                  setidEDDProyEmpEvaluador(target.value)
+                }
+              >
+                <option hidden value="">
                   Desplegar lista
                 </option>
                 {listEDDProyEmpEvaluador.map((valor) => (
                   <option
-                    selected={valor.idEDDProyEmp === idEDDProyEmpEvaluador ? "selected" : ""}
+                    selected={
+                      valor.idEDDProyEmp === idEDDProyEmpEvaluador
+                        ? "selected"
+                        : ""
+                    }
                     value={valor.idEDDProyEmp}
                   >
                     {valor.nomProyEmp}
@@ -274,12 +275,17 @@ const EditarEddEvalProyEmp = ({
                 id="input_proyemp"
                 placeholder="Seleccione la Proyecto + Evaluado"
                 onChange={({ target }) => setidEDDProyEmpEvaluado(target.value)}
-              ><option hidden value="">
+              >
+                <option hidden value="">
                   Desplegar lista
                 </option>
                 {listEDDProyEmpEvaluado.map((valor) => (
                   <option
-                    selected={valor.idEDDProyEmp === idEDDProyEmpEvaluado ? "selected" : ""}
+                    selected={
+                      valor.idEDDProyEmp === idEDDProyEmpEvaluado
+                        ? "selected"
+                        : ""
+                    }
                     value={valor.idEDDProyEmp}
                   >
                     {valor.nomProyEmp}
@@ -296,12 +302,11 @@ const EditarEddEvalProyEmp = ({
                 className="form-control"
                 name="input_proyemp"
                 id="input_proyemp"
-                type='number'
+                type="number"
                 value={cicloEvaluacion}
                 // placeholder=""
                 onChange={({ target }) => setcicloEvaluacion(target.value)}
-              >
-              </input>
+              ></input>
             </div>
 
             <Button

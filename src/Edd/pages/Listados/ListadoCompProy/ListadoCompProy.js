@@ -26,12 +26,13 @@ import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
 import "../ListadoCompProy/CompProy.css";
 import ExportCSV from "../../../../templates/exports/exportCSV";
+
 export default function ListadoCompProy() {
   // const [num_boton, setNumBoton] = useState(1);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   // const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
   // const [cantidadPaginas, setCantidadPaginas] = useState([]);
-  const nombreTabla = "eddevalproyemp";
+  const nombreTabla = "listadocompproy";
 
   const [EDDCompProy, setEDDCompProy] = useState([""]);
 
@@ -237,12 +238,12 @@ export default function ListadoCompProy() {
       /.*,,.*/.test(selectedProyecto) ||
       /[0]/.test(selectedProyecto)
     ) {
-      TopAlerts("AlMenosDosProyectos");
+      TopAlerts("01", "El proyecto no está seleccionado.");
       return;
     }
 
     if (!fechaIni || !fechaFin || !tipoComparacion || !tipoCargo) {
-      TopAlerts("CamposLlenos");
+      TopAlerts("02", "Uno o más campos se encuentran vacíos o nulos.");
       return; // Salir de la función si los campos no están llenos
     }
 
@@ -609,7 +610,7 @@ export default function ListadoCompProy() {
                 </Link>
               </td>
               <td>
-               <ExportCSV dashcomproy={EDDCompProy}/> 
+               <ExportCSV inputData={EDDCompProy} nomTabla={nombreTabla}/> 
               </td>
             </tr>
           </table>

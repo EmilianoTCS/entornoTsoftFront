@@ -49,8 +49,9 @@ const InsertarEDDEvalRespPreg = ({ isActiveEDDEvalRespPreg, cambiarEstado, EDDEv
       isActive: true
     };
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarEDDEvalRespPreg(EDDEvalRespPreg);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDEvalRespPreg(datos);
     });
   }
 

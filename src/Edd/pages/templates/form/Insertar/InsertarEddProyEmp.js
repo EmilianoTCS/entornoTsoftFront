@@ -51,7 +51,7 @@ const InsertarEDDProyEmp = ({
   }
 
   function SendData(e) {
-    // e.preventDefault();
+    e.preventDefault();
     const url = "pages/insertar/insertarEddProyEmp.php";
     const operationUrl = "insertarEddProyEmp";
     var data = {
@@ -61,11 +61,10 @@ const InsertarEDDProyEmp = ({
       idEmpleado: idEmpleado,
       isActive: true,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-        TopAlerts("successCreated");
-      actualizarEDDProyEmp(EDDProyEmp);
-      console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDProyEmp(datos);
     });
   }
 

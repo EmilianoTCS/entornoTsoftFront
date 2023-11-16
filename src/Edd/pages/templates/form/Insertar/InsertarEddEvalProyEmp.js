@@ -36,11 +36,9 @@ const InsertarEDDEvalProyEmp = ({
     cambiarEstado(false);
   };
 
-
-  const [idProyecto, setidProyecto] = useState('');
+  const [idProyecto, setidProyecto] = useState("");
   const [listProyecto, setlistProyecto] = useState([""]);
   const [selectedProyecto, setSelectedProyecto] = useState("");
-
 
   // ----------------------FUNCIONES----------------------------
 
@@ -48,11 +46,10 @@ const InsertarEDDEvalProyEmp = ({
     const url = "pages/auxiliares/listadoProyectoForms.php";
     const operationUrl = "listados";
     var data = {
-      idServicio: '',
+      idServicio: "",
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setlistProyecto(data);
-      // console.log(data);
     });
   }
 
@@ -78,8 +75,6 @@ const InsertarEDDEvalProyEmp = ({
   //   });
   // }
 
-
-
   function obtenerEvaluadorEvaluado(idProyecto) {
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
@@ -97,19 +92,15 @@ const InsertarEDDEvalProyEmp = ({
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
       setlistEDDEvaluacion(response)
-
     );
   }
-
-
-
 
   function SendData(e) {
     e.preventDefault();
 
     if (idEDDProyEmpEvaluado === idEDDProyEmpEvaluador) {
       // Los valores son iguales, mostrar una alerta
-      TopAlerts('MismoEvaludorYEvaluado')
+      TopAlerts("MismoEvaludorYEvaluado");
     } else {
       const url = "pages/insertar/insertarEddEvalProyEmp.php";
       const operationUrl = "insertarEddEvalProyEmp";
@@ -122,20 +113,16 @@ const InsertarEDDEvalProyEmp = ({
         cicloEvaluacion: 0,
         isActive: true,
       };
-      console.log(data);
       SendDataService(url, operationUrl, data).then((response) => {
-
-        if (response[0].OUT_CODRESULT !== '00') {
+        if (response[0].OUT_CODRESULT !== "00") {
           TopAlertsError(response[0].OUT_CODRESULT, response[0].OUT_MJERESULT);
         } else {
-          TopAlerts("successCreated");
+          TopAlerts("00");
           actualizarEDDEvalProyEmp(EDDEvalProyEmp);
-          console.log(response);
         }
       });
     }
   }
-
 
   function actualizarEDDEvalProyEmp(response) {
     listEDDEvalProyEmp.push(response);
@@ -146,17 +133,17 @@ const InsertarEDDEvalProyEmp = ({
     obtenerEvaluadorEvaluado();
     //  obtenerEvaluador();
     //  obtenerEvaluado();
-    obtenerProyecto()
+    obtenerProyecto();
   }, []);
-
-
 
   // ----------------------RENDER----------------------------
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Asociar evaluación al <br></br>proyecto - colaborador</Modal.Title>
+          <Modal.Title>
+            Asociar evaluación al <br></br>proyecto - colaborador
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
@@ -204,8 +191,6 @@ const InsertarEDDEvalProyEmp = ({
                   </option>
                 ))}
               </select>
-
-
             </div>
             <div className="form-group">
               <label htmlFor="input_proyemp">Proyecto - Evaluador: </label>
@@ -234,7 +219,9 @@ const InsertarEDDEvalProyEmp = ({
                 name="input_proyemp"
                 id="input_proyemp"
                 placeholder="Seleccione la Proyecto + Evaluador"
-                onChange={({ target }) => setidEDDProyEmpEvaluador(target.value)}
+                onChange={({ target }) =>
+                  setidEDDProyEmpEvaluador(target.value)
+                }
               >
                 <option hidden value="">
                   Desplegar lista
@@ -244,10 +231,7 @@ const InsertarEDDEvalProyEmp = ({
                   <option value={valor.idEDDProyEmp}>{valor.nomProyEmp}</option>
                 ))}
               </select>
-
             </div>
-
-
 
             <Button
               variant="secondary"

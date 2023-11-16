@@ -34,12 +34,10 @@ const EditarEddEvalCompetencia = ({
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idEDDEvalCompetencia, nombreTabla: nombreTabla};
+    var data = { idRegistro: idEDDEvalCompetencia, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
       setnomCompetencia(response[0].nomCompetencia);
-
     });
   }, [idEDDEvalCompetencia]);
 
@@ -50,18 +48,24 @@ const EditarEddEvalCompetencia = ({
     var data = {
       usuarioModificacion: userData.usuario,
       idEDDEvalCompetencia: idEDDEvalCompetencia,
-      nomCompetencia: nomCompetencia === "" ? responseID[0].nomCompetencia : nomCompetencia,
-      isActive:true,
+      nomCompetencia:
+        nomCompetencia === "" ? responseID[0].nomCompetencia : nomCompetencia,
+      isActive: true,
     };
-console.log(data);
+  
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      actualizarEddEvalCompetencia(EddEvalCompetencia);console.log(response);
+      console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEddEvalCompetencia(datos);
     });
 
     function actualizarEddEvalCompetencia(EddEvalCompetencia) {
       const nuevosEddEvalCompetencia = listEddEvalCompetencia.map((c) =>
-        c.idEddEvalCompetencia === EddEvalCompetencia.idEddEvalCompetencia ? EddEvalCompetencia : c
+        c.idEddEvalCompetencia === EddEvalCompetencia.idEddEvalCompetencia
+          ? EddEvalCompetencia
+          : c
       );
       setEddEvalCompetencia(nuevosEddEvalCompetencia);
     }
@@ -85,11 +89,13 @@ console.log(data);
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
-              <label htmlFor="input_nombreDelEddEvalCompetencia">Competencia:</label>
+            <div>
+              <label htmlFor="input_nombreDelEddEvalCompetencia">
+                Competencia:
+              </label>
               <input
-              value={nomCompetencia}
-               style={{ textTransform: "uppercase" }}
+                value={nomCompetencia}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre"
                 type="text"
                 className="form-control"

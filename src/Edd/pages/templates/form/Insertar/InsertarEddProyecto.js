@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
@@ -8,7 +8,11 @@ import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }) => {
+const InsertarEDDProyecto = ({
+  isActiveEDDProyecto,
+  cambiarEstado,
+  EDDProyecto,
+}) => {
   // ----------------------CONSTANTES----------------------------
   const [nomProyecto, setnomProyecto] = useState("");
   const [fechaIni, setfechaIni] = useState("");
@@ -34,22 +38,21 @@ const InsertarEDDProyecto = ({ isActiveEDDProyecto, cambiarEstado, EDDProyecto }
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
     var data = {
-        idCliente: '',
+      idCliente: "",
     };
     SendDataService(url, operationUrl, data).then((data) => {
-        setlistServicio(data);
+      setlistServicio(data);
     });
+  }
 
-}
+  function obtenerTipoProyecto() {
+    const url = "pages/auxiliares/listadoTipoProyectos.php";
+    const operationUrl = "listados";
 
-function obtenerTipoProyecto() {
-  const url = "pages/auxiliares/listadoTipoProyectos.php";
-  const operationUrl = "listados";
-  
-  getDataService(url,operationUrl).then((data) => {
-    setlistTipoProyectos(data);
-  });
-}
+    getDataService(url, operationUrl).then((data) => {
+      setlistTipoProyectos(data);
+    });
+  }
 
   function SendData(e) {
     e.preventDefault();
@@ -61,14 +64,13 @@ function obtenerTipoProyecto() {
       fechaIni: fechaIni,
       fechaFin: fechaFin,
       tipoProyecto: tipoProyecto,
-      idServicio:idServicio,
-      isActive:true
+      idServicio: idServicio,
+      isActive: true,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts('successCreated');
-      console.log(response);
-      actualizarEDDProyecto(EDDProyecto);console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDProyecto(datos);
     });
   }
 
@@ -78,7 +80,7 @@ function obtenerTipoProyecto() {
 
   useEffect(function () {
     obtenerServicio();
-    obtenerTipoProyecto()
+    obtenerTipoProyecto();
   }, []);
 
   // ----------------------RENDER----------------------------
@@ -90,10 +92,10 @@ function obtenerTipoProyecto() {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_nombreDelEDDProyecto">Proyecto:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre del proyecto"
                 type="text"
                 className="form-control"
@@ -146,7 +148,9 @@ function obtenerTipoProyecto() {
                 </option>
 
                 {listTipoProyectos.map((valor) => (
-                  <option value={valor.subTipoConfDato}>{valor.subTipoConfDato}</option>
+                  <option value={valor.subTipoConfDato}>
+                    {valor.subTipoConfDato}
+                  </option>
                 ))}
               </select>
             </div>

@@ -37,7 +37,7 @@ const EditarEDDProyEmp = ({
     setcargoEnProy(responseID[0].cargoEnProy);
     setidProyecto(responseID[0].idProyecto);
     setidEmpleado(responseID[0].idEmpleado);
-    setReset(true)
+    setReset(true);
   };
 
   // ----------------------FUNCIONES----------------------------
@@ -45,7 +45,7 @@ const EditarEDDProyEmp = ({
     const url = "pages/auxiliares/listadoProyectoForms.php";
     const operationUrl = "listados";
     var data = {
-      idServicio: '',
+      idServicio: "",
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setlistProyecto(data);
@@ -64,12 +64,11 @@ const EditarEDDProyEmp = ({
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idEDDProyEmp, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
       setcargoEnProy(response[0].cargoEnProy);
       setidProyecto(response[0].idProyecto);
       setidEmpleado(response[0].idEmpleado);
-      setReset(true)
+      setReset(true);
     });
   }, [idEDDProyEmp]);
 
@@ -85,10 +84,11 @@ const EditarEDDProyEmp = ({
       idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
       isActive: true,
     };
-    console.log(data);
+
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts("successEdited");
-      actualizarEDDProyEmp(EDDProyEmp);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDProyEmp(datos);
     });
 
     function actualizarEDDProyEmp(EDDProyEmp) {
@@ -107,7 +107,7 @@ const EditarEDDProyEmp = ({
         obtenerProyecto();
       }
     },
-    [idEDDProyEmp,reset]
+    [idEDDProyEmp, reset]
   );
 
   // ----------------------RENDER----------------------------
@@ -115,7 +115,7 @@ const EditarEDDProyEmp = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-        <Modal.Title>Editar proyecto - empleado</Modal.Title>
+          <Modal.Title>Editar proyecto - empleado</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
@@ -132,7 +132,9 @@ const EditarEDDProyEmp = ({
               >
                 {listProyecto.map((valor) => (
                   <option
-                    selected={valor.idEDDProyecto === idProyecto ? "selected" : ""}
+                    selected={
+                      valor.idEDDProyecto === idProyecto ? "selected" : ""
+                    }
                     value={valor.idEDDProyecto}
                   >
                     {valor.nomProyecto}
@@ -170,18 +172,25 @@ const EditarEDDProyEmp = ({
                 id="input_nombreDelcargo"
                 onChange={({ target }) => setcargoEnProy(target.value)}
               >
-                <option value="Referente" selected={cargoEnProy.toUpperCase() === 'REFERENTE' ? true : ""}>
+                <option
+                  value="Referente"
+                  selected={
+                    cargoEnProy.toUpperCase() === "REFERENTE" ? true : ""
+                  }
+                >
                   REFERENTE
                 </option>
-                <option value="Colaborador" selected={cargoEnProy.toUpperCase() === 'COLABORADOR' ? true : ""}>
+                <option
+                  value="Colaborador"
+                  selected={
+                    cargoEnProy.toUpperCase() === "COLABORADOR" ? true : ""
+                  }
+                >
                   COLABORADOR
-                </option>                
-                
+                </option>
               </select>
             </div>
 
-            
-           
             <Button
               variant="secondary"
               type="submit"

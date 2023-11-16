@@ -55,11 +55,10 @@ const InsertarEmpSubsist = ({
       idSubsistema: idSubsistema,
       isActive: true,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts("successCreated");
-      actualizarEmpSubsist(EmpSubsist);
-      console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEmpSubsist(datos);
     });
   }
 
@@ -81,7 +80,7 @@ const InsertarEmpSubsist = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div className="form-group">
+            <div className="form-group">
               <label htmlFor="input_Empleado">Empleado: </label>
               <select
                 required
@@ -121,7 +120,6 @@ const InsertarEmpSubsist = ({
                 ))}
               </select>
             </div>
-
 
             <Button
               variant="secondary"

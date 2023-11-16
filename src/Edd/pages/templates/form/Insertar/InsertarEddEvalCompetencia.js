@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
@@ -8,7 +8,11 @@ import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-const InsertarEddEvalCompetencia = ({ isActiveEddEvalCompetencia, cambiarEstado, EddEvalCompetencia }) => {
+const InsertarEddEvalCompetencia = ({
+  isActiveEddEvalCompetencia,
+  cambiarEstado,
+  EddEvalCompetencia,
+}) => {
   // ----------------------CONSTANTES----------------------------
   const [nomCompetencia, setnomCompetencia] = useState("");
 
@@ -29,12 +33,12 @@ const InsertarEddEvalCompetencia = ({ isActiveEddEvalCompetencia, cambiarEstado,
     var data = {
       usuarioCreacion: userData.usuario,
       nomCompetencia: nomCompetencia,
-      isActive:true
+      isActive: true,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarEddEvalCompetencia(EddEvalCompetencia);console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEddEvalCompetencia(datos);
     });
   }
 
@@ -51,11 +55,12 @@ const InsertarEddEvalCompetencia = ({ isActiveEddEvalCompetencia, cambiarEstado,
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-
-          <div>
-              <label htmlFor="input_nombreDelEddEvalCompetencia">Competencia:</label>
+            <div>
+              <label htmlFor="input_nombreDelEddEvalCompetencia">
+                Competencia:
+              </label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre"
                 type="text"
                 className="form-control"

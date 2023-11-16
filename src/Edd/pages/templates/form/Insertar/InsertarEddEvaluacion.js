@@ -45,11 +45,11 @@ const InsertarEDDEvaluacion = ({
       descFormulario:descFormulario,
       isActive: true,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts("successCreated");
-      actualizarEDDEvaluacion(EDDEvaluacion);
-      console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDEvaluacion(datos);
+
     });
   }
 

@@ -50,12 +50,10 @@ const EditarEDDEvalRespPreg = ({
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idEDDEvalRespPreg, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
       setnomRespPreg(response[0].nomRespPreg);
       setordenRespPreg(response[0].ordenRespPreg);
       setidEDDEvalPregunta(response[0].idEDDEvalPregunta);
-
     });
   }, [idEDDEvalRespPreg]);
 
@@ -67,24 +65,29 @@ const EditarEDDEvalRespPreg = ({
       usuarioModificacion: userData.usuario,
       idEDDEvalRespPreg: idEDDEvalRespPreg,
       nomRespPreg: nomRespPreg === "" ? responseID[0].nomRespPreg : nomRespPreg,
-      ordenRespPreg: ordenRespPreg === "" ? responseID[0].ordenRespPreg : ordenRespPreg,
-      idEDDEvalPregunta: idEDDEvalPregunta === "" ? responseID[0].idEDDEvalPregunta : idEDDEvalPregunta,
+      ordenRespPreg:
+        ordenRespPreg === "" ? responseID[0].ordenRespPreg : ordenRespPreg,
+      idEDDEvalPregunta:
+        idEDDEvalPregunta === ""
+          ? responseID[0].idEDDEvalPregunta
+          : idEDDEvalPregunta,
       isActive: true,
     };
-    console.log(data);
+  
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      actualizarEDDEvalRespPreg(EDDEvalRespPreg); console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response;
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDEvalRespPreg(datos);
     });
-
-    function actualizarEDDEvalRespPreg(EDDEvalRespPreg) {
-      const nuevosEDDEvalRespPreg = listEDDEvalRespPreg.map((c) =>
-        c.idEDDEvalRespPreg === EDDEvalRespPreg.idEDDEvalRespPreg ? EDDEvalRespPreg : c
-      );
-      setEDDEvalRespPreg(nuevosEDDEvalRespPreg);
-    }
   }
-
+  function actualizarEDDEvalRespPreg(EDDEvalRespPreg) {
+    const nuevosEDDEvalRespPreg = listEDDEvalRespPreg.map((c) =>
+      c.idEDDEvalRespPreg === EDDEvalRespPreg.idEDDEvalRespPreg
+        ? EDDEvalRespPreg
+        : c
+    );
+    setEDDEvalRespPreg(nuevosEDDEvalRespPreg);
+  }
   useEffect(
     function () {
       if (idEDDEvalRespPreg !== null) {
@@ -104,8 +107,6 @@ const EditarEDDEvalRespPreg = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-
-
             <div className="form-group">
               <label htmlFor="input_EvalPregunta">Pregunta: </label>
               <select
@@ -118,7 +119,11 @@ const EditarEDDEvalRespPreg = ({
               >
                 {listEDDEvalPregunta.map((valor) => (
                   <option
-                    selected={valor.idEDDEvalPregunta === idEDDEvalPregunta ? "selected" : ""}
+                    selected={
+                      valor.idEDDEvalPregunta === idEDDEvalPregunta
+                        ? "selected"
+                        : ""
+                    }
                     value={valor.idEDDEvalPregunta}
                   >
                     {valor.nomPregunta}
@@ -155,24 +160,12 @@ const EditarEDDEvalRespPreg = ({
                   {nomRespPreg}
                 </option>
 
-                <option value="<TEXTO>">
-                  TIPO TEXTO
-                </option>
-                <option disabled>
-                  --ALTERNATIVAS--
-                </option>
-                <option value="MUY BUENO">
-                  MUY BUENO
-                </option>
-                <option value="BUENO">
-                  BUENO
-                </option><option value="MEDIO">
-                  MEDIO
-                </option>
-                <option value="NO SATISFACTORIO">
-                  NO SATISFACTORIO
-                </option>
-
+                <option value="<TEXTO>">TIPO TEXTO</option>
+                <option disabled>--ALTERNATIVAS--</option>
+                <option value="MUY BUENO">MUY BUENO</option>
+                <option value="BUENO">BUENO</option>
+                <option value="MEDIO">MEDIO</option>
+                <option value="NO SATISFACTORIO">NO SATISFACTORIO</option>
               </select>
             </div>
 

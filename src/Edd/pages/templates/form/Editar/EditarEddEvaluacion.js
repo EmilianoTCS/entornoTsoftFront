@@ -27,7 +27,7 @@ const EditarEDDEvaluacion = ({
   const [descFormulario, setdescFormulario] = useState("");
 
   const listEDDEvaluacion = EDDEvaluacion;
-  var idEDDEvaluacion = idEDDEvaluacion
+  var idEDDEvaluacion = idEDDEvaluacion;
 
   const show = isActiveEditEDDEvaluacion;
 
@@ -37,8 +37,7 @@ const EditarEDDEvaluacion = ({
     setfechaFin(responseID[0].fechaFin);
     settipoEvaluacion(responseID[0].tipoEvaluacion);
     setnomEvaluacion(responseID[0].nomEvaluacion);
-    setReset(true)
-
+    setReset(true);
   };
 
   // ----------------------FUNCIONES----------------------------
@@ -48,13 +47,11 @@ const EditarEDDEvaluacion = ({
     var data = { idRegistro: idEDDEvaluacion, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       setResponseID(response);
-      setReset(false)
+      setReset(false);
       settipoEvaluacion(response[0].tipoEvaluacion);
       setfechaIni(response[0].fechaIni);
       setfechaFin(response[0].fechaFin);
       setnomEvaluacion(response[0].nomEvaluacion);
-
-
     });
   };
 
@@ -65,18 +62,22 @@ const EditarEDDEvaluacion = ({
     var data = {
       usuarioModificacion: userData.usuario,
       idEDDEvaluacion: idEDDEvaluacion,
-      nomEvaluacion: nomEvaluacion === "" ? responseID[0].nomEvaluacion : nomEvaluacion,
-      tipoEvaluacion: tipoEvaluacion === "" ? responseID[0].tipoEvaluacion : tipoEvaluacion,
+      nomEvaluacion:
+        nomEvaluacion === "" ? responseID[0].nomEvaluacion : nomEvaluacion,
+      tipoEvaluacion:
+        tipoEvaluacion === "" ? responseID[0].tipoEvaluacion : tipoEvaluacion,
       fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
       fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
-      descFormulario: descFormulario === "" ? responseID[0].descFormulario : descFormulario,
+      descFormulario:
+        descFormulario === "" ? responseID[0].descFormulario : descFormulario,
 
       isActive: true,
     };
-    console.log(data);
+
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      actualizarEDDEvaluacion(EDDEvaluacion); console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarEDDEvaluacion(datos);
     });
 
     function actualizarEDDEvaluacion(EDDEvaluacion) {
@@ -121,23 +122,32 @@ const EditarEDDEvaluacion = ({
               />
             </div>
             <div className="form-group">
-              <label htmlFor="input_nombreDelTipoEvaluacion">Tipo evaluación:</label>
+              <label htmlFor="input_nombreDelTipoEvaluacion">
+                Tipo evaluación:
+              </label>
               <select
                 required
                 className="form-control"
                 name="input_nombreDelTipoEvaluacion"
                 id="input_nombreDelTipoEvaluacion"
-
-
                 onChange={({ target }) => settipoEvaluacion(target.value)}
               >
-                <option value="Referente" selected={tipoEvaluacion.toUpperCase() === 'REFERENTE' ? true : ""}>
+                <option
+                  value="Referente"
+                  selected={
+                    tipoEvaluacion.toUpperCase() === "REFERENTE" ? true : ""
+                  }
+                >
                   REFERENTE
                 </option>
-                <option value="Colaborador" selected={tipoEvaluacion.toUpperCase() === 'COLABORADOR' ? true : ""}>
+                <option
+                  value="Colaborador"
+                  selected={
+                    tipoEvaluacion.toUpperCase() === "COLABORADOR" ? true : ""
+                  }
+                >
                   COLABORADOR
                 </option>
-
               </select>
             </div>
             <div>
