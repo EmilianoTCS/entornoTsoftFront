@@ -1,38 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Container, Table, Tooltip, OverlayTrigger } from "react-bootstrap";
+import React, { useState, useEffect} from "react";
+import { Table} from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
-import { useRoute } from "wouter";
 
 import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
-import { RiEditBoxFill } from "react-icons/ri";
-import { BsFillKeyFill, BsFillTrashFill } from "react-icons/bs";
-import { AiFillBook } from "react-icons/ai";
-
-import { MdDashboard } from "react-icons/md";
-import { SiSubstack } from "react-icons/si";
-import { FaComments } from "react-icons/fa";
-import { BiSolidSend } from "react-icons/bi";
-import { FaQuestionCircle } from "react-icons/fa";
-
-import Select from "react-select";
 
 import "../TablasStyles.css";
 import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
 import TopAlerts from "../../../../templates/alerts/TopAlerts";
-import Paginador from "../../../../templates/Paginador/Paginador";
-import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
 import "../ListadoCompProy/CompProy.css";
 import ExportCSV from "../../../../templates/exports/exportCSV";
 
 export default function ListadoCompProy() {
-  // const [num_boton, setNumBoton] = useState(1);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-  // const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
-  // const [cantidadPaginas, setCantidadPaginas] = useState([]);
+  var date = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3)
   const nombreTabla = "listadocompproy";
+  const [nombreArchivoCSV, setNombreArchivoCSV] = useState("");
 
   const [EDDCompProy, setEDDCompProy] = useState([""]);
 
@@ -159,11 +144,11 @@ export default function ListadoCompProy() {
     const ciclos = {};
     let auxCantRespOK = 0;
     let auxCantResp = 0;
-  
+
     // Iteramos sobre el array original para agrupar valores por ciclo
     response.forEach((item) => {
       const ciclo = item.cicloEvaluacion;
-  
+
       // Si el ciclo no existe, inicializa las variables auxiliares
       if (!ciclos[ciclo]) {
         auxCantRespOK = 0;
@@ -175,11 +160,11 @@ export default function ListadoCompProy() {
           cantResp: 0,
         };
       }
-  
+
       // Acumula cantRespOK y cantResp por cada ciclo
       auxCantRespOK += parseInt(item.cantRespOK);
       auxCantResp += parseInt(item.cantResp);
-  
+
       // Si es el primer registro para el ciclo, copia los valores originales
       if (auxCantResp === parseInt(item.cantResp)) {
         for (const key in item) {
@@ -188,29 +173,28 @@ export default function ListadoCompProy() {
           }
         }
       }
-  
+
       // Actualiza las cantidades acumuladas en el objeto del ciclo
       ciclos[ciclo].cantRespOK = auxCantRespOK;
       ciclos[ciclo].cantResp = auxCantResp;
     });
-  
+
     // Calcular el porcentaje de aprobación para cada ciclo
     for (const ciclo in ciclos) {
       const promedioAprob =
         (ciclos[ciclo].cantRespOK * 100) / ciclos[ciclo].cantResp;
       ciclos[ciclo].porcentajeAprob = promedioAprob.toFixed(2);
     }
-  
+
     // Convertir el objeto a un array de objetos
     const result = Object.values(ciclos);
-  
+
     // Actualizar el estado o realizar otras acciones si es necesario
     setNuevosDatos(result);
     setLodadedNuevosDatos(true);
-  
+
     return result;
   }
-  
 
   function SendData(data) {
     var url = "pages/listados/listadoCompetenciasGeneralEval.php";
@@ -218,6 +202,13 @@ export default function ListadoCompProy() {
     SendDataService(url, operationUrl, data).then((data) => {
       setEDDCompProy(data);
       setNuevosDatos(calcularPromedioCompetenciasPorCiclo(data));
+      setNombreArchivoCSV(
+        "list_comp_proy_" +
+          data[0].nomProyecto.substr(0, 10) +
+          "_" +
+          date
+      );
+      console.log(nombreArchivoCSV);
     });
   }
 
@@ -262,7 +253,6 @@ export default function ListadoCompProy() {
 
     // Después de realizar la búsqueda, establece el estado de busquedaRealizada en true
     setBusquedaRealizada(true);
-
     SendData(data);
   };
 
@@ -610,7 +600,10 @@ export default function ListadoCompProy() {
                 </Link>
               </td>
               <td>
-               <ExportCSV inputData={EDDCompProy} nomTabla={nombreTabla}/> 
+                <ExportCSV
+                  inputData={EDDCompProy}
+                  nomTabla={nombreArchivoCSV}
+                />
               </td>
             </tr>
           </table>

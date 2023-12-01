@@ -1,9 +1,20 @@
 import React from "react";
 import * as XLSX from "xlsx";
-import "./exportCSV.css";
+import "./export.css";
 import TopAlerts from "../alerts/TopAlerts";
 
 const ExportCSV = ({ inputData, nomTabla }) => {
+
+// Extraer números usando una expresión regular
+var matchResult = nomTabla.match(/\d+/g);
+
+// Verificar si hay coincidencias antes de usar map
+var numeros = matchResult ? matchResult.map(Number) : [];
+
+// Extraer texto eliminando los números
+var texto = nomTabla.replace(/\d+/g, '');
+
+console.log(texto);
   const exportData = (format) => {
 
     if (inputData.length === 0 || inputData[0] === '') {
@@ -47,7 +58,7 @@ const ExportCSV = ({ inputData, nomTabla }) => {
 
       const ws = XLSX.utils.json_to_sheet(inputData);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, nomTabla);
+      XLSX.utils.book_append_sheet(wb, ws, texto);
 
       /* Genera un archivo XLSX*/
       XLSX.writeFile(wb, `${nomTabla}.xlsx`);

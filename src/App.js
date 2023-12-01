@@ -52,6 +52,8 @@ import FormularioEvaluacionExterno from "./Edd/pages/Listados/FormularioEvaluaci
 import CargaSinDatos from "./Edd/pages/Listados/FormularioEvaluacion/CargaSinDatos";
 import ListadoCompProy from "./Edd/pages/Listados/ListadoCompProy/ListadoCompProy";
 import DashboardCompProy from "./Edd/pages/Listados/ListadoCompProy/DashboardCompProy";
+import ListadoEddResumenEval from "./Edd/pages/Listados/ListadoEddResumenEval/ListadoEddResumenEval.js";
+import DashboardEddResumenEval from "./Edd/pages/Listados/ListadoEddResumenEval/DashboardEddResumenEval.js";
 
 
 function App() {
@@ -141,6 +143,7 @@ function App() {
 
             <Route element={<ListadoCompProy />} path="/listadoCompProy"></Route>
             <Route element={<DashboardCompProy />} path="/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion"></Route>
+            <Route element={<DashboardEddResumenEval />} path="/DashboardEddResumenEval/:idCliente/:idServicio/:idProyecto/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion"></Route>
 
 
             <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto/:cicloEvaluacion"></Route>

@@ -1,0 +1,51 @@
+.containerSemiCirculos {
+  background-color: rgb(245, 245, 245);
+  padding: 10px;
+  width: 900px;
+  margin: auto;
+  margin-top: 20px;
+  border-radius: 20px 20px 0 0;
+}
+
+.containerBarras {
+  background-color: rgb(245, 245, 245);
+  padding: 10px;
+  width: 900px;
+  margin: auto;
+  margin-top: 15px;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  justify-content: center;
+  align-content: space-between;
+}
+
+.colaboradores-card {
+  background-color: rgb(185, 130, 85);
+  padding: 10px;
+  height: 40px;
+  width: 250px;
+  color: white;
+  border-radius: 7px;
+}
+.colaboradores-card h3,
+p {
+  font-size: 13pt;
+}
+.containerCardsResp {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnOcultarDetalle {
+  background-color: #e10b1c;
+  border-color: white;
+  border: none;
+  border: #e10b1c solid 1px;
+  color: white;
+  font-size: 10pt;
+  border-radius: 5px;
+  width: 60px;
+}

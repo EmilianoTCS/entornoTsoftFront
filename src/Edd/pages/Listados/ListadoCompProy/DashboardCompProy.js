@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from "react";
 
-import { Navigate, useParams, Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useRoute } from "wouter";
 import "../TablasStyles.css";
 import "../ListadoCompProy/CompProy.css";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
-import { FiArrowUp, FiArrowDown } from "react-icons/fi";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
-import { MdDashboard } from "react-icons/md";
 
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+
+import ExportPDF from "../../../../templates/exports/exportPDF";
 import "../BtnInsertar.css";
-import {
-  buildStyles,
-  CircularProgressbarWithChildren,
-} from "react-circular-progressbar";
 
 import ProgressBar from "react-bootstrap/ProgressBar";
 
 // GRAFICO LINEAS
-import { Bar, Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 import {
@@ -35,6 +31,7 @@ import {
   Filler,
   ArcElement,
 } from "chart.js";
+import ExtraGraph from "./ExtraGraph";
 
 ChartJS.register(
   CategoryScale,
@@ -67,7 +64,21 @@ export default function DashboardCompProy() {
   const [DashCompProy, setDashCompProy] = useState([""]);
   const [listConfigCompColorFlechas, setListConfigCompColorFlechas] =
     useState("");
+  const nombreTabla = "dashCompProy";
+  const [nombrePDF, setNombrePDF] = useState("");
+  var date = new Date()
+    .toISOString()
+    .replace(/[^0-9]/g, "")
+    .slice(0, -3);
 
+  const [activeGraph, setActiveGraph] = useState(null);
+
+  const [paramsExtraGraph, setParams] = useState({
+    idEDDEvaluacion: "",
+    nomEvaluacion: "",
+    idEDDProyecto: "",
+    cicloEvaluacion: "",
+  });
   //---------------------- CONFIGS ----------------------
 
   function GetConfigCompColorFlechas() {
@@ -111,14 +122,17 @@ export default function DashboardCompProy() {
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setDashCompProy(data);
-      console.log("InformaciónReponse", data);
+      // console.log("InformaciónReponse", data);
+      setNombrePDF(
+        "Dash_comp_proy_" + tipoCargo + "_" + data[0].nomProyecto + "_" + date
+      );
     });
   }
   useEffect(() => {
     SendData();
     GetConfigCompColorFlechas();
     GetDataLinks();
-  }, []);
+  }, [activeGraph]);
 
   //---------------------- GRAFICOS ----------------------
 
@@ -126,14 +140,16 @@ export default function DashboardCompProy() {
     // FUERTE
     // "#B71C1C", // Rojo              1
     // "#303F9F", // Azul              2
-    "#8BC34A", // Verde               3
+    // "#8BC34A", // Verde               3
+    "#828282", // GRIS               3
     // "#FDD835", // Amarillo              4
     "#F48FB1", // Rosa              5
-    "#00796B", // Cyan                  6
+    // "#00796B", // Cyan                  6
     // "#8E24AA", // Violeta              7
-    "#EF6C00", // Naranja              8
+    // "#EF6C00", // Naranja              8
     "#03A9F4", // Celeste              9
-    "#795548", // Verde agua            10
+    // "#795548", // Verde agua            10
+    "#c24be3", // Verde agua            10
 
     // CLAROS
     // "#EF9A9A", // Rojo              1
@@ -213,6 +229,7 @@ export default function DashboardCompProy() {
     const options = {
       responsive: true,
       animation: true,
+      devicePixelRatio: 4,
       plugins: {
         legend: {
           display: true,
@@ -390,12 +407,12 @@ export default function DashboardCompProy() {
     const competencias = [
       ...new Set(DashCompProy.map((item) => item.nomCompetencia)),
     ];
-  
+
     const datasets = ciclosConDatos.map((ciclo, index) => {
       const data = competencias.map((competencia) => {
         let totalCompetenciasOK = 0;
         let totalCompetencias = 0;
-  
+
         DashCompProy.forEach((item) => {
           if (
             item.cicloEvaluacion === ciclo &&
@@ -405,15 +422,15 @@ export default function DashboardCompProy() {
             totalCompetencias += parseInt(item.cantResp);
           }
         });
-  
+
         const porcentaje =
           totalCompetencias === 0
             ? 0
             : (totalCompetenciasOK * 100) / totalCompetencias;
-  
+
         return porcentaje.toFixed(2);
       });
-  
+
       return {
         // type: "line",
         label: `Ciclo ${ciclo}`,
@@ -425,15 +442,16 @@ export default function DashboardCompProy() {
         pointBackgroundColor: predefinedColors[index % predefinedColors.length],
       };
     });
-  
+
     const data = {
       labels: competencias,
       datasets: datasets,
     };
-  
+
     const options = {
       responsive: true,
       animation: true,
+      devicePixelRatio: 4,
       plugins: {
         legend: {
           display: true,
@@ -449,10 +467,9 @@ export default function DashboardCompProy() {
         },
       },
     };
-  
+
     return <Bar data={data} options={options} />;
   }
-  
 
   // function countCompetenciasPorCiclo() {
   //   var returnArray = [];
@@ -654,12 +671,11 @@ export default function DashboardCompProy() {
     const diferencias = calcularDiferencias(promediosPorCiclo);
     var arrayReturn = [];
 
-    // console.log(datos);
     Object.entries(promediosPorCiclo).map(([ciclo, promedio], index) => {
       Object.entries(datosLinks).map(([item, data]) => {
         if (data.cargoEnProy === tipoCargo && data.cicloEvaluacion === ciclo) {
           arrayReturn.push(
-            <div key={index} style={{ marginTop: "10px",  }}>
+            <div key={index} style={{ marginTop: "10px" }}>
               <div className="ciclo">
                 <b>
                   Ciclo: {ciclo} - {promedio.fechasIni}
@@ -691,12 +707,19 @@ export default function DashboardCompProy() {
                   fontWeight: "600",
                 }}
               />
-              <Link
-                to={`/homePageEDD/${data.idEDDEvaluacion}/${data.nomEvaluacion}/${data.idProyecto}/${data.cicloEvaluacion}`}
+              <button
                 className="btnRedirect"
+                onClick={() => {
+                  ActiveExtraGraph(
+                    data.idEDDEvaluacion,
+                    data.nomEvaluacion,
+                    data.idProyecto,
+                    data.cicloEvaluacion
+                  );
+                }}
               >
-                <button className="btnRedirect">Más información</button>
-              </Link>
+                Más información
+              </button>
             </div>
           );
         }
@@ -715,6 +738,24 @@ export default function DashboardCompProy() {
       </div>
     );
   }
+
+  //---------------------- MAS INFO ----------------------
+
+  const ActiveExtraGraph = (
+    idEDDEvaluacion,
+    nomEvaluacion,
+    idProyecto,
+    cicloEvaluacion
+  ) => {
+    setActiveGraph(true);
+
+    setParams({
+      idEDDEvaluacion: idEDDEvaluacion,
+      nomEvaluacion: nomEvaluacion,
+      idEDDProyecto: idProyecto,
+      cicloEvaluacion: cicloEvaluacion,
+    });
+  };
 
   //---------------------- MAIN RENDER ----------------------
 
@@ -747,6 +788,7 @@ export default function DashboardCompProy() {
             </div>
             <br></br>
             {Info()}
+
             <table id="fondoTablaDashCompProy">
               {/* <tr>{countCompetenciasPorCiclo()}</tr> */}
               <tr>
@@ -758,7 +800,6 @@ export default function DashboardCompProy() {
                     width: "530px",
                     alignItems: "center",
                     alignContent: "center",
-                    borderRadius: "0px 0px 30px 0px",
                   }}
                 >
                   <h5
@@ -772,53 +813,31 @@ export default function DashboardCompProy() {
                 </div>
               </tr>
             </table>
-
-            <table>
-              <th>
-                {/* <div
-                  className="bg-light mx-auto px-2 border "
-                  style={{
-                    width: "550px",
-                    height: "370px",
-                    marginTop: "10px",
-                    alignItems: "center",
-                    alignContent: "center",
-                    borderRadius: "0px 0px 0px 30px",
-                  }}
-                >
-                  <h4
-                    style={{
-                      textAlign: "center",
-                    }}
-                  >
-                    Tendencia '% de aprobación' de competencias por ciclo
-                  </h4>
-                  {LineChart()}
-                </div> */}
-              </th>
-              <th>
-                {/* <div
-                  className="bg-light mx-auto px-2 border "
-                  style={{
-                    width: "550px",
-                    height: "370px",
-                    marginTop: "10px",
-                    alignItems: "center",
-                    alignContent: "center",
-                    borderRadius: "0px 0px 30px 0px",
-                  }}
-                >
-                  <h4
-                    style={{
-                      textAlign: "center",
-                    }}
-                  >
-                    Tendencia '% de aprobación' de ciclos por competencia
-                  </h4>
-                  {LineChartInvertido()}
-                </div> */}
-              </th>
-            </table>
+            <div
+              style={{
+                backgroundColor: "white",
+                marginTop: "10px",
+                borderRadius: "0 0 30px 30px",
+                marginBottom: "10px",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+              className="beforeBreakGraph"
+            >
+              {activeGraph ? (
+                <ExtraGraph
+                  idEDDEvaluacion={paramsExtraGraph.idEDDEvaluacion}
+                  nomEvaluacion={paramsExtraGraph.nomEvaluacion}
+                  idEDDProyecto={paramsExtraGraph.idEDDProyecto}
+                  cicloEvaluacion={paramsExtraGraph.cicloEvaluacion}
+                  setActiveGraph={setActiveGraph}
+                  activeGraph={activeGraph}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+            <ExportPDF nombreTabla={nombrePDF} />
           </td>
         </tr>
       </table>

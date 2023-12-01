@@ -82,12 +82,12 @@ export default function FormularioEvaluacionRespondida() {
         verEnDashboard: false,
         ordenDashboard: null,
       };
-      console.log(data);
+      console.log("data", data);
 
-      SendDataService(url, operationUrl, data).then((response) => {
-        console.log("response sv", response);
-        actualizarRespuesta(response[0]);
-      });
+      // SendDataService(url, operationUrl, data).then((response) => {
+      //   console.log("response sv", response);
+      //   actualizarRespuesta(response[0]);
+      // });
     }
   }
 
@@ -140,7 +140,7 @@ export default function FormularioEvaluacionRespondida() {
                     setIdEDDEvalProyEmp(idEDDEvalPregunta.idEDDEvalProyResp);
                     setDisableInputText(!disableInputText);
                   }}
-                />
+                />  
               </div>
               <div>
                 <>
