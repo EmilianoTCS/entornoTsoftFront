@@ -46,7 +46,7 @@ import DiseñoDashboardGrafico from "./Edd/pages/DiseñoDashboard/DiseñoDashboa
 import DiseñoDashboardTabla from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTabla";
 import DiseñoTablaLineaReferente from "./Edd/pages/DiseñoDashboard/DiseñoTablaLineaReferente";
 import UnReferenteDiseño from "./Edd/pages/DiseñoDashboard/1Ref";
-import RedirectErrorMail from "./Edd/pages/Listados/ListadoEddEvalProyEmp/RedirectErrorMail"
+import RedirectErrorMail from "./Edd/pages/Listados/ListadoEddEvalProyEmp/RedirectErrorMail";
 import LoginVerif from "./pages/login/loginVerif";
 import FormularioEvaluacionExterno from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacionExterno";
 import CargaSinDatos from "./Edd/pages/Listados/FormularioEvaluacion/CargaSinDatos";
@@ -55,6 +55,14 @@ import DashboardCompProy from "./Edd/pages/Listados/ListadoCompProy/DashboardCom
 import ListadoEddResumenEval from "./Edd/pages/Listados/ListadoEddResumenEval/ListadoEddResumenEval.js";
 import DashboardEddResumenEval from "./Edd/pages/Listados/ListadoEddResumenEval/DashboardEddResumenEval.js";
 
+//IHH
+import IHH_ListadoAcop from "./IHH/pages/ListadoAcop/ihh_ListadoAcop.js";
+import IHH_ListadoElementoImp from "./IHH/pages/ListadoElementoImp/ihh_ListadoElementoImp.js";
+import IHH_ListadoImpugnacionEmp from "./IHH/pages/ListadoImpugnacionEmp/ihh_ListadoImpugnacionEmp.js";
+import IHH_ListadoNotaImpugnacion from "./IHH/pages/ListadoNotaImpugnacion/ihh_ListadoNotaImpugnacion.js";
+import IHH_ListadoPeriodo from "./IHH/pages/ListadoPeriodo/ListadoPeriodo.js";
+import IHH_ListadoTipoElemento from "./IHH/pages/ListadoTipoElemento/ListadoTipoElemento.js";
+import IHH_ListadoTipoPeriodo from "./IHH/pages/ListadoTipoPeriodo/ListadoTipoPeriodo.js";
 
 function App() {
   return (
@@ -65,14 +73,16 @@ function App() {
           <Route element={<Login />} path="/Login"></Route>
           <Route element={<LoginVerif />} path="/LoginVerif"></Route>
 
-        
-          <Route element={<RedirectErrorMail />} path="/RedirectErrorMail"></Route>
+          <Route
+            element={<RedirectErrorMail />}
+            path="/RedirectErrorMail"
+          ></Route>
           <Route element={<CargaSinDatos />} path="/CargaSinDatos"></Route>
           <Route
             element={<FormularioEvaluacionExterno />}
             path="/listadoRespPregEvaluacionesExterno/:idEvaluacion/:idEDDProyEmpEvaluador/:cicloEvaluacion"
           ></Route>
-          
+
           <Route element={<PrivateRoute />}>
             <Route path="/home" element={<HomePage />}></Route>
             {/* ACADEMIA */}
@@ -136,23 +146,43 @@ function App() {
             {/* ------------------------------------------------------------------------------------------ */}
 
             {/* DASHBOARD */}
-            <Route element={<HomePageEDD />} path="/homePageEDD/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"></Route>
-            <Route element={<GraficosDashboard />} path="/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"></Route>
-            <Route element={<ComentariosDashboard />} path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"></Route>
+            <Route
+              element={<HomePageEDD />}
+              path="/homePageEDD/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"
+            ></Route>
+            <Route
+              element={<GraficosDashboard />}
+              path="/GraficosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"
+            ></Route>
+            <Route
+              element={<ComentariosDashboard />}
+              path="/ComentariosDashboard/:idEvaluacion/:nomEvaluacion/:idEDDProyecto/:cicloEvaluacion"
+            ></Route>
             {/* ------------------- */}
 
-            <Route element={<ListadoCompProy />} path="/listadoCompProy"></Route>
-            <Route element={<DashboardCompProy />} path="/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion"></Route>
-            <Route element={<DashboardEddResumenEval />} path="/DashboardEddResumenEval/:idCliente/:idServicio/:idProyecto/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion"></Route>
+            <Route
+              element={<ListadoCompProy />}
+              path="/listadoCompProy"
+            ></Route>
+            <Route
+              element={<DashboardCompProy />}
+              path="/DashboardCompProy/:selectedClients/:selectedServicio/:selectedProyecto/:tipoComparacion/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion"
+            ></Route>
+            <Route
+              element={<DashboardEddResumenEval />}
+              path="/DashboardEddResumenEval/:idCliente/:idServicio/:idProyecto/:tipoCargo/:fechaIni/:fechaFin/:cicloEvaluacion"
+            ></Route>
 
-
-            <Route element={<AlertOpoDes />} path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto/:cicloEvaluacion"></Route>
+            <Route
+              element={<AlertOpoDes />}
+              path="/AlertasOporDes/:idEvaluacion/:nomEvaluacion/:tipoEvaluacion/:idEDDProyecto/:cicloEvaluacion"
+            ></Route>
             {/* EDD */}
             <Route
-            element={<FormularioEvaluacion />}
-            path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion"
-          ></Route>
-            
+              element={<FormularioEvaluacion />}
+              path="/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion"
+            ></Route>
+
             <Route
               element={<ListadoEddProyecto />}
               path="/listadoEddProyecto/:params"
@@ -198,14 +228,43 @@ function App() {
               element={<FormReferentes />}
               path="/FormularioRefEDD"
             ></Route>
+            {/* ------------------------------------- IHH */}
+            <Route
+              element={<IHH_ListadoAcop />}
+              path="/ihh/listadoAcop"
+            ></Route>
+            <Route
+              element={<IHH_ListadoElementoImp />}
+              path="/ihh/listadoElementoImp"
+            ></Route>
+            <Route
+              element={<IHH_ListadoImpugnacionEmp />}
+              path="/ihh/listadoImpugnacionEmp"
+            ></Route>
+            <Route
+              element={<IHH_ListadoNotaImpugnacion />}
+              path="/ihh/listadoNotaImpugnacion"
+            ></Route>
+             <Route
+              element={<IHH_ListadoPeriodo />}
+              path="/ihh/listadoPeriodo"
+            ></Route>
+            <Route
+              element={<IHH_ListadoTipoElemento />}
+              path="/ihh/listadoTipoElemento"
+            ></Route>
+            <Route
+              element={<IHH_ListadoTipoPeriodo />}
+              path="/ihh/listadoTipoPeriodo"
+            ></Route>
 
+            {/* ------------------------------------------------------------------------------------------ */}
 
+            {/* ---- IHH ---- */}
             <Route
               element={<FormularioEvaluacionRespondida />}
               path="/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion"
             ></Route>
-
-            {/* ------------------------------------------------------------------------------------------ */}
           </Route>
         </Routes>
       </BrowserRouter>

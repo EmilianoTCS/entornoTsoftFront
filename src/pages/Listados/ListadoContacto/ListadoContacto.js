@@ -35,6 +35,7 @@ export default function ListadoContacto() {
 
   const [listCliente, setlistCliente] = useState([""]);
   const [listServicio, setlistServicio] = useState([""]);
+  
   function obtenerCliente() {
     const url = "pages/auxiliares/listadoClienteForms.php";
     const operationUrl = "listados";
@@ -42,13 +43,7 @@ export default function ListadoContacto() {
       setlistCliente(response)
     );
   }
-  // function obtenerServicio() {
-  //   const url = "pages/auxiliares/listadoServicioForms.php";
-  //   const operationUrl = "listados";
-  //   getDataService(url, operationUrl).then((response) =>
-  //     setlistServicio(response)
-  //   );
-  // }
+
   function obtenerServicio() {
         const url = "pages/auxiliares/listadoServicioForms.php";
         const operationUrl = "listados";

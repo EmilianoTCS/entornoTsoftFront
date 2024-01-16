@@ -367,14 +367,18 @@ export default function ExtraGraph({
 
           tableRows.push(
             <>
-              <br></br>
-              <td id="infoLinePorcLeyendasREFERENTE">
-                <b>{matchingLey.datoVisible}</b>
-              </td>
-              <td className="linea">
-                <td>{carita_gral}</td>
-              </td>
-            </>
+            <br></br>
+            <td style={{whiteSpace: "nowrap"}} > 
+              &nbsp;
+              <b>{matchingLey.datoVisible}</b>
+              
+            </td>
+            &nbsp;
+
+            <td className="linea">
+              <td>{carita_gral}</td>
+            </td>
+          </>
           );
         }
       });
@@ -382,10 +386,12 @@ export default function ExtraGraph({
         <div>
           <table
             style={{
-              backgroundColor: "#ececec",
-              width: "800px",
-              borderRadius: "20px",
+              backgroundColor: "white",
+              width: "500px",
+              borderRadius: "15px",
               margin: "auto",
+              marginTop: "20px",
+              fontSize: "8pt",
             }}
           >
             {tableRows}
@@ -600,10 +606,11 @@ export default function ExtraGraph({
         <td>
           <table
             style={{
-              backgroundColor: "#ececec",
+              backgroundColor: "white",
               width: "300px",
-              borderRadius: "10px",
               margin: "5px", // Espacio entre tablas
+              border: "1px solid lightgray",
+              borderRadius: "20px"
             }}
           >
             <thead>
@@ -763,7 +770,7 @@ export default function ExtraGraph({
   );
 
   return (
-    <table style={{ margin: "auto" }}>
+    <table style={{ margin: "auto" }} id="AutoScroll_tableExtraGraph">
       <div
         style={{
           backgroundColor: "white",
@@ -810,7 +817,7 @@ export default function ExtraGraph({
         className="btnOcultar"
         data-html2canvas-ignore="true"
       >
-        Ocultar
+        Ocultar ciclo de evaluación
       </button>
     </table>
   );

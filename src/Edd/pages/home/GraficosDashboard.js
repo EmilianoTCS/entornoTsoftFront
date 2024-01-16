@@ -2,13 +2,11 @@ import GrafChart from "./GrafChart";
 import "../DiseñoDashboard/DiseñoDash.css";
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../../../templates/Header/Header";
-import getDataService from "../../../services/GetDataService";
 import SendDataService from "../../../services/SendDataService";
-import Card from "react-bootstrap/Card";
 import { Navigate } from "react-router-dom";
 import "./homeEDD.css";
 import { useRoute } from "wouter";
-import { Container, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import {
   buildStyles,
   CircularProgressbarWithChildren,

@@ -70,6 +70,7 @@ export default function SideBar(props) {
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasScrolling"
           aria-controls="offcanvasScrolling"
+          data-html2canvas-ignore="true"
         >
           <BsArrowRightCircle id="iconSidebar" />
         </button>

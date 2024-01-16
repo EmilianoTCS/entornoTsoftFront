@@ -1,10 +1,10 @@
-.btnExport{
-    background-color: #e10b1c;
-    border-color: white; 
-    border: none;
-    border:#e10b1c solid 1px;
-    color: white;
-    font-size: 10pt;
-    border-radius: 5px;
-    width: 120px;
+.btnExport {
+  background-color: #e10b1c;
+  border-color: white;
+  border: none;
+  border: #e10b1c solid 1px;
+  color: white;
+  font-size: 10pt;
+  border-radius: 5px;
+  width: fit-content;
 }

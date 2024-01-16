@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../../../templates/Header/Header";
 import { Navigate, useParams } from "react-router-dom";
 import SendDataService from "../../../../services/SendDataService";
-import { Doughnut, Bar } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import "./DashboardEddResumenEval.css";
 import DashboardEddResumenEval_detalle from "./DashboardEddResumenEval_detalle";
 import ExportPDF from "../../../../templates/exports/exportPDF";
@@ -18,7 +18,7 @@ export default function DashboardEddResumenEval() {
     fechaFin,
     tipoCargo,
   } = useParams();
-
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [listEddResumenEval, setListEddResumenEval] = useState();
   const [loadedDataResumenEval, setLoadedDataResumenEval] = useState(false);
@@ -63,8 +63,8 @@ export default function DashboardEddResumenEval() {
       proyFechaIni: "11/2022",
       proyFechaFin: "11/2023",
       estadoProyecto: "Inactivo",
-      cantEmpleados: 4,
-      cantEvalRespondidas: 0,
+      cantEmpleados: 5,
+      cantEvalRespondidas: 1,
       cicloEvaluacion: 1,
     },
     {
@@ -406,6 +406,13 @@ export default function DashboardEddResumenEval() {
     GetConfigCompColor();
     GetConfigCompLeyenda();
     GetConfigCompRangoF();
+    // Agrega un listener de scroll para mostrar u ocultar el botón
+    window.addEventListener("scroll", toggleScrollButton);
+
+    // Limpia el listener cuando el componente se desmonta
+    return () => {
+      window.removeEventListener("scroll", toggleScrollButton);
+    };
   }, [
     loadedDataResumenEval,
     loadedDataColor,
@@ -415,6 +422,24 @@ export default function DashboardEddResumenEval() {
   ]);
 
   //Funciones
+
+  // Muestra u oculta el botón basado en la posición del usuario en la página
+  const toggleScrollButton = () => {
+    if (
+      document.body.scrollTop > 20 ||
+      document.documentElement.scrollTop > 20
+    ) {
+      setShowScrollButton(true);
+    } else {
+      setShowScrollButton(false);
+    }
+  };
+
+  // Desplázate hacia arriba cuando se hace clic en el botón
+  const scrollToTop = () => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  };
 
   //Dependiendo del porcentaje obtenido, se obtiene el color
   function ColorPicker(porc) {
@@ -440,138 +465,6 @@ export default function DashboardEddResumenEval() {
     }
   }
 
-  //Semi círculos
-  const SemiCirculos = ({ data }) => {
-    if (loadedDataResumenEval) {
-      // Calcular el promedio de evaluaciones respondidas por ciclo
-      const promedioPorProyecto = {};
-      data.forEach((item) => {
-        if (!promedioPorProyecto[item.idEDDProyecto]) {
-          promedioPorProyecto[item.idEDDProyecto] = {
-            totalEvalRespondidas: 0,
-            totalEmpleados: 0,
-            ciclos: 0,
-            nomProyecto: item.nomProyecto,
-          };
-        }
-        promedioPorProyecto[item.idEDDProyecto].totalEvalRespondidas +=
-          parseInt(item.cantEvalRespondidas);
-        promedioPorProyecto[item.idEDDProyecto].totalEmpleados += parseInt(
-          item.cantEmpleados
-        );
-        promedioPorProyecto[item.idEDDProyecto].ciclos += 1;
-      });
-
-      // Crear un array para almacenar los datos de cada proyecto
-      const chartData = Object.entries(promedioPorProyecto).map(
-        ([idProyecto, promedio]) => {
-          const porcentaje =
-            (promedio.totalEvalRespondidas / promedio.totalEmpleados) * 100;
-
-          return {
-            labels: [`${porcentaje.toFixed(2)}%`],
-            nomProyecto: promedio.nomProyecto,
-            cantEvalRespondidas: promedio.totalEvalRespondidas,
-            totalEmpleados: promedio.totalEmpleados,
-            idProyecto,
-            datasets: [
-              {
-                data: [porcentaje, 100 - porcentaje],
-                backgroundColor: [
-                  ColorPicker(porcentaje, 100 - porcentaje),
-                  "#E7E7E7",
-                ],
-              },
-            ],
-          };
-        }
-      );
-
-      // Dividir los datos en filas de máximo 4 semicírculos por fila
-      const rows = [];
-      while (chartData.length) {
-        rows.push(chartData.splice(0, 4));
-      }
-
-      const doughnutLabel = {
-        id: "doughnutLabel",
-        beforeDatasetsDraw(chart, args, pluginOptions) {
-          const { ctx, data } = chart;
-          ctx.save();
-          const xCoor = chart.getDatasetMeta(0).data[0].x;
-          const yCoor = chart.getDatasetMeta(0).data[0].y;
-          ctx.font = "bold 18px sans-serif";
-          ctx.fillStyle = `${data.datasets[0].backgroundColor[0]}`;
-
-          ctx.textAlign = "center";
-          ctx.fillText(`${data.labels}`, xCoor, yCoor);
-        },
-      };
-
-      // Renderizar los semicírculos
-      return (
-        <div>
-          <h3
-            style={{
-              textAlign: "center",
-              margin: "auto",
-            }}
-          >
-            Cantidad de evaluaciones respondidas por proyecto en %
-          </h3>
-          {rows.map((row, rowIndex) => (
-            <div key={rowIndex} style={{ display: "flex" }}>
-              {row.map((item, colIndex) => (
-                <div
-                  key={colIndex}
-                  style={{
-                    margin: "auto",
-                    textAlign: "center",
-                    marginTop: "25px",
-                  }}
-                >
-                  <h5>{item.nomProyecto}</h5>
-                  <h7>
-                    {item.cantEvalRespondidas}/{item.totalEmpleados} Eval.
-                    Respondidas
-                  </h7>
-
-                  <Doughnut
-                    data={item}
-                    options={{
-                      circumference: 180,
-                      devicePixelRatio: 4,
-                      rotation: 270,
-                      cutout: "70%",
-                      animation: false,
-                      plugins: {
-                        legend: {
-                          display: false,
-                        },
-                      },
-                      aspectRatio: 2,
-                    }}
-                    plugins={[doughnutLabel]}
-                    height={100}
-                    width={180}
-                  />
-                  <button
-                    className="btnRedirect"
-                    onClick={() => {
-                      ActiveExtraGraph(item.idProyecto);
-                    }}
-                  >
-                    Más información
-                  </button>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      );
-    }
-  };
-
   //Barras horizontales
   const BarChart = ({ data }) => {
     if (loadedDataResumenEval) {
@@ -584,6 +477,7 @@ export default function DashboardEddResumenEval() {
             totalEmpleados: 0,
             ciclos: 0,
             nomProyecto: item.nomProyecto,
+            idProyecto: item.idEDDProyecto,
           };
         }
         promedioPorProyecto[item.idEDDProyecto].totalEvalRespondidas +=
@@ -600,6 +494,9 @@ export default function DashboardEddResumenEval() {
       const percentages = Object.values(promedioPorProyecto).map(
         (item) => (item.totalEvalRespondidas * 100) / item.totalEmpleados
       );
+      const idProyecto = Object.values(promedioPorProyecto).map(
+        (item) => item.idProyecto
+      );
 
       // Configuración del gráfico
       const chartData = {
@@ -611,6 +508,7 @@ export default function DashboardEddResumenEval() {
             backgroundColor: percentages.map((item) => ColorPicker(item)),
             borderColor: percentages.map((item) => ColorPicker(item)),
             borderWidth: 1,
+            idProyecto: idProyecto,
           },
         ],
       };
@@ -627,12 +525,12 @@ export default function DashboardEddResumenEval() {
           ctx.save();
 
           data.datasets[0].data.forEach((dataPoint, index) => {
-            ctx.font = "bold 10px sans-serif";
+            ctx.font = "bold 13px sans-serif";
             ctx.fillStyle = `black`;
             ctx.fillText(
-              `${data.labels[index]}: ${dataPoint.toFixed(2)}`,
+              `${dataPoint.toFixed(2)}%`,
               left + 10,
-              y.getPixelForValue(index)
+              y.getPixelForValue(index) + 5
             );
           });
         },
@@ -659,71 +557,98 @@ export default function DashboardEddResumenEval() {
             display: false,
           },
         },
+        onClick: (event, elements) => {
+          if (elements.length > 0) {
+            ActiveExtraGraph(
+              chartData.datasets[0].idProyecto[elements[0].index]
+            );
+          }
+        },
+        onHover: (event, chartElement) => {
+          event.native.target.style.cursor = chartElement[0]
+            ? "pointer"
+            : "default";
+        },
+        elements: {
+          bar: {
+            hover: {
+              mode: "nearest",
+              axis: "xy",
+            },
+            // cursor: "pointer", // Cambia el cursor a "pointer" al pasar sobre las barras
+          },
+        },
       };
 
       return (
         <div>
-          <Bar data={chartData} options={chartOptions} plugins={[dataLabels]} />
+          <Bar
+            data={chartData}
+            options={chartOptions}
+            plugins={[dataLabels]}
+            width={850}
+            height={220}
+          />
         </div>
       );
     }
   };
 
-  //Cartas
-  const ColaboradoresCard = ({ data }) => {
-    if (loadedDataResumenEval) {
-      // Calcular la cantidad promedio de empleados por proyecto
-      const promedioPorProyecto = {};
-      data.forEach((item) => {
-        if (!promedioPorProyecto[item.idEDDProyecto]) {
-          promedioPorProyecto[item.idEDDProyecto] = {
-            totalEmpleados: 0,
-            ciclos: 0,
-            nomProyecto: item.nomProyecto,
-          };
-        }
-        promedioPorProyecto[item.idEDDProyecto].totalEmpleados += parseInt(
-          item.cantEmpleados
-        );
-        promedioPorProyecto[item.idEDDProyecto].ciclos += 1;
-      });
+  // //Cartas
+  // const ColaboradoresCard = ({ data }) => {
+  //   if (loadedDataResumenEval) {
+  //     // Calcular la cantidad promedio de empleados por proyecto
+  //     const promedioPorProyecto = {};
+  //     data.forEach((item) => {
+  //       if (!promedioPorProyecto[item.idEDDProyecto]) {
+  //         promedioPorProyecto[item.idEDDProyecto] = {
+  //           totalEmpleados: 0,
+  //           ciclos: 0,
+  //           nomProyecto: item.nomProyecto,
+  //         };
+  //       }
+  //       promedioPorProyecto[item.idEDDProyecto].totalEmpleados += parseInt(
+  //         item.cantEmpleados
+  //       );
+  //       promedioPorProyecto[item.idEDDProyecto].ciclos += 1;
+  //     });
 
-      return (
-        <>
-          {tipoCargo === "COLABORADOR" ? (
-            <h5>Cantidad promedio de colaboradores por proyecto</h5>
-          ) : (
-            <h5>Cantidad promedio de referentes por proyecto</h5>
-          )}
+  //     return (
+  //       <>
+  //         {tipoCargo === "COLABORADOR" ? (
+  //           <h5>Cantidad promedio de colaboradores por proyecto</h5>
+  //         ) : (
+  //           <h5>Cantidad promedio de referentes por proyecto</h5>
+  //         )}
 
-          <div className="containerCardsResp">
-            {Object.values(promedioPorProyecto).map((item) => (
-              <div key={item.nomProyecto} className="colaboradores-card">
-                <table>
-                  <tr>
-                    <td style={{ width: "150px", textAlign: "left" }}>
-                      <h3>{item.nomProyecto}: </h3>
-                    </td>
-                    <td style={{ width: "50px", textAlign: "center" }}>
-                      {tipoCargo === "COLABORADOR" ? (
-                        <>
-                          <h3>{item.totalEmpleados / item.ciclos}</h3>
-                        </>
-                      ) : (
-                        <>
-                          <h3>{item.totalEmpleados / item.ciclos}</h3>
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            ))}
-          </div>
-        </>
-      );
-    }
-  };
+  //         <div className="containerCardsResp">
+  //           {Object.values(promedioPorProyecto).map((item) => (
+  //             <div key={item.nomProyecto} className="colaboradores-card">
+  //               <table>
+  //                 <tr>
+  //                   <td style={{ width: "150px", textAlign: "left" }}>
+  //                     <h3>{item.nomProyecto}: </h3>
+  //                   </td>
+  //                   <td style={{ width: "50px", textAlign: "center" }}>
+  //                     {tipoCargo === "COLABORADOR" ? (
+  //                       <>
+  //                         <h3>{item.totalEmpleados / item.ciclos}</h3>
+  //                       </>
+  //                     ) : (
+  //                       <>
+  //                         <h3>{item.totalEmpleados / item.ciclos}</h3>
+  //                       </>
+  //                     )}
+  //                   </td>
+  //                 </tr>
+  //               </table>
+  //             </div>
+  //           ))}
+  //         </div>
+  //       </>
+  //     );
+  //   }
+  // };
 
   //Caras
   function InfoCaras() {
@@ -761,10 +686,14 @@ export default function DashboardEddResumenEval() {
           tableRows.push(
             <>
               <br></br>
-
-              <td id="infoLinePorcLeyendasREFERENTE">
+{/* id="infoLinePorcLeyendasREFERENTE" */}
+              <td style={{whiteSpace: "nowrap"}} > 
+                &nbsp;
                 <b>{matchingLey.datoVisible}</b>
+                
               </td>
+              &nbsp;
+
               <td className="linea">
                 <td>{carita_gral}</td>
               </td>
@@ -777,10 +706,11 @@ export default function DashboardEddResumenEval() {
           <table
             style={{
               backgroundColor: "white",
-              width: "800px",
+              width: "500px",
               borderRadius: "15px",
               margin: "auto",
               marginTop: "20px",
+              fontSize: "8pt",
             }}
           >
             {tableRows}
@@ -790,6 +720,24 @@ export default function DashboardEddResumenEval() {
       );
     }
   }
+
+
+  const formatDate = (date) => {
+    const [anio, mes, dia] = date.split("-");
+    const fechaObj = new Date(anio, mes - 1, dia);
+
+    // Obtener día, mes y año
+    const nuevoDia = fechaObj.getDate().toString().padStart(2, "0");
+    const nuevoMes = (fechaObj.getMonth() + 1).toString().padStart(2, "0"); // Sumamos 1 al mes
+    const nuevoAnio = fechaObj.getFullYear();
+
+    // Crear la nueva fecha en formato "dd-mm-yyyy"
+    const nuevaFecha = `${nuevoDia}-${nuevoMes}-${nuevoAnio}`;
+
+    return nuevaFecha;
+  };
+
+
 
   //Main render
   return userData.statusConected === true || userData !== null ? (
@@ -808,39 +756,67 @@ export default function DashboardEddResumenEval() {
       >
         Estado general de evaluaciones de desempeño - {tipoCargo}
       </h2>
-      <div className="containerSemiCirculos">
-        <SemiCirculos data={jsonData} />
+      <div className="containerBarras">
+        <h5>Promedio de evaluaciones respondidas por proyecto en %</h5>
+        
+        <h6>(Desde {formatDate(fechaIni)} hasta {formatDate(fechaFin)})</h6>
+        &nbsp;
+        <h2
+          data-html2canvas-ignore="true"
+          style={{
+            textAlign: "center",
+            margin: "auto",
+            marginTop: "5px",
+            fontSize: "10pt",
+          }}
+        >
+          (Click en cada barra para más información)
+        </h2>
+        <BarChart data={jsonData} />
+
         <InfoCaras></InfoCaras>
       </div>
 
-      <div className="containerBarras">
-        <div style={{ width: "60%", textAlign: "center" }}>
-          <h5>Promedio de evaluaciones respondidas por proyecto en %</h5>
-          <BarChart data={jsonData} />
-        </div>
-        <div style={{ width: "60%", textAlign: "center" }}>
-          <ColaboradoresCard data={jsonData} />
-        </div>
-      </div>
-
-      {activeGraph ? (
-        <DashboardEddResumenEval_detalle
-          idCliente={paramsExtraGraph.idCliente}
-          idServicio={paramsExtraGraph.idServicio}
-          idProyecto={paramsExtraGraph.idEDDProyecto}
-          cicloEvaluacion={paramsExtraGraph.cicloEvaluacion}
-          fechaIni={paramsExtraGraph.fechaIni}
-          fechaFin={paramsExtraGraph.fechaFin}
-          tipoCargo={paramsExtraGraph.tipoCargo}
-          setActiveGraph={setActiveGraph}
-          activeGraph={activeGraph}
-        />
-      ) : (
-        <></>
-      )}
-      <div style={{ margin: "auto", width: "900px", marginTop: "5px" }}>
+      <div
+        style={{
+          margin: "auto",
+          width: "1000px",
+          marginTop: "5px",
+          display: "flex",
+          justifyContent: "space-around",
+          flexDirection: "column",
+        }}
+      >
+        {activeGraph ? (
+          <DashboardEddResumenEval_detalle
+            idCliente={paramsExtraGraph.idCliente}
+            idServicio={paramsExtraGraph.idServicio}
+            idProyecto={paramsExtraGraph.idEDDProyecto}
+            cicloEvaluacion={paramsExtraGraph.cicloEvaluacion}
+            fechaIni={paramsExtraGraph.fechaIni}
+            fechaFin={paramsExtraGraph.fechaFin}
+            tipoCargo={paramsExtraGraph.tipoCargo}
+            setActiveGraph={setActiveGraph}
+            activeGraph={activeGraph}
+            setShowScrollButton={setShowScrollButton}
+          />
+        ) : (
+          <></>
+        )}
+        {/* Botón de AutoScroll */}
         <ExportPDF nombreTabla={nombrePDF} />
       </div>
+
+      {showScrollButton && (
+        <button
+          onClick={scrollToTop}
+          id="scrollBtn"
+          title="Ir arriba"
+          data-html2canvas-ignore="true"
+        >
+          ↑
+        </button>
+      )}
     </>
   ) : (
     <Navigate to="/login"></Navigate>

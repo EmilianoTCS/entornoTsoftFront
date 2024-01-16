@@ -1,13 +1,14 @@
 /* colortxtCircle */
 
-.colortxtCircle{
-text-align: right;
+.colortxtCircle {
+  text-align: right;
 }
 
 /* LINEA */
 .linea:not(:last-child) {
   height: 7px;
   border-right: 2px ridge rgba(151, 151, 151, 0.568);
+  margin-left: 10px;
 }
 
 /* --- */
@@ -23,20 +24,17 @@ text-align: right;
   width: 80%;
   margin: auto;
   border-radius: 10px;
-  
 }
-#hr{
-  height:1em;
-  width:1em;
-  border-width:0;
-  color:#000000;
-  background-color:#000;
- }
+#hr {
+  height: 1em;
+  width: 1em;
+  border-width: 0;
+  color: #000000;
+  background-color: #000;
+}
 
 #infoLinePorcLeyendasREFERENTE {
-  padding: 1em;
-  font-size: 12pt;
-  
+  white-space: nowrap;
 }
 
 #tableLeyendasREFERENTE {
@@ -45,7 +43,6 @@ text-align: right;
   width: 80%;
   margin: auto;
   border-radius: 10px;
-
 }
 /* --------------- */
 
@@ -71,12 +68,11 @@ text-align: right;
 }
 /* ---------- */
 
-
 /* DIESEÑO TABLA CON LINEA PORC REFERENTES */
 
-#infoLinePorcREFPrin{
-width: 90%;
-margin-bottom: 3px;
+#infoLinePorcREFPrin {
+  width: 90%;
+  margin-bottom: 3px;
 }
 
 #infoLinePorcREFERENTE {
@@ -103,7 +99,8 @@ margin-bottom: 3px;
 }
 
 #faceStyleLeyendas {
-width: 2em;
+  width: 2em;
+  margin: 0 5px 0 0;
 }
 
 #sizeCaritasReferentes {
@@ -136,7 +133,6 @@ width: 2em;
   margin-right: 1em;
 }
 /* ---------- */
-
 
 /* DIESEÑO DASHBOARD TABLA */
 #faceStyle {
@@ -182,22 +178,22 @@ COLORES BARRAS DASHBOARD TABLA CON LINEA PORC*/
 .red-progress-bar .progress-bar {
   background-color: #f71717;
   color: rgb(255, 255, 255);
-  font-size: 11pt;  font-weight: 700;
+  font-size: 11pt;
+  font-weight: 700;
 }
 .green-progress-bar .progress-bar {
   background-color: #02c202;
   color: rgb(255, 255, 255);
-  font-size: 11pt; font-weight: 700;
+  font-size: 11pt;
+  font-weight: 700;
 }
 .orange-progress-bar .progress-bar {
   background-color: #ff7300;
   color: rgb(0, 0, 0);
-  font-size: 11pt; font-weight: 700;
-} 
+  font-size: 11pt;
+  font-weight: 700;
+}
 /* ----------- */
-
-
-
 
 /* Porcentaje Card */
 .porcentajeCard {

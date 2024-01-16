@@ -126,6 +126,8 @@ export default function DashboardCompProy() {
       setNombrePDF(
         "Dash_comp_proy_" + tipoCargo + "_" + data[0].nomProyecto + "_" + date
       );
+
+      
     });
   }
   useEffect(() => {
@@ -289,116 +291,6 @@ export default function DashboardCompProy() {
     return <>{tableRows}</>;
   }
 
-  // function LineChart() {
-  //   const ciclosConDatos = [
-  //     ...new Set(DashCompProy.map((item) => item.cicloEvaluacion)),
-  //   ];
-  //   const competencias = [
-  //     ...new Set(DashCompProy.map((item) => item.nomCompetencia)),
-  //   ];
-
-  //   const datasets = competencias.map((competencia, index) => {
-  //     const data = ciclosConDatos.map((ciclo) => {
-  //       let porcentaje = 0;
-
-  //       if (tipoCargo === "REFERENTE") {
-  //         const filteredItems = DashCompProy.filter((item) => {
-  //           return (
-  //             item.nomCompetencia === competencia &&
-  //             item.cicloEvaluacion === ciclo
-  //           );
-  //         });
-
-  //         if (filteredItems.length > 0) {
-  //           // Calcular el promedio de las competencias con el mismo nombre y ciclo
-  //           const competenciasMismoNombreCiclo = DashCompProy.filter((item) => {
-  //             return (
-  //               item.nomCompetencia === competencia &&
-  //               item.cicloEvaluacion === ciclo
-  //             );
-  //           });
-
-  //           const totalPorcentajes = competenciasMismoNombreCiclo.reduce(
-  //             (total, item) => {
-  //               return total + parseFloat(item.porcAprobRef);
-  //             },
-  //             0
-  //           );
-
-  //           porcentaje =
-  //             totalPorcentajes / competenciasMismoNombreCiclo.length || 0;
-  //         }
-  //       } else if (tipoCargo === "COLABORADOR") {
-  //         const filteredItems = DashCompProy.filter((item) => {
-  //           return (
-  //             item.nomCompetencia === competencia &&
-  //             item.cicloEvaluacion === ciclo
-  //           );
-  //         });
-
-  //         if (filteredItems.length > 0) {
-  //           // Calcular el promedio de las competencias con el mismo nombre y ciclo
-  //           const competenciasMismoNombreCiclo = DashCompProy.filter((item) => {
-  //             return (
-  //               item.nomCompetencia === competencia &&
-  //               item.cicloEvaluacion === ciclo
-  //             );
-  //           });
-
-  //           const totalPorcentajes = competenciasMismoNombreCiclo.reduce(
-  //             (total, item) => {
-  //               return total + parseFloat(item.porcAprobColab);
-  //             },
-  //             0
-  //           );
-
-  //           porcentaje = (
-  //             totalPorcentajes / competenciasMismoNombreCiclo.length || 0
-  //           ).toFixed(2);
-  //         }
-  //       }
-
-  //       return porcentaje;
-  //     });
-
-  //     return {
-  //       type: "line",
-  //       label: competencia,
-  //       data: data,
-  //       backgroundColor: predefinedColors[index % predefinedColors.length],
-  //       borderColor: predefinedColors[index % predefinedColors.length],
-  //       pointRadius: 3,
-  //       pointBorderColor: predefinedColors[index % predefinedColors.length],
-  //       pointBackgroundColor: predefinedColors[index % predefinedColors.length],
-  //     };
-  //   });
-
-  //   const data = {
-  //     labels: ciclosConDatos, // Usar los ciclos en el eje X
-  //     datasets: datasets,
-  //   };
-
-  //   const options = {
-  //     responsive: true,
-  //     animation: true,
-  //     plugins: {
-  //       legend: {
-  //         display: true,
-  //       },
-  //     },
-  //     scales: {
-  //       y: {
-  //         min: 0,
-  //         max: 100,
-  //       },
-  //       x: {
-  //         ticks: { color: "black" },
-  //       },
-  //     },
-  //   };
-
-  //   return <Line data={data} options={options} />;
-  // }
 
   function LineChartInvertido() {
     const ciclosConDatos = [
@@ -470,142 +362,6 @@ export default function DashboardCompProy() {
 
     return <Bar data={data} options={options} />;
   }
-
-  // function countCompetenciasPorCiclo() {
-  //   var returnArray = [];
-  //   if (cicloEvaluacion === "0") {
-  //     const competenciasPorCiclo = DashCompProy.reduce((result, item) => {
-  //       if (!result[item.cicloEvaluacion]) {
-  //         result[item.cicloEvaluacion] = {
-  //           competencias: new Set(),
-  //           fechas: new Set(),
-  //           referentes: new Set(),
-  //           colaboradores: new Set(),
-  //         };
-  //       }
-  //       result[item.cicloEvaluacion].competencias.add(item.nomCompetencia);
-  //       result[item.cicloEvaluacion].fechas.add(item.epeFechaFin);
-  //       result[item.cicloEvaluacion].referentes.add(item.cantReferentes);
-  //       result[item.cicloEvaluacion].colaboradores.add(item.cantColaboradores);
-
-  //       return result;
-  //     }, {});
-
-  //     let lastFormattedFecha = null;
-
-  //     const infoCiclos = Object.entries(competenciasPorCiclo).map(
-  //       ([cicloEvaluacion, data], index, array) => {
-  //         const competencias = data.competencias.size;
-  //         const fechas = [...data.fechas];
-  //         const formattedFechasPorCiclo = [...new Set(fechas)];
-
-  //         // Si la fecha es diferente de la fecha en el ciclo anterior, mostrarla, de lo contrario, mostrar un título invisible
-  //         const shouldShowFecha =
-  //           formattedFechasPorCiclo.join(", ") !== lastFormattedFecha;
-
-  //         lastFormattedFecha = formattedFechasPorCiclo.join(", ");
-
-  //         const referentes = [...data.referentes];
-  //         const colaboradores = [...data.colaboradores];
-
-  //         // Agregar <hr> solo si no es el último ciclo
-  //         const separator = index < array.length - 1 ? <hr /> : null;
-
-  //         return (
-  //           <tr key={cicloEvaluacion} style={{ textAlign: "left" }}>
-  //             <tr>
-  //               {shouldShowFecha ? (
-  //                 <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
-  //               ) : (
-  //                 <h5 style={{ visibility: "hidden" }}>Fecha: 0000</h5>
-  //               )}
-  //             </tr>
-
-  //             <tr>
-  //               <div>
-  //                 <td>
-  //                   <h5>Ciclo: {cicloEvaluacion}</h5>
-  //                 </td>
-  //                 <td className="linea">&nbsp;&nbsp;</td>
-
-  //                 <td>
-  //                   <h5>&nbsp;&nbsp;Competencias: {competencias}</h5>
-  //                 </td>
-  //                 <td className="linea">&nbsp;&nbsp;</td>
-
-  //                 <td>
-  //                   {tipoCargo === "REFERENTE" ? (
-  //                     <h5>&nbsp;&nbsp;Referentes: {referentes.join(",")}</h5>
-  //                   ) : (
-  //                     <h5>
-  //                       &nbsp;&nbsp;Colaboradores: {colaboradores.join(",")}
-  //                     </h5>
-  //                   )}
-  //                 </td>
-  //               </div>
-  //             </tr>
-  //             {separator}
-  //           </tr>
-  //         );
-  //       }
-  //     );
-
-  //     return (
-  //       <table>
-  //         <tbody>{infoCiclos}</tbody>
-  //       </table>
-  //     );
-  //   } else {
-  //     const competenciasPorCiclo = DashCompProy.filter(
-  //       (item) => item.cicloEvaluacion === cicloEvaluacion
-  //     ).map((item) => item.nomCompetencia);
-
-  //     const competenciasUnicas = [...new Set(competenciasPorCiclo)];
-
-  //     const fechasPorCiclo = DashCompProy.filter(
-  //       (item) => item.cicloEvaluacion === cicloEvaluacion
-  //     ).map((item) => item.epeFechaFin);
-
-  //     const formattedFechasPorCiclo = [...new Set(fechasPorCiclo)];
-  //     let referentesSet = new Set();
-  //     let colaboradoresSet = new Set();
-
-  //     DashCompProy.forEach((item) => {
-  //       referentesSet.add(item.cantReferentes);
-  //       colaboradoresSet.add(item.cantColaboradores);
-  //     });
-
-  //     let referentesArray = [...referentesSet];
-  //     let colaboradoresArray = [...colaboradoresSet];
-
-  //     return (
-  //       <tr key={cicloEvaluacion}>
-  //         <tr>
-  //           <h5>Fecha: {formattedFechasPorCiclo.join(", ")}</h5>
-  //         </tr>
-  //         <tr>
-  //           <td></td>
-  //           <td>
-  //             {" "}
-  //             <h5>Ciclo: {cicloEvaluacion}&nbsp;&nbsp; </h5>
-  //           </td>
-  //           <td>
-  //             <h5>Competencias: {competenciasUnicas.length}&nbsp;&nbsp;</h5>
-  //           </td>
-  //           <td>
-  //             {tipoCargo === "REFERENTE" ? (
-  //               <h5>Referentes: {referentesArray.join(", ")}&nbsp;&nbsp;</h5>
-  //             ) : (
-  //               <h5>Colaboradores: {colaboradoresArray.join(", ")}</h5>
-  //             )}
-  //           </td>
-  //         </tr>
-  //       </tr>
-  //     );
-  //   }
-  // }
-
-  //---------------------- PROGRESS BAR ----------------------
 
   function calcularPromedioCompetencias(datos) {
     // Agrupar los datos por ciclo
@@ -755,6 +511,8 @@ export default function DashboardCompProy() {
       idEDDProyecto: idProyecto,
       cicloEvaluacion: cicloEvaluacion,
     });
+
+    
   };
 
   //---------------------- MAIN RENDER ----------------------

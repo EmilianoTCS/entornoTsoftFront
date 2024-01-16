@@ -99,6 +99,7 @@ export default function ListadoEddProyecto() {
       cantidadPorPagina: cantidadPorPagina,
       idServicio: idServicio,
     };
+    console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);

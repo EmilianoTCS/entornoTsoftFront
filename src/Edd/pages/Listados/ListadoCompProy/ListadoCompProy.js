@@ -595,7 +595,22 @@ export default function ListadoCompProy() {
                     onClick={buscarClick}
                     disabled={!busquedaRealizada} // Deshabilita el botón si busquedaRealizada es falso
                   >
-                    Desplegar Dashboard
+                    Desplegar Dashboard Competencias
+                  </button>
+                </Link>
+              {/* </td>
+              <td> */}
+                <Link
+                  to={`/DashboardEddResumenEval/${selectedClients}/${selectedServicio}/0/${tipoCargo}/${fechaIni}/${fechaFin}/${cicloEvaluacion}`}
+                >
+                  <button
+                    data-title="Desplegar dashboard"
+                    type="button"
+                    className="btn-General-Pag"
+                    onClick={buscarClick}
+                    disabled={!busquedaRealizada} // Deshabilita el botón si busquedaRealizada es falso
+                  >
+                    Desplegar Dashboard Resumen
                   </button>
                 </Link>
               </td>

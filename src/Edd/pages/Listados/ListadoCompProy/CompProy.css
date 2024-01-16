@@ -4,7 +4,7 @@
   text-align: center;
   display: flex;
   justify-content: space-around;
-  padding: 2em;
+  padding: 1em;
   border-spacing: 5px;
   margin-top: 10px;
   border-radius: 0 0 0px 0px;
@@ -23,9 +23,10 @@
   background-color: #e10b1c;
   border-style: none none none none;
   font-size: 12pt;
+  margin: 3px;
   border: #e10b1c solid 1px;
   border-radius: 7px;
-  padding: 0.5em;
+  padding: 5px;
   color: white;
   margin-left: 1em;
 }

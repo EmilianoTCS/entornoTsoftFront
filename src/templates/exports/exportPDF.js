@@ -3,23 +3,33 @@ import html2pdf from "html2pdf.js";
 import "./export.css";
 
 const ExportPDF = ({ nombreTabla }) => {
-  const exportToPDF = () => {
+  const exportToPDF = (e) => {
+    e.stopPropagation();
+    let body = document.body;
+    let html = document.documentElement;
+    let height = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+    let heightCM = height / 35.35;
+
     const pdfOptions = {
-      filename: nombreTabla,
-      image: { type: "jpeg", quality: 1 },
-      html2canvas: { scale: 4, allowTaint: true },
-      jsPDF: { unit: "mm", orientation: "landscape" },
-      pagebreak: {
-        mode: "avoid-all",
-        before: ["#fondoTablaDashCompProy", ".containerBarras"],
+      margin: 1,
+      filename: `${nombreTabla}`,
+
+      html2canvas: { scale: 2, dpi: 192, letterRendering: true },
+      jsPDF: {
+        orientation: "portrait",
+        unit: "cm",
+        format: [heightCM, 30],
       },
-      DisablePdfCompression: 0
     };
 
-    const content = document.body;
-
     html2pdf()
-      .from(content)
+      .from(body)
       .set(pdfOptions)
       .to("container")
       .outputPdf((pdf) => {

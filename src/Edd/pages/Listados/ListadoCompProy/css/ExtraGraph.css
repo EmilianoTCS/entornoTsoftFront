@@ -536,7 +536,7 @@
   color: white;
   font-size: 10pt;
   border-radius: 5px;
-  width: 60px;
+  width: fit-content;
   margin: 20px 0 10px 20px;
 }
 
