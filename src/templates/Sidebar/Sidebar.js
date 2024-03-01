@@ -106,9 +106,8 @@ export default function SideBar(props) {
                       id="li_home"
                       to={
                         userData.nomRol === "administrador" ||
-                          userData.nomRol === "people" ||
-                          userData.nomRol === "alumno"
-
+                        userData.nomRol === "people" ||
+                        userData.nomRol === "alumno"
                           ? "/home"
                           : "/homeColaborador"
                       }
@@ -121,7 +120,16 @@ export default function SideBar(props) {
                   </li>
 
                   {/* --------------------------------------------------- */}
-                  <li id="li_Academia">
+                  <li
+                    id="li_Academia"
+                    className={
+                      userData.nomRol === "administrador" ||
+                      userData.nomRol === "people" ||
+                      userData.nomRol === "gerencia"
+                        ? ""
+                        : "private"
+                    }
+                  >
                     <Link to="/listadoClientes/0">
                       <button id="submenuSidebar">
                         <IoIosPeople id="icons" />
@@ -139,15 +147,17 @@ export default function SideBar(props) {
                       </button>
                     </Link>
                   </li>
-                  {/* --------------------------------------------------- */}
+                  {/* -----------------Academia de formación-------------------- */}
 
                   <li
                     id="li_Academia"
                     onClick={handleChangeAcademia}
                     className={
                       userData.nomRol === "administrador" ||
-                        userData.nomRol === "people" ||
-                        userData.nomRol === "alumno"
+                      userData.nomRol === "people" ||
+                      userData.nomRol === "gerencia" ||
+                      userData.nomRol === "relator" ||
+                      userData.nomRol === "alumno"
                         ? ""
                         : "private"
                     }
@@ -187,52 +197,53 @@ export default function SideBar(props) {
                           </button>
                         </Link>
                       </li>
+                      {/* --------------------------------------------------- */}
+                      <li id="textLeftSelect">
+                        <Link to="/listadoNotaExamen/0">
+                          <button id="submenuSidebar">
+                            <IoBookmarks id="icons" />
+                            Nota examen
+                          </button>
+                        </Link>
+                      </li>
                     </ul>
                   </li>
 
-                  {/* --------------------------------------------------- */}
+                  {/* -----------------Evaluaciones de desempeño------------------------- */}
 
                   <li
                     id="li_Academia"
                     onClick={handleChangeEvaluaciones}
                     className={
                       userData.nomRol === "administrador" ||
-                        userData.nomRol === "people" ||
-                        userData.nomRol === "alumno"
-
+                      userData.nomRol === "people" ||
+                      userData.nomRol === "gerencia" ||
+                      userData.nomRol === "referente" ||
+                      userData.nomRol === "colaborador"
                         ? ""
                         : "private"
                     }
                   >
                     <button id="buttonSidebar">
                       <FaBook id="icons" />
-                      Eval desempeño
+                      Eval. desempeño
                     </button>
                     <ul
                       id="COE_Academia"
                       className={isToggledEvaluaciones ? "active" : ""}
                     >
-                      {/* ----------------------FORMS QUE NO SE USAN----------------------------- */}
-
-                      {/* <li id="textLeftSelect">
-                        <Link to="/FormularioAnEDD">
-                          <button id="submenuSidebar">
-                            <ImBook id="icons" />
-                            Analista
-                          </button>
-                        </Link>
-                      </li>
-                      <li id="textLeftSelect">
-                        <Link to="/FormularioRefEDD">
-                          <button id="submenuSidebar">
-                            <ImBook id="icons" />
-                            Referente
-                          </button>
-                        </Link>
-                      </li> */}
                       {/* --------------------------------------------------- */}
 
-                      <li id="textLeftSelect">
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
                         <Link to="/listadoEddProyecto/0">
                           <button id="submenuSidebar">
                             <ImBook id="icons" />
@@ -241,7 +252,16 @@ export default function SideBar(props) {
                         </Link>
                       </li>
                       {/* --------------------------------------------------- */}
-                      <li id="textLeftSelect">
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
                         <Link to="/listadoEddEvaluacion/0">
                           <button id="submenuSidebar">
                             <ImBook id="icons" />
@@ -250,7 +270,16 @@ export default function SideBar(props) {
                         </Link>
                       </li>
                       {/* --------------------------------------------------- */}
-                      <li id="textLeftSelect">
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
                         <Link to="/listadoEddEvalCompetencia">
                           <button id="submenuSidebar">
                             <ImBook id="icons" />
@@ -268,7 +297,16 @@ export default function SideBar(props) {
                         </Link>
                       </li> */}
                       {/* --------------------------------------------------- */}
-                      <li id="textLeftSelect">
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
                         <Link to="/listadoServicios/0">
                           <button id="submenuSidebar">
                             <ImBook id="icons" />
@@ -277,8 +315,25 @@ export default function SideBar(props) {
                         </Link>
                       </li>
                       {/* --------------------------------------------------- */}
-                       {/* --------------------------------------------------- */}
-                       <li id="textLeftSelect">
+                      <li id="textLeftSelect">
+                        <Link to="/listadoEddEvalProyEmp/0">
+                          <button id="submenuSidebar">
+                            <ImBook id="icons" />
+                            Evaluaciones a empleados
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
                         <Link to="/listadoCompProy">
                           <button id="submenuSidebar">
                             <ImBook id="icons" />

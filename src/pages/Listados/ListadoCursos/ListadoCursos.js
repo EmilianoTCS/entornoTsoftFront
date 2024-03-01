@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
-
+import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 import GetDataService from "../../../services/GetDataService";
 import SendDataService from "../../../services/SendDataService";
 import Header from "../../../templates/Header/Header";
@@ -50,7 +50,7 @@ export default function ListadoCursos() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts('successEdited');
+          TopAlerts("successEdited");
         });
       }
     });
@@ -80,130 +80,149 @@ export default function ListadoCursos() {
   }
 
   //PAGINADOR ---------------------
-
   return userData.statusConected || userData !== null ? (
     <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de cursos</h1>
-          <h6 style={{color:'gray'}}>Factory Devops {'->'} Listado de Cursos</h6>
+      {userData.nomRol === "administrador" ||
+      userData.nomRol === "gerencia" ||
+      userData.nomRol === "people" ||
+      userData.nomRol === "relator" ? (
+        <>
+          <Header></Header>
           <br></br>
+          <br></br>
+          <div id="fondoTabla">
+            <div id="containerTablas">
+              <h1 id="TitlesPages">Listado de cursos</h1>
+              <h6 style={{ color: "gray" }}>
+                Factory Devops {"->"} Listado de Cursos
+              </h6>
+              <br></br>
 
-          <div id="selectPaginador">
-            <Button id="btn" onClick={insertarCurso}>
-              Crear Curso
-            </Button>
+              <div id="selectPaginador">
+                {userData.nomRol === "administrador" ? (
+                  <Button id="btn" onClick={insertarCurso}>
+                    Crear Curso
+                  </Button>
+                ) : null}
 
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cantidad registros: </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadR"
-                id="input_CantidadR"
-                onChange={({ target }) => {
-                  setcantidadPorPagina(target.value);
-                  setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
+                <div className="form-group" id="btn2">
+                  <label htmlFor="input_CantidadR">Cantidad registros: </label>
+                  <select
+                    value={cantidadPorPagina || ""}
+                    className="form-control"
+                    name="input_CantidadR"
+                    id="input_CantidadR"
+                    onChange={({ target }) => {
+                      setcantidadPorPagina(target.value);
+                      setNumBoton(1);
+                    }}
+                    required
+                  >
+                    <option hidden value="">
+                      {cantidadPorPagina}
+                    </option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </div>
+              </div>
+
+              <InsertarCurso
+                isActiveCurso={isActiveInsertCurso}
+                cambiarEstado={setIsActiveInsertCurso}
+                curso={curso}
+              ></InsertarCurso>
+
+              <EditarCurso
+                isActiveEditCurso={isActiveEditCurso}
+                cambiarEstado={setIsActiveEditCurso}
+                idCurso={idCurso}
+                setCurso={setCurso}
+                curso={curso}
+                nombreTabla={nombreTabla}
+              ></EditarCurso>
+
+
+              <Table id="mainTable" hover responsive>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Código</th>
+                    <th>Curso</th>
+                    <th>Tipo Horas</th>
+                    <th>Durac horas</th>
+                    <th>Cant sesiones</th>
+                    <th>Operaciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {curso.map((curso) => (
+                    <tr key={curso.idCurso}>
+                      <td>{curso.idCurso}</td>
+                      <td>{curso.codCurso}</td>
+                      <td>{curso.nomCurso}</td>
+                      <td>{curso.tipoHH}</td>
+                      <td align="right" width={30}>
+                        {curso.duracionCursoHH}
+                      </td>
+                      <td align="right" width={30}>
+                        {curso.cantSesionesCurso}
+                      </td>
+                      <td>
+                        {userData.nomRol === "administrador" ? (
+                          <button
+                            data-title="Editar curso"
+                            id="OperationBtns"
+                            onClick={() => editarCurso(curso.idCurso)}
+                          >
+                            <RiEditBoxFill id="icons" />
+                          </button>
+                        ) : null}
+
+                        <Link to={`/listadoRamos/${curso.idCurso}`}>
+                          <button
+                            data-title="Ramo relacionado"
+                            id="OperationBtns"
+                          >
+                            <BsBookmarksFill id="icons" />
+                          </button>
+                        </Link>
+
+                        <Link to={`/listadoReqCurso/${curso.idCurso}`}>
+                          <button
+                            data-title="Requisito relacionado"
+                            id="OperationBtns"
+                          >
+                            <AiTwotoneEdit id="icons" />
+                          </button>
+                        </Link>
+                        {userData.nomRol === "administrador" ? (
+                          <button
+                            data-title="Desactivar curso"
+                            onClick={() => desactivar(curso.idCurso)}
+                            id="OperationBtns"
+                          >
+                            <BsFillTrashFill id="icons" />
+                          </button>
+                        ) : null}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <Paginador
+                paginas={cantidadPaginas}
+                cambiarNumero={setNumBoton}
+                num_boton={num_boton}
+              ></Paginador>
             </div>
           </div>
-
-          <InsertarCurso
-            isActiveCurso={isActiveInsertCurso}
-            cambiarEstado={setIsActiveInsertCurso}
-            curso={curso}
-          ></InsertarCurso>
-
-          <EditarCurso
-            isActiveEditCurso={isActiveEditCurso}
-            cambiarEstado={setIsActiveEditCurso}
-            idCurso={idCurso}
-            setCurso={setCurso}
-            curso={curso}
-            nombreTabla={nombreTabla}
-          ></EditarCurso>
-
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Código</th>
-                <th>Curso</th>
-                <th>Tipo Horas</th>
-                <th>Durac horas</th>
-                <th>Cant sesiones</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {curso.map((curso) => (
-                <tr key={curso.idCurso}>
-                  <td>{curso.idCurso}</td>
-                  <td>{curso.codCurso}</td>
-                  <td>{curso.nomCurso}</td>
-                  <td>{curso.tipoHH}</td>
-                  <td align="right" width={30}>
-                    {curso.duracionCursoHH}
-                  </td>
-                  <td align="right" width={30}>
-                    {curso.cantSesionesCurso}
-                  </td>
-                  <td>
-                    <button
-                      data-title="Editar curso"
-                      id="OperationBtns"
-                      onClick={() => editarCurso(curso.idCurso)}
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-
-
-                    <Link to={`/listadoRamos/${curso.idCurso}`} >
-                      <button data-title="Ramo relacionado" id="OperationBtns">
-                        <BsBookmarksFill id="icons" />
-                      </button>
-                    </Link>
-
-                    
-                    <Link to={`/listadoReqCurso/${curso.idCurso}`} >
-                      <button data-title="Requisito relacionado" id="OperationBtns">
-                        <AiTwotoneEdit id="icons" />
-                      </button>
-                    </Link>
-
-                    
-                    <button
-                      data-title="Desactivar curso"
-                      onClick={() => desactivar(curso.idCurso)}
-                      id="OperationBtns"
-                    >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
-        </div>
-      </div>
+        </>
+      ) : (
+        <AuthorizationError></AuthorizationError>
+      )}
     </>
   ) : (
     <Navigate to="/login"></Navigate>

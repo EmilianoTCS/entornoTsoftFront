@@ -9,6 +9,7 @@ import Header from "../../../../templates/Header/Header";
 import "../TablasStyles.css";
 import "./formStyle.css";
 import "../BtnInsertar.css";
+import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function FormularioEvaluacionRespondida() {
   const [, params] = useRoute(
@@ -140,7 +141,7 @@ export default function FormularioEvaluacionRespondida() {
                     setIdEDDEvalProyEmp(idEDDEvalPregunta.idEDDEvalProyResp);
                     setDisableInputText(!disableInputText);
                   }}
-                />  
+                />
               </div>
               <div>
                 <>
@@ -179,189 +180,222 @@ export default function FormularioEvaluacionRespondida() {
   var auxOrden = "0";
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <div>
-        <a
-          style={{ margin: "10px", marginTop: "15px", marginLeft: "60px" }}
-          type="submit"
-          id="btnAtras"
-          value="Registrar"
-          href="javascript: history.go(-1)"
-        >
-          Volver
-        </a>
-        <Container id="textStyle">
-          {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
-            if (auxEncabezado !== idEDDEvalPregunta.nomEvaluacion) {
-              return (
-                <>
-                  <strong>
-                    <h1>
-                      Resultados de la evaluación: &nbsp;
-                      <br></br>
-                      {(auxEncabezado = idEDDEvalPregunta.nomEvaluacion)}
-                    </h1>
-                  </strong>
-                  <strong>
-                    <h5
-                      style={{
-                        backgroundColor: "#dfdfdf",
-                        color: "black",
-                        padding: "4px",
-                      }}
-                    >
-                      Realizado por: &nbsp;{idEDDEvalPregunta.nomEvaluado}
-                    </h5>
-                  </strong>
-                  <br></br>
-                  <strong>
-                    <h5>Instrucciones :</h5>
-                  </strong>
-                  <strong>
-                    <h5>
-                      -Seleccione y elija el orden de los comentarios a
-                      desplegar en el dashboard.
-                      <br></br>
-                      -Las respuestas de alternativas no son seleccionables.
-                    </h5>
-                  </strong>
-                </>
-              );
-            }
-          })}
-        </Container>
-        <Container id="fondoTabla1">
-          <br></br>
-          <Container>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ||
+    userData.nomRol === "referente" ||
+    userData.nomRol === "colaborador" ? (
+      <>
+        <Header></Header>
+        <div>
+          <a
+            style={{ margin: "10px", marginTop: "15px", marginLeft: "60px" }}
+            type="submit"
+            id="btnAtras"
+            value="Registrar"
+            href="javascript: history.go(-1)"
+          >
+            Volver
+          </a>
+          <Container id="textStyle">
             {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
-              if (auxOrden !== idEDDEvalPregunta.pregunta) {
+              if (auxEncabezado !== idEDDEvalPregunta.nomEvaluacion) {
                 return (
                   <>
-                    <Table>
-                      <tr>
-                        <td
-                          id="pregunta"
-                          style={{ textTransform: "uppercase" }}
-                        >
-                          {idEDDEvalPregunta.ordenPregunta}. &nbsp;
-                          {(auxOrden = idEDDEvalPregunta.pregunta)} &nbsp;
-                          {idEDDEvalPregunta.nomCompetencia}
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td
-                          id="respuesta"
-                          style={{
-                            textTransform: "uppercase",
-                            backgroundColor: "#dfdfdf",
-                            padding: "7px",
-                          }}
-                        >
-                          {/* <Table border={1} style={{ backgroundColor: '#dfdfdf' }}>
-                            <tr>
-                              <td> */}
-                          {idEDDEvalPregunta.respuesta === null ? (
-                            <h6>No respondida</h6>
-                          ) : (
-                            idEDDEvalPregunta.respuesta
-                          )}
-                          {/* </td>
-                            </tr>
-                          </Table> */}
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>
-                          {idEDDEvalPregunta.tipoResp === "T" ? (
-                            <form
-                              name={idEDDEvalPregunta.pregunta}
-                              key={idEDDEvalPregunta.pregunta}
-                              onSubmit={VerEnDashboard}
-                            >
-                              <label for="verEnDashboard">
-                                Seleccionar : &nbsp;
-                              </label>
-                              <input
-                                style={{ width: "20px", height: "20px" }}
-                                name={idEDDEvalPregunta.pregunta}
-                                type="checkbox"
-                                key={idEDDEvalPregunta.pregunta}
-                                value={
-                                  idEDDEvalPregunta.verEnDashboard === null ||
-                                  idEDDEvalPregunta.verEnDashboard === "0"
-                                    ? false
-                                    : true
-                                }
-                                defaultChecked={
-                                  idEDDEvalPregunta.verEnDashboard === null ||
-                                  idEDDEvalPregunta.verEnDashboard === "0" ||
-                                  idEDDEvalPregunta.verEnDashboard === ""
-                                    ? false
-                                    : true
-                                }
-                                onChange={({ target }) => {
-                                  setInputVerEnDashboard(target.value);
-                                  setIdEDDEvalProyEmp(
-                                    idEDDEvalPregunta.idEDDEvalProyResp
-                                  );
-                                  setDisableInputText(!disableInputText);
-                                }}
-                              />
-                              <>
-                                <h7>
-                                  {" "}
-                                  &nbsp;&nbsp;Orden de despliegue en dashboard :
-                                  &nbsp;
-                                </h7>
-                                <input
-                                  style={{
-                                    width: "33px",
-                                    height: "30px",
-                                    fontSize: "16px",
-                                  }}
-                                  type="txt"
-                                  name={idEDDEvalPregunta.pregunta}
-                                  defaultValue={
-                                    idEDDEvalPregunta.ordenDashboard
-                                  }
-                                  onChange={({ target }) => {
-                                    setInputOrdenDashboard(target.value);
-                                    setIdEDDEvalProyEmp(
-                                      idEDDEvalPregunta.idEDDEvalProyResp
-                                    );
-                                  }}
-                                ></input>
-                                <br></br>
-                              </>
-                              <p>
-                                <Button
-                                  type="submit"
-                                  id="enviarOrdenComentario"
-                                >
-                                  Enviar
-                                </Button>
-                              </p>
-                            </form>
-                          ) : (
-                            <></>
-                          )}
-                        </td>
-                      </tr>
-                    </Table>
+                    <strong>
+                      <h1>
+                        Resultados de la evaluación: &nbsp;
+                        <br></br>
+                        {(auxEncabezado = idEDDEvalPregunta.nomEvaluacion)}
+                      </h1>
+                    </strong>
+                    <strong>
+                      <h5
+                        style={{
+                          backgroundColor: "#dfdfdf",
+                          color: "black",
+                          padding: "4px",
+                        }}
+                      >
+                        Evaluador: &nbsp;{idEDDEvalPregunta.nomEvaluador}
+                      </h5>
+                      <h5
+                        style={{
+                          backgroundColor: "#dfdfdf",
+                          color: "black",
+                          padding: "4px",
+                        }}
+                      >
+                        Evaluado: &nbsp;{idEDDEvalPregunta.nomEvaluado}
+                      </h5>
+                    </strong>
+                    <br></br>
+                    {userData.nomRol === "administrador" ||
+                    userData.nomRol === "people" ||
+                    userData.nomRol === "gerencia" ? (
+                      <>
+                        <strong>
+                          <h5>Instrucciones :</h5>
+                        </strong>
+                        <strong>
+                          <h5>
+                            -Seleccione y elija el orden de los comentarios a
+                            desplegar en el dashboard.
+                            <br></br>
+                            -Las respuestas de alternativas no son
+                            seleccionables.
+                          </h5>
+                        </strong>
+                      </>
+                    ) : null}
                   </>
                 );
               }
             })}
-            &nbsp;
           </Container>
-        </Container>
-      </div>
-      <br></br>
-      <br></br>
-    </>
+          <Container id="fondoTabla1">
+            <br></br>
+            <Container>
+              {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
+                if (auxOrden !== idEDDEvalPregunta.pregunta) {
+                  return (
+                    <>
+                      <Table>
+                        <tr>
+                          <td
+                            id="pregunta"
+                            style={{ textTransform: "uppercase" }}
+                          >
+                            {idEDDEvalPregunta.ordenPregunta}. &nbsp;
+                            {(auxOrden = idEDDEvalPregunta.pregunta)} &nbsp;
+                            {idEDDEvalPregunta.tipoResp === "T"
+                              ? null
+                              : "(" + idEDDEvalPregunta.nomCompetencia + ")"}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td
+                            id="respuesta"
+                            style={{
+                              textTransform: "uppercase",
+                              backgroundColor: "#dfdfdf",
+                              padding: "7px",
+                            }}
+                          >
+                            {/* <Table border={1} style={{ backgroundColor: '#dfdfdf' }}>
+                            <tr>
+                              <td> */}
+                            {idEDDEvalPregunta.respuesta === null ? (
+                              <h6>No respondida</h6>
+                            ) : (
+                              idEDDEvalPregunta.respuesta
+                            )}
+                            {/* </td>
+                            </tr>
+                          </Table> */}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          {userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia" ? (
+                            <td>
+                              {idEDDEvalPregunta.tipoResp === "T" ? (
+                                <form
+                                  name={idEDDEvalPregunta.pregunta}
+                                  key={idEDDEvalPregunta.pregunta}
+                                  onSubmit={VerEnDashboard}
+                                >
+                                  <label for="verEnDashboard">
+                                    Seleccionar : &nbsp;
+                                  </label>
+                                  <input
+                                    style={{ width: "20px", height: "20px" }}
+                                    name={idEDDEvalPregunta.pregunta}
+                                    type="checkbox"
+                                    key={idEDDEvalPregunta.pregunta}
+                                    value={
+                                      idEDDEvalPregunta.verEnDashboard ===
+                                        null ||
+                                      idEDDEvalPregunta.verEnDashboard === "0"
+                                        ? false
+                                        : true
+                                    }
+                                    defaultChecked={
+                                      idEDDEvalPregunta.verEnDashboard ===
+                                        null ||
+                                      idEDDEvalPregunta.verEnDashboard ===
+                                        "0" ||
+                                      idEDDEvalPregunta.verEnDashboard === ""
+                                        ? false
+                                        : true
+                                    }
+                                    onChange={({ target }) => {
+                                      setInputVerEnDashboard(target.value);
+                                      setIdEDDEvalProyEmp(
+                                        idEDDEvalPregunta.idEDDEvalProyResp
+                                      );
+                                      setDisableInputText(!disableInputText);
+                                    }}
+                                  />
+                                  <>
+                                    <h7>
+                                      {" "}
+                                      &nbsp;&nbsp;Orden de despliegue en
+                                      dashboard : &nbsp;
+                                    </h7>
+                                    <input
+                                      style={{
+                                        width: "33px",
+                                        height: "30px",
+                                        fontSize: "16px",
+                                      }}
+                                      type="txt"
+                                      name={idEDDEvalPregunta.pregunta}
+                                      defaultValue={
+                                        idEDDEvalPregunta.ordenDashboard
+                                      }
+                                      onChange={({ target }) => {
+                                        setInputOrdenDashboard(target.value);
+                                        setIdEDDEvalProyEmp(
+                                          idEDDEvalPregunta.idEDDEvalProyResp
+                                        );
+                                      }}
+                                    ></input>
+                                    <br></br>
+                                  </>
+                                  <p>
+                                    <Button
+                                      type="submit"
+                                      id="enviarOrdenComentario"
+                                    >
+                                      Enviar
+                                    </Button>
+                                  </p>
+                                </form>
+                              ) : (
+                                <></>
+                              )}
+                            </td>
+                          ) : null}
+                        </tr>
+                      </Table>
+                    </>
+                  );
+                }
+              })}
+              &nbsp;
+            </Container>
+          </Container>
+        </div>
+        <br></br>
+        <br></br>
+      </>
+    ) : (
+      <AuthorizationError />
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

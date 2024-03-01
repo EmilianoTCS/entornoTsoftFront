@@ -17,6 +17,7 @@ import TopAlerts from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoSesion() {
   const [, params] = useRoute("/listadoSesiones/:params");
@@ -91,8 +92,7 @@ export default function ListadoSesion() {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
       idRamo: idRamo,
-      idCurso,
-      idCurso,
+      idCurso: idCurso,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
@@ -104,167 +104,182 @@ export default function ListadoSesion() {
   //PAGINADOR ---------------------
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de Sesiones</h1>
-          <h6 style={{ color: "gray" }}>
-            Factory Devops {"->"} Listado de Sesiones
-          </h6>
-          <br></br>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ||
+    userData.nomRol === "relator" ? (
+      <>
+        <Header></Header>
+        <br></br>
+        <br></br>
+        <div id="fondoTabla">
+          <div id="containerTablas">
+            <h1 id="TitlesPages">Listado de Sesiones</h1>
+            <h6 style={{ color: "gray" }}>
+              Factory Devops {"->"} Listado de Sesiones
+            </h6>
+            <br></br>
 
-          <div id="selectPaginador">
-            <Button id="btn" onClick={insertarSesion}>
-              Crear Sesión
-            </Button>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cantidad registros: </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadR"
-                id="input_CantidadR"
-                onChange={({ target }) => {
-                  setcantidadPorPagina(target.value);
-                  setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cursos: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidCurso(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option value="">Todos</option>
-                {listCurso.map((valor) => (
-                  <option
-                    selected={valor.idCurso === idCurso ? "selected" : ""}
-                    value={valor.idCurso}
-                  >
-                    {valor.nomCurso}
+            <div id="selectPaginador">
+              {userData.nomRol === "administrador" ? (
+                <Button id="btn" onClick={insertarSesion}>
+                  Crear Sesión
+                </Button>
+              ) : null}
+
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Cantidad registros: </label>
+                <select
+                  value={cantidadPorPagina || ""}
+                  className="form-control"
+                  name="input_CantidadR"
+                  id="input_CantidadR"
+                  onChange={({ target }) => {
+                    setcantidadPorPagina(target.value);
+                    setNumBoton(1);
+                  }}
+                  required
+                >
+                  <option hidden value="">
+                    {cantidadPorPagina}
                   </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Ramos: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidRamo(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option value="">Todos</option>
-                {listRamo.map((valor) => (
-                  <option
-                    selected={valor.idRamo === idRamo ? "selected" : ""}
-                    value={valor.idRamo}
-                  >
-                    {valor.nomRamo}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <InsertarSesion
-            isActiveSesion={isActiveInsertSesion}
-            cambiarEstado={setIsActiveInsertSesion}
-            sesion={Sesion}
-          ></InsertarSesion>
-
-          <EditarSesion
-            isActiveEditSesion={isActiveEditSesion}
-            cambiarEstado={setIsActiveEditSesion}
-            idSesion={idSesion}
-            setSesion={setSesion}
-            sesion={Sesion}
-            nombreTabla={nombreTabla}
-          ></EditarSesion>
-
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>N° Sesión</th>
-                <th>Sesión</th>
-                <th>Tipo</th>
-                <th>Tipo Horas</th>
-                <th>Durac Horas</th>
-                <th>Curso</th>
-                <th>Ramo</th>
-
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Sesion.map((Sesion) => (
-                <tr key={Sesion.idSesion}>
-                  <td >{Sesion.idSesion}</td>
-                  <td >{Sesion.nroSesion}</td>
-                  <td >{Sesion.nomSesion}</td>
-                  <td>{Sesion.tipoSesion}</td>
-                  <td>{Sesion.tipoSesionHH}</td>
-                  <td >{Sesion.duracionSesionHH}</td>
-                  <td>{Sesion.nomCurso}</td>
-                  <td>{Sesion.nomRamo}</td>
-
-                  <td>
-                    <button
-                      data-title="Editar Sesion"
-                      id="OperationBtns"
-                      onClick={() => editarSesion(Sesion.idSesion)}
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Cursos: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidCurso(target.value);
+                    setNumBoton(1);
+                  }}
+                >
+                  <option value="">Todos</option>
+                  {listCurso.map((valor) => (
+                    <option
+                      selected={valor.idCurso === idCurso ? "selected" : ""}
+                      value={valor.idCurso}
                     >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-                    <Link to={`/listadoCursoAlumnoSesion/${Sesion.idSesion}`}>
-                      <button
-                        data-title="Asistencia relacionadas"
-                        id="OperationBtns"
-                      >
-                        <BsPersonCheckFill id="icons" />
-                      </button>
-                    </Link>
-                    <button
-                      data-title="Desactivar Sesion"
-                      onClick={() => desactivar(Sesion.idSesion)}
-                      id="OperationBtns"
+                      {valor.nomCurso}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Ramos: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidRamo(target.value);
+                    setNumBoton(1);
+                  }}
+                >
+                  <option value="">Todos</option>
+                  {listRamo.map((valor) => (
+                    <option
+                      selected={valor.idRamo === idRamo ? "selected" : ""}
+                      value={valor.idRamo}
                     >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
+                      {valor.nomRamo}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <InsertarSesion
+              isActiveSesion={isActiveInsertSesion}
+              cambiarEstado={setIsActiveInsertSesion}
+              sesion={Sesion}
+            ></InsertarSesion>
+
+            <EditarSesion
+              isActiveEditSesion={isActiveEditSesion}
+              cambiarEstado={setIsActiveEditSesion}
+              idSesion={idSesion}
+              setSesion={setSesion}
+              sesion={Sesion}
+              nombreTabla={nombreTabla}
+            ></EditarSesion>
+
+            <Table id="mainTable" hover responsive>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>N° Sesión</th>
+                  <th>Sesión</th>
+                  <th>Tipo</th>
+                  <th>Tipo Horas</th>
+                  <th>Durac Horas</th>
+                  <th>Curso</th>
+                  <th>Ramo</th>
+
+                  <th>Operaciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
+              </thead>
+              <tbody>
+                {Sesion.map((Sesion) => (
+                  <tr key={Sesion.idSesion}>
+                    <td>{Sesion.idSesion}</td>
+                    <td>{Sesion.nroSesion}</td>
+                    <td>{Sesion.nomSesion}</td>
+                    <td>{Sesion.tipoSesion}</td>
+                    <td>{Sesion.tipoSesionHH}</td>
+                    <td>{Sesion.duracionSesionHH}</td>
+                    <td>{Sesion.nomCurso}</td>
+                    <td>{Sesion.nomRamo}</td>
+
+                    <td>
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Editar Sesion"
+                          id="OperationBtns"
+                          onClick={() => editarSesion(Sesion.idSesion)}
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>
+                      ) : null}
+
+                      <Link to={`/listadoCursoAlumnoSesion/${Sesion.idSesion}`}>
+                        <button
+                          data-title="Asistencia relacionadas"
+                          id="OperationBtns"
+                        >
+                          <BsPersonCheckFill id="icons" />
+                        </button>
+                      </Link>
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Desactivar Sesion"
+                          onClick={() => desactivar(Sesion.idSesion)}
+                          id="OperationBtns"
+                        >
+                          <BsFillTrashFill id="icons" />
+                        </button>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Paginador
+              paginas={cantidadPaginas}
+              cambiarNumero={setNumBoton}
+              num_boton={num_boton}
+            ></Paginador>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    ) : (
+      <AuthorizationError />
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

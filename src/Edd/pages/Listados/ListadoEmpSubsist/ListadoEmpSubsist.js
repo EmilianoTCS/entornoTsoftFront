@@ -18,6 +18,7 @@ import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoEmpSubsist() {
   const [, params] = useRoute("/listadoEmpSubsist/:params");
@@ -38,8 +39,6 @@ export default function ListadoEmpSubsist() {
   const [listEmpleado, setlistEmpleado] = useState([""]);
   const [listSubsistema, setlistSubsistema] = useState([""]);
 
-
-
   function obtenerEmpleado() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
@@ -52,17 +51,17 @@ export default function ListadoEmpSubsist() {
     const url = "pages/auxiliares/listadoSubsistemaForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistSubsistema(response)
+      setlistSubsistema(response)
     );
   }
 
-    function insertarEmpSubsist() {
-      setIsActiveInsertEmpSubsist(!isActiveInsertEmpSubsist);
-    }
-    function editarEmpSubsist(ID) {
-      setIsActiveEditEmpSubsist(!isActiveEditEmpSubsist);
-      setidEmpSubsist(ID);
-    }
+  function insertarEmpSubsist() {
+    setIsActiveInsertEmpSubsist(!isActiveInsertEmpSubsist);
+  }
+  function editarEmpSubsist(ID) {
+    setIsActiveEditEmpSubsist(!isActiveEditEmpSubsist);
+    setidEmpSubsist(ID);
+  }
 
   function desactivar(ID) {
     ConfirmAlert().then((response) => {
@@ -88,7 +87,7 @@ export default function ListadoEmpSubsist() {
       obtenerEmpleado();
       obtenerSubsist();
     },
-    [num_boton, cantidadPorPagina, idEmpleado,idSubsistema]
+    [num_boton, cantidadPorPagina, idEmpleado, idSubsistema]
   );
 
   //PAGINADOR ---------------------
@@ -100,7 +99,7 @@ export default function ListadoEmpSubsist() {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
       idEmpleado: idEmpleado,
-      idSubsistema:idSubsistema
+      idSubsistema: idSubsistema,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
@@ -112,154 +111,174 @@ export default function ListadoEmpSubsist() {
   //PAGINADOR ---------------------
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de colaborador asociados a subsistemas</h1>
-          <h6 style={{ color: "gray" }}>
-            EDD {"->"} Listado de colaborador asociados a subsistemas
-          </h6>
-          <br></br>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ? (
+      <>
+        <Header></Header>
+        <br></br>
+        <br></br>
+        <div id="fondoTabla">
+          <div id="containerTablas">
+            <h1 id="TitlesPages">
+              Listado de subsistemas asociados a colaboradores
+            </h1>
+            <h6 style={{ color: "gray" }}>
+              EDD {"->"} Listado de subsistemas asociados a colaboradores
+            </h6>
+            <br></br>
 
-          <div id="selectPaginador">
-            <Button id="btn" onClick={insertarEmpSubsist}>
-              Asociar colaborador a subsistema
-            </Button>
+            <div id="selectPaginador">
+              {userData.nomRol === "administrador" ? (
+                <Button id="btn" onClick={insertarEmpSubsist}>
+                  Asociar colaborador a subsistema
+                </Button>
+              ) : null}
 
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadRegistros">
-                Cantidad registros:{" "}
-              </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadRegistros"
-                id="input_CantidadRegistros"
-                onChange={({ target }) => {
-                  setcantidadPorPagina(target.value);
-                  setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Colaborador: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidEmpleado(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option value="">Todos</option>
-                {listEmpleado.map((valor) => (
-                  <option
-                    selected={valor.idEmpleado === idEmpleado ? "selected" : ""}
-                    value={valor.idEmpleado}
-                  >
-                    {valor.nomEmpleado}
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadRegistros">
+                  Cantidad registros:{" "}
+                </label>
+                <select
+                  value={cantidadPorPagina || ""}
+                  className="form-control"
+                  name="input_CantidadRegistros"
+                  id="input_CantidadRegistros"
+                  onChange={({ target }) => {
+                    setcantidadPorPagina(target.value);
+                    setNumBoton(1);
+                  }}
+                  required
+                >
+                  <option hidden value="">
+                    {cantidadPorPagina}
                   </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Subsistema: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidSubsistema(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option value="">Todos</option>
-                {listSubsistema.map((valor) => (
-                  <option
-                    selected={valor.idSubsistema === idSubsistema ? "selected" : ""}
-                    value={valor.idSubsistema}
-                  >
-                    {valor.nomSubsistema}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
 
-          <InsertarEmpSubsist
-            isActiveEmpSubsist={isActiveInsertEmpSubsist}
-            cambiarEstado={setIsActiveInsertEmpSubsist}
-            EmpSubsist={EmpSubsist}
-          ></InsertarEmpSubsist>
-
-          <EditarEmpSubsist
-            isActiveEditEmpSubsist={isActiveEditEmpSubsist}
-            cambiarEstado={setIsActiveEditEmpSubsist}
-            idEmpSubsist={idEmpSubsist}
-            setEmpSubsist={setEmpSubsist}
-            EmpSubsist={EmpSubsist}
-            nombreTabla={nombreTabla}
-          ></EditarEmpSubsist>
-
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Colaborador</th>
-                <th>Subsistema</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {EmpSubsist.map((EmpSubsist) => (
-                <tr key={EmpSubsist.idEmpSubsist}>
-                  <td>{EmpSubsist.idEmpSubsist}</td>
-
-                  <td>{EmpSubsist.nomEmpleado}</td>
-                  <td>{EmpSubsist.nomSubsistema}</td>
-                  <td>
-                    <button
-                      data-title="Editar colaborador subsistema"
-                      id="OperationBtns"
-                      onClick={() => editarEmpSubsist(EmpSubsist.idEmpSubsist)}
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Colaborador: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidEmpleado(target.value);
+                    setNumBoton(1);
+                  }}
+                >
+                  <option value="">Todos</option>
+                  {listEmpleado.map((valor) => (
+                    <option
+                      selected={
+                        valor.idEmpleado === idEmpleado ? "selected" : ""
+                      }
+                      value={valor.idEmpleado}
                     >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-
-                    <button
-                      data-title="Desactivar colaborador subsistema"
-                      onClick={() => desactivar(EmpSubsist.idEmpSubsist)}
-                      id="OperationBtns"
+                      {valor.nomEmpleado}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Subsistema: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidSubsistema(target.value);
+                    setNumBoton(1);
+                  }}
+                >
+                  <option value="">Todos</option>
+                  {listSubsistema.map((valor) => (
+                    <option
+                      selected={
+                        valor.idSubsistema === idSubsistema ? "selected" : ""
+                      }
+                      value={valor.idSubsistema}
                     >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
+                      {valor.nomSubsistema}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <InsertarEmpSubsist
+              isActiveEmpSubsist={isActiveInsertEmpSubsist}
+              cambiarEstado={setIsActiveInsertEmpSubsist}
+              EmpSubsist={EmpSubsist}
+            ></InsertarEmpSubsist>
+
+            <EditarEmpSubsist
+              isActiveEditEmpSubsist={isActiveEditEmpSubsist}
+              cambiarEstado={setIsActiveEditEmpSubsist}
+              idEmpSubsist={idEmpSubsist}
+              setEmpSubsist={setEmpSubsist}
+              EmpSubsist={EmpSubsist}
+              nombreTabla={nombreTabla}
+            ></EditarEmpSubsist>
+
+            <Table id="mainTable" hover responsive>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Colaborador</th>
+                  <th>Subsistema</th>
+                  {userData.nomRol === "administrador" ? (
+                    <th>Operaciones</th>
+                  ) : null}
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
+              </thead>
+              <tbody>
+                {EmpSubsist.map((EmpSubsist) => (
+                  <tr key={EmpSubsist.idEmpSubsist}>
+                    <td>{EmpSubsist.idEmpSubsist}</td>
+
+                    <td>{EmpSubsist.nomEmpleado}</td>
+                    <td>{EmpSubsist.nomSubsistema}</td>
+                    {userData.nomRol === "administrador" ? (
+                      <td>
+                        <button
+                          data-title="Editar colaborador subsistema"
+                          id="OperationBtns"
+                          onClick={() =>
+                            editarEmpSubsist(EmpSubsist.idEmpSubsist)
+                          }
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>
+
+                        <button
+                          data-title="Desactivar colaborador subsistema"
+                          onClick={() => desactivar(EmpSubsist.idEmpSubsist)}
+                          id="OperationBtns"
+                        >
+                          <BsFillTrashFill id="icons" />
+                        </button>
+                      </td>
+                    ) : null}
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Paginador
+              paginas={cantidadPaginas}
+              cambiarNumero={setNumBoton}
+              num_boton={num_boton}
+            ></Paginador>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    ) : (
+      <AuthorizationError />
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

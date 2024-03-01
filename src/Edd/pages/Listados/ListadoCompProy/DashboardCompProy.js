@@ -32,6 +32,7 @@ import {
   ArcElement,
 } from "chart.js";
 import ExtraGraph from "./ExtraGraph";
+import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 ChartJS.register(
   CategoryScale,
@@ -126,8 +127,6 @@ export default function DashboardCompProy() {
       setNombrePDF(
         "Dash_comp_proy_" + tipoCargo + "_" + data[0].nomProyecto + "_" + date
       );
-
-      
     });
   }
   useEffect(() => {
@@ -290,7 +289,6 @@ export default function DashboardCompProy() {
 
     return <>{tableRows}</>;
   }
-
 
   function LineChartInvertido() {
     const ciclosConDatos = [
@@ -511,98 +509,104 @@ export default function DashboardCompProy() {
       idEDDProyecto: idProyecto,
       cicloEvaluacion: cicloEvaluacion,
     });
-
-    
   };
 
   //---------------------- MAIN RENDER ----------------------
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <br></br>
-      <h2
-        style={{
-          background: "white",
-          width: "1000px",
-          textAlign: "center",
-          margin: "auto auto",
-          borderRadius: "0.5em",
-          padding: "5px",
-        }}
-      >
-        Dashboard Comparación ciclos de proyectos - {tipoCargo}
-      </h2>
-      <table style={{ margin: "auto" }}>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ? (
+      <>
+        <Header></Header>
         <br></br>
-        <tr>
+        <h2
+          style={{
+            background: "white",
+            width: "1000px",
+            textAlign: "center",
+            margin: "auto auto",
+            borderRadius: "0.5em",
+            padding: "5px",
+          }}
+        >
+          Dashboard Comparación ciclos de proyectos - {tipoCargo}
+        </h2>
+        <table style={{ margin: "auto" }}>
           <br></br>
-          <td>
-            <div
-              className="bg-light mx-auto px-2 border}}"
-              style={{ width: "800px", height: "400px" }}
-            >
-              {BarrasChart()}
-            </div>
+          <tr>
             <br></br>
-            {Info()}
+            <td>
+              <div
+                className="bg-light mx-auto px-2 border}}"
+                style={{ width: "800px", height: "400px" }}
+              >
+                {BarrasChart()}
+              </div>
+              <br></br>
+              {Info()}
 
-            <table id="fondoTablaDashCompProy">
-              {/* <tr>{countCompetenciasPorCiclo()}</tr> */}
-              <tr>
-                <PromedioCompetenciasTabla datos={DashCompProy} />
-              </tr>
-              <tr>
-                <div
-                  style={{
-                    width: "530px",
-                    alignItems: "center",
-                    alignContent: "center",
-                  }}
-                >
-                  <h5
+              <table id="fondoTablaDashCompProy">
+                {/* <tr>{countCompetenciasPorCiclo()}</tr> */}
+                <tr>
+                  <PromedioCompetenciasTabla datos={DashCompProy} />
+                </tr>
+                <tr>
+                  <div
                     style={{
-                      textAlign: "center",
+                      width: "530px",
+                      alignItems: "center",
+                      alignContent: "center",
                     }}
                   >
-                    <b>Tendencia '% de aprobación' de ciclos por competencia</b>
-                  </h5>
-                  {LineChartInvertido()}
-                </div>
-              </tr>
-            </table>
-            <div
-              style={{
-                backgroundColor: "white",
-                marginTop: "10px",
-                borderRadius: "0 0 30px 30px",
-                marginBottom: "10px",
-                alignContent: "center",
-                justifyContent: "center",
-              }}
-              className="beforeBreakGraph"
-            >
-              {activeGraph ? (
-                <ExtraGraph
-                  idEDDEvaluacion={paramsExtraGraph.idEDDEvaluacion}
-                  nomEvaluacion={paramsExtraGraph.nomEvaluacion}
-                  idEDDProyecto={paramsExtraGraph.idEDDProyecto}
-                  cicloEvaluacion={paramsExtraGraph.cicloEvaluacion}
-                  setActiveGraph={setActiveGraph}
-                  activeGraph={activeGraph}
-                />
-              ) : (
-                <></>
-              )}
-            </div>
-            <ExportPDF nombreTabla={nombrePDF} />
-          </td>
-        </tr>
-      </table>
+                    <h5
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      <b>
+                        Tendencia '% de aprobación' de ciclos por competencia
+                      </b>
+                    </h5>
+                    {LineChartInvertido()}
+                  </div>
+                </tr>
+              </table>
+              <div
+                style={{
+                  backgroundColor: "white",
+                  marginTop: "10px",
+                  borderRadius: "0 0 30px 30px",
+                  marginBottom: "10px",
+                  alignContent: "center",
+                  justifyContent: "center",
+                }}
+                className="beforeBreakGraph"
+              >
+                {activeGraph ? (
+                  <ExtraGraph
+                    idEDDEvaluacion={paramsExtraGraph.idEDDEvaluacion}
+                    nomEvaluacion={paramsExtraGraph.nomEvaluacion}
+                    idEDDProyecto={paramsExtraGraph.idEDDProyecto}
+                    cicloEvaluacion={paramsExtraGraph.cicloEvaluacion}
+                    setActiveGraph={setActiveGraph}
+                    activeGraph={activeGraph}
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
+              <ExportPDF nombreTabla={nombrePDF} />
+            </td>
+          </tr>
+        </table>
 
-      <br></br>
-    </>
-  ) : (
+        <br></br>
+      </>
+    ) : (
+      <AuthorizationError />
+    )
+  ) : ( 
     <Navigate to="/login"></Navigate>
   );
 }

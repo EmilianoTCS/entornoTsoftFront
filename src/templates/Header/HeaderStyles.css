@@ -1,7 +1,7 @@
 #HeaderContainer {
   background-color: #fff !important;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   min-width: 20%;
   box-shadow: -1px 13px 27px -7px rgba(0, 0, 0, 0.82);

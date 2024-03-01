@@ -5,7 +5,6 @@ import DashboardCompProy_detalle from "./DashboardCompProy_detalle";
 import SendDataService from "../../../../services/SendDataService";
 import { Doughnut, Bar } from "react-chartjs-2";
 import "./DashboardEddResumenEval.css";
-import { Link } from "react-router-dom";
 export default function DashboardEddResumenEval_detalle({
   idCliente,
   idServicio,

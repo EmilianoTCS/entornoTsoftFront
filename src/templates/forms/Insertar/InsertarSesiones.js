@@ -70,12 +70,12 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear Sesion</Modal.Title>
+          <Modal.Title>Crear Sesión</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
           <div>
-              <label htmlFor="input_NotaExamen">Número de sesion:</label>
+              <label htmlFor="input_NotaExamen">Número de sesión:</label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Número de la sesion"
@@ -91,7 +91,7 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
 
 
             <div>
-              <label htmlFor="input_nombreDelSesion">Nombre de la sesion:</label>
+              <label htmlFor="input_nombreDelSesion">Nombre de la sesión:</label>
               <input
                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre de la Sesion"
@@ -143,7 +143,7 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
               </select>
             </div>      
             <div>
-              <label htmlFor="input_nombreDelSesion">Duracion de la sesion:</label>
+              <label htmlFor="input_nombreDelSesion">Duracion de la sesión:</label>
               <input
                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba la duración de la Sesion"

@@ -21,6 +21,7 @@ import TopAlerts from "../../../templates/alerts/TopAlerts";
 import "../InsertarCursoListadoCursosYRamos.css";
 import Button from "react-bootstrap/Button";
 import Paginador from "../../../templates/Paginador/Paginador";
+import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoRamos() {
   const [, params] = useRoute("/listadoRamos/:params");
@@ -98,160 +99,182 @@ export default function ListadoRamos() {
   //PAGINADOR ---------------------
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de ramos</h1>
-          <h6 style={{ color: "gray" }}>
-            Factory Devops {"->"} Listado de Ramos
-          </h6>
-          <br></br>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ||
+    userData.nomRol === "relator" ? (
+      <>
+        <Header></Header>
+        <br></br>
+        <br></br>
+        <div id="fondoTabla">
+          <div id="containerTablas">
+            <h1 id="TitlesPages">Listado de ramos</h1>
+            <h6 style={{ color: "gray" }}>
+              Factory Devops {"->"} Listado de Ramos
+            </h6>
+            <br></br>
 
-          <div id="selectPaginador">
-            <Button id="btn1" onClick={insertarRamo}>
-              Crear Ramo
-            </Button>
+            <div id="selectPaginador">
+              {userData.nomRol === "administrador" ? (
+                <Button id="btn1" onClick={insertarRamo}>
+                  Crear Ramo
+                </Button>
+              ) : null}
 
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cantidad registros: </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadR"
-                id="input_CantidadR"
-                onChange={({ target }) => {
-                  setcantidadPorPagina(target.value);
-                  setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cursos: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidCurso(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option value="">Todos</option>
-                {listCurso.map((valor) => (
-                  <option
-                    selected={valor.idCurso === idCurso ? "selected" : ""}
-                    value={valor.idCurso}
-                  >
-                    {valor.nomCurso}
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Cantidad registros: </label>
+                <select
+                  value={cantidadPorPagina || ""}
+                  className="form-control"
+                  name="input_CantidadR"
+                  id="input_CantidadR"
+                  onChange={({ target }) => {
+                    setcantidadPorPagina(target.value);
+                    setNumBoton(1);
+                  }}
+                  required
+                >
+                  <option hidden value="">
+                    {cantidadPorPagina}
                   </option>
-                ))}
-              </select>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Cursos: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidCurso(target.value);
+                    setNumBoton(1);
+                  }}
+                >
+                  <option value="">Todos</option>
+                  {listCurso.map((valor) => (
+                    <option
+                      selected={valor.idCurso === idCurso ? "selected" : ""}
+                      value={valor.idCurso}
+                    >
+                      {valor.nomCurso}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
-          <InsertarRamo
-            isActiveRamo={isActiveInsertRamo}
-            cambiarEstado={setIsActiveInsertRamo}
-            ramos={ramos}
-          ></InsertarRamo>
-          <EditarRamo
-            isActiveEditRamo={isActiveEditRamo}
-            cambiarEstado={setIsActiveEditRamo}
-            idRamo={idRamo}
-            setRamos={setRamos}
-            ramos={ramos}
-            nombreTabla={nombreTabla}
-          ></EditarRamo>
+            <InsertarRamo
+              isActiveRamo={isActiveInsertRamo}
+              cambiarEstado={setIsActiveInsertRamo}
+              ramos={ramos}
+            ></InsertarRamo>
+            <EditarRamo
+              isActiveEditRamo={isActiveEditRamo}
+              cambiarEstado={setIsActiveEditRamo}
+              idRamo={idRamo}
+              setRamos={setRamos}
+              ramos={ramos}
+              nombreTabla={nombreTabla}
+            ></EditarRamo>
 
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Código</th>
-                <th>Ramo</th>
-                <th>Tipo</th>
-                <th>Tipo horario</th>
-                <th>Duración</th>
-                <th>Cant sesiones</th>
-                <th>Curso</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ramos.map((ramos) => (
-                <tr key={ramos.idRamo}>
-                  <td align="right" width={1}>
-                    {ramos.idRamo}
-                  </td>
-                  <td>{ramos.codRamo}</td>
-                  <td>{ramos.nomRamo}</td>
-                  <td>{ramos.tipoRamo}</td>
-                  <td>{ramos.tipoRamoHH}</td>
-                  <td align="right" width={1}>
-                    {ramos.duracionRamoHH}
-                  </td>
-                  <td align="right" width={30}>
-                    {ramos.cantSesionesRamo}
-                  </td>
-                  <td>{ramos.nomCurso}</td>
-                  <td>
-                    <button
-                      data-title="Editar ramo"
-                      id="OperationBtns"
-                      onClick={() => editarRamo(ramos.idRamo)}
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-
-                    <Link to={`/listadoSesiones/${ramos.idRamo}`}>
-                      <button data-title="Sesiones relacionados" id="OperationBtns">
-                        <IoIosMegaphone id="icons" />
-                      </button>
-                    </Link>
-
-                    <Link to={`/listadoRamoExamen/${ramos.idRamo}`}>
-                      <button data-title="Examen relacionados" id="OperationBtns">
-                        <BsPenFill id="icons" />
-                      </button>
-                    </Link>
-
-                    <Link to={`/listadoRelatorRamo/${ramos.idRamo}`}>
-                      <button data-title="Relatores relacionados" id="OperationBtns">
-                        <BsFillPersonLinesFill id="icons" />
-                      </button>
-                    </Link>
-
-                    <button
-                      data-title="Desactivar curso"
-                      id="OperationBtns"
-                      onClick={() => desactivar(ramos.idRamo)}
-                    >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
+            <Table id="mainTable" hover responsive>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Código</th>
+                  <th>Ramo</th>
+                  <th>Tipo</th>
+                  <th>Tipo horario</th>
+                  <th>Duración</th>
+                  <th>Cant sesiones</th>
+                  <th>Curso</th>
+                  <th>Operaciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
+              </thead>
+              <tbody>
+                {ramos.map((ramos) => (
+                  <tr key={ramos.idRamo}>
+                    <td align="right" width={1}>
+                      {ramos.idRamo}
+                    </td>
+                    <td>{ramos.codRamo}</td>
+                    <td>{ramos.nomRamo}</td>
+                    <td>{ramos.tipoRamo}</td>
+                    <td>{ramos.tipoRamoHH}</td>
+                    <td align="right" width={1}>
+                      {ramos.duracionRamoHH}
+                    </td>
+                    <td align="right" width={30}>
+                      {ramos.cantSesionesRamo}
+                    </td>
+                    <td>{ramos.nomCurso}</td>
+                    <td>
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Editar ramo"
+                          id="OperationBtns"
+                          onClick={() => editarRamo(ramos.idRamo)}
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>
+                      ) : null}
+
+                      <Link to={`/listadoSesiones/${ramos.idRamo}`}>
+                        <button
+                          data-title="Sesiones relacionados"
+                          id="OperationBtns"
+                        >
+                          <IoIosMegaphone id="icons" />
+                        </button>
+                      </Link>
+
+                      <Link to={`/listadoRamoExamen/${ramos.idRamo}`}>
+                        <button
+                          data-title="Examen relacionados"
+                          id="OperationBtns"
+                        >
+                          <BsPenFill id="icons" />
+                        </button>
+                      </Link>
+
+                      <Link to={`/listadoRelatorRamo/0/${ramos.idRamo}`}>
+                        <button
+                          data-title="Relatores relacionados"
+                          id="OperationBtns"
+                        >
+                          <BsFillPersonLinesFill id="icons" />
+                        </button>
+                      </Link>
+
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Desactivar curso"
+                          id="OperationBtns"
+                          onClick={() => desactivar(ramos.idRamo)}
+                        >
+                          <BsFillTrashFill id="icons" />
+                        </button>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Paginador
+              paginas={cantidadPaginas}
+              cambiarNumero={setNumBoton}
+              num_boton={num_boton}
+            ></Paginador>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    ) : (
+      <AuthorizationError />
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

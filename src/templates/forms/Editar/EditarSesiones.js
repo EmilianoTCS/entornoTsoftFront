@@ -112,15 +112,15 @@ const EditarSesion = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar Sesion</Modal.Title>
+          <Modal.Title>Editar Sesión</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
             <div>
-              <label htmlFor="input_NotaExamen">Número de sesion:</label>
+              <label htmlFor="input_NotaExamen">Número de sesión:</label>
               <input
                 style={{ textTransform: "uppercase" }}
-                placeholder="Número de la sesion"
+                placeholder="Número de la sesión"
                 value={nroSesion || ""}
                 type="number"
                 className="form-control"
@@ -134,10 +134,10 @@ const EditarSesion = ({
 
 
             <div>
-              <label htmlFor="input_nombreDelSesion">Nombre de la sesion:</label>
+              <label htmlFor="input_nombreDelSesion">Nombre de la sesión:</label>
               <input
                style={{ textTransform: "uppercase" }}
-               placeholder="Escriba el nombre de la Sesion"
+               placeholder="Escriba el nombre de la sesión"
                value={nomSesion || ""}
                 type="text"
                 className="form-control"
@@ -185,16 +185,16 @@ const EditarSesion = ({
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="ACADEMICAS">ACADEMICAS</option>
-                <option value="CRONOLOGICAS">CRONOLOGICAS</option>
+                <option value="ACADEMICAS">ACADÉMICAS</option>
+                <option value="CRONOLOGICAS">CRONOLÓGICAS</option>
                 <option value="MIXTO">MIXTO</option>
               </select>
             </div>      
             <div>
-              <label htmlFor="input_nombreDelSesion">Duracion de la sesion:</label>
+              <label htmlFor="input_nombreDelSesion">Duración de la sesión:</label>
               <input
                style={{ textTransform: "uppercase" }}
-               placeholder="Escriba la duración de la Sesion"
+               placeholder="Escriba la duración de la sesión"
                value={duracionSesionHH || ""}
                 type="number"
                 className="form-control"

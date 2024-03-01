@@ -16,6 +16,7 @@ import TopAlerts from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoServicio() {
   const [, params] = useRoute("/listadoServicios/:params");
@@ -61,7 +62,7 @@ export default function ListadoServicio() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts('successEdited');
+          TopAlerts("successEdited");
         });
       }
     });
@@ -93,140 +94,156 @@ export default function ListadoServicio() {
   );
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de servicios</h1>
-          <h6 style={{ color: "gray" }}>
-            Eval desempeño {"->"} Servicios
-          </h6>
-          <br></br>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ? (
+      <>
+        <Header></Header>
+        <br></br>
+        <br></br>
+        <div id="fondoTabla">
+          <div id="containerTablas">
+            <h1 id="TitlesPages">Listado de servicios</h1>
+            <h6 style={{ color: "gray" }}>Eval desempeño {"->"} Servicios</h6>
+            <br></br>
 
-          <div id="selectPaginador">
-            <Button id="btn" onClick={insertarServicio}>
-              Crear servicio
-            </Button>
+            <div id="selectPaginador">
+              {userData.nomRol === "administrador" ? (
+                <Button id="btn" onClick={insertarServicio}>
+                  Crear servicio
+                </Button>
+              ) : null}
 
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cantidad registros: </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadR"
-                id="input_CantidadR"
-                onChange={({ target }) => {
-                  setcantidadPorPagina(target.value);
-                  setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Clientes: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidCliente(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option hidden value="" selected>
-                  Desplegar lista
-                </option>
-                <option value="">Todos</option>
-                {listCliente.map((valor) => (
-                  <option
-                    selected={valor.idCliente === idCliente ? "selected" : ""}
-                    value={valor.idCliente}
-                  >
-                    {valor.nomCliente}
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Cantidad registros: </label>
+                <select
+                  value={cantidadPorPagina || ""}
+                  className="form-control"
+                  name="input_CantidadR"
+                  id="input_CantidadR"
+                  onChange={({ target }) => {
+                    setcantidadPorPagina(target.value);
+                    setNumBoton(1);
+                  }}
+                  required
+                >
+                  <option hidden value="">
+                    {cantidadPorPagina}
                   </option>
-                ))}
-              </select>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Clientes: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidCliente(target.value);
+                    setNumBoton(1);
+                  }}
+                >
+                  <option hidden value="" selected>
+                    Desplegar lista
+                  </option>
+                  <option value="">Todos</option>
+                  {listCliente.map((valor) => (
+                    <option
+                      selected={valor.idCliente === idCliente ? "selected" : ""}
+                      value={valor.idCliente}
+                    >
+                      {valor.nomCliente}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
-          <InsertarServicio
-            isActiveServicio={isActiveInsertServicio}
-            cambiarEstado={setIsActiveInsertServicio}
-            servicio={servicio}
-          ></InsertarServicio>
+            <InsertarServicio
+              isActiveServicio={isActiveInsertServicio}
+              cambiarEstado={setIsActiveInsertServicio}
+              servicio={servicio}
+            ></InsertarServicio>
 
-          <EditarServicio
-            isActiveEditServicio={isActiveEditServicio}
-            cambiarEstado={setIsActiveEditServicio}
-            idServicio={idServicio}
-            setServicio={setServicio}
-            servicio={servicio}
-            nombreTabla={nombreTabla}
-          ></EditarServicio>
+            <EditarServicio
+              isActiveEditServicio={isActiveEditServicio}
+              cambiarEstado={setIsActiveEditServicio}
+              idServicio={idServicio}
+              setServicio={setServicio}
+              servicio={servicio}
+              nombreTabla={nombreTabla}
+            ></EditarServicio>
 
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre del cliente</th>
-                <th>Nombre del servicio</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {servicio.map((Servicio) => (
-                <tr key={Servicio.idServicio}>
-                  <td>{Servicio.idServicio}</td>
-                  <td>{Servicio.nomCliente}</td>
-                  <td>{Servicio.nomServicio}</td>
-                  <td>
-                    <button
-                      data-title="Editar Servicio"
-                      id="OperationBtns"
-                      onClick={() => editarServicio(Servicio.idServicio)}
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-
-                    <Link to={`/listadoContacto/${Servicio.idServicio}`}>
-                      <button data-title="Contactos relacionados" id="OperationBtns">
-                        <MdContactMail id="icons" />
-                      </button>
-                    </Link>
-                    <Link to={`/listadoEddProyecto/${Servicio.idServicio}`} >
-                      <button data-title="Proyectos relacionados" id="OperationBtns">
-                        <RiEditBoxFill id="icons" />
-                      </button>
-                    </Link>
-                    <button
-                      data-title="Desactivar Servicio"
-                      onClick={() => desactivar(Servicio.idServicio)}
-                      id="OperationBtns"
-                    >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
+            <Table id="mainTable" hover responsive>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre del cliente</th>
+                  <th>Nombre del servicio</th>
+                  <th>Operaciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
+              </thead>
+              <tbody>
+                {servicio.map((Servicio) => (
+                  <tr key={Servicio.idServicio}>
+                    <td>{Servicio.idServicio}</td>
+                    <td>{Servicio.nomCliente}</td>
+                    <td>{Servicio.nomServicio}</td>
+                    <td>
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Editar Servicio"
+                          id="OperationBtns"
+                          onClick={() => editarServicio(Servicio.idServicio)}
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>
+                      ) : null}
+
+                      <Link to={`/listadoContacto/${Servicio.idServicio}`}>
+                        <button
+                          data-title="Contactos relacionados"
+                          id="OperationBtns"
+                        >
+                          <MdContactMail id="icons" />
+                        </button>
+                      </Link>
+                      <Link to={`/listadoEddProyecto/${Servicio.idServicio}`}>
+                        <button
+                          data-title="Proyectos relacionados"
+                          id="OperationBtns"
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>
+                      </Link>
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Desactivar Servicio"
+                          onClick={() => desactivar(Servicio.idServicio)}
+                          id="OperationBtns"
+                        >
+                          <BsFillTrashFill id="icons" />
+                        </button>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Paginador
+              paginas={cantidadPaginas}
+              cambiarNumero={setNumBoton}
+              num_boton={num_boton}
+            ></Paginador>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    ) : (
+      <AuthorizationError></AuthorizationError>
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

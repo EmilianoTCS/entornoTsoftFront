@@ -18,6 +18,7 @@ import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoEDDEvalPregunta() {
   const [, params] = useRoute("/listadoEddEvalPregunta/:params");
@@ -34,9 +35,7 @@ export default function ListadoEDDEvalPregunta() {
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
   const nombreTabla = "eddevalpregunta";
 
-  const [idEDDEvalCompetencia, setidEDDEvalCompetencia] = useState(
-    null
-  );
+  const [idEDDEvalCompetencia, setidEDDEvalCompetencia] = useState(null);
   const [idEDDEvaluacion, setidEDDEvaluacion] = useState(params.params);
   const [idEDDEvaPregunta, setidEDDEvaPregunta] = useState(params.params);
 
@@ -65,7 +64,7 @@ export default function ListadoEDDEvalPregunta() {
     const url = "pages/auxiliares/listadoEddEvalPregunta.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEDDEvaPregunta(response)
+      setlistEDDEvaPregunta(response)
     );
   }
 
@@ -99,11 +98,15 @@ export default function ListadoEDDEvalPregunta() {
       handleChangePaginador();
       obtenerEDDEvalCompetencia();
       obtenerEDDEvaluacion();
-      obtenerEDDEvalPregunta()
+      obtenerEDDEvalPregunta();
     },
-    [num_boton, cantidadPorPagina,idEDDEvaluacion,idEDDEvalPregunta,idEDDEvalCompetencia]
-
-    
+    [
+      num_boton,
+      cantidadPorPagina,
+      idEDDEvaluacion,
+      idEDDEvalPregunta,
+      idEDDEvalCompetencia,
+    ]
   );
 
   //PAGINADOR ---------------------
@@ -116,7 +119,7 @@ export default function ListadoEDDEvalPregunta() {
       cantidadPorPagina: cantidadPorPagina,
       idEDDEvalCompetencia: idEDDEvalCompetencia,
       idEDDEvaluacion: idEDDEvaluacion,
-      idEDDEvalPregunta:idEDDEvalPregunta
+      idEDDEvalPregunta: idEDDEvalPregunta,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
@@ -128,220 +131,212 @@ export default function ListadoEDDEvalPregunta() {
   //PAGINADOR ---------------------
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-        <a
-        
-            type="submit"
-            id="btnAtras"
-            value="Registrar"
-            href="/listadoEddEvaluacion/0">Volver
-          </a>
-          <h1 id="TitlesPages"> Listado de preguntas de evaluaciones</h1>
-          <h6 style={{ color: "gray" }}>
-            EDD {"->"} Listado de preguntas de evaluaciones
-          </h6>
-          <br></br>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ? (
+      <>
+        <Header></Header>
+        <br></br>
+        <br></br>
+        <div id="fondoTabla">
+          <div id="containerTablas">
+            <a
+              type="submit"
+              id="btnAtras"
+              value="Registrar"
+              href="/listadoEddEvaluacion/0"
+            >
+              Volver
+            </a>
+            <h1 id="TitlesPages"> Listado de preguntas de evaluaciones</h1>
+            <h6 style={{ color: "gray" }}>
+              EDD {"->"} Listado de preguntas de evaluaciones
+            </h6>
+            <br></br>
 
-          <div id="selectPaginador">
-            <Button id="btn" onClick={insertarEDDEvalPregunta}>
-              Crear pregunta 
-            </Button>
+            <div id="selectPaginador">
+              {userData.nomRol === "administrador" ? (
+                <Button id="btn" onClick={insertarEDDEvalPregunta}>
+                  Crear pregunta
+                </Button>
+              ) : null}
 
-            <div style={{width:'10em'}} className="form-group" id="btn2">
-              <label htmlFor="input_CantidadRegistros">
-                Cantidad registros:
-              </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadRegistros"
-                id="input_CantidadRegistros"
-                onChange={({ target }) => {
-                  setcantidadPorPagina(target.value);
-                  setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            {/* <div className="form-group" id="btn2" style={{width:200}}>
-              <label htmlFor="input_CantidadR">Pregunta: </label>
-              <select
-                required
-                type="text"
-                                
-                className="form-control"
-                onChange={({ target }) => {
-                  setidEDDEvaPregunta(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option value="">Todos</option>
-                {listEDDEvaPregunta.map((valor) => (
-                  <option
-                    selected={
-                      valor.idEDDEvalPregunta === idEDDEvalPregunta
-                        ? "selected"
-                        : ""
-                    }
-                    value={valor.idEDDEvalPregunta}
-                  >
-                    {valor.nomPregunta}
+              <div style={{ width: "10em" }} className="form-group" id="btn2">
+                <label htmlFor="input_CantidadRegistros">
+                  Cantidad registros:
+                </label>
+                <select
+                  value={cantidadPorPagina || ""}
+                  className="form-control"
+                  name="input_CantidadRegistros"
+                  id="input_CantidadRegistros"
+                  onChange={({ target }) => {
+                    setcantidadPorPagina(target.value);
+                    setNumBoton(1);
+                  }}
+                  required
+                >
+                  <option hidden value="">
+                    {cantidadPorPagina}
                   </option>
-                ))}
-              </select>
-            </div> */}
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Evaluación: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidEDDEvaluacion(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option value="">Todos</option>
-                {listEDDEvaluacion.map((valor) => (
-                  <option
-                    selected={
-                      valor.idEDDEvaluacion === idEDDEvaluacion
-                        ? "selected"
-                        : ""
-                    }
-                    value={valor.idEDDEvaluacion}
-                  >
-                    {valor.nomEvaluacion}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Competencia: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidEDDEvalCompetencia(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option value="">Todos</option>
-                {listEDDEvalCompetencia.map((valor) => (
-                  <option
-                    selected={
-                      valor.idEDDEvalCompetencia === idEDDEvalCompetencia
-                        ? "selected"
-                        : ""
-                    }
-                    value={valor.idEDDEvalCompetencia}
-                  >
-                    {valor.nomCompetencia}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
 
-          <InsertarEDDEvalPregunta
-            isActiveEDDEvalPregunta={isActiveInsertEDDEvalPregunta}
-            cambiarEstado={setIsActiveInsertEDDEvalPregunta}
-            EDDEvalPregunta={EDDEvalPregunta}
-          ></InsertarEDDEvalPregunta>
-
-          <EditarEddEvalPregunta
-            isActiveEditEDDEvalPregunta={isActiveEditEDDEvalPregunta}
-            cambiarEstado={setIsActiveEditEDDEvalPregunta}
-            idEDDEvalPregunta={idEDDEvalPregunta}
-            setEDDEvalPregunta={setEDDEvalPregunta}
-            EDDEvalPregunta={EDDEvalPregunta}
-            nombreTabla={nombreTabla}
-          ></EditarEddEvalPregunta>
-
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Pregunta</th>
-                <th>Orden</th>
-                <th>Evaluación</th>
-                <th>Competencia</th>
-                <th>Tipo respuesta</th>
-                <th>Obligatorio</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {EDDEvalPregunta.map((idEDDEvalPregunta) => (
-                <tr key={idEDDEvalPregunta.idEDDEvalPregunta}>
-                  <td>{idEDDEvalPregunta.idEDDEvalPregunta}</td>
-                  <td>{idEDDEvalPregunta.nomPregunta}</td>
-                  <td>{idEDDEvalPregunta.ordenPregunta}</td>
-                  <td>{idEDDEvalPregunta.nomEvaluacion}</td>
-                  <td>{idEDDEvalPregunta.nomCompetencia}</td>
-                  <td>
-                    {idEDDEvalPregunta.tipoResp === 'A' ? (
-                      <td>ALTERNATIVA</td>
-                    ) : (
-                      <td>TEXTO</td>
-                    )}
-                  </td>
-                  <td>{idEDDEvalPregunta.preguntaObligatoria}</td>
-                  
-
-                  <td align="center">
-                    <button
-                      data-title="Editar pregunta"
-                      id="OperationBtns"
-                      onClick={() =>
-                        editarEDDEvalPregunta(
-                          idEDDEvalPregunta.idEDDEvalPregunta
-                        )
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Evaluación: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidEDDEvaluacion(target.value);
+                    setNumBoton(1);
+                  }}
+                >
+                  <option value="">Todos</option>
+                  {listEDDEvaluacion.map((valor) => (
+                    <option
+                      selected={
+                        valor.idEDDEvaluacion === idEDDEvaluacion
+                          ? "selected"
+                          : ""
                       }
+                      value={valor.idEDDEvaluacion}
                     >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-                    <Link to={`/listadoEddEvalRespPreg/${idEDDEvalPregunta.idEDDEvalPregunta}`}>
-                      <button data-title="Respuestas relacionadas" id="OperationBtns">
-                        <AiFillBook id="icons" />
-                      </button>
-                    </Link>
-                    <button
-                      data-title="Desactivar pregunta"
-                      onClick={() =>
-                        desactivar(idEDDEvalPregunta.idEDDEvalPregunta)
+                      {valor.nomEvaluacion}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Competencia: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidEDDEvalCompetencia(target.value);
+                    setNumBoton(1);
+                  }}
+                >
+                  <option value="">Todos</option>
+                  {listEDDEvalCompetencia.map((valor) => (
+                    <option
+                      selected={
+                        valor.idEDDEvalCompetencia === idEDDEvalCompetencia
+                          ? "selected"
+                          : ""
                       }
-                      id="OperationBtns"
+                      value={valor.idEDDEvalCompetencia}
                     >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
+                      {valor.nomCompetencia}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <InsertarEDDEvalPregunta
+              isActiveEDDEvalPregunta={isActiveInsertEDDEvalPregunta}
+              cambiarEstado={setIsActiveInsertEDDEvalPregunta}
+              EDDEvalPregunta={EDDEvalPregunta}
+            ></InsertarEDDEvalPregunta>
+
+            <EditarEddEvalPregunta
+              isActiveEditEDDEvalPregunta={isActiveEditEDDEvalPregunta}
+              cambiarEstado={setIsActiveEditEDDEvalPregunta}
+              idEDDEvalPregunta={idEDDEvalPregunta}
+              setEDDEvalPregunta={setEDDEvalPregunta}
+              EDDEvalPregunta={EDDEvalPregunta}
+              nombreTabla={nombreTabla}
+            ></EditarEddEvalPregunta>
+
+            <Table id="mainTable" hover responsive>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Pregunta</th>
+                  <th>Orden</th>
+                  <th>Evaluación</th>
+                  <th>Competencia</th>
+                  <th>Tipo respuesta</th>
+                  <th>Obligatorio</th>
+                  <th>Operaciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
+              </thead>
+              <tbody>
+                {EDDEvalPregunta.map((idEDDEvalPregunta) => (
+                  <tr key={idEDDEvalPregunta.idEDDEvalPregunta}>
+                    <td>{idEDDEvalPregunta.idEDDEvalPregunta}</td>
+                    <td>{idEDDEvalPregunta.nomPregunta}</td>
+                    <td>{idEDDEvalPregunta.ordenPregunta}</td>
+                    <td>{idEDDEvalPregunta.nomEvaluacion}</td>
+                    <td>{idEDDEvalPregunta.nomCompetencia}</td>
+                    <td>
+                      {idEDDEvalPregunta.tipoResp === "A" ? (
+                        <td>ALTERNATIVA</td>
+                      ) : (
+                        <td>TEXTO</td>
+                      )}
+                    </td>
+                    <td>{idEDDEvalPregunta.preguntaObligatoria}</td>
+
+                    <td align="center">
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Editar pregunta"
+                          id="OperationBtns"
+                          onClick={() =>
+                            editarEDDEvalPregunta(
+                              idEDDEvalPregunta.idEDDEvalPregunta
+                            )
+                          }
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>
+                      ) : null}
+
+                      <Link
+                        to={`/listadoEddEvalRespPreg/${idEDDEvalPregunta.idEDDEvalPregunta}`}
+                      >
+                        <button
+                          data-title="Respuestas relacionadas"
+                          id="OperationBtns"
+                        >
+                          <AiFillBook id="icons" />
+                        </button>
+                      </Link>
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Desactivar pregunta"
+                          onClick={() =>
+                            desactivar(idEDDEvalPregunta.idEDDEvalPregunta)
+                          }
+                          id="OperationBtns"
+                        >
+                          <BsFillTrashFill id="icons" />
+                        </button>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Paginador
+              paginas={cantidadPaginas}
+              cambiarNumero={setNumBoton}
+              num_boton={num_boton}
+            ></Paginador>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    ) : (
+      <AuthorizationError />
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

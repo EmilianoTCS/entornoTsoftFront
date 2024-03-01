@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from "react";
-import { Table} from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Table } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
 
 import getDataService from "../../../../services/GetDataService";
@@ -12,10 +12,14 @@ import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import "../BtnInsertar.css";
 import "../ListadoCompProy/CompProy.css";
 import ExportCSV from "../../../../templates/exports/exportCSV";
+import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoCompProy() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-  var date = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3)
+  var date = new Date()
+    .toISOString()
+    .replace(/[^0-9]/g, "")
+    .slice(0, -3);
   const nombreTabla = "listadocompproy";
   const [nombreArchivoCSV, setNombreArchivoCSV] = useState("");
 
@@ -203,10 +207,7 @@ export default function ListadoCompProy() {
       setEDDCompProy(data);
       setNuevosDatos(calcularPromedioCompetenciasPorCiclo(data));
       setNombreArchivoCSV(
-        "list_comp_proy_" +
-          data[0].nomProyecto.substr(0, 10) +
-          "_" +
-          date
+        "list_comp_proy_" + data[0].nomProyecto.substr(0, 10) + "_" + date
       );
       console.log(nombreArchivoCSV);
     });
@@ -282,391 +283,392 @@ export default function ListadoCompProy() {
 
   // FINNN Restablecer los valores
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ? (
+      <>
+        <Header></Header>
+        <br></br>
+        <br></br>
+        <div id="fondoTabla">
+          <div id="containerTablas">
+            <a type="submit" id="btnAtras" value="Registrar" href="/home">
+              Volver
+            </a>
+            <h1 id="TitlesPages">Listado de comparación de proyectos</h1>
+            <h6 style={{ color: "gray" }}>
+              Eval desempeño {"->"} Comparación de proyectos
+            </h6>
+            <br></br>
 
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <a type="submit" id="btnAtras" value="Registrar" href="/home">
-            Volver
-          </a>
-          <h1 id="TitlesPages">Listado de comparación de proyectos</h1>
-          <h6 style={{ color: "gray" }}>
-            Eval desempeño {"->"} Comparación de proyectos
-          </h6>
-          <br></br>
-
-          <table style={{ width: "100%" }}>
-            <tr>
-              <td style={{ width: "16em" }}>
-                <label htmlFor="input_CantidadR">Clientes: </label>
-                {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
+            <table style={{ width: "100%" }}>
+              <tr>
+                <td style={{ width: "16em" }}>
+                  <label htmlFor="input_CantidadR">Clientes: </label>
+                  {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
                                     <span> <FaQuestionCircle id="icons" /></span>
                                 </OverlayTrigger> */}
-                <select
-                  required
-                  type="text"
-                  className="form-control"
-                  onChange={({ target }) => {
-                    const selectedOptions = Array.from(
-                      target.selectedOptions,
-                      (option) => option.value
-                    );
-
-                    if (selectedOptions.includes("todos")) {
-                      // Si "Todos" está seleccionado, selecciona todas las demás opciones excepto "Ninguno"
-                      setSelectedClients(
-                        listCliente
-                          .filter((valor) => valor.idCliente !== "0")
-                          .map((valor) => valor.idCliente)
-                      );
-                    } else if (selectedOptions.includes("0")) {
-                      // Si "Ninguno" está seleccionado, deselecciona todas las demás opciones
-                      setSelectedClients(["0"]);
-                    } else {
-                      setSelectedClients(selectedOptions);
-                    }
-                    resetProjects();
-                    resetServices();
-                  }}
-                >
-                  <option disabled hidden>
-                    Clientes
-                  </option>
-                  <option value="0">Ninguno</option>
-                  {/* <option value="todos">-- Todos --</option> Agrega la opción "Todos" */}
-                  {listCliente.map((valor) => (
-                    <option
-                      selected={
-                        selectedClients.includes(valor.idCliente)
-                          ? "selected"
-                          : ""
-                      }
-                      value={valor.idCliente}
-                    >
-                      {valor.nomCliente}
-                    </option>
-                  ))}
-                </select>
-              </td>
-
-              <td id="espacioEntreOpciones" style={{ width: "16em" }}>
-                <label htmlFor="input_CantidadR">Servicios: </label>
-                {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
-                                    <span> <FaQuestionCircle id="icons" /></span>
-                                </OverlayTrigger> */}
-                <select
-                  required
-                  type="text"
-                  className="form-control"
-                  onChange={({ target }) => {
-                    const selectedOptions = Array.from(
-                      target.selectedOptions,
-                      (option) => option.value
-                    );
-
-                    if (selectedOptions.includes("todos")) {
-                      // Si "Todos" está seleccionado, selecciona todas las demás opciones excepto "Ninguno"
-                      setSelectedServicio(
-                        listServicio
-                          .filter((valor) => valor.idServicio !== "0")
-                          .map((valor) => valor.idServicio)
-                      );
-                    } else if (selectedOptions.includes("0")) {
-                      // Si "Ninguno" está seleccionado, deselecciona todas las demás opciones
-                      setSelectedServicio(["0"]);
-                    } else {
-                      setSelectedServicio(selectedOptions);
-                    }
-                    resetProjects();
-                  }}
-                >
-                  <option disabled hidden>
-                    Servicios
-                  </option>
-                  <option value="0">Ninguno</option>
-                  {/* <option value="todos">-- Todos --</option> Agrega la opción "Todos" */}
-                  {listServicio.map((valor) => (
-                    <option
-                      selected={
-                        selectedServicio.includes(valor.idServicio)
-                          ? "selected"
-                          : ""
-                      }
-                      value={valor.idServicio}
-                    >
-                      {valor.nomServicio}
-                    </option>
-                  ))}
-                </select>
-              </td>
-
-              <td id="espacioEntreOpciones" style={{ width: "16em" }}>
-                <label htmlFor="input_CantidadR">Proyectos:</label>
-                {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
-                                    <span> <FaQuestionCircle id="icons" /></span>
-                                </OverlayTrigger>*/}
-                <select
-                  required
-                  type="text"
-                  className="form-control"
-                  onChange={({ target }) => {
-                    const selectedOptions = Array.from(
-                      target.selectedOptions,
-                      (option) => option.value
-                    );
-
-                    if (selectedOptions.includes("todos")) {
-                      // Si "Todos" está seleccionado, selecciona todas las demás opciones excepto "Ninguno"
-                      setSelectedProyecto(
-                        listProyecto
-                          .filter((valor) => valor.idEDDProyecto !== "0")
-                          .map((valor) => valor.idEDDProyecto)
-                      );
-                    } else if (selectedOptions.includes("0")) {
-                      // Si "Ninguno" está seleccionado, deselecciona todas las demás opciones
-                      setSelectedProyecto(["0"]);
-                    } else {
-                      setSelectedProyecto(selectedOptions);
-                    }
-                  }}
-                >
-                  <option disabled hidden>
-                    Proyectos
-                  </option>
-                  <option value="0">Ninguno</option>
-                  {/* <option value="todos">-- Todos --</option> Agrega la opción "Todos" */}
-                  {listProyecto.map((valor) => (
-                    <option
-                      selected={
-                        selectedProyecto.includes(valor.idEDDProyecto)
-                          ? "selected"
-                          : ""
-                      }
-                      value={valor.idEDDProyecto}
-                    >
-                      {valor.nomProyecto}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td id="espacioEntreOpciones" style={{ width: "16em" }}>
-                <div className="form-group">
-                  <label htmlFor="Ciclo">Ciclo de evaluación: </label>
                   <select
                     required
                     type="text"
                     className="form-control"
                     onChange={({ target }) => {
-                      setcicloEvaluacion(target.value);
+                      const selectedOptions = Array.from(
+                        target.selectedOptions,
+                        (option) => option.value
+                      );
+
+                      if (selectedOptions.includes("todos")) {
+                        // Si "Todos" está seleccionado, selecciona todas las demás opciones excepto "Ninguno"
+                        setSelectedClients(
+                          listCliente
+                            .filter((valor) => valor.idCliente !== "0")
+                            .map((valor) => valor.idCliente)
+                        );
+                      } else if (selectedOptions.includes("0")) {
+                        // Si "Ninguno" está seleccionado, deselecciona todas las demás opciones
+                        setSelectedClients(["0"]);
+                      } else {
+                        setSelectedClients(selectedOptions);
+                      }
+                      resetProjects();
+                      resetServices();
                     }}
                   >
-                    <option value={0}>Todos</option>
-                    {listcicloEvaluacion.map((valor) => (
-                      <option value={valor.cicloEvaluacion}>
-                        {valor.cicloEvaluacion}
+                    <option disabled hidden>
+                      Clientes
+                    </option>
+                    <option value="0">Ninguno</option>
+                    {/* <option value="todos">-- Todos --</option> Agrega la opción "Todos" */}
+                    {listCliente.map((valor) => (
+                      <option
+                        selected={
+                          selectedClients.includes(valor.idCliente)
+                            ? "selected"
+                            : ""
+                        }
+                        value={valor.idCliente}
+                      >
+                        {valor.nomCliente}
                       </option>
                     ))}
                   </select>
-                </div>
-              </td>
-              <td id="espacioEntreOpciones">
-                <label>Fecha inicio desde:</label>
-                <br></br>
-                <input
-                  className="form-control"
-                  placeholder="Fecha inicio"
-                  type="date"
-                  value={fechaIni}
-                  onChange={(e) => setFechaIni(e.target.value)}
-                />
-              </td>
-              <td id="espacioEntreOpciones">
-                <span>Fecha inicio hasta:</span>
-                <br></br>
-                <input
-                  className="form-control"
-                  type="date"
-                  value={fechaFin}
-                  onChange={(e) => setFechaFin(e.target.value)}
-                />
-              </td>
+                </td>
 
-              <td>
-                <option disabled></option>
-                <button
-                  data-title="Limpiar filtros"
-                  type="button"
-                  class="btn-General-Pag"
-                  onClick={limpiarClick}
-                >
-                  Limpiar
-                </button>
-              </td>
-            </tr>
-          </table>
-          <br></br>
-          <table style={{ width: "100%" }}>
-            <tr>
-              <td>
-                <div id="tableResumen">
-                  <table>
-                    <td>
-                      <strong>Comparación por:</strong>
-                    </td>
-                    <td id="espacioEntreOpciones">
-                      <input
-                        type="radio"
-                        id="mes"
-                        name="tipoComparacion"
-                        value="MES"
-                        checked={tipoComparacion === "MES"}
-                        onChange={(e) => setTipoComparacion(e.target.value)}
-                      />
-                      <label htmlFor="mes">&nbsp;Mes</label>
-                    </td>
-                    <td id="espacioEntreOpciones">
-                      <input
-                        type="radio"
-                        id="año"
-                        name="tipoComparacion"
-                        value="AÑO"
-                        checked={tipoComparacion === "AÑO"}
-                        onChange={(e) => setTipoComparacion(e.target.value)}
-                      />
-                      <label htmlFor="año">&nbsp;Año</label>
-                    </td>
-                  </table>
-                </div>
-              </td>
+                <td id="espacioEntreOpciones" style={{ width: "16em" }}>
+                  <label htmlFor="input_CantidadR">Servicios: </label>
+                  {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
+                                    <span> <FaQuestionCircle id="icons" /></span>
+                                </OverlayTrigger> */}
+                  <select
+                    required
+                    type="text"
+                    className="form-control"
+                    onChange={({ target }) => {
+                      const selectedOptions = Array.from(
+                        target.selectedOptions,
+                        (option) => option.value
+                      );
 
-              <td id="espacioEntreOpciones">
-                <div id="tableResumen">
-                  <table>
-                    <td>
-                      <strong>Seleccionar por:</strong>
-                    </td>
-                    <td id="espacioEntreOpciones">
-                      <input
-                        type="radio"
-                        id="referentes"
-                        name="tipoCargo"
-                        value="REFERENTE"
-                        checked={tipoCargo === "REFERENTE"}
-                        onChange={(e) => setTipoCargo(e.target.value)}
-                      />
-                      <label htmlFor="referentes">&nbsp;Referente</label>
-                    </td>
-                    <td id="espacioEntreOpciones">
-                      <input
-                        type="radio"
-                        id="colaborador"
-                        name="tipoCargo"
-                        value="COLABORADOR"
-                        checked={tipoCargo === "COLABORADOR"}
-                        onChange={(e) => setTipoCargo(e.target.value)}
-                      />
-                      <label htmlFor="colaborador">&nbsp;Colaborador</label>
-                    </td>
-                  </table>
-                </div>
-              </td>
-              <td>
-                <button
-                  data-title="Buscar"
-                  type="button"
-                  class="btn-General-Pag"
-                  onClick={buscarClick} // Aquí se agrega el manejador de eventos
-                >
-                  Buscar
-                </button>
-              </td>
-
-              <td>
-                <Link
-                  to={`/dashboardCompProy/${selectedClients}/${selectedServicio}/${selectedProyecto}/${tipoComparacion}/${tipoCargo}/${fechaIni}/${fechaFin}/${cicloEvaluacion}`}
-                >
-                  <button
-                    data-title="Desplegar dashboard"
-                    type="button"
-                    className="btn-General-Pag"
-                    onClick={buscarClick}
-                    disabled={!busquedaRealizada} // Deshabilita el botón si busquedaRealizada es falso
+                      if (selectedOptions.includes("todos")) {
+                        // Si "Todos" está seleccionado, selecciona todas las demás opciones excepto "Ninguno"
+                        setSelectedServicio(
+                          listServicio
+                            .filter((valor) => valor.idServicio !== "0")
+                            .map((valor) => valor.idServicio)
+                        );
+                      } else if (selectedOptions.includes("0")) {
+                        // Si "Ninguno" está seleccionado, deselecciona todas las demás opciones
+                        setSelectedServicio(["0"]);
+                      } else {
+                        setSelectedServicio(selectedOptions);
+                      }
+                      resetProjects();
+                    }}
                   >
-                    Desplegar Dashboard Competencias
-                  </button>
-                </Link>
-              {/* </td>
-              <td> */}
-                <Link
-                  to={`/DashboardEddResumenEval/${selectedClients}/${selectedServicio}/0/${tipoCargo}/${fechaIni}/${fechaFin}/${cicloEvaluacion}`}
-                >
-                  <button
-                    data-title="Desplegar dashboard"
-                    type="button"
-                    className="btn-General-Pag"
-                    onClick={buscarClick}
-                    disabled={!busquedaRealizada} // Deshabilita el botón si busquedaRealizada es falso
-                  >
-                    Desplegar Dashboard Resumen
-                  </button>
-                </Link>
-              </td>
-              <td>
-                <ExportCSV
-                  inputData={EDDCompProy}
-                  nomTabla={nombreArchivoCSV}
-                />
-              </td>
-            </tr>
-          </table>
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                {/* <th>ID</th> */}
-                <th>Cliente</th>
-                <th>Servicio</th>
-                <th>Proyecto</th>
-                <th>Ciclo</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>% Aprobación</th>
-                <th>Cant Ref</th>
-                <th>Cant Colab</th>
+                    <option disabled hidden>
+                      Servicios
+                    </option>
+                    <option value="0">Ninguno</option>
+                    {/* <option value="todos">-- Todos --</option> Agrega la opción "Todos" */}
+                    {listServicio.map((valor) => (
+                      <option
+                        selected={
+                          selectedServicio.includes(valor.idServicio)
+                            ? "selected"
+                            : ""
+                        }
+                        value={valor.idServicio}
+                      >
+                        {valor.nomServicio}
+                      </option>
+                    ))}
+                  </select>
+                </td>
 
-                {/* <th>Operaciones</th> */}
+                <td id="espacioEntreOpciones" style={{ width: "16em" }}>
+                  <label htmlFor="input_CantidadR">Proyectos:</label>
+                  {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
+                                    <span> <FaQuestionCircle id="icons" /></span>
+                                </OverlayTrigger>*/}
+                  <select
+                    required
+                    type="text"
+                    className="form-control"
+                    onChange={({ target }) => {
+                      const selectedOptions = Array.from(
+                        target.selectedOptions,
+                        (option) => option.value
+                      );
+
+                      if (selectedOptions.includes("todos")) {
+                        // Si "Todos" está seleccionado, selecciona todas las demás opciones excepto "Ninguno"
+                        setSelectedProyecto(
+                          listProyecto
+                            .filter((valor) => valor.idEDDProyecto !== "0")
+                            .map((valor) => valor.idEDDProyecto)
+                        );
+                      } else if (selectedOptions.includes("0")) {
+                        // Si "Ninguno" está seleccionado, deselecciona todas las demás opciones
+                        setSelectedProyecto(["0"]);
+                      } else {
+                        setSelectedProyecto(selectedOptions);
+                      }
+                    }}
+                  >
+                    <option disabled hidden>
+                      Proyectos
+                    </option>
+                    <option value="0">Ninguno</option>
+                    {/* <option value="todos">-- Todos --</option> Agrega la opción "Todos" */}
+                    {listProyecto.map((valor) => (
+                      <option
+                        selected={
+                          selectedProyecto.includes(valor.idEDDProyecto)
+                            ? "selected"
+                            : ""
+                        }
+                        value={valor.idEDDProyecto}
+                      >
+                        {valor.nomProyecto}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td id="espacioEntreOpciones" style={{ width: "16em" }}>
+                  <div className="form-group">
+                    <label htmlFor="Ciclo">Ciclo de evaluación: </label>
+                    <select
+                      required
+                      type="text"
+                      className="form-control"
+                      onChange={({ target }) => {
+                        setcicloEvaluacion(target.value);
+                      }}
+                    >
+                      <option value={0}>Todos</option>
+                      {listcicloEvaluacion.map((valor) => (
+                        <option value={valor.cicloEvaluacion}>
+                          {valor.cicloEvaluacion}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </td>
+                <td id="espacioEntreOpciones">
+                  <label>Fecha inicio desde:</label>
+                  <br></br>
+                  <input
+                    className="form-control"
+                    placeholder="Fecha inicio"
+                    type="date"
+                    value={fechaIni}
+                    onChange={(e) => setFechaIni(e.target.value)}
+                  />
+                </td>
+                <td id="espacioEntreOpciones">
+                  <span>Fecha inicio hasta:</span>
+                  <br></br>
+                  <input
+                    className="form-control"
+                    type="date"
+                    value={fechaFin}
+                    onChange={(e) => setFechaFin(e.target.value)}
+                  />
+                </td>
+
+                <td>
+                  <option disabled></option>
+                  <button
+                    data-title="Limpiar filtros"
+                    type="button"
+                    class="btn-General-Pag"
+                    onClick={limpiarClick}
+                  >
+                    Limpiar
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {loadedNuevosDatos ? (
-                nuevosDatos.map((item) => (
-                  <tr>
-                    <td>{item.nomCliente}</td>
-                    <td>{item.nomServicio}</td>
-                    <td>{item.nomProyecto}</td>
-                    <td>{item.cicloEvaluacion}</td>
-                    <td>{item.epeFechaIni}</td>
-                    <td>{item.epeFechaFin}</td>
-                    <td>{item.porcentajeAprob}</td>
-                    <td>{item.cantReferentes}</td>
-                    <td>{item.cantColaboradores}</td>
-                  </tr>
-                ))
-              ) : (
-                <></>
-              )}
-            </tbody>
-          </Table>
-          {/* <Paginador
-                        paginas={cantidadPaginas}
-                        cambiarNumero={setNumBoton}
-                        num_boton={num_boton}
-                    ></Paginador> */}
+            </table>
+            <br></br>
+            <table style={{ width: "100%" }}>
+              <tr>
+                <td>
+                  <div id="tableResumen">
+                    <table>
+                      <td>
+                        <strong>Comparación por:</strong>
+                      </td>
+                      <td id="espacioEntreOpciones">
+                        <input
+                          type="radio"
+                          id="mes"
+                          name="tipoComparacion"
+                          value="MES"
+                          checked={tipoComparacion === "MES"}
+                          onChange={(e) => setTipoComparacion(e.target.value)}
+                        />
+                        <label htmlFor="mes">&nbsp;Mes</label>
+                      </td>
+                      <td id="espacioEntreOpciones">
+                        <input
+                          type="radio"
+                          id="año"
+                          name="tipoComparacion"
+                          value="AÑO"
+                          checked={tipoComparacion === "AÑO"}
+                          onChange={(e) => setTipoComparacion(e.target.value)}
+                        />
+                        <label htmlFor="año">&nbsp;Año</label>
+                      </td>
+                    </table>
+                  </div>
+                </td>
+
+                <td id="espacioEntreOpciones">
+                  <div id="tableResumen">
+                    <table>
+                      <td>
+                        <strong>Seleccionar por:</strong>
+                      </td>
+                      <td id="espacioEntreOpciones">
+                        <input
+                          type="radio"
+                          id="referentes"
+                          name="tipoCargo"
+                          value="REFERENTE"
+                          checked={tipoCargo === "REFERENTE"}
+                          onChange={(e) => setTipoCargo(e.target.value)}
+                        />
+                        <label htmlFor="referentes">&nbsp;Referente</label>
+                      </td>
+                      <td id="espacioEntreOpciones">
+                        <input
+                          type="radio"
+                          id="colaborador"
+                          name="tipoCargo"
+                          value="COLABORADOR"
+                          checked={tipoCargo === "COLABORADOR"}
+                          onChange={(e) => setTipoCargo(e.target.value)}
+                        />
+                        <label htmlFor="colaborador">&nbsp;Colaborador</label>
+                      </td>
+                    </table>
+                  </div>
+                </td>
+                <td>
+                  <button
+                    data-title="Buscar"
+                    type="button"
+                    class="btn-General-Pag"
+                    onClick={buscarClick} // Aquí se agrega el manejador de eventos
+                  >
+                    Buscar
+                  </button>
+                </td>
+
+                <td>
+                  <Link
+                    to={`/dashboardCompProy/${selectedClients}/${selectedServicio}/${selectedProyecto}/${tipoComparacion}/${tipoCargo}/${fechaIni}/${fechaFin}/${cicloEvaluacion}`}
+                  >
+                    <button
+                      data-title="Desplegar dashboard"
+                      type="button"
+                      className="btn-General-Pag"
+                      onClick={buscarClick}
+                      disabled={!busquedaRealizada} // Deshabilita el botón si busquedaRealizada es falso
+                    >
+                      Desplegar Dashboard Competencias
+                    </button>
+                  </Link>
+                  {/* </td>
+              <td> */}
+                  <Link
+                    to={`/DashboardEddResumenEval/${selectedClients}/${selectedServicio}/0/${tipoCargo}/${fechaIni}/${fechaFin}/${cicloEvaluacion}`}
+                  >
+                    <button
+                      data-title="Desplegar dashboard"
+                      type="button"
+                      className="btn-General-Pag"
+                      onClick={buscarClick}
+                      disabled={!busquedaRealizada} // Deshabilita el botón si busquedaRealizada es falso
+                    >
+                      Desplegar Dashboard Resumen
+                    </button>
+                  </Link>
+                </td>
+                <td>
+                  <ExportCSV
+                    inputData={EDDCompProy}
+                    nomTabla={nombreArchivoCSV}
+                  />
+                </td>
+              </tr>
+            </table>
+            <Table id="mainTable" hover responsive>
+              <thead>
+                <tr>
+                  {/* <th>ID</th> */}
+                  <th>Cliente</th>
+                  <th>Servicio</th>
+                  <th>Proyecto</th>
+                  <th>Ciclo</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Fin</th>
+                  <th>% Aprobación</th>
+                  <th>Cant Ref</th>
+                  <th>Cant Colab</th>
+
+                  {/* <th>Operaciones</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {loadedNuevosDatos ? (
+                  nuevosDatos.map((item) => (
+                    <tr>
+                      <td>{item.nomCliente}</td>
+                      <td>{item.nomServicio}</td>
+                      <td>{item.nomProyecto}</td>
+                      <td>{item.cicloEvaluacion}</td>
+                      <td>{item.epeFechaIni}</td>
+                      <td>{item.epeFechaFin}</td>
+                      <td>{item.porcentajeAprob}</td>
+                      <td>{item.cantReferentes}</td>
+                      <td>{item.cantColaboradores}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </tbody>
+            </Table>
+ 
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    ) : (
+      <AuthorizationError />
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

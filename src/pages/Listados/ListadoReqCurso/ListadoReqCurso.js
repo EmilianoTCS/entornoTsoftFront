@@ -17,6 +17,7 @@ import TopAlerts from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoReqCurso() {
   const [, params] = useRoute("/listadoReqCurso/:params");
@@ -28,12 +29,11 @@ export default function ListadoReqCurso() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
-  const nombreTabla= "reqcurso"
-  
+  const nombreTabla = "reqcurso";
+
   const [idCurso, setidCurso] = useState(params.params);
 
   const [listCurso, setlistCurso] = useState([""]);
-
 
   function obtenerCurso() {
     const url = "pages/auxiliares/listadoCursoForms.php";
@@ -56,13 +56,14 @@ export default function ListadoReqCurso() {
       if (response === true) {
         var url = "pages/cambiarEstado/cambiarEstado.php";
         var operationUrl = "cambiarEstado";
-        var data = { 
-          idRegistro: ID, 
+        var data = {
+          idRegistro: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla : nombreTabla,
-         }; console.log(data);
+          nombreTabla: nombreTabla,
+        };
+        console.log(data);
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts('successEdited');
+          TopAlerts("successEdited");
         });
       }
     });
@@ -72,7 +73,7 @@ export default function ListadoReqCurso() {
       handleChangePaginador();
       obtenerCurso();
     },
-    [num_boton,cantidadPorPagina,idCurso]
+    [num_boton, cantidadPorPagina, idCurso]
   );
 
   //PAGINADOR ---------------------
@@ -82,134 +83,155 @@ export default function ListadoReqCurso() {
     var data = {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
-      idCurso:idCurso
+      idCurso: idCurso,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setReqCurso(datos.datos);
-});
+    });
   }
   //PAGINADOR ---------------------
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de requisitos cursos</h1>
-          <h6 style={{color:'gray'}}>Factory Devops {'->'} Listado de requisitos cursos</h6>
-          <br></br>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ||
+    userData.nomRol === "alumno" ||
+    userData.nomRol === "relator" ? (
+      <>
+        <Header></Header>
+        <br></br>
+        <br></br>
+        <div id="fondoTabla">
+          <div id="containerTablas">
+            <h1 id="TitlesPages">Listado de requisitos cursos</h1>
+            <h6 style={{ color: "gray" }}>
+              Factory Devops {"->"} Listado de requisitos cursos
+            </h6>
+            <br></br>
 
-          <div id="selectPaginador">
-          <Button id="btn" onClick={insertarReqCurso}>
-            Crear Req Curso
-          </Button>
+            <div id="selectPaginador">
+              {userData.nomRol === "administrador" ? (
+                <Button id="btn" onClick={insertarReqCurso}>
+                  Crear Req Curso
+                </Button>
+              ) : null}
 
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cantidad registros: </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadR"
-                id="input_CantidadR"
-                onChange={({ target }) => {setcantidadPorPagina(target.value);setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cursos: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {setidCurso(target.value);setNumBoton(1); }}
-              >
-                <option hidden value="" selected>
-                  Desplegar lista
-                </option>
-                <option value="">Todos</option>
-                {listCurso.map((valor) => (
-                  <option
-                  selected={(valor.idCurso === idCurso ? "selected" : "")}
-                  value={valor.idCurso}
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Cantidad registros: </label>
+                <select
+                  value={cantidadPorPagina || ""}
+                  className="form-control"
+                  name="input_CantidadR"
+                  id="input_CantidadR"
+                  onChange={({ target }) => {
+                    setcantidadPorPagina(target.value);
+                    setNumBoton(1);
+                  }}
+                  required
                 >
-                  {valor.nomCurso}
-                </option>
-              ))}
-              </select>
+                  <option hidden value="">
+                    {cantidadPorPagina}
+                  </option>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Cursos: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidCurso(target.value);
+                    setNumBoton(1);
+                  }}
+                >
+                  <option hidden value="" selected>
+                    Desplegar lista
+                  </option>
+                  <option value="">Todos</option>
+                  {listCurso.map((valor) => (
+                    <option
+                      selected={valor.idCurso === idCurso ? "selected" : ""}
+                      value={valor.idCurso}
+                    >
+                      {valor.nomCurso}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
 
-          <InsertarReqCurso
-            isActiveReqCurso={isActiveInsertReqCurso}
-            cambiarEstado={setIsActiveInsertReqCurso}
-            reqCurso={reqCurso}
-          ></InsertarReqCurso>
+            <InsertarReqCurso
+              isActiveReqCurso={isActiveInsertReqCurso}
+              cambiarEstado={setIsActiveInsertReqCurso}
+              reqCurso={reqCurso}
+            ></InsertarReqCurso>
 
-          <EditarReqCurso
-            isActiveEditReqCurso={isActiveEditReqCurso}
-            cambiarEstado={setIsActiveEditReqCurso}
-            idReqCurso={idReqCurso}
-            setReqCurso={setReqCurso}
-            reqCurso={reqCurso} 
-            nombreTabla={nombreTabla}
-          ></EditarReqCurso> 
+            <EditarReqCurso
+              isActiveEditReqCurso={isActiveEditReqCurso}
+              cambiarEstado={setIsActiveEditReqCurso}
+              idReqCurso={idReqCurso}
+              setReqCurso={setReqCurso}
+              reqCurso={reqCurso}
+              nombreTabla={nombreTabla}
+            ></EditarReqCurso>
 
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre curso</th>
-                <th>Requisito curso</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reqCurso.map((reqCurso) => (
-                <tr key={reqCurso.idReqCurso}>
-                  <td>{reqCurso.idReqCurso}</td>
-                  <td>{reqCurso.nomCurso}</td>
-                  <td>{reqCurso.requisitoCurso}</td>
-                  <td>
-                    <button
-                      data-title="Editar ReqCurso"
-                      id="OperationBtns"
-                      onClick={() => editarReqCurso(reqCurso.idReqCurso)}
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-                    <button
-                      data-title="Desactivar ReqCurso"
-                      onClick={() => desactivar(reqCurso.idReqCurso)}
-                      id="OperationBtns"
-                    >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
+            <Table id="mainTable" hover responsive>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre curso</th>
+                  <th>Requisito curso</th>
+                  {userData.nomRol === "administrador" ? (
+                    <th>Operaciones</th>
+                  ) : null}
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-               paginas={cantidadPaginas}
-               cambiarNumero={setNumBoton}
-               num_boton={num_boton}
-             ></Paginador>
+              </thead>
+              <tbody>
+                {reqCurso.map((reqCurso) => (
+                  <tr key={reqCurso.idReqCurso}>
+                    <td>{reqCurso.idReqCurso}</td>
+                    <td>{reqCurso.nomCurso}</td>
+                    <td>{reqCurso.requisitoCurso}</td>
+                    {userData.nomRol === "administrador" ? (
+                      <td>
+                        <button
+                          data-title="Editar ReqCurso"
+                          id="OperationBtns"
+                          onClick={() => editarReqCurso(reqCurso.idReqCurso)}
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>
+                        <button
+                          data-title="Desactivar ReqCurso"
+                          onClick={() => desactivar(reqCurso.idReqCurso)}
+                          id="OperationBtns"
+                        >
+                          <BsFillTrashFill id="icons" />
+                        </button>
+                      </td>
+                    ) : null}
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Paginador
+              paginas={cantidadPaginas}
+              cambiarNumero={setNumBoton}
+              num_boton={num_boton}
+            ></Paginador>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    ) : (
+      <AuthorizationError />
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

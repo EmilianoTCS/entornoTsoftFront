@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table } from "react-bootstrap";
-import { Navigate,Link } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { useRoute } from "wouter";
 
 import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
-import { BsFillKeyFill,BsFillTrashFill } from "react-icons/bs";
+import { BsFillKeyFill, BsFillTrashFill } from "react-icons/bs";
 
 import "../TablasStyles.css";
 import InsertarEddEvalCompetencia from "../../templates/form/Insertar/InsertarEddEvalCompetencia";
@@ -17,11 +17,16 @@ import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoEddEvalCompetencia() {
   const [EddEvalCompetencia, setEddEvalCompetencia] = useState([""]);
-  const [isActiveInsertEddEvalCompetencia, setIsActiveInsertEddEvalCompetencia] = useState(false);
-  const [isActiveEditEddEvalCompetencia, setIsActiveEditEddEvalCompetencia] = useState(false);
+  const [
+    isActiveInsertEddEvalCompetencia,
+    setIsActiveInsertEddEvalCompetencia,
+  ] = useState(false);
+  const [isActiveEditEddEvalCompetencia, setIsActiveEditEddEvalCompetencia] =
+    useState(false);
   const [idEDDEvalCompetencia, setidEDDEvalCompetencia] = useState(null);
   const [num_boton, setNumBoton] = useState(1);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -48,7 +53,7 @@ export default function ListadoEddEvalCompetencia() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts('successEdited');
+          TopAlerts("successEdited");
         });
       }
     });
@@ -80,105 +85,128 @@ export default function ListadoEddEvalCompetencia() {
   //PAGINADOR ---------------------
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de competencias de preguntas</h1>
-          <h6 style={{color:'gray'}}>Eval desempeño {'->'} Competencias</h6>
-          <br></br>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ? (
+      <>
+        <Header></Header>
+        <br></br>
+        <br></br>
+        <div id="fondoTabla">
+          <div id="containerTablas">
+            <h1 id="TitlesPages">Listado de competencias de preguntas</h1>
+            <h6 style={{ color: "gray" }}>
+              Eval desempeño {"->"} Competencias
+            </h6>
+            <br></br>
 
-          <div id="selectPaginador">
-            <Button id="btn" onClick={insertarEddEvalCompetencia}>
-              Crear Competencia
-            </Button>
+            <div id="selectPaginador">
+              {userData.nomRol === "administrador" ? (
+                <Button id="btn" onClick={insertarEddEvalCompetencia}>
+                  Crear Competencia
+                </Button>
+              ) : null}
 
-            <div   style={{width:'10em'}} className="form-group" id="btn2">
-              <label htmlFor="input_CantidadRegistros">
-                Cantidad registros:{" "}
-              </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadRegistros"
-                id="input_CantidadRegistros"
-                onChange={({ target }) => {
-                  setcantidadPorPagina(target.value);
-                  setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
+              <div style={{ width: "10em" }} className="form-group" id="btn2">
+                <label htmlFor="input_CantidadRegistros">
+                  Cantidad registros:{" "}
+                </label>
+                <select
+                  value={cantidadPorPagina || ""}
+                  className="form-control"
+                  name="input_CantidadRegistros"
+                  id="input_CantidadRegistros"
+                  onChange={({ target }) => {
+                    setcantidadPorPagina(target.value);
+                    setNumBoton(1);
+                  }}
+                  required
+                >
+                  <option hidden value="">
+                    {cantidadPorPagina}
+                  </option>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
             </div>
-            </div>
-        
-           <InsertarEddEvalCompetencia
-            isActiveEddEvalCompetencia={isActiveInsertEddEvalCompetencia}
-            cambiarEstado={setIsActiveInsertEddEvalCompetencia}
-            EddEvalCompetencia={EddEvalCompetencia}
-          ></InsertarEddEvalCompetencia>
 
-          <EditarEddEvalCompetencia
-            isActiveEditEddEvalCompetencia={isActiveEditEddEvalCompetencia}
-            cambiarEstado={setIsActiveEditEddEvalCompetencia}
-            idEDDEvalCompetencia={idEDDEvalCompetencia}
-            setEddEvalCompetencia={setEddEvalCompetencia}
-            EddEvalCompetencia={EddEvalCompetencia}
-            nombreTabla={nombreTabla}
-          ></EditarEddEvalCompetencia>
+            <InsertarEddEvalCompetencia
+              isActiveEddEvalCompetencia={isActiveInsertEddEvalCompetencia}
+              cambiarEstado={setIsActiveInsertEddEvalCompetencia}
+              EddEvalCompetencia={EddEvalCompetencia}
+            ></InsertarEddEvalCompetencia>
 
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Competencia</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {EddEvalCompetencia.map((EddEvalCompetencia) => (
-                <tr key={EddEvalCompetencia.idEDDEvalCompetencia}>
-                  <td>{EddEvalCompetencia.idEDDEvalCompetencia}</td>
-                  <td>{EddEvalCompetencia.nomCompetencia}</td>
-                  <td>
-                    <button
-                      data-title="Editar competencia"
-                      id="OperationBtns"
-                      onClick={() => editarEddEvalCompetencia(EddEvalCompetencia.idEDDEvalCompetencia)}
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>
+            <EditarEddEvalCompetencia
+              isActiveEditEddEvalCompetencia={isActiveEditEddEvalCompetencia}
+              cambiarEstado={setIsActiveEditEddEvalCompetencia}
+              idEDDEvalCompetencia={idEDDEvalCompetencia}
+              setEddEvalCompetencia={setEddEvalCompetencia}
+              EddEvalCompetencia={EddEvalCompetencia}
+              nombreTabla={nombreTabla}
+            ></EditarEddEvalCompetencia>
 
-
-                    <button
-                      data-title="Desactivar competencia"
-                      onClick={() => desactivar(EddEvalCompetencia.idEDDEvalCompetencia)}
-                      id="OperationBtns"
-                    >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
+            <Table id="mainTable" hover responsive>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Competencia</th>
+                  {userData.nomRol === "administrador" ? (
+                    <th>Operaciones</th>
+                  ) : null}
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
+              </thead>
+              <tbody>
+                {EddEvalCompetencia.map((EddEvalCompetencia) => (
+                  <tr key={EddEvalCompetencia.idEDDEvalCompetencia}>
+                    <td>{EddEvalCompetencia.idEDDEvalCompetencia}</td>
+                    <td>{EddEvalCompetencia.nomCompetencia}</td>
+                    <td>
+                      {userData.nomRol === "administrador" ? (
+                        <>
+                          <button
+                            data-title="Editar competencia"
+                            id="OperationBtns"
+                            onClick={() =>
+                              editarEddEvalCompetencia(
+                                EddEvalCompetencia.idEDDEvalCompetencia
+                              )
+                            }
+                          >
+                            <RiEditBoxFill id="icons" />
+                          </button>
+
+                          <button
+                            data-title="Desactivar competencia"
+                            onClick={() =>
+                              desactivar(
+                                EddEvalCompetencia.idEDDEvalCompetencia
+                              )
+                            }
+                            id="OperationBtns"
+                          >
+                            <BsFillTrashFill id="icons" />
+                          </button>
+                        </>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Paginador
+              paginas={cantidadPaginas}
+              cambiarNumero={setNumBoton}
+              num_boton={num_boton}
+            ></Paginador>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    ) : (
+      <AuthorizationError></AuthorizationError>
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

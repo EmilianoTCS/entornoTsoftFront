@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
 import { useRoute } from "wouter";
 
-import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
@@ -18,6 +17,8 @@ import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+
+import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoEddProyecto() {
   const [, params] = useRoute("/listadoEddProyecto/:params");
@@ -111,143 +112,164 @@ export default function ListadoEddProyecto() {
 
   return userData.statusConected || userData !== null ? (
     <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de proyectos</h1>
-          <h6 style={{ color: "gray" }}>Eval desempeño {"->"} Proyectos</h6>
+      {userData.nomRol === "administrador" ||
+      userData.nomRol === "gerencia" ||
+      userData.nomRol === "people" ? (
+        <>
+          <Header></Header>
           <br></br>
+          <br></br>
+          <div id="fondoTabla">
+            <div id="containerTablas">
+              <h1 id="TitlesPages">Listado de proyectos</h1>
+              <h6 style={{ color: "gray" }}>Eval desempeño {"->"} Proyectos</h6>
+              <br></br>
 
-          <div id="selectPaginador">
-            <Button id="btn" onClick={insertarEDDProyecto}>
-              Crear proyecto
-            </Button>
+              <div id="selectPaginador">
+                {userData.nomRol === "administrador" ? (
+                  <Button id="btn" onClick={insertarEDDProyecto}>
+                    Crear proyecto
+                  </Button>
+                ) : null}
 
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadRegistros">
-                Cantidad registros:{" "}
-              </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadRegistros"
-                id="input_CantidadRegistros"
-                onChange={({ target }) => {
-                  setcantidadPorPagina(target.value);
-                  setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Servicios del cliente: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {
-                  setidServicio(target.value);
-                  setNumBoton(1);
-                }}
-              >
-                <option value="">Todos</option>
-                {listServicio.map((valor) => (
-                  <option
-                    selected={valor.idServicio === idServicio ? "selected" : ""}
-                    value={valor.idServicio}
+                <div className="form-group" id="btn2">
+                  <label htmlFor="input_CantidadRegistros">
+                    Cantidad registros:{" "}
+                  </label>
+                  <select
+                    value={cantidadPorPagina || ""}
+                    className="form-control"
+                    name="input_CantidadRegistros"
+                    id="input_CantidadRegistros"
+                    onChange={({ target }) => {
+                      setcantidadPorPagina(target.value);
+                      setNumBoton(1);
+                    }}
+                    required
                   >
-                    {valor.nomServicio}
-                  </option>
-                ))}
-              </select>
+                    <option hidden value="">
+                      {cantidadPorPagina}
+                    </option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </div>
+                <div className="form-group" id="btn2">
+                  <label htmlFor="input_CantidadR">
+                    Servicios del cliente:{" "}
+                  </label>
+                  <select
+                    required
+                    type="text"
+                    className="form-control"
+                    onChange={({ target }) => {
+                      setidServicio(target.value);
+                      setNumBoton(1);
+                    }}
+                  >
+                    <option value="">Todos</option>
+                    {listServicio.map((valor) => (
+                      <option
+                        selected={
+                          valor.idServicio === idServicio ? "selected" : ""
+                        }
+                        value={valor.idServicio}
+                      >
+                        {valor.nomServicio}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <InsertarEddProyecto
+                isActiveEDDProyecto={isActiveInsertEDDProyecto}
+                cambiarEstado={setIsActiveInsertEDDProyecto}
+                EDDProyecto={EDDProyecto}
+              ></InsertarEddProyecto>
+
+              <EditarEDDProyecto
+                isActiveEditEDDProyecto={isActiveEditEDDProyecto}
+                cambiarEstado={setIsActiveEditEDDProyecto}
+                idEDDProyecto={idEDDProyecto}
+                setEDDProyecto={setEDDProyecto}
+                EDDProyecto={EDDProyecto}
+                nombreTabla={nombreTabla}
+              ></EditarEDDProyecto>
+
+              <Table id="mainTable" hover responsive>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Proyecto</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Tipo Proyecto</th>
+                    <th>Servicio del cliente</th>
+                    <th>Operaciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {EDDProyecto.map((EDDProyecto) => (
+                    <tr key={EDDProyecto.idEDDProyecto}>
+                      <td>{EDDProyecto.idEDDProyecto}</td>
+                      <td>{EDDProyecto.nomProyecto}</td>
+                      <td>{EDDProyecto.fechaIni}</td>
+                      <td>{EDDProyecto.fechaFin}</td>
+                      <td>{EDDProyecto.tipoProyecto}</td>
+                      <td>{EDDProyecto.nomServicio}</td>
+                      <td>
+                        {userData.nomRol === "administrador" ? (
+                          <button
+                            data-title="Editar proyecto"
+                            id="OperationBtns"
+                            onClick={() =>
+                              editarEDDProyecto(EDDProyecto.idEDDProyecto)
+                            }
+                          >
+                            <RiEditBoxFill id="icons" />
+                          </button>
+                        ) : null}
+
+                        <Link
+                          to={`/listadoEDDProyEmp/${EDDProyecto.idEDDProyecto}/0`}
+                        >
+                          <button
+                            data-title="Proy. colaborador relacionados"
+                            id="OperationBtns"
+                          >
+                            <AiFillProject id="icons" />
+                          </button>
+                        </Link>
+                        {userData.nomRol === "administrador" ? (
+                          <button
+                            data-title="Desactivar proyecto"
+                            onClick={() =>
+                              desactivar(EDDProyecto.idEDDProyecto)
+                            }
+                            id="OperationBtns"
+                          >
+                            <BsFillTrashFill id="icons" />
+                          </button>
+                        ) : null}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <Paginador
+                paginas={cantidadPaginas}
+                cambiarNumero={setNumBoton}
+                num_boton={num_boton}
+              ></Paginador>
             </div>
           </div>
-
-          <InsertarEddProyecto
-            isActiveEDDProyecto={isActiveInsertEDDProyecto}
-            cambiarEstado={setIsActiveInsertEDDProyecto}
-            EDDProyecto={EDDProyecto}
-          ></InsertarEddProyecto>
-
-          <EditarEDDProyecto
-            isActiveEditEDDProyecto={isActiveEditEDDProyecto}
-            cambiarEstado={setIsActiveEditEDDProyecto}
-            idEDDProyecto={idEDDProyecto}
-            setEDDProyecto={setEDDProyecto}
-            EDDProyecto={EDDProyecto}
-            nombreTabla={nombreTabla}
-          ></EditarEDDProyecto>
-
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Proyecto</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>Tipo Proyecto</th>
-                <th>Servicio del cliente</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {EDDProyecto.map((EDDProyecto) => (
-                <tr key={EDDProyecto.idEDDProyecto}>
-                  <td>{EDDProyecto.idEDDProyecto}</td>
-                  <td>{EDDProyecto.nomProyecto}</td>
-                  <td>{EDDProyecto.fechaIni}</td>
-                  <td>{EDDProyecto.fechaFin}</td>
-                  <td>{EDDProyecto.tipoProyecto}</td>
-                  <td>{EDDProyecto.nomServicio}</td>
-                  <td>
-                    <button
-                      data-title="Editar proyecto"
-                      id="OperationBtns"
-                      onClick={() =>
-                        editarEDDProyecto(EDDProyecto.idEDDProyecto)
-                      }
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-                    <Link
-                      to={`/listadoEDDProyEmp/${EDDProyecto.idEDDProyecto}`}
-                    >
-                      <button
-                        data-title="Proy. colaborador relacionados"
-                        id="OperationBtns"
-                      >
-                        <AiFillProject id="icons" />
-                      </button>
-                    </Link>
-                    <button
-                      data-title="Desactivar proyecto"
-                      onClick={() => desactivar(EDDProyecto.idEDDProyecto)}
-                      id="OperationBtns"
-                    >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
-        </div>
-      </div>
+        </>
+      ) : (
+        <AuthorizationError />
+      )}
     </>
   ) : (
     <Navigate to="/login"></Navigate>

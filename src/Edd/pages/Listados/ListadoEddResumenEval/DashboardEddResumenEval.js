@@ -6,6 +6,7 @@ import { Bar } from "react-chartjs-2";
 import "./DashboardEddResumenEval.css";
 import DashboardEddResumenEval_detalle from "./DashboardEddResumenEval_detalle";
 import ExportPDF from "../../../../templates/exports/exportPDF";
+import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function DashboardEddResumenEval() {
   //Declaración de variables
@@ -686,14 +687,12 @@ export default function DashboardEddResumenEval() {
           tableRows.push(
             <>
               <br></br>
-{/* id="infoLinePorcLeyendasREFERENTE" */}
-              <td style={{whiteSpace: "nowrap"}} > 
+              {/* id="infoLinePorcLeyendasREFERENTE" */}
+              <td style={{ whiteSpace: "nowrap" }}>
                 &nbsp;
                 <b>{matchingLey.datoVisible}</b>
-                
               </td>
               &nbsp;
-
               <td className="linea">
                 <td>{carita_gral}</td>
               </td>
@@ -721,7 +720,6 @@ export default function DashboardEddResumenEval() {
     }
   }
 
-
   const formatDate = (date) => {
     const [anio, mes, dia] = date.split("-");
     const fechaObj = new Date(anio, mes - 1, dia);
@@ -737,87 +735,91 @@ export default function DashboardEddResumenEval() {
     return nuevaFecha;
   };
 
-
-
   //Main render
   return userData.statusConected === true || userData !== null ? (
-    <>
-      <Header></Header>
-      <h2
-        style={{
-          background: "white",
-          width: "1000px",
-          textAlign: "center",
-          margin: "auto",
-          marginTop: "20px",
-          borderRadius: "0.5em",
-          padding: "5px",
-        }}
-      >
-        Estado general de evaluaciones de desempeño - {tipoCargo}
-      </h2>
-      <div className="containerBarras">
-        <h5>Promedio de evaluaciones respondidas por proyecto en %</h5>
-        
-        <h6>(Desde {formatDate(fechaIni)} hasta {formatDate(fechaFin)})</h6>
-        &nbsp;
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ? (
+      <>
+        <Header></Header>
         <h2
-          data-html2canvas-ignore="true"
           style={{
+            background: "white",
+            width: "1000px",
             textAlign: "center",
             margin: "auto",
-            marginTop: "5px",
-            fontSize: "10pt",
+            marginTop: "20px",
+            borderRadius: "0.5em",
+            padding: "5px",
           }}
         >
-          (Click en cada barra para más información)
+          Estado general de evaluaciones de desempeño - {tipoCargo}
         </h2>
-        <BarChart data={jsonData} />
+        <div className="containerBarras">
+          <h5>Promedio de evaluaciones respondidas por proyecto en %</h5>
+          <h6>
+            (Desde {formatDate(fechaIni)} hasta {formatDate(fechaFin)})
+          </h6>
+          &nbsp;
+          <h2
+            data-html2canvas-ignore="true"
+            style={{
+              textAlign: "center",
+              margin: "auto",
+              marginTop: "5px",
+              fontSize: "10pt",
+            }}
+          >
+            (Click en cada barra para más información)
+          </h2>
+          <BarChart data={jsonData} />
+          <InfoCaras></InfoCaras>
+        </div>
 
-        <InfoCaras></InfoCaras>
-      </div>
-
-      <div
-        style={{
-          margin: "auto",
-          width: "1000px",
-          marginTop: "5px",
-          display: "flex",
-          justifyContent: "space-around",
-          flexDirection: "column",
-        }}
-      >
-        {activeGraph ? (
-          <DashboardEddResumenEval_detalle
-            idCliente={paramsExtraGraph.idCliente}
-            idServicio={paramsExtraGraph.idServicio}
-            idProyecto={paramsExtraGraph.idEDDProyecto}
-            cicloEvaluacion={paramsExtraGraph.cicloEvaluacion}
-            fechaIni={paramsExtraGraph.fechaIni}
-            fechaFin={paramsExtraGraph.fechaFin}
-            tipoCargo={paramsExtraGraph.tipoCargo}
-            setActiveGraph={setActiveGraph}
-            activeGraph={activeGraph}
-            setShowScrollButton={setShowScrollButton}
-          />
-        ) : (
-          <></>
-        )}
-        {/* Botón de AutoScroll */}
-        <ExportPDF nombreTabla={nombrePDF} />
-      </div>
-
-      {showScrollButton && (
-        <button
-          onClick={scrollToTop}
-          id="scrollBtn"
-          title="Ir arriba"
-          data-html2canvas-ignore="true"
+        <div
+          style={{
+            margin: "auto",
+            width: "1000px",
+            marginTop: "5px",
+            display: "flex",
+            justifyContent: "space-around",
+            flexDirection: "column",
+          }}
         >
-          ↑
-        </button>
-      )}
-    </>
+          {activeGraph ? (
+            <DashboardEddResumenEval_detalle
+              idCliente={paramsExtraGraph.idCliente}
+              idServicio={paramsExtraGraph.idServicio}
+              idProyecto={paramsExtraGraph.idEDDProyecto}
+              cicloEvaluacion={paramsExtraGraph.cicloEvaluacion}
+              fechaIni={paramsExtraGraph.fechaIni}
+              fechaFin={paramsExtraGraph.fechaFin}
+              tipoCargo={paramsExtraGraph.tipoCargo}
+              setActiveGraph={setActiveGraph}
+              activeGraph={activeGraph}
+              setShowScrollButton={setShowScrollButton}
+            />
+          ) : (
+            <></>
+          )}
+          {/* Botón de AutoScroll */}
+          <ExportPDF nombreTabla={nombrePDF} />
+        </div>
+
+        {showScrollButton && (
+          <button
+            onClick={scrollToTop}
+            id="scrollBtn"
+            title="Ir arriba"
+            data-html2canvas-ignore="true"
+          >
+            ↑
+          </button>
+        )}
+      </>
+    ) : (
+      <AuthorizationError />
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

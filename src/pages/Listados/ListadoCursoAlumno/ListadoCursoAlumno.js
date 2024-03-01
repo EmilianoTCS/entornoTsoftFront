@@ -18,12 +18,14 @@ import TopAlerts from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoCursoAlumno() {
   const [, params] = useRoute("/listadoCursoAlumnos/:params");
 
   const [CursoAlumno, setCursoAlumno] = useState([""]);
-  const [isActiveInsertCursoAlumno, setIsActiveInsertCursoAlumno] = useState(false);
+  const [isActiveInsertCursoAlumno, setIsActiveInsertCursoAlumno] =
+    useState(false);
   const [idCursoAlumno, setidCursoAlumno] = useState(null);
   const [isActiveEditCursoAlumno, setIsActiveEditCursoAlumno] = useState(false);
   const [num_boton, setNumBoton] = useState(1);
@@ -31,7 +33,7 @@ export default function ListadoCursoAlumno() {
   const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
 
-  const nombreTabla= "cursoalumno"
+  const nombreTabla = "cursoalumno";
 
   const [idEmpleado, setidEmpleado] = useState(params.params);
   const [idCurso, setidCurso] = useState(params.params);
@@ -39,12 +41,11 @@ export default function ListadoCursoAlumno() {
   const [listEmpleado, setlistEmpleado] = useState([""]);
   const [listCurso, setlistCurso] = useState([""]);
 
-
   function obtenerEmpleado() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEmpleado(response)
+      setlistEmpleado(response)
     );
   }
 
@@ -69,13 +70,13 @@ export default function ListadoCursoAlumno() {
       if (response === true) {
         var url = "pages/cambiarEstado/cambiarEstado.php";
         var operationUrl = "cambiarEstado";
-        var data = { 
-          idRegistro: ID, 
+        var data = {
+          idRegistro: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla : nombreTabla,
-         };
+          nombreTabla: nombreTabla,
+        };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts('successEdited');
+          TopAlerts("successEdited");
         });
       }
     });
@@ -84,187 +85,233 @@ export default function ListadoCursoAlumno() {
     function () {
       handleChangePaginador();
       obtenerCurso();
-      obtenerEmpleado()
-
+      obtenerEmpleado();
     },
-    [num_boton,cantidadPorPagina, idEmpleado, idCurso]
+    [num_boton, cantidadPorPagina, idEmpleado, idCurso]
   );
 
   //PAGINADOR ---------------------
   function handleChangePaginador() {
     var url = "pages/listados/listadoCursoAlumno.php";
     var operationUrl = "listadoCursoAlumno";
-    var data = {
-      num_boton: num_boton,
-      cantidadPorPagina: cantidadPorPagina,
-      idEmpleado:idEmpleado,
-      idCurso:idCurso
-    };console.log(data);
+    if (userData.nomRol === "alumno") {
+      var data = {
+        num_boton: num_boton,
+        cantidadPorPagina: cantidadPorPagina,
+        idEmpleado: userData.idEmpleado,
+        idCurso: idCurso,
+      };
+    } else {
+      var data = {
+        num_boton: num_boton,
+        cantidadPorPagina: cantidadPorPagina,
+        idEmpleado: idEmpleado,
+        idCurso: idCurso,
+      };
+    }
+    console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
-      setCursoAlumno(datos.datos);console.log(data);
-});
+      setCursoAlumno(datos.datos);
+      console.log(data);
+    });
   }
   //PAGINADOR ---------------------
 
   return userData.statusConected || userData !== null ? (
-    <>
-      <Header></Header>
-      <br></br>
-      <br></br>
-      <div id="fondoTabla">
-        <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de Cursos Alumnos</h1>
-          <h6 style={{color:'gray'}}>Factory Devops {'->'} Listado de Cursos Alumnos</h6>
-          <br></br>
+    userData.nomRol === "administrador" ||
+    userData.nomRol === "gerencia" ||
+    userData.nomRol === "people" ||
+    userData.nomRol === "alumno" ||
+    userData.nomRol === "relator" ? (
+      <>
+        <Header></Header>
+        <br></br>
+        <br></br>
+        <div id="fondoTabla">
+          <div id="containerTablas">
+            <h1 id="TitlesPages">Listado de Cursos Alumnos</h1>
+            <h6 style={{ color: "gray" }}>
+              Factory Devops {"->"} Listado de Cursos Alumnos
+            </h6>
+            <br></br>
 
-          <div id="selectPaginador">
-          <Button id="btn" onClick={insertarCursoAlumno}>
-            Crear Curso Alumno
-          </Button>
+            <div id="selectPaginador">
+              {userData.nomRol === "administrador" ? (
+                <Button id="btn" onClick={insertarCursoAlumno}>
+                  Crear Curso Alumno
+                </Button>
+              ) : null}
 
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cantidad registros: </label>
-              <select
-                value={cantidadPorPagina || ""}
-                className="form-control"
-                name="input_CantidadR"
-                id="input_CantidadR"
-                onChange={({ target }) => {setcantidadPorPagina(target.value);setNumBoton(1);
-                }}
-                required
-              >
-                <option hidden value="">
-                  {cantidadPorPagina}
-                </option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Cursos: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {setidCurso(target.value);setNumBoton(1);}}
-              >
-                <option value="">Todos</option>
-                {listCurso.map((valor) => (
-                  <option
-                  selected={(valor.idCurso === idCurso ? "selected" : "")}
-                  value={valor.idCurso}
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Cantidad registros: </label>
+                <select
+                  value={cantidadPorPagina || ""}
+                  className="form-control"
+                  name="input_CantidadR"
+                  id="input_CantidadR"
+                  onChange={({ target }) => {
+                    setcantidadPorPagina(target.value);
+                    setNumBoton(1);
+                  }}
+                  required
                 >
-                  {valor.nomCurso}
-                </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="input_CantidadR">Empleados: </label>
-              <select
-                required
-                type="text"
-                className="form-control"
-                onChange={({ target }) => {setidEmpleado(target.value);setNumBoton(1);}}
-              >
-                <option value="">Todos</option>
-                {listEmpleado.map((valor) => (
-                  <option
-                  selected={(valor.idEmpleado === idEmpleado ? "selected" : "")}
-                  value={valor.idEmpleado}
+                  <option hidden value="">
+                    {cantidadPorPagina}
+                  </option>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              <div className="form-group" id="btn2">
+                <label htmlFor="input_CantidadR">Cursos: </label>
+                <select
+                  required
+                  type="text"
+                  className="form-control"
+                  onChange={({ target }) => {
+                    setidCurso(target.value);
+                    setNumBoton(1);
+                  }}
                 >
-                  {valor.nomEmpleado}
-                </option>
-                ))}
-              </select>
+                  <option value="">Todos</option>
+                  {listCurso.map((valor) => (
+                    <option
+                      selected={valor.idCurso === idCurso ? "selected" : ""}
+                      value={valor.idCurso}
+                    >
+                      {valor.nomCurso}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {userData.nomRol === "administrador" ||
+              userData.nomRol === "gerencia" ||
+              userData.nomRol === "people" ||
+              userData.nomRol === "relator" ? (
+                <div className="form-group" id="btn2">
+                  <label htmlFor="input_CantidadR">Empleados: </label>
+                  <select
+                    required
+                    type="text"
+                    className="form-control"
+                    onChange={({ target }) => {
+                      setidEmpleado(target.value);
+                      setNumBoton(1);
+                    }}
+                  >
+                    <option value="">Todos</option>
+                    {listEmpleado.map((valor) => (
+                      <option
+                        selected={
+                          valor.idEmpleado === idEmpleado ? "selected" : ""
+                        }
+                        value={valor.idEmpleado}
+                      >
+                        {valor.nomEmpleado}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : null}
             </div>
-          </div>
 
-          <InsertarCursoAlumno
-            isActiveCursoAlumno={isActiveInsertCursoAlumno}
-            cambiarEstado={setIsActiveInsertCursoAlumno}
-            CursoAlumno={CursoAlumno}
-          ></InsertarCursoAlumno>
+            <InsertarCursoAlumno
+              isActiveCursoAlumno={isActiveInsertCursoAlumno}
+              cambiarEstado={setIsActiveInsertCursoAlumno}
+              CursoAlumno={CursoAlumno}
+            ></InsertarCursoAlumno>
 
-          <EditarCursoAlumno
-            isActiveEditCursoAlumno={isActiveEditCursoAlumno}
-            cambiarEstado={setIsActiveEditCursoAlumno}
-            idCursoAlumno={idCursoAlumno}
-            setCursoAlumno={setCursoAlumno}
-            CursoAlumno={CursoAlumno} 
-            nombreTabla={nombreTabla}
-          ></EditarCursoAlumno> 
+            <EditarCursoAlumno
+              isActiveEditCursoAlumno={isActiveEditCursoAlumno}
+              cambiarEstado={setIsActiveEditCursoAlumno}
+              idCursoAlumno={idCursoAlumno}
+              setCursoAlumno={setCursoAlumno}
+              CursoAlumno={CursoAlumno}
+              nombreTabla={nombreTabla}
+            ></EditarCursoAlumno>
 
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Alumno</th>
-                <th>Curso</th>
-                <th>Fecha inicio</th>
-                <th>Fecha fin</th>
-                {/* <th>Hora inicio clase</th>
-                <th>Hora fin clase</th> */}
-                <th>%Asist</th>
-                <th>%Partic</th>
-                <th>%Aprob</th>
-                <th>Aprobada</th>
-                <th>Estado</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {CursoAlumno.map((CursoAlumno) => (
-                <tr key={CursoAlumno.idCursoAlumno}>
-                  <td>{CursoAlumno.idCursoAlumno}</td>
-                  <td>{CursoAlumno.nomEmpleado}</td>
-                  <td>{CursoAlumno.nomCurso}</td>
-                  <td width={120}>{CursoAlumno.fechaIni}</td>
-                  <td>{CursoAlumno.fechaFin}</td>
-                  {/* <td width={100}>{CursoAlumno.horaIni}</td>
-                  <td width={100}>{CursoAlumno.horaFin}</td> */}
-                  <td align="right">{CursoAlumno.porcAsistencia}</td>
-                  <td align="right">{CursoAlumno.porcParticipacion}</td>
-                  <td align="right">{CursoAlumno.porcAprobacion}</td>
-                  <td>{CursoAlumno.claseAprobada}</td>
-                  <td>{CursoAlumno.estadoCurso}</td>
-                  <td>
-                    <button
-                      data-title="Editar CursoAlumno"
-                      id="OperationBtns"
-                      onClick={() => editarCursoAlumno(CursoAlumno.idCursoAlumno)}
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-                    <Link to={`/listadoCursoAlumnoSesion/${CursoAlumno.idCursoAlumno}`} >
-                      <button data-title="Curso-Alum-Sesion relacionado" id="OperationBtns">
-                        <ImBook id="icons" />
-                      </button>
-                    </Link>
-                    <button
-                      data-title="Desactivar CursoAlumno"
-                      onClick={() => desactivar(CursoAlumno.idCursoAlumno)}
-                      id="OperationBtns"
-                    >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
+            <Table id="mainTable" hover responsive>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Alumno</th>
+                  <th>Curso</th>
+                  <th>Fecha inicio</th>
+                  <th>Fecha fin</th>
+                  <th>%Asist</th>
+                  <th>%Partic</th>
+                  <th>%Aprob</th>
+                  <th>Aprobada</th>
+                  <th>Estado</th>
+                  <th>Operaciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
+              </thead>
+              <tbody>
+                {CursoAlumno.map((CursoAlumno) => (
+                  <tr key={CursoAlumno.idCursoAlumno}>
+                    <td>{CursoAlumno.idCursoAlumno}</td>
+                    <td>{CursoAlumno.nomEmpleado}</td>
+                    <td>{CursoAlumno.nomCurso}</td>
+                    <td width={120}>{CursoAlumno.fechaIni}</td>
+                    <td>{CursoAlumno.fechaFin}</td>
+
+                    <td align="right">{CursoAlumno.porcAsistencia}</td>
+                    <td align="right">{CursoAlumno.porcParticipacion}</td>
+                    <td align="right">{CursoAlumno.porcAprobacion}</td>
+                    <td>{CursoAlumno.claseAprobada}</td>
+                    <td>{CursoAlumno.estadoCurso}</td>
+                    <td>
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Editar CursoAlumno"
+                          id="OperationBtns"
+                          onClick={() =>
+                            editarCursoAlumno(CursoAlumno.idCursoAlumno)
+                          }
+                        >
+                          <RiEditBoxFill id="icons" />
+                        </button>
+                      ) : null}
+
+                      <Link
+                        to={`/listadoCursoAlumnoSesion/${CursoAlumno.idCursoAlumno}`}
+                      >
+                        <button
+                          data-title="Curso-Alum-Sesion relacionado"
+                          id="OperationBtns"
+                        >
+                          <ImBook id="icons" />
+                        </button>
+                      </Link>
+                      {userData.nomRol === "administrador" ? (
+                        <button
+                          data-title="Desactivar CursoAlumno"
+                          onClick={() => desactivar(CursoAlumno.idCursoAlumno)}
+                          id="OperationBtns"
+                        >
+                          <BsFillTrashFill id="icons" />
+                        </button>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Paginador
+              paginas={cantidadPaginas}
+              cambiarNumero={setNumBoton}
+              num_boton={num_boton}
+            ></Paginador>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    ) : (
+      <AuthorizationError />
+    )
   ) : (
     <Navigate to="/login"></Navigate>
   );

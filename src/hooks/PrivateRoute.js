@@ -16,14 +16,17 @@ export const PrivateRoute = ({
     if (
       userData.nomRol === "administrador" ||
       userData.nomRol === "people" ||
-      userData.nomRol === "alumno"
+      userData.nomRol === "gerencia" ||
+      userData.nomRol === "relator" ||
+      userData.nomRol === "alumno" ||
+      userData.nomRol === "referente" ||
+      userData.nomRol === "colaborador"
 
     ) {
       return children ? children : <Outlet></Outlet>;
     } else if (
       userData.nomRol === null ||
       userData.nomRol === "" 
-      //|| userData.nomRol === "alumno"
     ) {
       return <Navigate to={redirectTo}></Navigate>;
     }
