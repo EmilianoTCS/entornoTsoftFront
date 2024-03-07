@@ -14,7 +14,8 @@ export default function TopAlertsError(cod, msj) {
       showConfirmButton: false,
       timerProgressBar: true,
     }).then(function () {
-      location.reload();
+      // location.reload();
+      console.log("RELOADED");
     });
   } else {
     return MySwal.fire({

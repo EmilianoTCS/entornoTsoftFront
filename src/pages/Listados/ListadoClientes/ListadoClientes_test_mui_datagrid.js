@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 // import { Container, Table } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
 import Header from "../../../templates/Header/Header";
@@ -108,46 +108,77 @@ export default function ListadoClientes_test_mui_datagrid() {
   const MyDataGrid = () => {
     if (loadedData) {
       function getRowId(row) {
+        console.log(row.idCliente);
         return row.idCliente;
       }
 
-      const handleEditChange = (newValues) => {
-        // console.log(newValues);
-        // const { field, row, newValue } = newValues;
-        // if (field === "nomPais") {
-        //   const { nomCliente, direccionCliente, idPais, idCliente } = row;
-        //   var data = {
-        //     nomCliente: nomCliente,
-        //     direccionCliente: direccionCliente,
-        //     idPais: newValue,
-        //     idCliente: idCliente,
-        //   };
-        // } else {
-        //   const { nomCliente, direccionCliente, idPais, idCliente } = newValues;
-        //   var data = {
-        //     nomCliente: nomCliente,
-        //     direccionCliente: direccionCliente,
-        //     idPais: idPais,
-        //     idCliente: idCliente,
-        //   };
-        // }
+      //   const handleEditChange = (newValues) => {
+      //     // console.log(newValues);
+      //     // const { field, row, newValue } = newValues;
+      //     // if (field === "nomPais") {
+      //     //   const { nomCliente, direccionCliente, idPais, idCliente } = row;
+      //     //   var data = {
+      //     //     nomCliente: nomCliente,
+      //     //     direccionCliente: direccionCliente,
+      //     //     idPais: newValue,
+      //     //     idCliente: idCliente,
+      //     //   };
+      //     // } else {
+      //     //   const { nomCliente, direccionCliente, idPais, idCliente } = newValues;
+      //     //   var data = {
+      //     //     nomCliente: nomCliente,
+      //     //     direccionCliente: direccionCliente,
+      //     //     idPais: idPais,
+      //     //     idCliente: idCliente,
+      //     //   };
+      //     // }
+      //   };
+      const handleEditChange = (newRow) => {
+        var auxVar = "";
+        const updatedRow = { ...newRow, isNew: false };
+        console.log(updatedRow);
+        auxVar = cliente.map((row) =>
+          row.idCliente === newRow.idCliente ? updatedRow : row
+        );
+        return updatedRow;
       };
-
-      console.log("json", cliente);
+      //   console.log("json", cliente);
 
       const columns = [
         { field: "idCliente", headerName: "ID", width: 90 },
         {
           field: "nomCliente",
           headerName: "Nombre",
-          width: 150,
+          width: 200,
           editable: true,
         },
         {
           field: "direccionCliente",
           headerName: "Apellido",
-          width: 150,
+          width: 200,
           editable: true,
+          renderCell: (params) => (
+              <Select
+                onChange={(e) =>
+                  handleEditChange([{ ...params, newValue: e.target.value }][0])
+                }
+                inputProps={{ "aria-label": "Without label" }}
+                defaultValue={params.row.idPais || ""}
+              >
+                <MenuItem value="" disabled>
+                  Selecciona una nacionalidad
+                </MenuItem>
+                {listPais.map((item) => (
+                  <MenuItem
+                    key={item.idPais}
+                    selected={params.row.idPais === item.idPais ? true : false}
+                    value={item.idPais}
+                  >
+                    {item.nomPais}
+                  </MenuItem>
+                ))}
+              </Select>
+          ),
         },
         {
           field: "nomPais",
@@ -186,15 +217,15 @@ export default function ListadoClientes_test_mui_datagrid() {
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
             rows={cliente}
+            editMode="cell"
             columns={columns}
-            getRowId={(row) => (row && row.idCliente ? row.idCliente : uuidv4())}
+            // getRowId={(row) =>
+            //   row && row.idCliente ? row.idCliente : "idCliente"
+            // }
+            getRowId={getRowId}
             pageSize={10}
-            experimentalFeatures={true}
-            // onCellClick={(params) => console.log(params)}
             processRowUpdate={(newRow, oldRow) => {
-              //   handleEditChange(newRow);
-              console.log("newRow", newRow);
-              console.log("oldRow", oldRow);
+              handleEditChange(newRow);
             }}
             onProcessRowUpdateError={(error) => {
               console.log(error);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Container, Table } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
 
@@ -16,10 +16,12 @@ import TopAlerts from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
+import { FormControl, Select, MenuItem } from "@mui/material";
 
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 
 export default function ListadoClientes_test_agGrid() {
   const [cliente, setCliente] = useState([""]);
@@ -33,39 +35,55 @@ export default function ListadoClientes_test_agGrid() {
   const nombreTabla = "cliente";
   const [listPais, setlistPais] = useState([""]);
 
-  const idPaisToNomPais = {};
-  const nomPaisToIdPais = {};
-  listPais.forEach((pais) => {
-    idPaisToNomPais[pais.idPais] = pais.nomPais;
-    nomPaisToIdPais[pais.nomPais] = pais.idPais;
-  });
+  const nuevoNombreCliente = "Ingrese un nuevo nombre";
+  const nuevoDireccionCliente = "Ingrese una nueva dirección";
+
+  function obtenerPais() {
+    const url = "pages/auxiliares/listadoPaisForms.php";
+    const operationUrl = "listados";
+    getDataService(url, operationUrl).then((response) => setlistPais(response));
+  }
+
+  const gridRef = useRef();
 
   const columnDefs = [
     // { headerName: "ID", field: "idCliente" },
     { headerName: "Cliente", field: "nomCliente", editable: true },
     { headerName: "Dirección", field: "direccionCliente", editable: true },
-
     {
       headerName: "País",
-      editable: true,
       field: "nomPais",
-      parseValue: (params) => {
-        const nomPais = params.newValue;
-        console.log(nomPais);
-        console.log(nomPaisToIdPais[nomPais]);
-        return nomPaisToIdPais[nomPais] || "";
-      },
-      cellEditor: "agSelectCellEditor",
-      cellEditorParams: function () {
-        const opciones = Object.keys(nomPaisToIdPais).map((nomPais) => ({
-          text: nomPais,
-          value: nomPaisToIdPais[nomPais],
-        }));
-        const textos = opciones.map((opcion) => opcion.text);
-        return { values: textos };
+      cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
+      cellRenderer: function (params) {
+        return (
+          <select
+            onChange={(e) => {
+              params.data.idCliente === null
+                ? insertarCliente({ ...params, idPais: e.target.value })
+                : editarCliente(params);
+            }}
+            inputProps={{ "aria-label": "Without label" }}
+            defaultValue={params.data.idPais || ""}
+            // className="ag-theme-material"
+            className="select-hover-ag-grid"
+            style={{ width: "100%", border: "none" }}
+          >
+            <option value="" disabled>
+              Selecciona una nacionalidad
+            </option>
+            {listPais.map((item) => (
+              <option
+                key={item.idPais}
+                selected={params.data.idPais === item.idPais ? true : false}
+                value={item.idPais}
+              >
+                {item.nomPais}
+              </option>
+            ))}
+          </select>
+        );
       },
     },
-
 
     {
       headerName: "Operaciones",
@@ -106,33 +124,105 @@ export default function ListadoClientes_test_agGrid() {
   const rowData = cliente.map((cliente) => ({
     ...cliente,
   }));
+
   const autoSizeStrategy = useMemo(() => {
     return {
       type: "fitGridWidth",
     };
   }, []);
 
-  function insertarCliente() {
-    setIsActiveInsertCliente(!isActiveInsertCliente);
+  // const onRowValueChanged = (params) => {
+  //   console.log("paramsRow", params);
+  //   console.log("paramsCells", paramsCells);
+  //   if (paramsCells !== undefined && paramsCells.newValue === null) {
+  //     paramsCells.data[paramsCells.colDef.field] = paramsCells.oldValue;
+  //     gridRef.current.api.refreshCells({ force: true });
+  //     TopAlertsError("01", "No se permiten campos vacíos.");
+  //     setParamsCells();
+  //   } else {
+  //     editarCliente(params);
+  //     gridRef.current.api.redrawRows();
+  //   }
+  // };
+
+  // function insertarCliente() {
+  //   setIsActiveInsertCliente(!isActiveInsertCliente);
+  // }
+  function editarCliente(params) {
+    if (
+      params.data.nomCliente === null ||
+      params.data.direccionCliente === null ||
+      params.idPais === ""
+    ) {
+      TopAlerts(
+        "02",
+        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
+      );
+      location.reload();
+    } else {
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idCliente: params.data.idCliente,
+        nomCliente: params.data.nomCliente,
+        idPais: params.data.idPais,
+        direccionCliente: params.data.direccionCliente,
+      };
+
+      var url = "pages/editar/editarCliente.php";
+      var operationUrl = "editarCliente";
+
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        // actualizarCliente(datos);
+      });
+    }
   }
 
-  function editarCliente(params) {
-    var url = "pages/editar/editarCliente.php";
-    var operationUrl = "editarCliente";
+  const addNewRow = () => {
+    console.log("clicked");
+    const newRow = {
+      idCliente: null,
+      nomCliente: nuevoNombreCliente,
+      direccionCliente: nuevoDireccionCliente,
+      idPais: null,
+      nomPais: null,
+    }; // Crea una nueva fila vacía
+    console.log(cliente.length);
+    setCliente([newRow, ...cliente]); // Agrega la nueva fila al estado
+    setTimeout(() => {
+      gridRef.current.api.ensureIndexVisible(1); // Asegura que la nueva fila sea visible
+    }, 0);
+  };
+
+  function insertarCliente(params) {
+    const url = "pages/insertar/insertarCliente.php";
+    const operationUrl = "insertarCliente";
     var data = {
-      usuarioModificacion: userData.usuario,
-      idCliente: params.data.idCliente,
+      usuarioCreacion: userData.usuario,
       nomCliente: params.data.nomCliente,
       direccionCliente: params.data.direccionCliente,
+      idPais: params.idPais,
     };
-    // console.log(data);
+    console.log(data);
 
-    // SendDataService(url, operationUrl, data).then((response) => {
-    //   const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-    //   TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-    //   // actualizarCliente(datos);
-    // });
+    if (
+      params.data.nomCliente === null ||
+      params.data.direccionCliente === null ||
+      params.idPais === ""
+    ) {
+      TopAlerts(
+        "02",
+        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
+      );
+    } else {
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      });
+    }
   }
+
   function desactivar(ID) {
     ConfirmAlert().then((response) => {
       if (response === true) {
@@ -149,11 +239,7 @@ export default function ListadoClientes_test_agGrid() {
       }
     });
   }
-  function obtenerPais() {
-    const url = "pages/auxiliares/listadoPaisForms.php";
-    const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistPais(response));
-  }
+
   useEffect(
     function () {
       obtenerPais();
@@ -194,10 +280,13 @@ export default function ListadoClientes_test_agGrid() {
           <br></br>
 
           <div id="selectPaginador">
-            <Button id="btn" onClick={insertarCliente}>
+            {/* <Button id="btn" onClick={insertarCliente}>
               Crear Cliente
-            </Button>
+            </Button> */}
 
+            <Button id="btn" onClick={addNewRow}>
+              Agregar Nueva Fila
+            </Button>
             <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadRegistros">
                 Cantidad registros:{" "}
@@ -239,26 +328,49 @@ export default function ListadoClientes_test_agGrid() {
             nombreTabla={nombreTabla}
           ></EditarCliente>
 
-          <div
-            className="ag-theme-alpine"
-            style={{ height: "400px", marginTop: "10px" }}
-          >
+          <div className="ag-theme-alpine" style={{ height: "400px" }}>
+            <br></br>
+            <br></br>
             <AgGridReact
               columnDefs={columnDefs}
               rowData={rowData}
               autoSizeStrategy={autoSizeStrategy}
-              onCellValueChanged={(params) => {
-                editarCliente(params);
+              ref={gridRef}
+              rowSelection="single"
+              editType="fullRow"
+              getRowId={(params) => params.data.idCliente}
+              suppressRowClickSelection={true}
+              suppressCellSelection={true}
+              onCellClicked={(params) => {
+                if (
+                  params.colDef.field === "nomPais" &&
+                  params.data.nomCliente === nuevoNombreCliente &&
+                  params.data.direccionCliente === nuevoDireccionCliente
+                ) {
+                  alert(
+                    "Ingresa primero los datos tipo texto y luego confirma los cambios usando la tecla ENTER."
+                  );
+                }
               }}
+              onRowValueChanged={(params) => {
+                params.data.idCliente === null
+                  ? insertarCliente(params)
+                  : editarCliente(params);
+              }}
+              // onCellValueChanged={(params) => {
+              //   setParamsCells(params);
+              // }}
             />
           </div>
-
-          <Paginador
-            paginas={cantidadPaginas}
-            cambiarNumero={setNumBoton}
-            num_boton={num_boton}
-          ></Paginador>
         </div>
+        <br></br>
+        <br></br>
+
+        <Paginador
+          paginas={cantidadPaginas}
+          cambiarNumero={setNumBoton}
+          num_boton={num_boton}
+        ></Paginador>
       </div>
     </>
   ) : (
