@@ -1,35 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { Table, Button } from "react-bootstrap";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { Button } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
+import { useRoute } from "wouter";
 
 import SendDataService from "../../../services/SendDataService";
+import getDataService from "../../../services/GetDataService";
 import Header from "../../../templates/Header/Header";
 import Paginador from "../../../templates/Paginador/Paginador";
 import "../../../Edd/pages/Listados/TablasStyles.css";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
-import InsertarTipoPeriodo from "../../forms/insertar/InsertarTipoPeriodo";
-import EditarTipoPeriodo from "../../forms/editar/EditarTipoPeriodo";
 
+import TopAlerts from "../../../templates/alerts/TopAlerts";
+import Spinner from "../../../templates/spinner/spinner";
+
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-community/styles/ag-theme-material.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import "../WordWrap.css";
 
 export default function IHH_ListadoTipoPeriodo() {
+  const [, params] = useRoute("/ihh/listadoTipoPeriodo/:idTipoPeriodo");
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
+  const [loadedData, setLoadedData] = useState(false);
 
   const nombreTabla = "ihhtipoperiodo";
-
-  const [isActiveBooleans, setIsActiveBooleans] = useState({
-    editarTipoPeriodo: false,
-    insertarTipoPeriodo: false,
-  });
-
-  const [idRegistro, setIdRegistro] = useState(0);
+  const nuevoTipoElemento = "Ingrese un nuevo nombre";
+  const nuevaDescripcion = "Ingrese una nueva descripción (opcional)";
+  const nuevoDias = "Ingrese una nueva cantidad de días";
 
   const [mainList, setMainList] = useState({
     tipoPeriodo: [""],
   });
-
+  const [auxList, setAuxList] = useState({
+    tipoPeriodo: [""],
+  });
+  const [filters, setFilters] = useState({
+    idTipoPeriodo: params.idTipoPeriodo,
+  });
   const [num_boton, setNumBoton] = useState(1);
 
   const obtenerDatos = () => {
@@ -38,40 +50,200 @@ export default function IHH_ListadoTipoPeriodo() {
     var data = {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
+      idTipoPeriodo: filters.idTipoPeriodo
     };
 
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setMainList({ tipoPeriodo: datos.datos });
+      setLoadedData(true);
     });
   };
 
-  /**
-   * The function `activarFormulario` takes in an `idRegistro` and `nomOperacion` as parameters, and
-   * updates the state variables `idRegistro` and `isActiveBooleans.editarPeriodo` based on the values
-   * passed in.
-   * @param idRegistro - The id of the registration or record that needs to be activated in the form.
-   * @param nomOperacion - The parameter "nomOperacion" is a string that represents the operation to be
-   * performed. In this case, it is used to determine if the operation is "editar" (edit) or not.
-   */
-  const activarFormulario = (idRegistro, nomOperacion) => {
-    setIdRegistro(idRegistro);
-    if (nomOperacion === "editar") {
-      setIsActiveBooleans((prevDatos) => ({
-        ...prevDatos,
-        editarTipoPeriodo: true,
-      }));
-    }
+  const obtenerTipoPeriodos = () => {
+    var url = "pages/auxiliares/ihh_listadoTipoPeriodoForms.php";
+    var operationUrl = "listados";
+
+    getDataService(url, operationUrl).then((data) => {
+      setAuxList({ tipoPeriodo: data });
+    });
   };
 
-  /* The `useEffect` hook is used to perform side effects in a functional component. In this case, the
-`useEffect` hook is being used to fetch data and update the component's state. */
+  //----- definiciones data grid
+
+  const gridRef = useRef();
+
+  const columnDefs = [
+    {
+      headerName: "Nombre tipo de período",
+      field: "nomTipoPeriodo",
+      editable: true,
+      width: 200,
+    },
+    {
+      headerName: "Días",
+      field: "dias",
+      editable: true,
+      width: 80,
+      cellClass: "cellStyleNumber",
+
+    },
+    {
+      headerName: "Descripción",
+      field: "descripcion",
+      editable: true,
+      width: 600,
+      wrapText: true,
+      autoHeight: true,
+    },
+    {
+      headerName: "Operaciones",
+      cellRenderer: function (params) {
+        return (
+          <div style={{ color: "black" }}>
+            {/* <Button
+              data-title="Editar cliente"
+              id="OperationBtns"
+              onClick={() => editarCliente(params.data.idCliente)}
+              style={{color: "black"}}
+            >
+              <RiEditBoxFill id="icons" />
+            </Button> */}
+            {/* <Link to={`/listadoServicios/${params.data.idAcop}`}>
+              <Button
+                data-title="Servicios relacionados"
+                id="OperationBtns"
+                style={{ color: "black" }}
+              >
+                <BsFillKeyFill id="icons" />
+              </Button>
+            </Link> */}
+            <Button
+              data-title="Desactivar tipo de periodo"
+              id="OperationBtns"
+              onClick={() => desactivar(params.data.idTipoPeriodo)}
+              style={{ color: "black" }}
+            >
+              <BsFillTrashFill id="icons" />
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
+
+  const rowData = mainList.tipoPeriodo.map((tipoPeriodo) => ({
+    ...tipoPeriodo,
+  }));
+
+  const autoSizeStrategy = useMemo(() => {
+    return {
+      type: "fitGridWidth",
+    };
+  }, []);
+
+  //----------------------- Operaciones
+
+  function editarTipoPeriodo(params) {
+    if (params.data.nomTipoPeriodo === null || params.data.dias === null) {
+      TopAlerts(
+        "02",
+        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
+      );
+    } else {
+      var data = {
+        idTipoPeriodo: params.data.idTipoPeriodo,
+        nomTipoPeriodo: params.data.nomTipoPeriodo,
+        dias: params.data.dias,
+        descripcion: params.data.descripcion,
+        isActive: 1,
+        usuarioCreacion: userData.usuario,
+      };
+      const url = "pages/editar/ihh_editarTipoPeriodo.php";
+      const operationUrl = "ihh_editarTipoPeriodo";
+
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarRegistros(datos);
+      });
+    }
+  }
+
+  function actualizarRegistros(registro) {
+    const nuevosRegistros = mainList.tipoPeriodo.map((item) => {
+      return item.idTipoPeriodo === registro.idTipoPeriodo ? registro : item;
+    });
+    setMainList({ tipoPeriodo: nuevosRegistros });
+    gridRef.current.api.redrawRows();
+  }
+
+  const addNewRow = () => {
+    const newRow = {
+      idTipoPeriodo: null,
+      nomTipoElemento: nuevoTipoElemento,
+      dias: nuevoDias,
+      descripcion: nuevaDescripcion,
+    }; // Crea una nueva fila vacía
+    setMainList({ tipoPeriodo: [newRow, ...mainList.tipoPeriodo] }); // Agrega la nueva fila al estado
+    setTimeout(() => {
+      gridRef.current.api.ensureIndexVisible(1); // Asegura que la nueva fila sea visible
+    }, 0);
+  };
+
+  function insertarTipoPeriodo(params) {
+    const url = "pages/insertar/ihh_insertarTipoPeriodo.php";
+    const operationUrl = "ihh_insertarTipoPeriodo";
+    var data = {
+      nomTipoPeriodo: params.data.nomTipoPeriodo,
+      dias: params.data.dias,
+      descripcion:
+        params.data.descripcion === nuevaDescripcion
+          ? ""
+          : params.data.descripcion,
+      isActive: 1,
+      usuarioCreacion: userData.usuario,
+    };
+    if (params.data.nomTipoPeriodo === null || params.data.dias === null) {
+      TopAlerts(
+        "02",
+        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
+      );
+    } else {
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarRegistros(datos);
+      });
+    }
+  }
+
+  function desactivar(ID) {
+    ConfirmAlert().then((response) => {
+      if (response === true) {
+        var url = "pages/cambiarEstado/cambiarEstado.php";
+        var operationUrl = "cambiarEstado";
+        var data = {
+          idRegistro: ID,
+          usuarioModificacion: userData.usuario,
+          nombreTabla: nombreTabla,
+        };
+        SendDataService(url, operationUrl, data).then((response) => {
+          TopAlerts("successEdited");
+        });
+      }
+    });
+  }
+
+  //-------------- useEffect y render
+
   useEffect(
     function () {
       obtenerDatos();
+      obtenerTipoPeriodos()
     },
-    [num_boton, cantidadPorPagina]
+    [num_boton, cantidadPorPagina, loadedData, filters.idTipoPeriodo]
   );
 
   return userData.statusConected || userData !== null ? (
@@ -82,19 +254,14 @@ export default function IHH_ListadoTipoPeriodo() {
       <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de tipos de períodos</h1>
+          <h6 style={{ color: "gray" }}>
+            Factory Devops {"->"} Listado de tipos de períodos
+          </h6>
           <br></br>
 
           <div id="selectPaginador">
-            <Button
-              id="btn"
-              onClick={() => {
-                setIsActiveBooleans((prevInfo) => ({
-                  ...prevInfo,
-                  insertarTipoPeriodo: true,
-                }));
-              }}
-            >
-              Crear nuevo tipo de período
+            <Button id="btn" onClick={addNewRow}>
+              Agregar Nueva Fila
             </Button>
 
             <div className="form-group" id="btn2">
@@ -121,70 +288,59 @@ export default function IHH_ListadoTipoPeriodo() {
                 <option value="100">100</option>
               </select>
             </div>
+            <div className="form-group" id="btn2">
+              <label htmlFor="input_tipoElementos">Tipo de períodos: </label>
+              <select
+                required
+                type="text"
+                className="form-control"
+                onChange={({ target }) => {
+                  setFilters((prevDatos) => ({
+                    ...prevDatos,
+                    idTipoPeriodo: target.value,
+                  }));
+                  setNumBoton(1);
+                }}
+              >
+                <option value="">Todos</option>
+                {auxList.tipoPeriodo.map((valor) => (
+                  <option value={valor.idTipoPeriodo}>
+                    {valor.nomTipoPeriodo}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <InsertarTipoPeriodo 
-          isActive={isActiveBooleans.insertarTipoPeriodo}
-          cambiarEstado={setIsActiveBooleans}
-          />
-          <EditarTipoPeriodo
-          isActive={isActiveBooleans.editarTipoPeriodo}
-          cambiarEstado={setIsActiveBooleans}
-          idRegistro={idRegistro}
-          nombreTabla={nombreTabla}
-          />
-
-
-          <Table id="mainTable" hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Días</th>
-                <th>Descripción</th>
-                <th>Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mainList.tipoPeriodo.map((periodo) => (
-                <tr key={periodo.idTipoPeriodo}>
-                  <td>{periodo.idTipoPeriodo}</td>
-                  <td>{periodo.nomTipoPeriodo}</td>
-                  <td>{periodo.dias}</td>
-                  <td>{periodo.descripcion}</td>
-
-                  <td>
-                    <button
-                      data-title="Editar tipo de período"
-                      id="OperationBtns"
-                      onClick={() =>
-                        activarFormulario(periodo.idTipoPeriodo, "editar")
-                      }
-                    >
-                      <RiEditBoxFill id="icons" />
-                    </button>
-                    {/* <Link to={`/listadoEDDProyEmp/${EDDProyecto.idEDDProyecto}`}>
-                    <button
-                      data-title="Proy. colaborador relacionados"
-                      id="OperationBtns"
-                    >
-                      <AiFillProject id="icons" />
-                    </button>
-                  </Link> */}
-                    <button
-                      data-title="Desactivar tipo de período"
-                      onClick={() =>
-                        desactivar(periodo.idTipoPeriodo, "desactivar")
-                      }
-                      id="OperationBtns"
-                    >
-                      <BsFillTrashFill id="icons" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          {loadedData ? (
+            <>
+              <br />
+              <div className="ag-theme-quartz" style={{ height: "300px" }}>
+                <AgGridReact
+                  columnDefs={columnDefs}
+                  rowData={rowData}
+                  autoSizeStrategy={autoSizeStrategy}
+                  ref={gridRef}
+                  rowSelection="single"
+                  editType="fullRow"
+                  getRowId={(params) => params.data.idTipoPeriodo}
+                  suppressRowClickSelection={true}
+                  suppressCellSelection={true}
+                  onRowValueChanged={(params) => {
+                    params.data.idTipoPeriodo === null
+                      ? insertarTipoPeriodo(params)
+                      : editarTipoPeriodo(params);
+                  }}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <br />
+              <br />
+              <Spinner />
+            </>
+          )}
           <Paginador
             paginas={cantidadPaginas}
             cambiarNumero={setNumBoton}

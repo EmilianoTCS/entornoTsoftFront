@@ -63,17 +63,6 @@ export default function ListadoEDDEvalProyEmp() {
 
   const [loadedData, setloadedData] = useState(false);
 
-  // const [listEDDProyEmpEvaluador, setlistEDDProyEmpEvaluador] = useState([""]);
-  // const [listEDDProyEmpEvaluado, setlistEDDProyEmpEvaluado] = useState([""]);
-  // const [listEDDEvaluacion, setlistEDDEvaluacion] = useState([""]);
-
-  // function obtenerProyecto() {
-  //   const url = "pages/auxiliares/listadoProyectoForms.php";
-  //   const operationUrl = "listados";
-  //   getDataService(url, operationUrl).then((response) =>
-  //     setlistProyecto(response)
-  //   );
-  // }
 
   function obtenerCicloEvaluacion() {
     const url = "pages/auxiliares/listadoCiclosEval.php";
@@ -142,24 +131,6 @@ export default function ListadoEDDEvalProyEmp() {
     });
   }
 
-  useEffect(
-    function () {
-      handleChangePaginador();
-      obtenerEvaluadorEvaluado();
-      obtenerProyecto();
-      obtenerCicloEvaluacion();
-    },
-    [
-      num_boton,
-      cantidadPorPagina,
-      idProyecto,
-      idEvaluado,
-      idEvaluador,
-      cicloEvaluacion,
-      loadedData,
-    ]
-  );
-
   //PAGINADOR ---------------------
 
   function handleChangePaginador() {
@@ -196,7 +167,23 @@ export default function ListadoEDDEvalProyEmp() {
   }
 
   //PAGINADOR ---------------------
-
+  useEffect(
+    function () {
+      handleChangePaginador();
+      obtenerEvaluadorEvaluado();
+      obtenerProyecto();
+      obtenerCicloEvaluacion();
+    },
+    [
+      num_boton,
+      cantidadPorPagina,
+      idProyecto,
+      idEvaluado,
+      idEvaluador,
+      cicloEvaluacion,
+      loadedData,
+    ]
+  );
   return userData.statusConected || userData !== null ? (
     userData.nomRol === "administrador" ||
     userData.nomRol === "gerencia" ||
@@ -429,7 +416,7 @@ export default function ListadoEDDEvalProyEmp() {
                   <th>Evaluado</th>
 
                   <th>Resp</th>
-                  <th style={{textAlign: "right"}}>Ciclo eval</th>
+                  <th style={{ textAlign: "right" }}>Ciclo eval</th>
                   <th>Fecha respuesta eval</th>
                   {userData.nomRol === "administrador" ||
                   userData.nomRol === "people" ||
@@ -495,7 +482,9 @@ export default function ListadoEDDEvalProyEmp() {
                     <td>{EDDEvalProyEmp.nomEmpleadoEvaluado}</td>
 
                     <td>{EDDEvalProyEmp.evalRespondida}</td>
-                    <td style={{textAlign: "right"}}>{EDDEvalProyEmp.cicloEvaluacion}</td>
+                    <td style={{ textAlign: "right" }}>
+                      {EDDEvalProyEmp.cicloEvaluacion}
+                    </td>
                     <td width={5}>
                       {EDDEvalProyEmp.evalRespondida === "NO" ? (
                         <p style={{ color: "white" }}></p>
@@ -648,8 +637,8 @@ export default function ListadoEDDEvalProyEmp() {
                       {userData.nomRol === "administrador" ||
                       userData.nomRol === "people" ||
                       userData.nomRol === "gerencia" ? (
-                        EDDEvalProyEmp.evalRespondida === "NO" ? //   <button // > //   } //       : "" //       ? `/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${EDDEvalProyEmp.idEDDProyEmpEvaluador}/${EDDEvalProyEmp.cicloEvaluacion}` //     EDDEvalProyEmp.nomEvaluacion !== "empty / vacio" //   to={ // <Link
-                        //     data-title="Evaluacion relacionada"
+                        EDDEvalProyEmp.evalRespondida ===
+                        "NO" ? //     data-title="Evaluacion relacionada" //   <button // > //   } //       : "" //       ? `/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${EDDEvalProyEmp.idEDDProyEmpEvaluador}/${EDDEvalProyEmp.cicloEvaluacion}` //     EDDEvalProyEmp.nomEvaluacion !== "empty / vacio" //   to={ // <Link
                         //     id="OperationBtns"
                         //     disabled={
                         //       EDDEvalProyEmp.nomEvaluacion !==

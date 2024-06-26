@@ -7,6 +7,7 @@ import getDataService from "../../../../../services/GetDataService";
 import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import EditarPresupuestosMensuales from "../Editar/EditarPresupuestosMensuales";
 
 const InsertarEDDProyecto = ({
   isActiveEDDProyecto,
@@ -18,11 +19,15 @@ const InsertarEDDProyecto = ({
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState(null);
   const [tipoProyecto, setTipoProyecto] = useState("");
+  const [presupuestoTotal, setPresupuestoTotal] = useState({ value: "", formatted: "" });
 
   const [idServicio, setidServicio] = useState("");
 
   const [listServicio, setlistServicio] = useState([""]);
   const [listTipoProyectos, setlistTipoProyectos] = useState([""]);
+  const [datosResumen, setDatosResumen] = useState([""]);
+  const [isActiveFormularioPresupuesto, setisActiveFormularioPresupuesto] =
+    useState(false);
 
   const listEDDProyecto = EDDProyecto;
 
@@ -65,12 +70,18 @@ const InsertarEDDProyecto = ({
       fechaFin: fechaFin,
       tipoProyecto: tipoProyecto,
       idServicio: idServicio,
+      presupuestoTotal: presupuestoTotal.value, // Enviar el valor sin formatear
       isActive: true,
     };
     SendDataService(url, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
       TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
       actualizarEDDProyecto(datos);
+      if (datos.idresumenperproy && !isActiveFormularioPresupuesto) {
+        setisActiveFormularioPresupuesto(true);
+        setDatosResumen(response);
+        cambiarEstado(false)
+      }
     });
   }
 
@@ -78,14 +89,46 @@ const InsertarEDDProyecto = ({
     listEDDProyecto.push(response);
   }
 
-  useEffect(function () {
-    obtenerServicio();
-    obtenerTipoProyecto();
-  }, []);
+  useEffect(
+    function () {
+      obtenerServicio();
+      obtenerTipoProyecto();
+    },
+    [isActiveFormularioPresupuesto]
+  );
+
+  const formatCurrency = (value) => {
+    // Remover caracteres que no sean dígitos o el signo negativo
+    const number = parseInt(value.replace(/[^\d-]/g, ""), 10);
+    if (isNaN(number)) return "";
+    return new Intl.NumberFormat("es-CL", {
+      style: "currency",
+      currency: "CLP",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
+
+  const handlePresupuestoTotalChange = (e) => {
+    const { value } = e.target;
+    const numericValue = value.replace(/\D/g, ""); // Remover caracteres no numéricos
+    setPresupuestoTotal({
+      value: numericValue,
+      formatted: formatCurrency(value),
+    });
+  };
 
   // ----------------------RENDER----------------------------
   return (
     <>
+      {isActiveFormularioPresupuesto ? (
+        <EditarPresupuestosMensuales
+          isActiveFormulario={isActiveFormularioPresupuesto}
+          cambiarEstado={setisActiveFormularioPresupuesto}
+          resumenProyectos={datosResumen}
+        ></EditarPresupuestosMensuales>
+      ) : null}
+
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
           <Modal.Title>Crear proyecto</Modal.Title>
@@ -101,12 +144,11 @@ const InsertarEDDProyecto = ({
                 className="form-control"
                 name="input_nombreDelEDDProyecto"
                 id="input_nombreDelEDDProyecto"
-                maxLength="50"
+                maxLength="100"
                 onChange={({ target }) => setnomProyecto(target.value)}
                 required
               />
             </div>
-
             <div>
               <label htmlFor="input_fechaI">Fecha inicio:</label>
               <input
@@ -130,7 +172,7 @@ const InsertarEDDProyecto = ({
                 name="input_fechaF"
                 id="input_fechaF"
                 onChange={({ target }) => setfechaFin(target.value)}
-                // required
+                required
               />
             </div>
             <div className="form-group">
@@ -173,6 +215,20 @@ const InsertarEDDProyecto = ({
                 ))}
               </select>
             </div>
+            <div>
+              <label htmlFor="input_presupuestoTotal">Presupuesto total:</label>
+              <input
+                placeholder="Escriba presupuesto total del proyecto"
+                type="text"
+                className="form-control"
+                name="input_presupuestoTotal"
+                id="input_presupuestoTotal"
+                value={presupuestoTotal.formatted}
+                onChange={handlePresupuestoTotalChange}
+                required
+              />
+            </div>
+
             <Button
               variant="secondary"
               type="submit"

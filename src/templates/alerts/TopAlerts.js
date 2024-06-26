@@ -9,7 +9,7 @@ export default function TopAlertsError(cod, msj) {
       title: "Operación exitosa",
       icon: "success",
       position: "top-right",
-      timer: 1000,
+      timer: 3000,
       toast: true,
       showConfirmButton: false,
       timerProgressBar: true,

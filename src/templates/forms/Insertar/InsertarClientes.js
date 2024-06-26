@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
@@ -7,6 +7,7 @@ import getDataService from "../../../services/GetDataService";
 import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const InsertarClientes = ({ isActiveCliente, cambiarEstado, cliente }) => {
   // ----------------------CONSTANTES----------------------------
@@ -44,7 +45,8 @@ const InsertarClientes = ({ isActiveCliente, cambiarEstado, cliente }) => {
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
+      const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
       actualizarCliente(cliente);
     });
   }
@@ -66,10 +68,10 @@ const InsertarClientes = ({ isActiveCliente, cambiarEstado, cliente }) => {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_nombreDelCliente">Nombre:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre completo del cliente"
                 type="text"
                 className="form-control"
@@ -82,9 +84,9 @@ const InsertarClientes = ({ isActiveCliente, cambiarEstado, cliente }) => {
             </div>
 
             <div>
-            <label htmlFor="input_DirecciónDelCliente">Dirección:</label>
+              <label htmlFor="input_DirecciónDelCliente">Dirección:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre completo del cliente"
                 type="text"
                 className="form-control"

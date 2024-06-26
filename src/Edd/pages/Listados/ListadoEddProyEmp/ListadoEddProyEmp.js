@@ -40,14 +40,6 @@ export default function ListadoEDDProyEmp() {
 
   const [listEmpleado, setlistEmpleado] = useState([""]);
 
-  // function obtenerProyecto() {
-  //   const url = "pages/auxiliares/listadoProyectoForms.php";
-  //   const operationUrl = "listados";
-  //   getDataService(url, operationUrl).then((response) =>
-  //     setlistProyecto(response)
-  //   );
-  // }
-
   function obtenerProyecto() {
     const url = "pages/auxiliares/listadoProyectoForms.php";
     const operationUrl = "listados";
@@ -65,7 +57,6 @@ export default function ListadoEDDProyEmp() {
       setlistEmpleado(response)
     );
   }
-
   function insertarEDDProyEmp() {
     setIsActiveInsertEDDProyEmp(!isActiveInsertEDDProyEmp);
   }
@@ -73,7 +64,6 @@ export default function ListadoEDDProyEmp() {
     setIsActiveEditEDDProyEmp(!isActiveEditEDDProyEmp);
     setidEDDProyEmp(ID);
   }
-
   function desactivar(ID) {
     ConfirmAlert().then((response) => {
       if (response === true) {
@@ -90,17 +80,7 @@ export default function ListadoEDDProyEmp() {
       }
     });
   }
-
-  useEffect(
-    function () {
-      handleChangePaginador();
-      obtenerProyecto();
-      obtenerEmpleado();
-    },
-    [num_boton, cantidadPorPagina, idProyecto, idEmpleado]
-  );
-
-  //PAGINADOR ---------------------
+//PAGINADOR ---------------------
 
   function handleChangePaginador() {
     var url = "pages/listados/listadoEddProyEmp.php";
@@ -129,8 +109,16 @@ export default function ListadoEDDProyEmp() {
       setEDDProyEmp(datos.datos);
     });
   }
+  useEffect(
+    function () {
+      handleChangePaginador();
+      obtenerProyecto();
+      obtenerEmpleado();
+    },
+    [num_boton, cantidadPorPagina, idProyecto, idEmpleado]
+  );
 
-  //PAGINADOR ---------------------
+
 
   return userData.statusConected || userData !== null ? (
     <>

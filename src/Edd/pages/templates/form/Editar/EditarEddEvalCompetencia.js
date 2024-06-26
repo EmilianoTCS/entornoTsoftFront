@@ -85,7 +85,7 @@ const EditarEddEvalCompetencia = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar Proyecto</Modal.Title>
+          <Modal.Title>Editar Competencia</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>

@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from "react";
-
 import "../TablasStyles.css";
 import "../ListadoCompProy/CompProy.css";
 import SendDataService from "../../../../services/SendDataService";
-
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
-
 import "../BtnInsertar.css";
-
 import ProgressBar from "react-bootstrap/ProgressBar";
-
-// GRAFICO LINEAS
 import { Bar } from "react-chartjs-2";
-
 ChartJS.register(ArcElement, Tooltip, Legend);
 import {
   Chart as ChartJS,
@@ -28,7 +21,6 @@ import {
   ArcElement,
 } from "chart.js";
 import ExtraGraph from "../ListadoCompProy/ExtraGraph";
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -51,6 +43,8 @@ export default function DashboardCompProy_detalle({
   fechaFin,
   cicloEvaluacion,
 }) {
+   //Resumen: este componente se despliega  los promedios de desempeño y permite clickear un ciclo en específico para examinarlo, proviene de dashboardeddresumeneval_detalle
+
   const [loadedDataColor, setLoadedDataColor] = useState(false);
   const [loadedData, setLoadedData] = useState(false);
   const [datosLinks, setDatosLinks] = useState("");

@@ -18,6 +18,9 @@ export default function ExtraGraph({
   cicloEvaluacion,
   setActiveGraph,
 }) {
+
+  //Resumen: este muestra toda la info de un ciclo de evaluación en específico, mostrando los "radares" y comentarios
+  
   const [listResumenEval, setListResumenEval] = useState("");
   const [listCompetencias, setListCompetencias] = useState("");
   const [listConfigCompColorFlechas, setListConfigCompColorFlechas] =

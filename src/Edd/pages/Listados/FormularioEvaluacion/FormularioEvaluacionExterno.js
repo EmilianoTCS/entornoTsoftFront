@@ -190,14 +190,14 @@ export default function FormularioEvaluacionExterno() {
 
         idEvaluacion: idEDDEvaluacion,
         idEDDProyEmpEvaluador: idEDDProyEmpEvaluador,
-        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado, // Aquí estableces el valor correcto
+        idEDDProyEmpEvaluado: idEDDProyEmpEvaluado, 
         cicloEvaluacion:cicloEvaluacion,
       }
 
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);
-      setLoadedData(true); //Cambio el estado del booleano
+      setLoadedData(true); //Cambia el estado del booleano para indicar que los datos han sido obtenidos
       ConfirmAlert();
     });
   }

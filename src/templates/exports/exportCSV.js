@@ -4,27 +4,12 @@ import "./export.css";
 import TopAlerts from "../alerts/TopAlerts";
 
 const ExportCSV = ({ inputData, nomTabla }) => {
-
-// Extraer números usando una expresión regular
-var matchResult = nomTabla.match(/\d+/g);
-
-// Verificar si hay coincidencias antes de usar map
-var numeros = matchResult ? matchResult.map(Number) : [];
-
-// Extraer texto eliminando los números
-var texto = nomTabla.replace(/\d+/g, '');
-
-console.log(texto);
   const exportData = (format) => {
-
     if (inputData.length === 0 || inputData[0] === '') {
       console.error("No hay datos para exportar");
       TopAlerts('01', "No hay datos para exportar")
       return;
     }
-
-    let formattedData;
-    let contentType;
 
     if (format === "csv") {
       // Formato CSV
@@ -37,50 +22,38 @@ console.log(texto);
         csvData.push(row.join(";"));
       });
 
-      formattedData = csvData.join("\n");
-      contentType = "text/csv;charset=utf-8;";
-
-      const blob = new Blob([formattedData], { type: contentType });
+      const csvContent = csvData.join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
       const link = document.createElement("a");
-      if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", `${nomTabla}.${format}`);
-        link.style.visibility = "hidden";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
+      link.href = URL.createObjectURL(blob);
+      link.download = `${nomTabla}.csv`;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
     } else if (format === "xlsx") {
       // Formato XLSX (Excel)
-      if (typeof XLSX == "undefined") XLSX = require("xlsx");
-
       const ws = XLSX.utils.json_to_sheet(inputData);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, texto);
+      XLSX.utils.book_append_sheet(wb, ws, nomTabla);
 
-      /* Genera un archivo XLSX*/
       XLSX.writeFile(wb, `${nomTabla}.xlsx`);
     } else {
       console.error("Formato de exportación no válido");
-      return;
     }
   };
 
   return (
-    <table>
-      <tr>
-        <button className="btnExport" onClick={() => exportData("csv")}>
-          Exportar a CSV
-        </button>
-      </tr>
-      <tr>
-        <button className="btnExport" onClick={() => exportData("xlsx")}>
-          Exportar a Excel
-        </button>
-      </tr>
-    </table>
+    <div>
+      <button className="btnExport" onClick={() => exportData("csv")}>
+        Exportar a CSV
+      </button>
+      <button className="btnExport" onClick={() => exportData("xlsx")}>
+        Exportar a Excel
+      </button>
+    </div>
   );
 };
 

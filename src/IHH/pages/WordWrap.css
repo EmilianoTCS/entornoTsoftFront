@@ -1,0 +1,40 @@
+.ag-header-cell-label .ag-header-cell-text {
+  white-space: normal !important;
+}
+
+.cellStyleText {
+  text-align: left;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+.cellStyleNumber {
+  text-align: right;
+  vertical-align: middle;
+}
+
+.operaciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 500px));
+  gap: 5px;
+}
+.tabla,
+.containerOperations {
+  position: relative;
+}
+
+[data-title]:after {
+  content: attr(data-title);
+  background-color: #000000;
+  color: rgb(255, 255, 255);
+  font-size: 10pt;
+  position: absolute;
+  padding: 2px;
+  width: min-content;
+  bottom: 10px;
+  left: 10%;
+  white-space: nowrap;
+  box-shadow: 1px 1px 3px #222222;
+  opacity: 0;
+  border: 1px solid #111111;
+}

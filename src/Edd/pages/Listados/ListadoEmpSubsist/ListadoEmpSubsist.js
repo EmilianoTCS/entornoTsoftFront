@@ -80,18 +80,7 @@ export default function ListadoEmpSubsist() {
       }
     });
   }
-
-  useEffect(
-    function () {
-      handleChangePaginador();
-      obtenerEmpleado();
-      obtenerSubsist();
-    },
-    [num_boton, cantidadPorPagina, idEmpleado, idSubsistema]
-  );
-
-  //PAGINADOR ---------------------
-
+  
   function handleChangePaginador() {
     var url = "pages/listados/listadoEmpSubsist.php";
     var operationUrl = "listadoEmpSubsist";
@@ -107,6 +96,16 @@ export default function ListadoEmpSubsist() {
       setEmpSubsist(datos.datos);
     });
   }
+  useEffect(
+    function () {
+      handleChangePaginador();
+      obtenerEmpleado();
+      obtenerSubsist();
+    },
+    [num_boton, cantidadPorPagina, idEmpleado, idSubsistema]
+  );
+
+  //PAGINADOR ---------------------
 
   //PAGINADOR ---------------------
 

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
@@ -7,15 +7,14 @@ import getDataService from "../../../services/GetDataService";
 import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const InsertarServicio = ({ isActiveServicio, cambiarEstado, servicio }) => {
   // ----------------------CONSTANTES----------------------------
   const [nomServicio, setnomServicio] = useState("");
   const [idCliente, setidCliente] = useState("");
 
-  
   const [listCliente, setlistCliente] = useState([""]);
-
 
   const listServicio = servicio;
 
@@ -30,9 +29,10 @@ const InsertarServicio = ({ isActiveServicio, cambiarEstado, servicio }) => {
   function obtenerCliente() {
     const url = "pages/auxiliares/listadoClienteForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistCliente(response));
+    getDataService(url, operationUrl).then((response) =>
+      setlistCliente(response)
+    );
   }
-
 
   function SendData(e) {
     e.preventDefault();
@@ -42,12 +42,14 @@ const InsertarServicio = ({ isActiveServicio, cambiarEstado, servicio }) => {
       usuarioCreacion: userData.usuario,
       nomServicio: nomServicio,
       idCliente: idCliente,
-      isActive:true,
+      isActive: true,
     };
     console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarServicio(servicio);console.log(response);
+      const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+      actualizarServicio(servicio);
+      console.log(response);
     });
   }
 
@@ -68,10 +70,10 @@ const InsertarServicio = ({ isActiveServicio, cambiarEstado, servicio }) => {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_nombreDelservicio">Servicio:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre del servicio"
                 type="text"
                 className="form-control"
@@ -82,7 +84,7 @@ const InsertarServicio = ({ isActiveServicio, cambiarEstado, servicio }) => {
                 required
               />
             </div>
-            
+
             <div>
               <label htmlFor="input_Pais">Cliente:</label>
               <select
@@ -90,9 +92,11 @@ const InsertarServicio = ({ isActiveServicio, cambiarEstado, servicio }) => {
                 type="text"
                 className="form-control"
                 onChange={({ target }) => setidCliente(target.value)}
-              >                <option hidden value="">
-              Desplegar lista
-            </option>
+              >
+                {" "}
+                <option hidden value="">
+                  Desplegar lista
+                </option>
                 {listCliente.map((valor) => (
                   <option
                     selected={valor.idCliente === idCliente ? "selected" : ""}
@@ -118,5 +122,3 @@ const InsertarServicio = ({ isActiveServicio, cambiarEstado, servicio }) => {
   );
 };
 export default InsertarServicio;
-
-

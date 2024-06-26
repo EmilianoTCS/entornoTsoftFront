@@ -69,15 +69,6 @@ export default function ListadoEDDEvaluacion() {
       }
     });
   }
-
-  useEffect(
-    function () {
-      handleChangePaginador();
-      obtenerEvaluacion();
-    },
-    [num_boton, cantidadPorPagina, idEvaluacion]
-  );
-
   //PAGINADOR ---------------------
 
   function handleChangePaginador() {
@@ -96,6 +87,13 @@ export default function ListadoEDDEvaluacion() {
       console.log(data);
     });
   }
+  useEffect(
+    function () {
+      handleChangePaginador();
+      obtenerEvaluacion();
+    },
+    [num_boton, cantidadPorPagina, idEvaluacion]
+  );
 
   return userData.statusConected || userData !== null ? (
     userData.nomRol === "administrador" ||

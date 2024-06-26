@@ -25,15 +25,12 @@ export default function DashboardEddResumenEval() {
   const [loadedDataResumenEval, setLoadedDataResumenEval] = useState(false);
   const [loadedDataColor, setLoadedDataColor] = useState(false);
   const [listConfigCompColor, setListConfigCompColor] = useState("");
-
   const [loadedDataLeyenda, setLoadedDataLeyenda] = useState(false);
   const [loadedDataRango, setLoadedDataRango] = useState(false);
-
   const [listConfigCompRangoFlechas, setListConfigCompRangoFlechas] =
     useState("");
   const [listConfigCompRangoLeyenda, setListConfigCompRangoLeyenda] =
     useState("");
-
   const [activeGraph, setActiveGraph] = useState(null);
   const [paramsExtraGraph, setParams] = useState({
     idCliente: "",
@@ -44,289 +41,12 @@ export default function DashboardEddResumenEval() {
     fechaFin: "",
     tipoCargo: "",
   });
-
   const [nombrePDF, setNombrePDF] = useState("");
   var date = new Date()
     .toISOString()
     .replace(/[^0-9]/g, "")
     .slice(0, -3);
 
-  var jsonData = [
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 5,
-      nomProyecto: "A - ARG PROY",
-      idEDDProyEmp: 30,
-      idEDDEvalProyEmp: 103,
-      proyFechaIni: "11/2022",
-      proyFechaFin: "11/2023",
-      estadoProyecto: "Inactivo",
-      cantEmpleados: 5,
-      cantEvalRespondidas: 1,
-      cicloEvaluacion: 1,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 7,
-      nomProyecto: "CARMINA",
-      idEDDProyEmp: 37,
-      idEDDEvalProyEmp: 147,
-      proyFechaIni: "05/2022",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 1,
-      cantEvalRespondidas: 1,
-      cicloEvaluacion: 1,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 7,
-      nomProyecto: "CARMINA",
-      idEDDProyEmp: 37,
-      idEDDEvalProyEmp: 150,
-      proyFechaIni: "05/2022",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 1,
-      cantEvalRespondidas: 1,
-      cicloEvaluacion: 2,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 7,
-      nomProyecto: "CARMINA",
-      idEDDProyEmp: 37,
-      idEDDEvalProyEmp: 151,
-      proyFechaIni: "05/2022",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 1,
-      cantEvalRespondidas: 1,
-      cicloEvaluacion: 3,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 7,
-      nomProyecto: "CARMINA",
-      idEDDProyEmp: 37,
-      idEDDEvalProyEmp: 157,
-      proyFechaIni: "05/2022",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 1,
-      cantEvalRespondidas: 1,
-      cicloEvaluacion: 4,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 9,
-      nomProyecto: "GRIDO",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 158,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 3,
-      cicloEvaluacion: 1,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 9,
-      nomProyecto: "GRIDO",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 164,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 3,
-      cicloEvaluacion: 2,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 9,
-      nomProyecto: "GRIDO",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 167,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 2,
-      cicloEvaluacion: 3,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 9,
-      nomProyecto: "GRIDO",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 170,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 3,
-      cicloEvaluacion: 4,
-    },
-
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 10,
-      nomProyecto: "BYPASS",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 158,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 3,
-      cicloEvaluacion: 1,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 10,
-      nomProyecto: "BYPASS",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 164,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 0,
-      cicloEvaluacion: 2,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 10,
-      nomProyecto: "BYPASS",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 167,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 0,
-      cicloEvaluacion: 3,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 10,
-      nomProyecto: "BYPASS",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 170,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 1,
-      cicloEvaluacion: 4,
-    },
-
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 11,
-      nomProyecto: "HARDVISION",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 158,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 3,
-      cicloEvaluacion: 1,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 11,
-      nomProyecto: "HARDVISION",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 164,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 1,
-      cicloEvaluacion: 2,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 11,
-      nomProyecto: "HARDVISION",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 167,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 2,
-      cicloEvaluacion: 3,
-    },
-    {
-      idCliente: 5,
-      nomCliente: "ARG",
-      idServicio: 5,
-      nomServicio: "A - ARG",
-      idEDDProyecto: 11,
-      nomProyecto: "HARDVISION",
-      idEDDProyEmp: 39,
-      idEDDEvalProyEmp: 170,
-      proyFechaIni: "11/2023",
-      proyFechaFin: "Indefinida",
-      estadoProyecto: "Activo",
-      cantEmpleados: 3,
-      cantEvalRespondidas: 2,
-      cicloEvaluacion: 4,
-    },
-  ];
 
   //Obtención de los datos
   function getListEddResumenEval() {
@@ -372,7 +92,6 @@ export default function DashboardEddResumenEval() {
       setLoadedDataLeyenda(true);
     });
   }
-
   function GetConfigCompRangoF() {
     var url = "pages/listados/listadoConfigDatos.php";
     var operationUrl = "listadoConfigDatos";
@@ -772,7 +491,7 @@ export default function DashboardEddResumenEval() {
           >
             (Click en cada barra para más información)
           </h2>
-          <BarChart data={jsonData} />
+          <BarChart data={listEddResumenEval} />
           <InfoCaras></InfoCaras>
         </div>
 

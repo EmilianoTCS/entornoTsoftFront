@@ -1,0 +1,75 @@
+.cl_container_filtros_res_ihh_colab {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 1000px;
+  background-color: white;
+  margin: auto;
+  vertical-align: middle;
+  padding: 10px;
+  border-radius: 10px;
+}
+.cl_container_filtros_res_ihh_colab .container_inputs_filtros {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.container_inputs_filtros .input_colaborador,
+.input_proyectos {
+  width: 250px;
+}
+.cl_container_filtros_res_ihh_colab .container_btn_buscar {
+  display: flex;
+  align-items: center;
+}
+.cl_container_filtros_res_ihh_colab .btn_buscar {
+  background-color: #e10b1c;
+  border: none;
+  width: 100px;
+}
+
+.sctn_res_ihh_colab {
+  width: 1200px;
+  background-color: white;
+  margin: auto;
+  border-radius: 10px;
+}
+.sctn_res_ihh_colab .tbl_res_ihh_colab {
+  margin: auto;
+  margin-top: 20px;
+  width: 1100px;
+}
+.sctn_res_ihh_colab .tbl_res_ihh_colab thead {
+  text-align: center;
+  background-color: rgb(177, 177, 177);
+  padding: 10px;
+  vertical-align: middle;
+}
+.sctn_res_ihh_colab .tbl_res_ihh_colab .td_num_right_text {
+  width: min-content;
+  text-align: right;
+}
+.sctn_res_ihh_colab .tbl_res_ihh_colab .th_num {
+  width: 200px;
+}
+.sctn_res_ihh_colab .tbl_res_ihh_colab .th_operaciones {
+  width: 250px;
+}
+.sctn_res_ihh_colab .tbl_res_ihh_colab .th_operaciones,
+.td_operaciones {
+  width: 250px;
+  display: flex;
+  justify-content: center;
+}
+.sctn_res_ihh_colab .tbl_res_ihh_colab .th_nomProyecto,
+.td_nomProyecto {
+  width: 600px;
+}
+.containerTitulo_ihh_res_colab{
+    margin: auto;
+    background-color: white;
+    border-radius: 10px;
+    width: 1000px;
+    text-align: center;
+    padding: 2px;
+}

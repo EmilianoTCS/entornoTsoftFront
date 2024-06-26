@@ -60,7 +60,7 @@ export default function ListadoClientes_test_agGrid() {
             onChange={(e) => {
               params.data.idCliente === null
                 ? insertarCliente({ ...params, idPais: e.target.value })
-                : editarCliente(params);
+                : editarCliente({ ...params, idPais: e.target.value });
             }}
             inputProps={{ "aria-label": "Without label" }}
             defaultValue={params.data.idPais || ""}
@@ -131,23 +131,7 @@ export default function ListadoClientes_test_agGrid() {
     };
   }, []);
 
-  // const onRowValueChanged = (params) => {
-  //   console.log("paramsRow", params);
-  //   console.log("paramsCells", paramsCells);
-  //   if (paramsCells !== undefined && paramsCells.newValue === null) {
-  //     paramsCells.data[paramsCells.colDef.field] = paramsCells.oldValue;
-  //     gridRef.current.api.refreshCells({ force: true });
-  //     TopAlertsError("01", "No se permiten campos vacíos.");
-  //     setParamsCells();
-  //   } else {
-  //     editarCliente(params);
-  //     gridRef.current.api.redrawRows();
-  //   }
-  // };
-
-  // function insertarCliente() {
-  //   setIsActiveInsertCliente(!isActiveInsertCliente);
-  // }
+  
   function editarCliente(params) {
     if (
       params.data.nomCliente === null ||
@@ -164,7 +148,7 @@ export default function ListadoClientes_test_agGrid() {
         usuarioModificacion: userData.usuario,
         idCliente: params.data.idCliente,
         nomCliente: params.data.nomCliente,
-        idPais: params.data.idPais,
+        idPais: params.idPais,
         direccionCliente: params.data.direccionCliente,
       };
 
@@ -174,10 +158,23 @@ export default function ListadoClientes_test_agGrid() {
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
         TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-        // actualizarCliente(datos);
+        console.log(datos);
+        actualizarRegistros(datos);
       });
     }
   }
+
+  function actualizarRegistros(registro) {
+    console.log(registro);
+    const nuevosRegistros = cliente.map((item) => {
+      return item.idCliente === registro.idCliente ? registro : item;
+    });
+
+    setCliente(nuevosRegistros );
+    gridRef.current.api.redrawRows();
+  }
+
+
 
   const addNewRow = () => {
     console.log("clicked");
@@ -188,7 +185,6 @@ export default function ListadoClientes_test_agGrid() {
       idPais: null,
       nomPais: null,
     }; // Crea una nueva fila vacía
-    console.log(cliente.length);
     setCliente([newRow, ...cliente]); // Agrega la nueva fila al estado
     setTimeout(() => {
       gridRef.current.api.ensureIndexVisible(1); // Asegura que la nueva fila sea visible

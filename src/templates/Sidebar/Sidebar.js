@@ -4,65 +4,59 @@ import "../Sidebar/SidebarStyles.css";
 import Logout from "../../services/Logout";
 import userLogo from "../../sources/User_logo.png";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Offcanvas } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import FlechaTsoft from "../../templates/img/FlechaTsoft/FlechaTsoft";
-
-import { BsCalendarDayFill } from "react-icons/bs";
-import { MdSwitchAccount } from "react-icons/md";
+import { IoTime } from "react-icons/io5";
+import { BsHourglassBottom } from "react-icons/bs";
 import { IoHome } from "react-icons/io5";
-import { FaBook } from "react-icons/fa";
+import { FaBook, FaUpload } from "react-icons/fa";
 import { ImBook } from "react-icons/im";
 import { IoIosPeople } from "react-icons/io";
-import { MdAdminPanelSettings } from "react-icons/md";
-import { IoMdListBox } from "react-icons/io";
-import { GoTasklist } from "react-icons/go";
-import { GiArchiveRegister, GiStarFormation, GiPadlock } from "react-icons/gi";
-import { BsFillPersonLinesFill, BsFillPeopleFill } from "react-icons/bs";
 import { IoBookmarks } from "react-icons/io5";
-import { ImAddressBook } from "react-icons/im";
-import { MdEmojiPeople } from "react-icons/md";
-import { GiBookCover, GiNetworkBars } from "react-icons/gi";
-import { FaPeopleCarry } from "react-icons/fa";
-import { SiGitbook, SiBookstack } from "react-icons/si";
-import { TiThList } from "react-icons/ti";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
+import { PiExamFill } from "react-icons/pi";
+import { FaPeopleCarry } from "react-icons/fa";
+import FormularioImportarRegistros from "./FormularioImportarRegistros";
+import FormularioImportarRegistros_IHH from "./FormularioImportarRegistros_IHH";
 
-export default function SideBar(props) {
+export default function SideBar() {
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const [isToggledAdmin, setToggleAdmin] = useState(false);
   const [isToggledEvaluaciones, setToggleEvaluaciones] = useState(false);
   const [isToggledAcademia, setToggleAcademia] = useState(false);
-  const [isToggledAsistencias, setToggleAsistencias] = useState(false);
-  const [isToggledColaboradores, setToggleColaboradores] = useState(false);
-  const [isToggledTsoft, setToggleTsoft] = useState(false);
-  const [show, setShow] = useState(props.isToggled);
-  const closeSidebar = () => setShow(false);
-  const showSidebar = () => setShow(true);
-
-  function handleChangeAdmin() {
-    setToggleAdmin(!isToggledAdmin);
-  }
+  const [isToggledImportarArchivos, setToggleImportarArchivos] =
+    useState(false);
+  const [isActiveImportarArchivos, setIsActiveImportarArchivos] =
+    useState(false);
+  const [isActiveImportarArchivos_IHH, setIsActiveImportarArchivos_IHH] =
+    useState(false);
+  const [isToggledIHH, setToggleIHH] = useState(false);
 
   function handleChangeEvaluaciones() {
     setToggleEvaluaciones(!isToggledEvaluaciones);
   }
-  function handleChangeTsoft() {
-    setToggleTsoft(!isToggledTsoft);
+  function handleChangeIHH() {
+    setToggleIHH(!isToggledIHH);
   }
 
   function handleChangeAcademia() {
     setToggleAcademia(!isToggledAcademia);
   }
-  function handleChangeAsistencias() {
-    setToggleAsistencias(!isToggledAsistencias);
-  }
-  function handleChangeColaboradores() {
-    setToggleColaboradores(!isToggledColaboradores);
+
+  function handleImportarArchivos() {
+    setToggleImportarArchivos(!isToggledImportarArchivos);
   }
 
   return (
     <>
+      <FormularioImportarRegistros
+        isActive={isActiveImportarArchivos}
+        cambiarEstado={setIsActiveImportarArchivos}
+      ></FormularioImportarRegistros>
+
+      <FormularioImportarRegistros_IHH
+        isActive={isActiveImportarArchivos_IHH}
+        cambiarEstado={setIsActiveImportarArchivos_IHH}
+      ></FormularioImportarRegistros_IHH>
       <section>
         <button
           className="buttonStyleOpen"
@@ -140,10 +134,29 @@ export default function SideBar(props) {
                   {/* --------------------------------------------------- */}
 
                   <li id="li_Academia">
-                    <Link to="/listadoEmpleados">
+                    <Link to="/listadoEmpleados/0">
+                      <button id="submenuSidebar">
+                        <FaPeopleCarry id="icons" />
+                        Colaboradores
+                      </button>
+                    </Link>
+                  </li>
+                  {/* --------------------------------------------------- */}
+
+                  <li
+                    id="li_Academia"
+                    className={
+                      userData.nomRol === "administrador" ||
+                      userData.nomRol === "people" ||
+                      userData.nomRol === "gerencia"
+                        ? ""
+                        : "private"
+                    }
+                  >
+                    <Link to="/listadoEddProyecto/0">
                       <button id="submenuSidebar">
                         <ImBook id="icons" />
-                        Colaboradores
+                        Proyectos
                       </button>
                     </Link>
                   </li>
@@ -208,9 +221,7 @@ export default function SideBar(props) {
                       </li>
                     </ul>
                   </li>
-
                   {/* -----------------Evaluaciones de desempeño------------------------- */}
-
                   <li
                     id="li_Academia"
                     onClick={handleChangeEvaluaciones}
@@ -225,32 +236,13 @@ export default function SideBar(props) {
                     }
                   >
                     <button id="buttonSidebar">
-                      <FaBook id="icons" />
+                      <PiExamFill id="icons" />
                       Eval. desempeño
                     </button>
                     <ul
                       id="COE_Academia"
                       className={isToggledEvaluaciones ? "active" : ""}
                     >
-                      {/* --------------------------------------------------- */}
-
-                      <li
-                        id="textLeftSelect"
-                        className={
-                          userData.nomRol === "administrador" ||
-                          userData.nomRol === "people" ||
-                          userData.nomRol === "gerencia"
-                            ? ""
-                            : "private"
-                        }
-                      >
-                        <Link to="/listadoEddProyecto/0">
-                          <button id="submenuSidebar">
-                            <ImBook id="icons" />
-                            Proyecto
-                          </button>
-                        </Link>
-                      </li>
                       {/* --------------------------------------------------- */}
                       <li
                         id="textLeftSelect"
@@ -288,15 +280,7 @@ export default function SideBar(props) {
                         </Link>
                       </li>
                       {/* --------------------------------------------------- */}
-                      {/* <li id="textLeftSelect">
-                        <Link to="/listadoEvaluacionesPendientes">
-                          <button id="submenuSidebar">
-                            <ImBook id="icons" />
-                            Formulario eval (Solo Usuario)
-                          </button>
-                        </Link>
-                      </li> */}
-                      {/* --------------------------------------------------- */}
+
                       <li
                         id="textLeftSelect"
                         className={
@@ -352,7 +336,185 @@ export default function SideBar(props) {
                       </li> */}
                     </ul>
                   </li>
-                  {/* --------------------------------------------------- */}
+                  {/* -----------------Impugnacion de horas ------------------------- */}
+                  <li
+                    id="li_Academia"
+                    onClick={handleChangeIHH}
+                    className={
+                      userData.nomRol === "administrador" ||
+                      userData.nomRol === "people" ||
+                      userData.nomRol === "gerencia" ||
+                      userData.nomRol === "referente" ||
+                      userData.nomRol === "colaborador"
+                        ? ""
+                        : "private"
+                    }
+                  >
+                    <button id="buttonSidebar">
+                      <BsHourglassBottom id="icons" />
+                      Impugnación de horas
+                    </button>
+                    <ul
+                      id="COE_Academia"
+                      className={isToggledIHH ? "active" : ""}
+                    >
+                      {/* --------------------------------------------------- */}
+
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/ihh/listadoAcop">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            ACOPS
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/ihh/listadoElementoImp/0">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Elementos
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/ihh/listadoPeriodo/0">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Períodos
+                          </button>
+                        </Link>
+                      </li>
+
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/ihh/listadoImpugnacionEmp">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Impugnación
+                          </button>
+                        </Link>
+                      </li>
+
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/ihh/ListadoImpEmpProy">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Impugnar horas
+                          </button>
+                        </Link>
+                      </li>
+
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/ihh/Resumen_ihh_colab">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Resúmenes
+                          </button>
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+
+                  {/* -----------------Importar registros ------------------------- */}
+                  <li
+                    id="li_Academia"
+                    onClick={handleImportarArchivos}
+                    className={
+                      userData.nomRol === "administrador" ||
+                      userData.nomRol === "people" ||
+                      userData.nomRol === "gerencia"
+                        ? ""
+                        : "private"
+                    }
+                  >
+                    <button id="submenuSidebar">
+                      <FaUpload id="icons" />
+                      Importar datos
+                    </button>
+                    <ul
+                      id="COE_Academia"
+                      className={isToggledImportarArchivos ? "active" : ""}
+                    >
+                      <li id="textLeftSelect">
+                        <button
+                          id="submenuSidebar"
+                          onClick={() => setIsActiveImportarArchivos(true)}
+                        >
+                          <IoBookmarks id="icons" />
+                          Datos base
+                        </button>
+                      </li>
+                      <li id="textLeftSelect">
+                        <button
+                          id="submenuSidebar"
+                          onClick={() => setIsActiveImportarArchivos_IHH(true)}
+                        >
+                          <IoBookmarks id="icons" />
+                          Impugnación de horas
+                        </button>
+                      </li>
+                    </ul>
+                  </li>
+                  {/* -----------------Cambia password ------------------------- */}
+
                   <li id="li_Academia">
                     {/* <Link to="/listadoEmpleados"> */}
                     <button id="submenuSidebar">

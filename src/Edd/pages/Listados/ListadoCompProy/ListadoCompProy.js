@@ -124,26 +124,6 @@ export default function ListadoCompProy() {
   }
   // FIN ELIMINAR
 
-  useEffect(() => {
-    obtenerCliente();
-    obtenerProyecto();
-    obtenerServicio();
-
-    if (selectedProyString) {
-      // Verifica si se ha seleccionado un proyecto
-      obtenerCicloEvaluacion();
-    } else {
-      // Si no se ha seleccionado un proyecto, establece listcicloEvaluacion como un arreglo vacío
-      setlistcicloEvaluacion([]);
-    }
-  }, [
-    selectedClientsString,
-    selectedServicioString,
-    selectedProyString,
-    idProyecto,
-    loadedNuevosDatos,
-  ]);
-
   function calcularPromedioCompetenciasPorCiclo(response) {
     const ciclos = {};
     let auxCantRespOK = 0;
@@ -280,7 +260,26 @@ export default function ListadoCompProy() {
   const resetServices = () => {
     setSelectedServicio([]);
   };
+  
+  useEffect(() => {
+    obtenerCliente();
+    obtenerProyecto();
+    obtenerServicio();
 
+    if (selectedProyString) {
+      // Verifica si se ha seleccionado un proyecto
+      obtenerCicloEvaluacion();
+    } else {
+      // Si no se ha seleccionado un proyecto, establece listcicloEvaluacion como un arreglo vacío
+      setlistcicloEvaluacion([]);
+    }
+  }, [
+    selectedClientsString,
+    selectedServicioString,
+    selectedProyString,
+    idProyecto,
+    loadedNuevosDatos,
+  ]);
   // FINNN Restablecer los valores
   return userData.statusConected || userData !== null ? (
     userData.nomRol === "administrador" ||
@@ -305,9 +304,6 @@ export default function ListadoCompProy() {
               <tr>
                 <td style={{ width: "16em" }}>
                   <label htmlFor="input_CantidadR">Clientes: </label>
-                  {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
-                                    <span> <FaQuestionCircle id="icons" /></span>
-                                </OverlayTrigger> */}
                   <select
                     required
                     type="text"
@@ -357,9 +353,6 @@ export default function ListadoCompProy() {
 
                 <td id="espacioEntreOpciones" style={{ width: "16em" }}>
                   <label htmlFor="input_CantidadR">Servicios: </label>
-                  {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
-                                    <span> <FaQuestionCircle id="icons" /></span>
-                                </OverlayTrigger> */}
                   <select
                     required
                     type="text"
@@ -408,9 +401,6 @@ export default function ListadoCompProy() {
 
                 <td id="espacioEntreOpciones" style={{ width: "16em" }}>
                   <label htmlFor="input_CantidadR">Proyectos:</label>
-                  {/* <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-cliente">{mensajeCtrl}</Tooltip>}>
-                                    <span> <FaQuestionCircle id="icons" /></span>
-                                </OverlayTrigger>*/}
                   <select
                     required
                     type="text"
@@ -496,7 +486,6 @@ export default function ListadoCompProy() {
                     onChange={(e) => setFechaFin(e.target.value)}
                   />
                 </td>
-
                 <td>
                   <option disabled></option>
                   <button
@@ -662,7 +651,6 @@ export default function ListadoCompProy() {
                 )}
               </tbody>
             </Table>
- 
           </div>
         </div>
       </>

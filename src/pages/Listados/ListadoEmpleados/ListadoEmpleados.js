@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Navigate, Link } from "react-router-dom";
 import getDataService from "../../../services/GetDataService";
 import SendDataService from "../../../services/SendDataService";
+import { useRoute } from "wouter";
 
 //Componentes
 import Header from "../../../templates/Header/Header";
@@ -30,6 +31,8 @@ export default function ListadoEmpleados() {
   const [empleado, setEmpleado] = useState([""]);
   const [isActiveInsertEmpleado, setIsActiveInsertEmpleado] = useState(false);
   const [isActiveEditEmpleado, setIsActiveEditEmpleado] = useState(false);
+  const [, params] = useRoute("/listadoEmpleados/:idEmpleado");
+
   const [idEmpleado, setIDEmpleado] = useState(null);
   const [num_boton, setNumBoton] = useState(1);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -40,12 +43,12 @@ export default function ListadoEmpleados() {
   const [idPais, setidPais] = useState("");
   const [idArea, setidArea] = useState("");
   const [idCargo, setidCargo] = useState("");
-  const [idEmpleadoFiltro, setidEmpleadoFiltro] = useState("");
+  const [idEmpleadoFiltro, setidEmpleadoFiltro] = useState(params.idEmpleado);
 
   const [listPais, setlistPais] = useState([""]);
   const [listCargo, setlistCargo] = useState([""]);
   const [listArea, setlistArea] = useState([""]);
-  const [listEmpleado, setlistEmpleado] = useState([""]);
+  const [listEmpleado, setlistEmpleado] = useState(['']);
 
   // const [listServicio, setlistServicio] = useState([""]);
 
@@ -67,9 +70,10 @@ export default function ListadoEmpleados() {
   function obtenerEmpleado() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistEmpleado(response)
-    );
+    getDataService(url, operationUrl).then((response) => {
+      console.log(response);
+      setlistEmpleado(response);
+    });
   }
   function obtenerCargo() {
     const url = "pages/auxiliares/listadoCargoForms.php";
@@ -151,6 +155,7 @@ export default function ListadoEmpleados() {
       };
     }
     SendDataService(url, operationUrl, data).then((data) => {
+      console.log(data);
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setEmpleado(datos.datos);
@@ -359,7 +364,9 @@ export default function ListadoEmpleados() {
                       userData.nomRol === "gerencia" ||
                       userData.nomRol === "people" ||
                       userData.nomRol === "relator" ? (
-                        <Link to={`/listadoRelatorRamo/${empleado.idEmpleado}/0`}>
+                        <Link
+                          to={`/listadoRelatorRamo/${empleado.idEmpleado}/0`}
+                        >
                           <button
                             data-title="Relator Ramo relacionados"
                             id="OperationBtns"

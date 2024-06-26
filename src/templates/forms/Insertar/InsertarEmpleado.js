@@ -8,6 +8,7 @@ import getDataService from "../../../services/GetDataService";
 import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   // ----------------------CONSTANTES----------------------------
@@ -20,6 +21,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   const [password, setPassword] = useState("");
   const [tipoUsuario, settipoUsuario] = useState("");
   const [nomRol, setnomRol] = useState("");
+  const [valorHH, setValorHH] = useState("");
   const [telefonoEmpleado, settelefonoEmpleado] = useState("");
   const [idSubsistema, setidSubsistema] = useState("");
   const [listSubsistema, setlistSubsistema] = useState([""]);
@@ -91,20 +93,21 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
       idPais: idPais,
       idCargo: idCargo,
       idArea: idArea,
-      idCliente:idCliente,
+      idCliente: idCliente,
+      valorHH: valorHH,
       usuario: usuario,
       password: password,
       tipoUsuario: tipoUsuario,
       nomRol: nomRol,
       telefonoEmpleado: telefonoEmpleado,
       idSubsistema: idSubsistema,
-
     };
-    console.log(data);
+    // console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts("successCreated"); 
+      // TopAlerts("successCreated");
+      const {OUT_CODRESULT, OUT_MJERESULT} = response[0]
+      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT)
       actualizarEmpleados(empleado);
-      console.log(response);
     });
   }
 
@@ -124,7 +127,13 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   // ----------------------RENDER----------------------------
   return (
     <>
-      <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={true}
+        size="md"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Crear Colaborador</Modal.Title>
         </Modal.Header>
@@ -171,7 +180,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                   className="form-control"
                   name="input_Usuario"
                   id="input_Usuario"
-                  maxLength="15"
+                  maxLength="20"
                   onChange={({ target }) => setUsuario(target.value)}
                   required
                 />
@@ -323,6 +332,20 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                 </select>
               </div>
 
+              <div>
+                <label htmlFor="input_Usuario">Valor HH:</label>
+                <input
+                  style={{ textTransform: "uppercase" }}
+                  placeholder="Escriba el valor hora del colaborador"
+                  type="text"
+                  className="form-control"
+                  name="input_valorHH"
+                  id="input_valorHH"
+                  maxLength="30"
+                  onChange={({ target }) => setValorHH(target.value)}
+                  required
+                />
+              </div>
 
               {/* <div className="form-group" >
                 <label htmlFor="input_RolUsuario">Activar subsistema : </label>

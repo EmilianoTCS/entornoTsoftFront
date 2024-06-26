@@ -38,6 +38,7 @@
   width: 18px;
   margin-right: 13px;
   margin-bottom: 9px;
+  position: relative;
 }
 
 #mainTable{
@@ -50,6 +51,7 @@
 }
 
 #OperationBtns{
+  position: relative;
   font-size: 10pt;
   border: none;
   background: none;

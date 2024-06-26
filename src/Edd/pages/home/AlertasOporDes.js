@@ -113,31 +113,31 @@ export default function AlertOpoDes() {
 
   //Obtiene los datos de la configuración de estilos para las flechas
 
-  function GetConfigCompColorFlechas() {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
-    var data = {
-      tipoConfDato: "competencia",
-      subTipoConfDato: "RANGO_COLOR",
-    };
-    SendDataService(url, operationUrl, data).then((data) => {
-      setListConfigCompColorFlechas(data);
-      // console.log("configColor", data);
-    });
-  }
+  // function GetConfigCompColorFlechas() {
+  //   var url = "pages/listados/listadoConfigDatos.php";
+  //   var operationUrl = "listadoConfigDatos";
+  //   var data = {
+  //     tipoConfDato: "competencia",
+  //     subTipoConfDato: "RANGO_COLOR",
+  //   };
+  //   SendDataService(url, operationUrl, data).then((data) => {
+  //     setListConfigCompColorFlechas(data);
+  //     // console.log("configColor", data);
+  //   });
+  // }
 
-  function GetConfigCompRangoFlechas() {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
-    var data = {
-      tipoConfDato: "competencia",
-      subTipoConfDato: "RANGO_FLECHA",
-    };
-    SendDataService(url, operationUrl, data).then((data) => {
-      setListConfigCompRangoFlechas(data);
-      // console.log("configRango", data);
-    });
-  }
+  // function GetConfigCompRangoFlechas() {
+  //   var url = "pages/listados/listadoConfigDatos.php";
+  //   var operationUrl = "listadoConfigDatos";
+  //   var data = {
+  //     tipoConfDato: "competencia",
+  //     subTipoConfDato: "RANGO_FLECHA",
+  //   };
+  //   SendDataService(url, operationUrl, data).then((data) => {
+  //     setListConfigCompRangoFlechas(data);
+  //     // console.log("configRango", data);
+  //   });
+  // }
   //-----------------------------------
 
   //OBTIENE LOS DATOS DE CONFIGURACIÓN PARA ESTADÍSTICAS DE DESTACABLES, OPORTUNIDADES Y ALERTAS

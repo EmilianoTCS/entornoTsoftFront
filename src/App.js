@@ -42,18 +42,18 @@ import HomePageEDD from "../src/Edd/pages/home/HomepageEDD";
 import GraficosDashboard from "./Edd/pages/home/GraficosDashboard";
 import AlertOpoDes from "./Edd/pages/home/AlertasOporDes";
 import ComentariosDashboard from "./Edd/pages/home/ComentariosDashboard";
-import DiseñoDashboardTablaConLineasPorc from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTablaConLineaPorc";
-import DiseñoDashboardGrafico from "./Edd/pages/DiseñoDashboard/DiseñoDashboardGrafico";
-import DiseñoDashboardTabla from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTabla";
-import DiseñoTablaLineaReferente from "./Edd/pages/DiseñoDashboard/DiseñoTablaLineaReferente";
-import UnReferenteDiseño from "./Edd/pages/DiseñoDashboard/1Ref";
+// import DiseñoDashboardTablaConLineasPorc from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTablaConLineaPorc";
+// import DiseñoDashboardGrafico from "./Edd/pages/DiseñoDashboard/DiseñoDashboardGrafico";
+// import DiseñoDashboardTabla from "./Edd/pages/DiseñoDashboard/DiseñoDashboardTabla";
+// import DiseñoTablaLineaReferente from "./Edd/pages/DiseñoDashboard/DiseñoTablaLineaReferente";
+// import UnReferenteDiseño from "./Edd/pages/DiseñoDashboard/1Ref";
 import RedirectErrorMail from "./Edd/pages/Listados/ListadoEddEvalProyEmp/RedirectErrorMail";
 import LoginVerif from "./pages/login/loginVerif";
 import FormularioEvaluacionExterno from "./Edd/pages/Listados/FormularioEvaluacion/FormularioEvaluacionExterno";
 import CargaSinDatos from "./Edd/pages/Listados/FormularioEvaluacion/CargaSinDatos";
 import ListadoCompProy from "./Edd/pages/Listados/ListadoCompProy/ListadoCompProy";
 import DashboardCompProy from "./Edd/pages/Listados/ListadoCompProy/DashboardCompProy";
-import ListadoEddResumenEval from "./Edd/pages/Listados/ListadoEddResumenEval/ListadoEddResumenEval.js";
+// import ListadoEddResumenEval from "./Edd/pages/Listados/ListadoEddResumenEval/ListadoEddResumenEval.js";
 import DashboardEddResumenEval from "./Edd/pages/Listados/ListadoEddResumenEval/DashboardEddResumenEval.js";
 
 //IHH
@@ -66,6 +66,12 @@ import IHH_ListadoTipoElemento from "./IHH/pages/ListadoTipoElemento/ListadoTipo
 import IHH_ListadoTipoPeriodo from "./IHH/pages/ListadoTipoPeriodo/ListadoTipoPeriodo.js";
 import ListadoClientes_test_dataGrid from "./pages/Listados/ListadoClientes/ListadoClientes_test_dataGrid.js";
 import ListadoClientes_test_mui_datagrid from "./pages/Listados/ListadoClientes/ListadoClientes_test_mui_datagrid.js";
+import SimuladorCostos from "./IHH/pages/SimuladorCostos/SimuladorCostos.js";
+import DetalleProyectos from "./IHH/pages/DetalleProyectos/ihh_detalleProyectos.js";
+import ListadoImpEmpProy from "./IHH/pages/ListadoImpEmpProy/ihh_ListadoImpEmpProy.js";
+import Resumen_ihh_colab from "./IHH/pages/Resumen_ihh_colab/Resumen_ihh_colab.js";
+import Resumen_ihh_colab_mes from "./IHH/pages/Resumen_ihh_colab_mes/Resumen_ihh_colab_mes.js";
+import Resumen_ihh_colab_proy from "./IHH/pages/Resumen_ihh_colab_proy/Resumen_ihh_colab_proy.js";
 function App() {
   return (
     <AuthState>
@@ -90,7 +96,7 @@ function App() {
             {/* ACADEMIA */}
             <Route
               element={<ListadoEmpleados />}
-              path="/listadoEmpleados"
+              path="/listadoEmpleados/:idEmpleado"
             ></Route>
             <Route
               element={<ListadoRamos />}
@@ -113,7 +119,7 @@ function App() {
               path="/listadoClientes_test_dataGrid/:params"
             ></Route>
             <Route
-              element={<ListadoClientes_test_mui_datagrid/>}
+              element={<ListadoClientes_test_mui_datagrid />}
               path="/listadoClientes_test_mui_datagrid/:params"
             ></Route>
             <Route
@@ -246,7 +252,7 @@ function App() {
             ></Route>
             <Route
               element={<IHH_ListadoElementoImp />}
-              path="/ihh/listadoElementoImp"
+              path="/ihh/listadoElementoImp/:idElementoImp"
             ></Route>
             <Route
               element={<IHH_ListadoImpugnacionEmp />}
@@ -254,24 +260,47 @@ function App() {
             ></Route>
             <Route
               element={<IHH_ListadoNotaImpugnacion />}
-              path="/ihh/listadoNotaImpugnacion"
+              path="/ihh/listadoNotaImpugnacion/:idImpugnacionEmp"
             ></Route>
-             <Route
+            <Route
               element={<IHH_ListadoPeriodo />}
-              path="/ihh/listadoPeriodo"
+              path="/ihh/listadoPeriodo/:idPeriodo"
             ></Route>
             <Route
               element={<IHH_ListadoTipoElemento />}
-              path="/ihh/listadoTipoElemento"
+              path="/ihh/listadoTipoElemento/:idTipoElemento"
             ></Route>
             <Route
               element={<IHH_ListadoTipoPeriodo />}
-              path="/ihh/listadoTipoPeriodo"
+              path="/ihh/listadoTipoPeriodo/:idTipoPeriodo"
+            ></Route>
+            <Route
+              element={<DetalleProyectos />}
+              path="/ihh/detalleProyectos/:idProyecto"
+            ></Route>
+            <Route
+              element={<SimuladorCostos />}
+              path="/ihh/simuladorCostos/:idProyecto/:mes/:idAcop"
+            ></Route>
+            <Route
+              element={<ListadoImpEmpProy />}
+              path="/ihh/ListadoImpEmpProy"
+            ></Route>
+            <Route
+              element={<Resumen_ihh_colab />}
+              path="/ihh/Resumen_ihh_colab"
+            ></Route>
+            <Route
+              element={<Resumen_ihh_colab_mes />}
+              path="/ihh/Resumen_ihh_colab_mes/:idColaborador/:idProyecto/:fechaInicio/:fechaFin"
+            ></Route>
+            <Route
+              element={<Resumen_ihh_colab_proy />}
+              path="/ihh/Resumen_ihh_colab_proy/:idColaborador/:idProyecto/:fechaInicio/:fechaFin"
             ></Route>
 
             {/* ------------------------------------------------------------------------------------------ */}
 
-            {/* ---- IHH ---- */}
             <Route
               element={<FormularioEvaluacionRespondida />}
               path="/listadoEvalResp/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion"

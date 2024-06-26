@@ -1,0 +1,5 @@
+.headerTextRight{
+    display: flex;
+    justify-self: right;
+    text-align: right;
+}

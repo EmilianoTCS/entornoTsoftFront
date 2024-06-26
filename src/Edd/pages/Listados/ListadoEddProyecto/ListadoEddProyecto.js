@@ -8,7 +8,7 @@ import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillProject } from "react-icons/ai";
-
+import { FaMoneyBill } from "react-icons/fa";
 import "../TablasStyles.css";
 import InsertarEddProyecto from "../../templates/form/Insertar/InsertarEddProyecto";
 import EditarEDDProyecto from "../../templates/form/Editar/EditarEddProyecto";
@@ -18,6 +18,7 @@ import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
 
+import EditarPresupuestosMensuales from "../../templates/form/Editar/EditarPresupuestosMensuales";
 import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoEddProyecto() {
@@ -38,14 +39,6 @@ export default function ListadoEddProyecto() {
 
   const [listServicio, setlistServicio] = useState([""]);
 
-  // function obtenerServicio() {
-  //   const url = "pages/auxiliares/listadoServicioForms.php";
-  //   const operationUrl = "listados";
-  //   getDataService(url, operationUrl).then((response) =>
-  //     setlistServicio(response)
-  //   );
-  // }
-
   function obtenerServicio() {
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
@@ -56,7 +49,6 @@ export default function ListadoEddProyecto() {
       setlistServicio(data);
     });
   }
-
   function insertarEDDProyecto() {
     setIsActiveInsertEDDProyecto(!isActiveInsertEDDProyecto);
   }
@@ -64,7 +56,6 @@ export default function ListadoEddProyecto() {
     setIsActiveEditEDDProyecto(!isActiveEditEDDProyecto);
     setidEDDProyecto(ID);
   }
-
   function desactivar(ID) {
     ConfirmAlert().then((response) => {
       if (response === true) {
@@ -81,17 +72,6 @@ export default function ListadoEddProyecto() {
       }
     });
   }
-
-  useEffect(
-    function () {
-      handleChangePaginador();
-      obtenerServicio();
-    },
-    [num_boton, cantidadPorPagina, idServicio]
-  );
-
-  //PAGINADOR ---------------------
-
   function handleChangePaginador() {
     var url = "pages/listados/listadoEddProyecto.php";
     var operationUrl = "listadoEddProyecto";
@@ -108,6 +88,16 @@ export default function ListadoEddProyecto() {
     });
   }
 
+  useEffect(
+    function () {
+      handleChangePaginador();
+      obtenerServicio();
+    },
+    [num_boton, cantidadPorPagina, idServicio]
+  );
+
+  //PAGINADOR ---------------------
+
   //PAGINADOR ---------------------
 
   return userData.statusConected || userData !== null ? (
@@ -116,6 +106,12 @@ export default function ListadoEddProyecto() {
       userData.nomRol === "gerencia" ||
       userData.nomRol === "people" ? (
         <>
+          {/* <EditarPresupuestosMensuales
+            cambiarEstado={setEDDProyecto}
+            isActiveFormulario={true}
+            resumenProyectos={listServicio}
+          /> */}
+
           <Header></Header>
           <br></br>
           <br></br>
@@ -198,6 +194,7 @@ export default function ListadoEddProyecto() {
                 EDDProyecto={EDDProyecto}
                 nombreTabla={nombreTabla}
               ></EditarEDDProyecto>
+              {/* <EditarPresupuestosMensuales /> */}
 
               <Table id="mainTable" hover responsive>
                 <thead>
@@ -241,6 +238,16 @@ export default function ListadoEddProyecto() {
                             id="OperationBtns"
                           >
                             <AiFillProject id="icons" />
+                          </button>
+                        </Link>
+                        <Link
+                          to={`/ihh/detalleProyectos/${EDDProyecto.idEDDProyecto}`}
+                        >
+                          <button
+                            data-title="Detalle presupuesto mensual"
+                            id="OperationBtns"
+                          >
+                            <FaMoneyBill id="icons" />
                           </button>
                         </Link>
                         {userData.nomRol === "administrador" ? (
