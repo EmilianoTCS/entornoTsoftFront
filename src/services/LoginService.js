@@ -5,7 +5,6 @@ export default function LoginService({ username, password }) {
   return fetch(baseURL, {
     method: "POST",
     body: JSON.stringify({ username, password }),
-    "Content-Type": "application/json",
   })
     .then((response) => {
       if (!response) throw new Error("Fallo en la conexion");
