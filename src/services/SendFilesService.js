@@ -1,5 +1,5 @@
 export default function SendFilesService(url, file, data) {
-  const baseURL = `http://localhost/entornoTsoft/${url}`;
+  const baseURL = `https://entornotsoft-backend.000webhostapp.com/${url}`;
 
   const formData = new FormData();
   formData.append("file", file);
