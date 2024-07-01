@@ -499,7 +499,7 @@ export default function SideBar() {
                           onClick={() => setIsActiveImportarArchivos(true)}
                         >
                           <IoBookmarks id="icons" />
-                          Datos base
+                          Datos proyectos - colaborador
                         </button>
                       </li>
                       <li id="textLeftSelect">

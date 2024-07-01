@@ -79,6 +79,7 @@ const InsertarEDDProyecto = ({
       actualizarEDDProyecto(datos);
       if (datos.idresumenperproy && !isActiveFormularioPresupuesto) {
         setisActiveFormularioPresupuesto(true);
+        console.log(response);
         setDatosResumen(response);
         cambiarEstado(false)
       }
