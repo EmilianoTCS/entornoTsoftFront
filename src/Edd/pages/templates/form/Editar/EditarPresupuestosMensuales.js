@@ -161,7 +161,8 @@ const EditarPresupuestosMensuales = ({
   // ];
   // resumenProyectos = datos;
   const datos = resumenProyectos;
-  const [presupuestosCambiados, setPresupuestosCambiados] = useState([""]);
+  const [presupuestosCambiados, setPresupuestosCambiados] =
+    useState(resumenProyectos);
 
   const show = isActiveFormulario;
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -174,7 +175,38 @@ const EditarPresupuestosMensuales = ({
     borderRadius: "10px",
     margin: "auto",
   };
+
   // ----------------------FUNCIONES----------------------------
+  // Calcula el total de presupuestos mensuales sin haberse formateado ni redondeado
+  function sumtotal() {
+    let total = 0;
+    resumenProyectos.map((item) => {
+      total += parseFloat(item.presupuestoMensualUSD);
+    });
+    return total;
+  }
+  // Calcula el total de presupuestos mensuales redondeados
+  function sumtotalRedondeado() {
+    let total = 0;
+    datos.map((item) => {
+      total += Math.round(item.presupuestoMensualUSD);
+    });
+    return total;
+  }
+  //Obtengo la diferencia entre el total redondeando y el original, luego sobre escribo el array original restandole al último mes la diferencia
+  let diferencia = sumtotalRedondeado() - sumtotal();
+  datos.map((item, index) => {
+    if (index === datos.length - 1) {
+      item.presupuestoMensualUSD =
+        parseFloat(Math.round(item.presupuestoMensualUSD)) -
+        Math.round(diferencia);
+    } else {
+      item.presupuestoMensualUSD = parseFloat(
+        Math.round(item.presupuestoMensualUSD)
+      );
+    }
+  });
+  // setPresupuestosCambiados(datos);
   // función que se encarga de enviar los datos al servidor
   function SendData(e) {
     e.preventDefault();
@@ -186,28 +218,11 @@ const EditarPresupuestosMensuales = ({
       ),
       usuarioModificacion: userData.usuario, // filtra los elementos vacíos
     };
-
     SendDataService(url, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
       cambiarEstado(false);
     });
-  }
-
-  // Función para almacenar los cambios en los presupuestos y luego almacenarlos para ser enviados al servidor
-  function guardaRespEval(idRegistro, registro) {
-    // console.log("idRegistro", idRegistro);
-    console.log("registro", registro);
-    let itemId = presupuestosCambiados.findIndex(
-      (item) => item.idresumenperproy === idRegistro
-    );
-    if (itemId > -1) {
-      presupuestosCambiados.splice(itemId, 1, registro);
-    } else {
-      presupuestosCambiados.push(registro);
-    }
-    setPresupuestosCambiados([...presupuestosCambiados]);
-    // console.log(presupuestosCambiados);
   }
 
   // Función para dividir el array en partes iguales
@@ -265,36 +280,61 @@ const EditarPresupuestosMensuales = ({
   const [values, setValues] = useState(
     datos.map((dato) => ({
       ...dato,
-      formatted: formatCurrency(dato.presupuestoMensual),
+      formatted: formatCurrency(dato.presupuestoMensualUSD.toString()),
     }))
   );
 
   // obtiene los nuevos valores ingresados en el text box para compararlos y reemplazarlos en caso de ser necesario
   const handleInputChange = (e, id) => {
     const { value } = e.target;
-    console.log(value);
+    const cleanedValue = value.replace(/\D/g, "");
     setValues((prevValues) =>
       prevValues.map((item) => {
         if (item.idresumenperproy === id) {
-          console.log(item);
           return {
             ...item,
-            presupuestoMensual: value.replace(/\D/g, ""),
-            formatted: formatCurrency(value),
+            presupuestoMensualUSD: cleanedValue,
+            formatted: formatCurrency(cleanedValue),
           };
         }
         return item;
       })
     );
-
     // Guardar cambios en presupuestosCambiados
-    guardaRespEval(id, { idresumenperproy: id, presupuestoMensual: value.replace(/\D/g, "") });
+    guardaResp(id, {
+      idresumenperproy: id,
+      presupuestoMensualUSD: value.replace(/\D/g, ""),
+    });
   };
+
+  // Función para almacenar los cambios en los presupuestos y luego almacenarlos para ser enviados al servidor
+  function guardaResp(idRegistro, nuevoPresupuestoMensualUSD) {
+    const nuevosPresupuestos = presupuestosCambiados.map((item) => {
+      if (item.idresumenperproy === idRegistro) {
+        return {
+          ...item,
+          presupuestoMensualUSD:
+            nuevoPresupuestoMensualUSD.presupuestoMensualUSD,
+        };
+      }
+      return item;
+    });
+
+    const itemId = presupuestosCambiados.findIndex(
+      (item) => item.idresumenperproy === idRegistro
+    );
+
+    if (itemId === -1) {
+      console.warn(`Registro con id ${idRegistro} no encontrado.`);
+    }
+
+    setPresupuestosCambiados(nuevosPresupuestos);
+  }
 
   const sumTotalPresMensual = () => {
     let total = 0;
     values.forEach((item) => {
-      const presupuesto = item.presupuestoMensual;
+      const presupuesto = item.presupuestoMensualUSD.toString();
       // Verificar si el presupuesto es una cadena de texto antes de procesarlo
       if (typeof presupuesto === "string") {
         // Remover caracteres que no sean dígitos o el signo negativo
@@ -334,7 +374,10 @@ const EditarPresupuestosMensuales = ({
           <Modal.Title>
             <h3>Ajuste manual de presupuestos mensuales</h3>
             <h3>{values[0].nomProyecto}</h3>
-            <p>Ingrese los presupuestos de cada mes según ACOP</p>
+            <p>
+              Ingrese los presupuestos mensuales en dólares de cada mes según
+              ACOP
+            </p>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -348,7 +391,7 @@ const EditarPresupuestosMensuales = ({
                       style={{ marginBottom: "10px" }}
                     >
                       <label htmlFor={`input-${item.idresumenperproy}`}>
-                        {convertirFecha(item.mes)}:
+                        {convertirFecha(item.mes)} ($USD)
                       </label>
                       <input
                         type="text"

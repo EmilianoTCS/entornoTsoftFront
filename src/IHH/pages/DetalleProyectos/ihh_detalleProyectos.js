@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, Link } from "react-router-dom";
-import { Button, Table } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import Table from "react-bootstrap/Table";
 import Header from "../../../templates/Header/Header";
-import { MdDashboard } from "react-icons/md";
 import { useRoute } from "wouter";
 import ExportCSV from "../../../templates/exports/exportCSV";
 import SendDataService from "../../../services/SendDataService";
@@ -54,7 +54,7 @@ export default function DetalleProyectos() {
     flexDirection: "row",
   };
   var mainContainerDiv = {
-    width: "1200px",
+    width: "1300px",
     margin: "auto",
     display: "flex",
     flexDirection: "column",
@@ -76,13 +76,13 @@ export default function DetalleProyectos() {
       console.log(response);
       // Filtrar los elementos con "saldoPresupuesto" no nulo
       const saldoPresupuestoNoNulo = response.filter(
-        (elemento) => elemento.saldoPresupuesto !== null
+        (elemento) => elemento.saldoPresupuestoUSD !== null
       );
 
       if (saldoPresupuestoNoNulo.length > 0) {
         var ultimoSaldoPresupuesto =
           saldoPresupuestoNoNulo[saldoPresupuestoNoNulo.length - 1]
-            .saldoPresupuesto;
+            .saldoPresupuestoUSD;
       } else {
         var ultimoSaldoPresupuesto = response[0].presupuestoTotal;
       }
@@ -213,6 +213,7 @@ export default function DetalleProyectos() {
                         style: "currency",
                         currency: "CLP",
                       })}
+                      (USD)
                     </b>
                   </th>
                 </tr>
@@ -234,7 +235,7 @@ export default function DetalleProyectos() {
                                 style: "currency",
                                 currency: "CLP",
                               }
-                            )
+                            ) + "(USD)"
                           : "No definido"}
                       </text>
                     </b>
@@ -264,14 +265,20 @@ export default function DetalleProyectos() {
               <ExportCSV inputData={listDetalle} nomTabla={nombreArchivoCSV} />
             </div>
             <br></br>
-            <Table style={{ backgroundColor: "lightgray" }} hover responsive>
-              <thead style={{ textAlign: "center" }}>
-                <th style={{ width: "150px" }}>Mes</th>
-                <th style={{ width: "120px" }}>Pres. mensual proyectado</th>
-                <th>Pres. mensual acumulado</th>
-                <th>Costo mensual</th>
-                <th>Saldo mes</th>
-                <th>Saldo presupuesto</th>
+
+            <Table striped hover responsive>
+              <thead>
+                <th>Mes</th>
+                <th>Pres. mensual proyectado (USD)</th>
+                <th>Pres. mensual proyectado (CLP)</th>
+                <th>Pres. mensual acumulado (USD)</th>
+                <th>Pres. mensual acumulado (CLP)</th>
+                <th>Costo mensual (USD)</th>
+                <th>Costo mensual (CLP)</th>
+                <th>Saldo mes (USD)</th>
+                <th>Saldo mes (CLP)</th>
+                <th>Saldo presupuesto (USD)</th>
+                <th>Saldo presupuesto (CLP)</th>
                 <th>Operaciones</th>
               </thead>
               <tbody>
@@ -281,7 +288,16 @@ export default function DetalleProyectos() {
                       {convertirFecha(item.mes)}
                     </td>
                     <td style={{ textAlign: "right" }}>
-                      {parseFloat(item.presupuestoMensual).toLocaleString(
+                      {parseFloat(item.presupuestoMensualUSD).toLocaleString(
+                        "es-CL",
+                        {
+                          style: "currency",
+                          currency: "CLP",
+                        }
+                      )}
+                    </td>
+                    <td style={{ textAlign: "right" }}>
+                      {parseFloat(item.presupuestoMensualPesos).toLocaleString(
                         "es-CL",
                         {
                           style: "currency",
@@ -290,19 +306,39 @@ export default function DetalleProyectos() {
                       )}
                     </td>
                     <td style={{ textAlign: "right", width: "120px" }}>
-                      {item.presupuestoAcumulado
-                        ? parseFloat(item.presupuestoAcumulado).toLocaleString(
-                            "es-CL",
-                            {
-                              style: "currency",
-                              currency: "CLP",
-                            }
-                          )
+                      {item.presupuestoAcumuladoUSD
+                        ? parseFloat(
+                            item.presupuestoAcumuladoUSD
+                          ).toLocaleString("es-CL", {
+                            style: "currency",
+                            currency: "CLP",
+                          })
+                        : 0}
+                    </td>
+                    <td style={{ textAlign: "right", width: "120px" }}>
+                      {item.presupuestoAcumuladoPesos
+                        ? parseFloat(
+                            item.presupuestoAcumuladoPesos
+                          ).toLocaleString("es-CL", {
+                            style: "currency",
+                            currency: "CLP",
+                          })
                         : 0}
                     </td>
                     <td style={{ textAlign: "right" }}>
-                      {parseFloat(item.costoMensual)
-                        ? parseFloat(item.costoMensual).toLocaleString(
+                      {parseFloat(item.costoMensualUSD)
+                        ? parseFloat(item.costoMensualUSD).toLocaleString(
+                            "es-CL",
+                            {
+                              style: "currency",
+                              currency: "CLP",
+                            }
+                          )
+                        : "No definido"}
+                    </td>
+                    <td style={{ textAlign: "right" }}>
+                      {parseFloat(item.costoMensualPesos)
+                        ? parseFloat(item.costoMensualPesos).toLocaleString(
                             "es-CL",
                             {
                               style: "currency",
@@ -313,13 +349,13 @@ export default function DetalleProyectos() {
                     </td>
                     <td
                       style={
-                        parseFloat(item.saldoMensual) < 0
+                        parseFloat(item.saldoMensualUSD) < 0
                           ? { textAlign: "right", color: "red" }
                           : { textAlign: "right", color: "green" }
                       }
                     >
-                      {parseFloat(item.saldoMensual)
-                        ? parseFloat(item.saldoMensual).toLocaleString(
+                      {parseFloat(item.saldoMensualUSD)
+                        ? parseFloat(item.saldoMensualUSD).toLocaleString(
                             "es-CL",
                             {
                               style: "currency",
@@ -330,13 +366,47 @@ export default function DetalleProyectos() {
                     </td>
                     <td
                       style={
-                        parseFloat(item.saldoPresupuesto) < 0
+                        parseFloat(item.saldoMensualPesos) < 0
                           ? { textAlign: "right", color: "red" }
                           : { textAlign: "right", color: "green" }
                       }
                     >
-                      {parseFloat(item.saldoPresupuesto)
-                        ? parseFloat(item.saldoPresupuesto).toLocaleString(
+                      {parseFloat(item.saldoMensualPesos)
+                        ? parseFloat(item.saldoMensualPesos).toLocaleString(
+                            "es-CL",
+                            {
+                              style: "currency",
+                              currency: "CLP",
+                            }
+                          )
+                        : "No definido"}
+                    </td>
+                    <td
+                      style={
+                        parseFloat(item.saldoPresupuestoUSD) < 0
+                          ? { textAlign: "right", color: "red" }
+                          : { textAlign: "right", color: "green" }
+                      }
+                    >
+                      {parseFloat(item.saldoPresupuestoUSD)
+                        ? parseFloat(item.saldoPresupuestoUSD).toLocaleString(
+                            "es-CL",
+                            {
+                              style: "currency",
+                              currency: "CLP",
+                            }
+                          )
+                        : "No definido"}
+                    </td>
+                    <td
+                      style={
+                        parseFloat(item.saldoPresupuestoPesos) < 0
+                          ? { textAlign: "right", color: "red" }
+                          : { textAlign: "right", color: "green" }
+                      }
+                    >
+                      {parseFloat(item.saldoPresupuestoPesos)
+                        ? parseFloat(item.saldoPresupuestoPesos).toLocaleString(
                             "es-CL",
                             {
                               style: "currency",

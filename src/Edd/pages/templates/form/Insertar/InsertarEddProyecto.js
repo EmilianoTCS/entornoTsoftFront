@@ -19,7 +19,11 @@ const InsertarEDDProyecto = ({
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState(null);
   const [tipoProyecto, setTipoProyecto] = useState("");
-  const [presupuestoTotal, setPresupuestoTotal] = useState({ value: "", formatted: "" });
+  const [presupuestoTotal, setPresupuestoTotal] = useState({
+    formatted: "",
+    parsed: "",
+    input: "",
+  });
 
   const [idServicio, setidServicio] = useState("");
 
@@ -28,6 +32,11 @@ const InsertarEDDProyecto = ({
   const [datosResumen, setDatosResumen] = useState([""]);
   const [isActiveFormularioPresupuesto, setisActiveFormularioPresupuesto] =
     useState(false);
+  const [valorUSD, setValorUSD] = useState({
+    formatted: "",
+    parsed: "",
+    input: "",
+  });
 
   const listEDDProyecto = EDDProyecto;
 
@@ -70,7 +79,8 @@ const InsertarEDDProyecto = ({
       fechaFin: fechaFin,
       tipoProyecto: tipoProyecto,
       idServicio: idServicio,
-      presupuestoTotal: presupuestoTotal.value, // Enviar el valor sin formatear
+      presupuestoTotal: presupuestoTotal.parsed, // Enviar el valor sin formatear
+      valorUSD: valorUSD.parsed, // Enviar el valor sin formatear
       isActive: true,
     };
     SendDataService(url, operationUrl, data).then((response) => {
@@ -78,10 +88,10 @@ const InsertarEDDProyecto = ({
       TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
       actualizarEDDProyecto(datos);
       if (datos.idresumenperproy && !isActiveFormularioPresupuesto) {
+        console.log("response", response);
         setisActiveFormularioPresupuesto(true);
-        console.log(response);
         setDatosResumen(response);
-        cambiarEstado(false)
+        cambiarEstado(false);
       }
     });
   }
@@ -98,26 +108,50 @@ const InsertarEDDProyecto = ({
     [isActiveFormularioPresupuesto]
   );
 
+  const handleChangeValorUSD = (e) => {
+    const value = e.target.value;
+    const cleanedValue = value.replace(/[^\d,.]/g, "").replace(",", ".");
+    const number = parseFloat(cleanedValue);
+
+    const formattedValue = formatCurrency(number);
+    const parsedValue = isNaN(number) ? "" : number;
+
+    setValorUSD((prev) => ({
+      ...prev,
+      input: value,
+      formatted: formattedValue,
+      parsed: parsedValue,
+    }));
+  };
+
+  // Formato de moneda
   const formatCurrency = (value) => {
-    // Remover caracteres que no sean dígitos o el signo negativo
-    const number = parseInt(value.replace(/[^\d-]/g, ""), 10);
-    if (isNaN(number)) return "";
+    if (isNaN(value)) return "";
     return new Intl.NumberFormat("es-CL", {
       style: "currency",
       currency: "CLP",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(number);
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
   };
 
   const handlePresupuestoTotalChange = (e) => {
-    const { value } = e.target;
-    const numericValue = value.replace(/\D/g, ""); // Remover caracteres no numéricos
-    setPresupuestoTotal({
-      value: numericValue,
-      formatted: formatCurrency(value),
-    });
+    const value = e.target.value;
+    const cleanedValue = value.replace(/[^\d,.]/g, "").replace(",", ".");
+    const number = parseFloat(cleanedValue);
+
+    const formattedValue = formatCurrency(number);
+    const parsedValue = isNaN(number) ? "" : number;
+
+    setPresupuestoTotal((prev) => ({
+      ...prev,
+      input: value,
+      formatted: formattedValue,
+      parsed: parsedValue,
+    }));
+    console.log(presupuestoTotal);
   };
+
 
   // ----------------------RENDER----------------------------
   return (
@@ -217,17 +251,38 @@ const InsertarEDDProyecto = ({
               </select>
             </div>
             <div>
-              <label htmlFor="input_presupuestoTotal">Presupuesto total:</label>
+              <label htmlFor="input_presupuestoTotal">Valor USD ($CLP):</label>
               <input
                 placeholder="Escriba presupuesto total del proyecto"
                 type="text"
                 className="form-control"
                 name="input_presupuestoTotal"
                 id="input_presupuestoTotal"
-                value={presupuestoTotal.formatted}
+                value={valorUSD.input || ""}
+                onChange={handleChangeValorUSD}
+                required
+                maxLength={30}
+              />
+              {/* <p>Formatted: {valorUSD.formatted}</p>
+              <p>Parsed: {valorUSD.parsed}</p> */}
+            </div>
+            <div>
+              <label htmlFor="input_presupuestoTotal">
+                Presupuesto total en USD:
+              </label>
+              <input
+                placeholder="Escriba presupuesto total del proyecto"
+                type="text"
+                className="form-control"
+                name="input_presupuestoTotal"
+                id="input_presupuestoTotal"
+                value={presupuestoTotal.input}
                 onChange={handlePresupuestoTotalChange}
                 required
               />
+              <label>
+                (Valor en pesos: {formatCurrency(presupuestoTotal.parsed * valorUSD.parsed)})
+              </label>
             </div>
 
             <Button
