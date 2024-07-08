@@ -6,6 +6,7 @@ import SendDataService from "../../../../../services/SendDataService";
 import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { NumericFormat } from "react-number-format";
 
 const EditarPresupuestosMensuales = ({
   isActiveFormulario,
@@ -13,154 +14,9 @@ const EditarPresupuestosMensuales = ({
   resumenProyectos,
 }) => {
   // ----------------------CONSTANTES----------------------------
-  // const datos = [
-  //   {
-  //     idresumenperproy: "187",
-  //     mes: "202406",
-  //     presupuestoMensual: "62500000",
-  //     presupuestoAcumulado: null,
-  //     costoMensual: null,
-  //     saldoMensual: null,
-  //     saldoPresupuesto: null,
-  //     idProyecto: "48",
-  //     valorUfPesos: null,
-  //     isActive: "1",
-  //     usuarioCreacion: "admin_emiliano",
-  //     fechaCreacion: "2024-06-12 12:15:12",
-  //     usuarioModificacion: "admin_emiliano",
-  //     fechaModificacion: "2024-06-12 12:15:12",
-  //     nomProyecto: "BCH PRUEBA",
-  //     presupuestoTotal: "500000000",
-  //   },
-  //   {
-  //     idresumenperproy: "188",
-  //     mes: "202407",
-  //     presupuestoMensual: "62500000",
-  //     presupuestoAcumulado: null,
-  //     costoMensual: null,
-  //     saldoMensual: null,
-  //     saldoPresupuesto: null,
-  //     idProyecto: "48",
-  //     valorUfPesos: null,
-  //     isActive: "1",
-  //     usuarioCreacion: "admin_emiliano",
-  //     fechaCreacion: "2024-06-12 12:15:12",
-  //     usuarioModificacion: "admin_emiliano",
-  //     fechaModificacion: "2024-06-12 12:15:12",
-  //     nomProyecto: "BCH PRUEBA",
-  //     presupuestoTotal: "500000000",
-  //   },
-  //   {
-  //     idresumenperproy: "189",
-  //     mes: "202408",
-  //     presupuestoMensual: "62500000",
-  //     presupuestoAcumulado: null,
-  //     costoMensual: null,
-  //     saldoMensual: null,
-  //     saldoPresupuesto: null,
-  //     idProyecto: "48",
-  //     valorUfPesos: null,
-  //     isActive: "1",
-  //     usuarioCreacion: "admin_emiliano",
-  //     fechaCreacion: "2024-06-12 12:15:12",
-  //     usuarioModificacion: "admin_emiliano",
-  //     fechaModificacion: "2024-06-12 12:15:12",
-  //     nomProyecto: "BCH PRUEBA",
-  //     presupuestoTotal: "500000000",
-  //   },
-  //   {
-  //     idresumenperproy: "190",
-  //     mes: "202409",
-  //     presupuestoMensual: "62500000",
-  //     presupuestoAcumulado: null,
-  //     costoMensual: null,
-  //     saldoMensual: null,
-  //     saldoPresupuesto: null,
-  //     idProyecto: "48",
-  //     valorUfPesos: null,
-  //     isActive: "1",
-  //     usuarioCreacion: "admin_emiliano",
-  //     fechaCreacion: "2024-06-12 12:15:12",
-  //     usuarioModificacion: "admin_emiliano",
-  //     fechaModificacion: "2024-06-12 12:15:12",
-  //     nomProyecto: "BCH PRUEBA",
-  //     presupuestoTotal: "500000000",
-  //   },
-  //   {
-  //     idresumenperproy: "191",
-  //     mes: "202410",
-  //     presupuestoMensual: "62500000",
-  //     presupuestoAcumulado: null,
-  //     costoMensual: null,
-  //     saldoMensual: null,
-  //     saldoPresupuesto: null,
-  //     idProyecto: "48",
-  //     valorUfPesos: null,
-  //     isActive: "1",
-  //     usuarioCreacion: "admin_emiliano",
-  //     fechaCreacion: "2024-06-12 12:15:12",
-  //     usuarioModificacion: "admin_emiliano",
-  //     fechaModificacion: "2024-06-12 12:15:12",
-  //     nomProyecto: "BCH PRUEBA",
-  //     presupuestoTotal: "500000000",
-  //   },
-  //   {
-  //     idresumenperproy: "192",
-  //     mes: "202411",
-  //     presupuestoMensual: "62500000",
-  //     presupuestoAcumulado: null,
-  //     costoMensual: null,
-  //     saldoMensual: null,
-  //     saldoPresupuesto: null,
-  //     idProyecto: "48",
-  //     valorUfPesos: null,
-  //     isActive: "1",
-  //     usuarioCreacion: "admin_emiliano",
-  //     fechaCreacion: "2024-06-12 12:15:12",
-  //     usuarioModificacion: "admin_emiliano",
-  //     fechaModificacion: "2024-06-12 12:15:12",
-  //     nomProyecto: "BCH PRUEBA",
-  //     presupuestoTotal: "500000000",
-  //   },
-  //   {
-  //     idresumenperproy: "193",
-  //     mes: "202412",
-  //     presupuestoMensual: "62500000",
-  //     presupuestoAcumulado: null,
-  //     costoMensual: null,
-  //     saldoMensual: null,
-  //     saldoPresupuesto: null,
-  //     idProyecto: "48",
-  //     valorUfPesos: null,
-  //     isActive: "1",
-  //     usuarioCreacion: "admin_emiliano",
-  //     fechaCreacion: "2024-06-12 12:15:12",
-  //     usuarioModificacion: "admin_emiliano",
-  //     fechaModificacion: "2024-06-12 12:15:12",
-  //     nomProyecto: "BCH PRUEBA",
-  //     presupuestoTotal: "500000000",
-  //   },
-  //   {
-  //     idresumenperproy: "194",
-  //     mes: "202501",
-  //     presupuestoMensual: "62500000",
-  //     presupuestoAcumulado: null,
-  //     costoMensual: null,
-  //     saldoMensual: null,
-  //     saldoPresupuesto: null,
-  //     idProyecto: "48",
-  //     valorUfPesos: null,
-  //     isActive: "1",
-  //     usuarioCreacion: "admin_emiliano",
-  //     fechaCreacion: "2024-06-12 12:15:12",
-  //     usuarioModificacion: "admin_emiliano",
-  //     fechaModificacion: "2024-06-12 12:15:12",
-  //     nomProyecto: "BCH PRUEBA",
-  //     presupuestoTotal: "500000000",
-  //   },
-  // ];
+  //
   // resumenProyectos = datos;
-  const datos = resumenProyectos;
+  // const datos = resumenProyectos;
   const [presupuestosCambiados, setPresupuestosCambiados] =
     useState(resumenProyectos);
 
@@ -177,36 +33,37 @@ const EditarPresupuestosMensuales = ({
   };
 
   // ----------------------FUNCIONES----------------------------
-  // Calcula el total de presupuestos mensuales sin haberse formateado ni redondeado
-  function sumtotal() {
-    let total = 0;
-    resumenProyectos.map((item) => {
-      total += parseFloat(item.presupuestoMensualUSD);
-    });
-    return total;
-  }
-  // Calcula el total de presupuestos mensuales redondeados
-  function sumtotalRedondeado() {
-    let total = 0;
-    datos.map((item) => {
-      total += Math.round(item.presupuestoMensualUSD);
-    });
-    return total;
-  }
-  //Obtengo la diferencia entre el total redondeando y el original, luego sobre escribo el array original restandole al último mes la diferencia
-  let diferencia = sumtotalRedondeado() - sumtotal();
-  datos.map((item, index) => {
-    if (index === datos.length - 1) {
-      item.presupuestoMensualUSD =
-        parseFloat(Math.round(item.presupuestoMensualUSD)) -
-        Math.round(diferencia);
-    } else {
-      item.presupuestoMensualUSD = parseFloat(
-        Math.round(item.presupuestoMensualUSD)
-      );
-    }
-  });
+  // // Calcula el total de presupuestos mensuales sin haberse formateado ni redondeado
+  // function sumtotal() {
+  //   let total = 0;
+  //   resumenProyectos.map((item) => {
+  //     total += parseFloat(item.presupuestoMensualUSD);
+  //   });
+  //   return total;
+  // }
+  // // Calcula el total de presupuestos mensuales redondeados
+  // function sumtotalRedondeado() {
+  //   let total = 0;
+  //   datos.map((item) => {
+  //     total += Math.round(item.presupuestoMensualUSD);
+  //   });
+  //   return total;
+  // }
+  // //Obtengo la diferencia entre el total redondeando y el original, luego sobre escribo el array original restandole al último mes la diferencia
+  // let diferencia = sumtotalRedondeado() - sumtotal();
+  // datos.map((item, index) => {
+  //   if (index === datos.length - 1) {
+  //     item.presupuestoMensualUSD =
+  //       parseFloat(Math.round(item.presupuestoMensualUSD)) -
+  //       Math.round(diferencia);
+  //   } else {
+  //     item.presupuestoMensualUSD = parseFloat(
+  //       Math.round(item.presupuestoMensualUSD)
+  //     );
+  //   }
+  // });
   // setPresupuestosCambiados(datos);
+
   // función que se encarga de enviar los datos al servidor
   function SendData(e) {
     e.preventDefault();
@@ -265,45 +122,31 @@ const EditarPresupuestosMensuales = ({
 
   // Formato de moneda
   const formatCurrency = (value) => {
-    // Remover caracteres que no sean dígitos o el signo negativo
-    const number = parseInt(value.replace(/[^\d-]/g, ""), 10);
+    const number = parseFloat(value.replace(/[^\d,-]/g, "").replace(",", "."));
     if (isNaN(number)) return "";
     return new Intl.NumberFormat("es-CL", {
       style: "currency",
       currency: "CLP",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 2,
     }).format(number);
   };
 
-  // Inicializamos los valores en el estado
-  const [values, setValues] = useState(
-    datos.map((dato) => ({
-      ...dato,
-      formatted: formatCurrency(dato.presupuestoMensualUSD.toString()),
-    }))
-  );
+  // // Inicializamos los valores en el estado
+  // const [values, setValues] = useState(
+  //   datos.map((dato) => ({
+  //     ...dato,
+  //     formatted: formatCurrency(dato.presupuestoMensualUSD.toString()),
+  //   }))
+  // );
 
   // obtiene los nuevos valores ingresados en el text box para compararlos y reemplazarlos en caso de ser necesario
-  const handleInputChange = (e, id) => {
-    const { value } = e.target;
-    const cleanedValue = value.replace(/\D/g, "");
-    setValues((prevValues) =>
-      prevValues.map((item) => {
-        if (item.idresumenperproy === id) {
-          return {
-            ...item,
-            presupuestoMensualUSD: cleanedValue,
-            formatted: formatCurrency(cleanedValue),
-          };
-        }
-        return item;
-      })
-    );
+  const handleInputChange = (values, id) => {
+    const { value } = values;
     // Guardar cambios en presupuestosCambiados
     guardaResp(id, {
       idresumenperproy: id,
-      presupuestoMensualUSD: value.replace(/\D/g, ""),
+      presupuestoMensualUSD: parseFloat(value),
     });
   };
 
@@ -333,34 +176,37 @@ const EditarPresupuestosMensuales = ({
 
   const sumTotalPresMensual = () => {
     let total = 0;
-    values.forEach((item) => {
-      const presupuesto = item.presupuestoMensualUSD.toString();
-      // Verificar si el presupuesto es una cadena de texto antes de procesarlo
-      if (typeof presupuesto === "string") {
-        // Remover caracteres que no sean dígitos o el signo negativo
-        const valueWithoutNonDigits = presupuesto.replace(/[^\d-]/g, "");
-        // Convertir a número y sumar al total
-        total += parseInt(valueWithoutNonDigits);
-      }
+    presupuestosCambiados.forEach((item) => {
+      total += parseFloat(item.presupuestoMensualUSD);
     });
-
+    // console.log(total);
+    total = total.toString();
+    const number = total.replace(".", ",");
     // Formatear el total a moneda
-    const formattedTotal = formatCurrency(total.toString());
+    const formattedTotal = formatCurrency(number.toString());
 
     return formattedTotal;
   };
 
   const sumTotalDifPres = (presupuestoTotal, totalPresupuestoMensual) => {
     let total = 0;
+    
     total =
-      parseInt(presupuestoTotal.replace(/\D/g, "")) -
-      parseInt(totalPresupuestoMensual.replace(/\D/g, ""));
+      parseFloat(presupuestoTotal.replace(/[^\d,-]/g, "").replace(",", ".")) -
+      parseFloat(
+        totalPresupuestoMensual.replace(/[^\d,-]/g, "").replace(",", ".")
+      );
 
-    return formatCurrency(total.toString());
+    total = total.toFixed(2)
+    const number = total.toString()
+    return formatCurrency(number.replace(".", ","));
   };
   // ----------------------RENDER----------------------------
 
-  const columnas = dividirArray(values, Math.ceil(resumenProyectos.length / 3));
+  const columnas = dividirArray(
+    presupuestosCambiados,
+    Math.ceil(resumenProyectos.length / 3)
+  );
   return (
     <>
       <Modal
@@ -373,7 +219,7 @@ const EditarPresupuestosMensuales = ({
         <Modal.Header closeButton>
           <Modal.Title>
             <h3>Ajuste manual de presupuestos mensuales</h3>
-            <h3>{values[0].nomProyecto}</h3>
+            <h3>{presupuestosCambiados[0].nomProyecto}</h3>
             <p>
               Ingrese los presupuestos mensuales en dólares de cada mes según
               ACOP
@@ -393,15 +239,20 @@ const EditarPresupuestosMensuales = ({
                       <label htmlFor={`input-${item.idresumenperproy}`}>
                         {convertirFecha(item.mes)} ($USD)
                       </label>
-                      <input
-                        type="text"
-                        id={`input-${item.idresumenperproy}`}
-                        placeholder="Ingrese valor"
-                        style={{ width: "100%" }}
-                        value={item.formatted}
-                        onChange={(e) =>
+                      <NumericFormat
+                        placeholder="Escriba un nuevo valor ajustado para el presupuesto mensual"
+                        // style={{ width: "100%" }}
+                        className="form-control"
+                        name="input_presupuestoMensual"
+                        id="input_presupuestoMensual"
+                        value={item.presupuestoMensualUSD || ""}
+                        thousandSeparator={"."}
+                        prefix={"$"}
+                        onValueChange={(e) =>
                           handleInputChange(e, item.idresumenperproy)
                         }
+                        decimalSeparator=","
+                        required
                       />
                     </div>
                   ))}
@@ -428,8 +279,8 @@ const EditarPresupuestosMensuales = ({
                   Diferencia total:{" "}
                   <b
                     style={
-                      parseInt(resumenProyectos[0].presupuestoTotal) -
-                        parseInt(sumTotalPresMensual().replace(/\D/g, "")) >=
+                      parseFloat(resumenProyectos[0].presupuestoTotal.replace(",", ".")) -
+                        parseFloat(sumTotalPresMensual().replace(/\D/g, "")) >=
                       0
                         ? { color: "green" }
                         : { color: "red" }

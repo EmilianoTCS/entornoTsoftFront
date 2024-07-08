@@ -109,7 +109,106 @@ export default function ListadoEddProyecto() {
           {/* <EditarPresupuestosMensuales
             cambiarEstado={setEDDProyecto}
             isActiveFormulario={true}
-            resumenProyectos={listServicio}
+            resumenProyectos={[
+              {
+                  "idEDDProyecto": "86",
+                  "nomProyecto": "TEST RED 15",
+                  "fechaIni": "01-01-2024",
+                  "fechaFin": "31-07-2024",
+                  "nomServicio": "BCI",
+                  "tipoProyecto": "ESHOPPING",
+                  "mes": "202401",
+                  "idresumenperproy": "487",
+                  "presupuestoMensualUSD": "29566,75",
+                  "presupuestoMensualpesos": "33034050",
+                  "valorUSDPesos": "943.83",
+                  "presupuestoTotal": "206967,25"
+              },
+              {
+                  "idEDDProyecto": "86",
+                  "nomProyecto": "TEST RED 15",
+                  "fechaIni": "01-01-2024",
+                  "fechaFin": "31-07-2024",
+                  "nomServicio": "BCI",
+                  "tipoProyecto": "ESHOPPING",
+                  "mes": "202402",
+                  "idresumenperproy": "488",
+                  "presupuestoMensualUSD": "29566,75",
+                  "presupuestoMensualpesos": "33034050",
+                  "valorUSDPesos": "943.83",
+                  "presupuestoTotal": "206967,25"
+              },
+              {
+                  "idEDDProyecto": "86",
+                  "nomProyecto": "TEST RED 15",
+                  "fechaIni": "01-01-2024",
+                  "fechaFin": "31-07-2024",
+                  "nomServicio": "BCI",
+                  "tipoProyecto": "ESHOPPING",
+                  "mes": "202403",
+                  "idresumenperproy": "489",
+                  "presupuestoMensualUSD": "29566,75",
+                  "presupuestoMensualpesos": "33034050",
+                  "valorUSDPesos": "943.83",
+                  "presupuestoTotal": "206967,25"
+              },
+              {
+                  "idEDDProyecto": "86",
+                  "nomProyecto": "TEST RED 15",
+                  "fechaIni": "01-01-2024",
+                  "fechaFin": "31-07-2024",
+                  "nomServicio": "BCI",
+                  "tipoProyecto": "ESHOPPING",
+                  "mes": "202404",
+                  "idresumenperproy": "490",
+                  "presupuestoMensualUSD": "29566,75",
+                  "presupuestoMensualpesos": "23595750",
+                  "valorUSDPesos": "943.83",
+                  "presupuestoTotal": "206967,25"
+              },
+              {
+                  "idEDDProyecto": "86",
+                  "nomProyecto": "TEST RED 15",
+                  "fechaIni": "01-01-2024",
+                  "fechaFin": "31-07-2024",
+                  "nomServicio": "BCI",
+                  "tipoProyecto": "ESHOPPING",
+                  "mes": "202405",
+                  "idresumenperproy": "491",
+                  "presupuestoMensualUSD": "29566,75",
+                  "presupuestoMensualpesos": "23595750",
+                  "valorUSDPesos": "943.83",
+                  "presupuestoTotal": "206967,25"
+              },
+              {
+                  "idEDDProyecto": "86",
+                  "nomProyecto": "TEST RED 15",
+                  "fechaIni": "01-01-2024",
+                  "fechaFin": "31-07-2024",
+                  "nomServicio": "BCI",
+                  "tipoProyecto": "ESHOPPING",
+                  "mes": "202406",
+                  "idresumenperproy": "492",
+                  "presupuestoMensualUSD": "29566,75",
+                  "presupuestoMensualpesos": "23595750",
+                  "valorUSDPesos": "943.83",
+                  "presupuestoTotal": "206967,25"
+              },
+              {
+                  "idEDDProyecto": "86",
+                  "nomProyecto": "TEST RED 15",
+                  "fechaIni": "01-01-2024",
+                  "fechaFin": "31-07-2024",
+                  "nomServicio": "BCI",
+                  "tipoProyecto": "ESHOPPING",
+                  "mes": "202407",
+                  "idresumenperproy": "493",
+                  "presupuestoMensualUSD": "29566,75",
+                  "presupuestoMensualpesos": "28314900",
+                  "valorUSDPesos": "943.83",
+                  "presupuestoTotal": "206967,25"
+              }
+              ]}
           /> */}
 
           <Header></Header>

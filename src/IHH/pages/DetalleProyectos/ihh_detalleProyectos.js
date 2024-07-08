@@ -212,6 +212,8 @@ export default function DetalleProyectos() {
                       ).toLocaleString("es-CL", {
                         style: "currency",
                         currency: "CLP",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
                       })}
                       (USD)
                     </b>
@@ -293,6 +295,8 @@ export default function DetalleProyectos() {
                         {
                           style: "currency",
                           currency: "CLP",
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
                         }
                       )}
                     </td>
@@ -312,6 +316,8 @@ export default function DetalleProyectos() {
                           ).toLocaleString("es-CL", {
                             style: "currency",
                             currency: "CLP",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 2,
                           })
                         : 0}
                     </td>
@@ -322,6 +328,7 @@ export default function DetalleProyectos() {
                           ).toLocaleString("es-CL", {
                             style: "currency",
                             currency: "CLP",
+                            
                           })
                         : 0}
                     </td>
@@ -332,6 +339,8 @@ export default function DetalleProyectos() {
                             {
                               style: "currency",
                               currency: "CLP",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
                             }
                           )
                         : "No definido"}
@@ -360,6 +369,8 @@ export default function DetalleProyectos() {
                             {
                               style: "currency",
                               currency: "CLP",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
                             }
                           )
                         : "No definido"}
@@ -394,6 +405,8 @@ export default function DetalleProyectos() {
                             {
                               style: "currency",
                               currency: "CLP",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
                             }
                           )
                         : "No definido"}

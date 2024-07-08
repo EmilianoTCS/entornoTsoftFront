@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { NumericFormat } from "react-number-format";
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
 import getDataService from "../../../../../services/GetDataService";
@@ -108,19 +108,14 @@ const InsertarEDDProyecto = ({
     [isActiveFormularioPresupuesto]
   );
 
-  const handleChangeValorUSD = (e) => {
-    const value = e.target.value;
-    const cleanedValue = value.replace(/[^\d,.]/g, "").replace(",", ".");
-    const number = parseFloat(cleanedValue);
-
-    const formattedValue = formatCurrency(number);
-    const parsedValue = isNaN(number) ? "" : number;
+  const handleChangeValorUSD = (values) => {
+    const { formattedValue, value } = values;
 
     setValorUSD((prev) => ({
       ...prev,
-      input: value,
+      input: formattedValue,
+      parsed: parseFloat(value),
       formatted: formattedValue,
-      parsed: parsedValue,
     }));
   };
 
@@ -130,28 +125,21 @@ const InsertarEDDProyecto = ({
     return new Intl.NumberFormat("es-CL", {
       style: "currency",
       currency: "CLP",
-      minimumFractionDigits: 2,
+      minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     }).format(value);
   };
 
-  const handlePresupuestoTotalChange = (e) => {
-    const value = e.target.value;
-    const cleanedValue = value.replace(/[^\d,.]/g, "").replace(",", ".");
-    const number = parseFloat(cleanedValue);
-
-    const formattedValue = formatCurrency(number);
-    const parsedValue = isNaN(number) ? "" : number;
+  const handlePresupuestoTotalChange = (values) => {
+    const { formattedValue, value } = values;
 
     setPresupuestoTotal((prev) => ({
       ...prev,
-      input: value,
+      input: formattedValue,
+      parsed: parseFloat(value),
       formatted: formattedValue,
-      parsed: parsedValue,
     }));
-    console.log(presupuestoTotal);
   };
-
 
   // ----------------------RENDER----------------------------
   return (
@@ -250,38 +238,48 @@ const InsertarEDDProyecto = ({
                 ))}
               </select>
             </div>
+
             <div>
-              <label htmlFor="input_presupuestoTotal">Valor USD ($CLP):</label>
-              <input
-                placeholder="Escriba presupuesto total del proyecto"
-                type="text"
+              <label htmlFor="input_valorUSD">Valor USD (CLP)</label>
+              <NumericFormat
+                placeholder="Escriba el valor del dólar en CLP"
                 className="form-control"
-                name="input_presupuestoTotal"
-                id="input_presupuestoTotal"
+                name="input_valorUSD"
+                id="input_valorUSD"
                 value={valorUSD.input || ""}
-                onChange={handleChangeValorUSD}
+                thousandSeparator={"."}
+                prefix={"$"}
+                onValueChange={handleChangeValorUSD}
+                decimalSeparator=","
                 required
-                maxLength={30}
+                decimalScale={2}
+                fixedDecimalScale={true}
               />
-              {/* <p>Formatted: {valorUSD.formatted}</p>
-              <p>Parsed: {valorUSD.parsed}</p> */}
             </div>
             <div>
               <label htmlFor="input_presupuestoTotal">
                 Presupuesto total en USD:
               </label>
-              <input
+              <NumericFormat
                 placeholder="Escriba presupuesto total del proyecto"
-                type="text"
                 className="form-control"
                 name="input_presupuestoTotal"
                 id="input_presupuestoTotal"
                 value={presupuestoTotal.input}
-                onChange={handlePresupuestoTotalChange}
+                thousandSeparator={"."}
+                prefix={"$"}
+                onValueChange={handlePresupuestoTotalChange}
+                decimalSeparator=","
+                decimalScale={2}
+                fixedDecimalScale={true}
                 required
               />
               <label>
-                (Valor en pesos: {formatCurrency(presupuestoTotal.parsed * valorUSD.parsed)})
+                (Valor en CLP:{" "}
+                {formatCurrency(
+                  Math.round(presupuestoTotal.parsed * valorUSD.parsed)
+                )}
+                )
               </label>
             </div>
 
