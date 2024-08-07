@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
 import getDataService from "../../../../../services/GetDataService";
-import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
-
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 const EditarEDDEvalRespPreg = ({
   isActiveEditEDDEvalRespPreg,
   cambiarEstado,
@@ -73,11 +72,12 @@ const EditarEDDEvalRespPreg = ({
           : idEDDEvalPregunta,
       isActive: true,
     };
-  
+    
     SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response;
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
       actualizarEDDEvalRespPreg(datos);
+      cambiarEstado(false)
     });
   }
   function actualizarEDDEvalRespPreg(EDDEvalRespPreg) {
@@ -110,7 +110,6 @@ const EditarEDDEvalRespPreg = ({
             <div className="form-group">
               <label htmlFor="input_EvalPregunta">Pregunta: </label>
               <select
-                required
                 className="form-control"
                 name="input_EvalPregunta"
                 id="input_EvalPregunta"
@@ -143,14 +142,12 @@ const EditarEDDEvalRespPreg = ({
                 value={ordenRespPreg || ""}
                 maxLength="11"
                 onChange={({ target }) => setordenRespPreg(target.value)}
-                required
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="input_TipRESP">Respuesta: </label>
               <select
-                required
                 className="form-control"
                 name="input_TipRESP"
                 id="input_TipRESP"

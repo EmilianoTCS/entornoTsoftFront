@@ -34,7 +34,6 @@ export default function ListadoEDDEvalRespPreg() {
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
   const nombreTabla = "eddevalresppreg";
 
-  const [idEDDEvaluacion, setidEDDEvaluacion] = useState(params.params);
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState(params.params);
 
   const [listEDDEvaluacion, setlistEDDEvaluacion] = useState([""]);
@@ -198,7 +197,7 @@ export default function ListadoEDDEvalRespPreg() {
               isActiveEDDEvalRespPreg={isActiveInsertEDDEvalRespPreg}
               cambiarEstado={setIsActiveInsertEDDEvalRespPreg}
               EDDEvalRespPreg={EDDEvalRespPreg}
-              idEDDEvalPregunta={idEDDEvalPregunta}
+              idPregunta={idEDDEvalPregunta}
             ></InsertarEDDEvalRespPreg>
 
             <EditarEDDEvalRespPreg

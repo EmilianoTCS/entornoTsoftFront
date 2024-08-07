@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
 import getDataService from "../../../../../services/GetDataService";
-import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 
 const EditarEDDEvaluacion = ({
   isActiveEditEDDEvaluacion,
@@ -52,6 +52,7 @@ const EditarEDDEvaluacion = ({
       setfechaIni(response[0].fechaIni);
       setfechaFin(response[0].fechaFin);
       setnomEvaluacion(response[0].nomEvaluacion);
+      setdescFormulario(response[0].descFormulario);
     });
   };
 
@@ -76,8 +77,9 @@ const EditarEDDEvaluacion = ({
 
     SendDataService(url, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
       actualizarEDDEvaluacion(datos);
+      cambiarEstado(false)
     });
 
     function actualizarEDDEvaluacion(EDDEvaluacion) {
@@ -152,7 +154,7 @@ const EditarEDDEvaluacion = ({
             </div>
             <div>
               <label htmlFor="Descripción">Descripción de la evaluación:</label>
-              <input
+              <textarea
                 style={{ textTransform: "uppercase" }}
                 placeholder="Descripción de la evaluación"
                 type="text"

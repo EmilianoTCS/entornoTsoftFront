@@ -72,6 +72,8 @@ import ListadoImpEmpProy from "./IHH/pages/ListadoImpEmpProy/ihh_ListadoImpEmpPr
 import Resumen_ihh_colab from "./IHH/pages/Resumen_ihh_colab/Resumen_ihh_colab.js";
 import Resumen_ihh_colab_mes from "./IHH/pages/Resumen_ihh_colab_mes/Resumen_ihh_colab_mes.js";
 import Resumen_ihh_colab_proy from "./IHH/pages/Resumen_ihh_colab_proy/Resumen_ihh_colab_proy.js";
+import IHH_ListadoMesesAcop from "./IHH/pages/ListadoMesesAcop/ListadoMesesAcop.js";
+import IHH_ListadoAcopProy from "./IHH/pages/ListadoAcopProy/ListadoAcopProy.js";
 function App() {
   return (
     <AuthState>
@@ -280,7 +282,7 @@ function App() {
             ></Route>
             <Route
               element={<SimuladorCostos />}
-              path="/ihh/simuladorCostos/:idProyecto/:mes/:idAcop"
+              path="/ihh/simuladorCostos/:idProyecto/:mes"
             ></Route>
             <Route
               element={<ListadoImpEmpProy />}
@@ -298,6 +300,15 @@ function App() {
               element={<Resumen_ihh_colab_proy />}
               path="/ihh/Resumen_ihh_colab_proy/:idColaborador/:idProyecto/:fechaInicio/:fechaFin"
             ></Route>
+            <Route
+              element={<IHH_ListadoMesesAcop />}
+              path="/ihh/listado_mes_acop/:idAcop/"
+            ></Route>
+            <Route
+              element={<IHH_ListadoAcopProy />}
+              path="/ihh/listado_acop_proy/:idProyecto/:idAcop"
+            ></Route>
+            
 
             {/* ------------------------------------------------------------------------------------------ */}
 

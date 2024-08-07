@@ -5,6 +5,7 @@ import SendDataService from "../../../services/SendDataService";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { NumericFormat } from "react-number-format";
 
 export default function EditarDetalleResumen({
   isActive,
@@ -19,35 +20,12 @@ export default function EditarDetalleResumen({
 
   // Convertir el presupuestoMensual a un número flotante
   let parsePresupuestoMensual = parseFloat(presupuestoMensual);
+  let idResumen = idResumenPerProy;
 
   const [nuevoPresupuestoMensual, setPresupuestoMensual] = useState({
-    presupuestoMensual: parsePresupuestoMensual,
-    idResumenPerProy: idResumenPerProy,
+    presupuestoMensualUSD: parsePresupuestoMensual,
+    idresumenperproy: idResumen,
   });
-
-  const formatCurrency = (value) => {
-    // Convertir la cadena en un número flotante
-    const number = parseFloat(value);
-    if (isNaN(number)) return "";
-    
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(number);
-  };
-
-  const handlePresupuestoTotalChange = (e) => {
-    const { value } = e.target;
-    const numericValue = value.replace(/[^0-9.]/g, ""); // Remover caracteres no numéricos excepto el punto decimal
-    const formattedValue = formatCurrency(numericValue); // Formatear el valor a moneda
-    setPresupuestoMensual((prevState) => ({
-      ...prevState,
-      presupuestoMensual: parseFloat(numericValue),
-    }));
-    e.target.value = formattedValue; // Actualizar el valor del input con el formato de moneda
-  };
 
   function convertirFecha(fechaString) {
     if (fechaString) {
@@ -85,9 +63,8 @@ export default function EditarDetalleResumen({
     const operationUrl = "ihh_editarResumenPeriodo";
     const data = {
       presupuestosCambiados: [nuevoPresupuestoMensual],
-      usuarioModificacion: userData.usuario, // filtra los elementos vacíos
+      usuarioModificacion: userData.usuario,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -100,25 +77,34 @@ export default function EditarDetalleResumen({
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
           <Modal.Title>
-            Editar presupuesto mensual - {convertirFecha(mes)}
+            Editar presupuesto mensual <br></br> {convertirFecha(mes)}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
             <div>
               <label htmlFor="input_presupuestoTotal">
-                Nuevo presupuesto mensual:
+                Presupuesto total (USD)
               </label>
-              <input
-                placeholder="Presupuesto mensual"
-                type="text"
+              <NumericFormat
+                placeholder="Escriba el presupuesto total en USD"
                 className="form-control"
-                id="input_presupuestoMensual"
-                defaultValue={formatCurrency(
-                  parsePresupuestoMensual.toString()
-                )}
-                onChange={handlePresupuestoTotalChange}
+                name="input_presupuestoTotal"
+                id="input_presupuestoTotal"
+                value={parsePresupuestoMensual || ""}
+                thousandSeparator={"."}
+                prefix={"$"}
+                onValueChange={(values) => {
+                  const { value } = values;
+                  setPresupuestoMensual((prevDatos) => ({
+                    ...prevDatos,
+                    presupuestoMensual: parseFloat(value),
+                  }));
+                }}
+                decimalSeparator=","
                 required
+                decimalScale={2}
+                fixedDecimalScale={true}
               />
             </div>
             <Button

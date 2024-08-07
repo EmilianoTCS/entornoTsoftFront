@@ -46,7 +46,7 @@ const ExportCSV = ({ inputData, nomTabla }) => {
   };
 
   return (
-    <div>
+    <div className="div_container_btn_export_data">
       <button className="btnExport" onClick={() => exportData("csv")}>
         Exportar a CSV
       </button>

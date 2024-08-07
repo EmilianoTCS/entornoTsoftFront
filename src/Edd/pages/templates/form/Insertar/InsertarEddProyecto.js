@@ -3,6 +3,7 @@ import { NumericFormat } from "react-number-format";
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
 import getDataService from "../../../../../services/GetDataService";
+import Select from "react-select";
 
 import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
@@ -19,11 +20,6 @@ const InsertarEDDProyecto = ({
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState(null);
   const [tipoProyecto, setTipoProyecto] = useState("");
-  const [presupuestoTotal, setPresupuestoTotal] = useState({
-    formatted: "",
-    parsed: "",
-    input: "",
-  });
 
   const [idServicio, setidServicio] = useState("");
 
@@ -32,13 +28,9 @@ const InsertarEDDProyecto = ({
   const [datosResumen, setDatosResumen] = useState([""]);
   const [isActiveFormularioPresupuesto, setisActiveFormularioPresupuesto] =
     useState(false);
-  const [valorUSD, setValorUSD] = useState({
-    formatted: "",
-    parsed: "",
-    input: "",
-  });
 
-  const listEDDProyecto = EDDProyecto;
+  const [idAcops, setIdsAcops] = useState("");
+  const [opcionesAcops, setOpcionesAcop] = useState([]);
 
   const show = isActiveEDDProyecto;
 
@@ -68,6 +60,26 @@ const InsertarEDDProyecto = ({
     });
   }
 
+  const obtenerAcops = () => {
+    var url = "pages/listados/ihh_listadoAcop.php";
+    var operationUrl = "ihh_listadoAcop";
+    var auxOpciones = [];
+    var data = {
+      num_boton: 1,
+      cantidadPorPagina: 9999999999,
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      const { paginador, ...datos } = data;
+      data.datos.map((item) => {
+        auxOpciones.push({
+          label: item.nomAcop,
+          value: item.idAcop,
+        });
+      });
+      setOpcionesAcop(auxOpciones);
+    });
+  };
+
   function SendData(e) {
     e.preventDefault();
     const url = "pages/insertar/insertarEddProyecto.php";
@@ -79,68 +91,43 @@ const InsertarEDDProyecto = ({
       fechaFin: fechaFin,
       tipoProyecto: tipoProyecto,
       idServicio: idServicio,
-      presupuestoTotal: presupuestoTotal.parsed, // Enviar el valor sin formatear
-      valorUSD: valorUSD.parsed, // Enviar el valor sin formatear
+      idAcops: idAcops,
       isActive: true,
     };
+    // console.log(data);
     SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+      const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEDDProyecto(datos);
-      if (datos.idresumenperproy && !isActiveFormularioPresupuesto) {
-        console.log("response", response);
-        setisActiveFormularioPresupuesto(true);
-        setDatosResumen(response);
-        cambiarEstado(false);
-      }
+      EDDProyecto.unshift(response[0]);
+      cambiarEstado(false);
     });
   }
 
-  function actualizarEDDProyecto(response) {
-    listEDDProyecto.push(response);
-  }
+  const handleSelect = (selected) => {
+    let auxString = "";
+    if (selected && selected.length > 0) {
+      selected.forEach((item) => {
+        if (auxString === "") {
+          auxString = item.value;
+        } else {
+          auxString = auxString + "," + item.value;
+        }
+      });
+      setIdsAcops(auxString);
+    } else {
+      auxString = "";
+      setIdsAcops("");
+    }
+  };
 
   useEffect(
     function () {
       obtenerServicio();
       obtenerTipoProyecto();
+      obtenerAcops();
     },
     [isActiveFormularioPresupuesto]
   );
-
-  const handleChangeValorUSD = (values) => {
-    const { formattedValue, value } = values;
-
-    setValorUSD((prev) => ({
-      ...prev,
-      input: formattedValue,
-      parsed: parseFloat(value),
-      formatted: formattedValue,
-    }));
-  };
-
-  // Formato de moneda
-  const formatCurrency = (value) => {
-    if (isNaN(value)) return "";
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    }).format(value);
-  };
-
-  const handlePresupuestoTotalChange = (values) => {
-    const { formattedValue, value } = values;
-
-    setPresupuestoTotal((prev) => ({
-      ...prev,
-      input: formattedValue,
-      parsed: parseFloat(value),
-      formatted: formattedValue,
-    }));
-  };
-
   // ----------------------RENDER----------------------------
   return (
     <>
@@ -239,48 +226,16 @@ const InsertarEDDProyecto = ({
               </select>
             </div>
 
-            <div>
-              <label htmlFor="input_valorUSD">Valor USD (CLP)</label>
-              <NumericFormat
-                placeholder="Escriba el valor del dólar en CLP"
+            <div className="form-group">
+              <label htmlFor="input_serv">Selecciona uno o más ACOPS: </label>
+              <Select
+                closeMenuOnSelect={false}
                 className="form-control"
-                name="input_valorUSD"
-                id="input_valorUSD"
-                value={valorUSD.input || ""}
-                thousandSeparator={"."}
-                prefix={"$"}
-                onValueChange={handleChangeValorUSD}
-                decimalSeparator=","
-                required
-                decimalScale={2}
-                fixedDecimalScale={true}
+                isMulti
+                placeholder= "Desplegar listado"
+                options={opcionesAcops}
+                onChange={handleSelect}
               />
-            </div>
-            <div>
-              <label htmlFor="input_presupuestoTotal">
-                Presupuesto total en USD:
-              </label>
-              <NumericFormat
-                placeholder="Escriba presupuesto total del proyecto"
-                className="form-control"
-                name="input_presupuestoTotal"
-                id="input_presupuestoTotal"
-                value={presupuestoTotal.input}
-                thousandSeparator={"."}
-                prefix={"$"}
-                onValueChange={handlePresupuestoTotalChange}
-                decimalSeparator=","
-                decimalScale={2}
-                fixedDecimalScale={true}
-                required
-              />
-              <label>
-                (Valor en CLP:{" "}
-                {formatCurrency(
-                  Math.round(presupuestoTotal.parsed * valorUSD.parsed)
-                )}
-                )
-              </label>
             </div>
 
             <Button

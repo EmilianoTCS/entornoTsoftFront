@@ -107,7 +107,6 @@ const editarEDDEvalPregunta = ({
     };
 
     SendDataService(url, operationUrl, data).then((response) => {
-
       const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
       TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
       actualizarEDDEvalPregunta(datos);

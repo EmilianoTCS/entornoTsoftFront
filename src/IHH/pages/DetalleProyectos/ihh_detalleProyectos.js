@@ -30,11 +30,11 @@ export default function DetalleProyectos() {
   const nombreTabla = "list_det_proy";
 
   var styleH2 = {
-    margin: "auto auto auto 25%",
+    margin: "auto",
     backgroundColor: "white",
     padding: "5px 10px 5px 10px",
     textAlign: "center",
-    width: "500px",
+    maxWidth: "800px",
     borderRadius: "10px",
   };
   var styleH3 = {
@@ -76,13 +76,13 @@ export default function DetalleProyectos() {
       console.log(response);
       // Filtrar los elementos con "saldoPresupuesto" no nulo
       const saldoPresupuestoNoNulo = response.filter(
-        (elemento) => elemento.saldoPresupuestoUSD !== null
+        (elemento) => elemento.saldoPresupuesto !== null
       );
 
       if (saldoPresupuestoNoNulo.length > 0) {
         var ultimoSaldoPresupuesto =
           saldoPresupuestoNoNulo[saldoPresupuestoNoNulo.length - 1]
-            .saldoPresupuestoUSD;
+            .saldoPresupuesto;
       } else {
         var ultimoSaldoPresupuesto = response[0].presupuestoTotal;
       }
@@ -148,12 +148,12 @@ export default function DetalleProyectos() {
         />
         <Header></Header>
         <br></br>
+        <h3 style={styleH3}>Fecha actual: {now.toLocaleDateString("es-CL")}</h3>
         <div style={mainContainerDiv}>
           <div style={styleDivTitle}>
-            <h2 style={styleH2}>Detalle de costos de proyectos</h2>
-            <h3 style={styleH3}>
-              Fecha actual: {now.toLocaleDateString("es-CL")}
-            </h3>
+            <h2 style={styleH2}>
+              Detalle de costos de proyecto  <br></br>{listDetalle[0].nomProyecto}
+            </h2>
           </div>
 
           {/* resumen proyecto */}
@@ -215,7 +215,6 @@ export default function DetalleProyectos() {
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 2,
                       })}
-                      (USD)
                     </b>
                   </th>
                 </tr>
@@ -237,7 +236,7 @@ export default function DetalleProyectos() {
                                 style: "currency",
                                 currency: "CLP",
                               }
-                            ) + "(USD)"
+                            )
                           : "No definido"}
                       </text>
                     </b>
@@ -261,9 +260,7 @@ export default function DetalleProyectos() {
                 justifyContent: "space-between",
               }}
             >
-              <h3>
-                Movimiento mensual - Proyecto: {listDetalle[0].nomProyecto}
-              </h3>
+              <h3>Movimiento mensual en CLP</h3>
               <ExportCSV inputData={listDetalle} nomTabla={nombreArchivoCSV} />
             </div>
             <br></br>
@@ -271,176 +268,108 @@ export default function DetalleProyectos() {
             <Table striped hover responsive>
               <thead>
                 <th>Mes</th>
-                <th>Pres. mensual proyectado (USD)</th>
-                <th>Pres. mensual proyectado (CLP)</th>
-                <th>Pres. mensual acumulado (USD)</th>
-                <th>Pres. mensual acumulado (CLP)</th>
-                <th>Costo mensual (USD)</th>
-                <th>Costo mensual (CLP)</th>
-                <th>Saldo mes (USD)</th>
-                <th>Saldo mes (CLP)</th>
-                <th>Saldo presupuesto (USD)</th>
-                <th>Saldo presupuesto (CLP)</th>
-                <th>Operaciones</th>
+                <th style={{ textAlign: "right" }}>Pres. mensual proyectado</th>
+                <th style={{ textAlign: "right" }}>Pres. mensual acumulado</th>
+                <th style={{ textAlign: "right" }}>Costo mensual</th>
+                <th style={{ textAlign: "right" }}>Saldo mes</th>
+                <th style={{ textAlign: "right" }}>Saldo presupuesto</th>
+                <th style={{ textAlign: "center" }}>Operaciones</th>
               </thead>
               <tbody>
                 {listDetalle.map((item) => (
                   <tr>
-                    <td style={{ width: "150px" }}>
+                    <td style={{ width: "200px" }}>
                       {convertirFecha(item.mes)}
                     </td>
-                    <td style={{ textAlign: "right" }}>
-                      {parseFloat(item.presupuestoMensualUSD).toLocaleString(
+                    <td style={{ textAlign: "right", width: "150px" }}>
+                      {parseFloat(item.presupuestoMensual).toLocaleString(
                         "es-CL",
                         {
                           style: "currency",
                           currency: "CLP",
-                          minimumFractionDigits: 0,
+                          minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
                         }
                       )}
                     </td>
-                    <td style={{ textAlign: "right" }}>
-                      {parseFloat(item.presupuestoMensualPesos).toLocaleString(
-                        "es-CL",
-                        {
-                          style: "currency",
-                          currency: "CLP",
-                        }
-                      )}
-                    </td>
-                    <td style={{ textAlign: "right", width: "120px" }}>
-                      {item.presupuestoAcumuladoUSD
-                        ? parseFloat(
-                            item.presupuestoAcumuladoUSD
-                          ).toLocaleString("es-CL", {
-                            style: "currency",
-                            currency: "CLP",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 2,
-                          })
+
+                    <td style={{ textAlign: "right", width: "150px" }}>
+                      {item.presupuestoAcumulado
+                        ? parseFloat(item.presupuestoAcumulado).toLocaleString(
+                            "es-CL",
+                            {
+                              style: "currency",
+                              currency: "CLP",
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            }
+                          )
                         : 0}
                     </td>
-                    <td style={{ textAlign: "right", width: "120px" }}>
-                      {item.presupuestoAcumuladoPesos
-                        ? parseFloat(
-                            item.presupuestoAcumuladoPesos
-                          ).toLocaleString("es-CL", {
-                            style: "currency",
-                            currency: "CLP",
-                            
-                          })
-                        : 0}
-                    </td>
+
                     <td style={{ textAlign: "right" }}>
-                      {parseFloat(item.costoMensualUSD)
-                        ? parseFloat(item.costoMensualUSD).toLocaleString(
+                      {parseFloat(item.costoMensual)
+                        ? parseFloat(item.costoMensual).toLocaleString(
                             "es-CL",
                             {
                               style: "currency",
                               currency: "CLP",
-                              minimumFractionDigits: 0,
+                              minimumFractionDigits: 2,
                               maximumFractionDigits: 2,
                             }
                           )
                         : "No definido"}
                     </td>
-                    <td style={{ textAlign: "right" }}>
-                      {parseFloat(item.costoMensualPesos)
-                        ? parseFloat(item.costoMensualPesos).toLocaleString(
-                            "es-CL",
-                            {
-                              style: "currency",
-                              currency: "CLP",
-                            }
-                          )
-                        : "No definido"}
-                    </td>
+
                     <td
                       style={
-                        parseFloat(item.saldoMensualUSD) < 0
+                        parseFloat(item.saldoMensual) < 0
                           ? { textAlign: "right", color: "red" }
                           : { textAlign: "right", color: "green" }
                       }
                     >
-                      {parseFloat(item.saldoMensualUSD)
-                        ? parseFloat(item.saldoMensualUSD).toLocaleString(
+                      {parseFloat(item.saldoMensual)
+                        ? parseFloat(item.saldoMensual).toLocaleString(
                             "es-CL",
                             {
                               style: "currency",
                               currency: "CLP",
-                              minimumFractionDigits: 0,
+                              minimumFractionDigits: 2,
                               maximumFractionDigits: 2,
                             }
                           )
                         : "No definido"}
                     </td>
+
                     <td
                       style={
-                        parseFloat(item.saldoMensualPesos) < 0
+                        parseFloat(item.saldoPresupuesto) < 0
                           ? { textAlign: "right", color: "red" }
                           : { textAlign: "right", color: "green" }
                       }
                     >
-                      {parseFloat(item.saldoMensualPesos)
-                        ? parseFloat(item.saldoMensualPesos).toLocaleString(
+                      {parseFloat(item.saldoPresupuesto)
+                        ? parseFloat(item.saldoPresupuesto).toLocaleString(
                             "es-CL",
                             {
                               style: "currency",
                               currency: "CLP",
-                            }
-                          )
-                        : "No definido"}
-                    </td>
-                    <td
-                      style={
-                        parseFloat(item.saldoPresupuestoUSD) < 0
-                          ? { textAlign: "right", color: "red" }
-                          : { textAlign: "right", color: "green" }
-                      }
-                    >
-                      {parseFloat(item.saldoPresupuestoUSD)
-                        ? parseFloat(item.saldoPresupuestoUSD).toLocaleString(
-                            "es-CL",
-                            {
-                              style: "currency",
-                              currency: "CLP",
-                              minimumFractionDigits: 0,
+                              minimumFractionDigits: 2,
                               maximumFractionDigits: 2,
                             }
                           )
                         : "No definido"}
                     </td>
+
                     <td
-                      style={
-                        parseFloat(item.saldoPresupuestoPesos) < 0
-                          ? { textAlign: "right", color: "red" }
-                          : { textAlign: "right", color: "green" }
-                      }
+                      style={{
+                        width: "200px",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "end",
+                      }}
                     >
-                      {parseFloat(item.saldoPresupuestoPesos)
-                        ? parseFloat(item.saldoPresupuestoPesos).toLocaleString(
-                            "es-CL",
-                            {
-                              style: "currency",
-                              currency: "CLP",
-                            }
-                          )
-                        : "No definido"}
-                    </td>
-                    <td>
-                      <Link
-                        to={`/ihh/simuladorCostos/${idProyecto}/${item.mes}/${item.idAcop}`}
-                      >
-                        <Button
-                          data-title="Detalle de movimientos mensuales"
-                          id="OperationBtns"
-                          style={{ color: "black" }}
-                        >
-                          <MdAccessTimeFilled id="icons" />
-                        </Button>
-                      </Link>
-                      <button
+                      {/* <button
                         data-title="Editar resumen"
                         id="OperationBtns"
                         onClick={() => {
@@ -453,7 +382,18 @@ export default function DetalleProyectos() {
                         }}
                       >
                         <RiEditBoxFill id="icons" />
-                      </button>
+                      </button> */}
+                      <Link
+                        to={`/ihh/simuladorCostos/${idProyecto}/${item.mes}`}
+                      >
+                        <Button
+                          data-title="Detalle de movimientos mensuales"
+                          id="OperationBtns"
+                          style={{ color: "black" }}
+                        >
+                          <MdAccessTimeFilled id="icons" />
+                        </Button>
+                      </Link>
                     </td>
                   </tr>
                 ))}

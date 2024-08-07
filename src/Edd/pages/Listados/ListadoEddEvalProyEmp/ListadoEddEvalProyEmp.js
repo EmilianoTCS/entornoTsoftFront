@@ -407,14 +407,10 @@ export default function ListadoEDDEvalProyEmp() {
                 <tr>
                   <th>ID</th>
                   <th>Evaluación</th>
-                  {/* <th colSpan={2}>Fecha vigencia eval</th>
-                <th>Disp eval</th> */}
                   <th>Proyecto</th>
-
                   <th>Evaluador</th>
                   <th>Cargo</th>
                   <th>Evaluado</th>
-
                   <th>Resp</th>
                   <th style={{ textAlign: "right" }}>Ciclo eval</th>
                   <th>Fecha respuesta eval</th>
@@ -638,19 +634,7 @@ export default function ListadoEDDEvalProyEmp() {
                       userData.nomRol === "people" ||
                       userData.nomRol === "gerencia" ? (
                         EDDEvalProyEmp.evalRespondida ===
-                        "NO" ? //     data-title="Evaluacion relacionada" //   <button // > //   } //       : "" //       ? `/listadoRespPregEvaluaciones/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.idEDDProyEmpEvaluado}/${EDDEvalProyEmp.idEDDProyEmpEvaluador}/${EDDEvalProyEmp.cicloEvaluacion}` //     EDDEvalProyEmp.nomEvaluacion !== "empty / vacio" //   to={ // <Link
-                        //     id="OperationBtns"
-                        //     disabled={
-                        //       EDDEvalProyEmp.nomEvaluacion !==
-                        //         "empty / vacio" &&
-                        //       EDDEvalProyEmp.disponibilidadEvaluacion === "1"
-                        //         ? false
-                        //         : true
-                        //     }
-                        //   >
-                        //     <AiFillBook id="icons" />
-                        //   </button>
-                        // </Link>
+                        "NO" ? 
                         null : (
                           <Link
                             to={
@@ -740,30 +724,8 @@ export default function ListadoEDDEvalProyEmp() {
                             </button>
                           </Link>
                         )
-                      ) : // : EDDEvalProyEmp.evalRespondida === "SÍ" ? (
-                      //   <Link
-                      //     to={`/GraficosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}
-                      //   >
-                      //     <button
-                      //       data-title="Información colaboradores"
-                      //       id="OperationBtns"
-                      //     >
-                      //       <MdDashboard id="icons" />
-                      //     </button>
-                      //   </Link>
-                      // ) : (
-                      //   <Link
-                      //     to={`/GraficosDashboard/${EDDEvalProyEmp.idEDDEvaluacion}/${EDDEvalProyEmp.nomEvaluacion}/${EDDEvalProyEmp.idEDDProyecto}/${EDDEvalProyEmp.cicloEvaluacion}`}
-                      //   >
-                      //     <button
-                      //       data-title="Información colaboradores"
-                      //       id="OperationBtns"
-                      //       disabled
-                      //     >
-                      //       <MdDashboard id="icons" />
-                      //     </button>
-                      //   </Link>
-                      // )
+                      ) : 
+
                       null}
 
                       {userData.nomRol === "administrador" ||

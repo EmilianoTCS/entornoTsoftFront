@@ -19,7 +19,7 @@ import Spinner from "../../../templates/spinner/spinner";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
 
 export default function SimuladorCostos() {
-  const [, params] = useRoute("/ihh/simuladorCostos/:idProyecto/:mes/:idAcop");
+  const [, params] = useRoute("/ihh/simuladorCostos/:idProyecto/:mes");
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   // listados
@@ -369,7 +369,6 @@ it in the `rowData` array. */
         idresumenperproy: datosResumen[0].idresumenperproy,
       },
       usuarioCreacion: userData.usuario,
-      idAcop: params.idAcop,
       isActive: 1,
     };
 
@@ -409,8 +408,8 @@ it in the `rowData` array. */
               }}
             >
               {/* titulos */}
-              <h2 style={{ margin: "-10px auto", width: "650px" }}>
-                Proyecto {nomProyecto} - {convertirFecha(mes)}
+              <h2 style={{ margin: "-10px auto", width: "650px", textAlign: "center" }}>
+                Proyecto {nomProyecto} <br></br> {convertirFecha(mes)}
               </h2>
               <br></br>
 

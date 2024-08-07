@@ -151,7 +151,7 @@ export default function ListadoEDDProyEmp() {
 
             <div className="form-group" id="btn2">
               <label htmlFor="input_CantidadRegistros">
-                Cantidad registros:
+                Cant reg:
               </label>
               <select
                 value={cantidadPorPagina || ""}

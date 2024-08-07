@@ -1,11 +1,11 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-export default function ConfirmAlert(props) {
+export default function ConfirmAlert(text) {
   const MySwal = withReactContent(Swal);
   const promise1 = new Promise((resolve, reject) => {
     MySwal.fire({
       title: "¿Deseas desactivar este registro?",
-      text: "Puedes volver a habilitarlo en la página Administrador.",
+      html: text,
       icon: "warning",
       iconColor: "#e10b1c",
       showConfirmButton: true,

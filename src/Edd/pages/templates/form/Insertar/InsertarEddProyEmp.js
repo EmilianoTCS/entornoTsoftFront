@@ -65,6 +65,7 @@ const InsertarEDDProyEmp = ({
       const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
       TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
       actualizarEDDProyEmp(datos);
+      cambiarEstado(false)
     });
   }
 

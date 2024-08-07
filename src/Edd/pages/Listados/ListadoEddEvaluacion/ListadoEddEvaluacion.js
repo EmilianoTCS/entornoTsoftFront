@@ -79,12 +79,10 @@ export default function ListadoEDDEvaluacion() {
       cantidadPorPagina: cantidadPorPagina,
       idEDDEvaluacion: idEvaluacion,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setEDDEvaluacion(datos.datos);
-      console.log(data);
     });
   }
   useEffect(

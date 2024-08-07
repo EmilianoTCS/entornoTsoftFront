@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
-import getDataService from "../../../../../services/GetDataService";
-
-import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
+
 
 const InsertarEDDEvaluacion = ({
   isActiveEDDEvaluacion,
@@ -20,7 +19,6 @@ const InsertarEDDEvaluacion = ({
   const [tipoEvaluacion, settipoEvaluacion] = useState("");
   const [descFormulario, setdescFormulario] = useState("");
 
-
   const listEDDEvaluacion = EDDEvaluacion;
 
   const show = isActiveEDDEvaluacion;
@@ -30,7 +28,6 @@ const InsertarEDDEvaluacion = ({
   const handleClose = () => cambiarEstado(false);
 
   // ----------------------FUNCIONES----------------------------
-
 
   function SendData(e) {
     e.preventDefault();
@@ -42,14 +39,15 @@ const InsertarEDDEvaluacion = ({
       fechaIni: fechaIni,
       fechaFin: fechaFin,
       tipoEvaluacion: tipoEvaluacion,
-      descFormulario:descFormulario,
+      descFormulario: descFormulario,
       isActive: true,
     };
+
     SendDataService(url, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
       actualizarEDDEvaluacion(datos);
-
+      cambiarEstado(false)
     });
   }
 
@@ -57,8 +55,7 @@ const InsertarEDDEvaluacion = ({
     listEDDEvaluacion.push(response);
   }
 
-  useEffect(function () {
-  }, []);
+  useEffect(function () {}, []);
 
   // ----------------------RENDER----------------------------
   return (
@@ -97,24 +94,19 @@ const InsertarEDDEvaluacion = ({
                   Desplegar lista
                 </option>
 
-                <option value="Referente">
-                  REFERENTE
-                </option>
-                <option value="Colaborador">
-                  COLABORADOR
-                </option>   
+                <option value="Referente">REFERENTE</option>
+                <option value="Colaborador">COLABORADOR</option>
               </select>
             </div>
             <div>
               <label htmlFor="Descripción">Descripción de la evaluación:</label>
-              <input
+              <textarea
                 style={{ textTransform: "uppercase" }}
                 placeholder="Descripción de la evaluación"
                 type="text"
                 className="form-control"
                 name="Descripción"
                 id="Descripción"
-                maxLength="50"
                 onChange={({ target }) => setdescFormulario(target.value)}
                 required
               />
@@ -125,7 +117,7 @@ const InsertarEDDEvaluacion = ({
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio vigencia"
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"
@@ -138,7 +130,7 @@ const InsertarEDDEvaluacion = ({
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha fin vigencia"
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="input_fechaF"
                 id="input_fechaF"

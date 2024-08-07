@@ -2,23 +2,22 @@ import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
 import { useRoute } from "wouter";
-
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillProject } from "react-icons/ai";
-import { FaMoneyBill } from "react-icons/fa";
+import { FaMoneyBill, FaLink  } from "react-icons/fa";
 import "../TablasStyles.css";
 import InsertarEddProyecto from "../../templates/form/Insertar/InsertarEddProyecto";
 import EditarEDDProyecto from "../../templates/form/Editar/EditarEddProyecto";
 import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
-
-import EditarPresupuestosMensuales from "../../templates/form/Editar/EditarPresupuestosMensuales";
+import TopAlertsError from "../../../../templates/alerts/TopAlerts";
 import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoEddProyecto() {
@@ -56,22 +55,7 @@ export default function ListadoEddProyecto() {
     setIsActiveEditEDDProyecto(!isActiveEditEDDProyecto);
     setidEDDProyecto(ID);
   }
-  function desactivar(ID) {
-    ConfirmAlert().then((response) => {
-      if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
-        var data = {
-          idRegistro: ID,
-          usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
-        };
-        SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
-        });
-      }
-    });
-  }
+
   function handleChangePaginador() {
     var url = "pages/listados/listadoEddProyecto.php";
     var operationUrl = "listadoEddProyecto";
@@ -80,12 +64,131 @@ export default function ListadoEddProyecto() {
       cantidadPorPagina: cantidadPorPagina,
       idServicio: idServicio,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setEDDProyecto(datos.datos);
     });
+  }
+
+  function convertirFecha(fechaString) {
+    if (fechaString) {
+      // Extraer el año y el mes del string
+      const anio = fechaString.slice(0, 4);
+      const mesNumero = fechaString.slice(4);
+
+      // Convertir el mes a nombre
+      const meses = [
+        "ENERO",
+        "FEBRERO",
+        "MARZO",
+        "ABRIL",
+        "MAYO",
+        "JUNIO",
+        "JULIO",
+        "AGOSTO",
+        "SEPTIEMBRE",
+        "OCTUBRE",
+        "NOVIEMBRE",
+        "DICIEMBRE",
+      ];
+      const mesNombre = meses[parseInt(mesNumero) - 1];
+
+      // Formatear la fecha en el formato deseado
+      const fechaFormateada = mesNombre + " " + anio;
+
+      return fechaFormateada;
+    }
+  }
+  const obtenerRelacionesProy = async (ID) => {
+    var datosProyectos = [];
+    var url = "pages/auxiliares/validar_rel_proy.php";
+    var operationUrl = "validar_rel_proy";
+    var data = {
+      idProyecto: ID,
+    };
+    const response = await SendDataService(url, operationUrl, data);
+    if (response) {
+      datosProyectos = response;
+    }
+    return datosProyectos;
+  };
+
+  function MensajeError(text) {
+    const MySwal = withReactContent(Swal);
+    MySwal.fire({
+      title: "No es posible realizar esta acción.",
+      html: text,
+      icon: "error",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      showConfirmButton: true,
+      confirmButtonText: "Aceptar",
+      timerProgressBar: true,
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+        // history.back();
+      }
+    });
+  }
+
+  // ELIMINAR
+  async function desactivar(ID) {
+    const datosAfectados = await obtenerRelacionesProy(ID);
+    let text = `<b>Esta acción no se puede deshacer.</b>
+      <br>`;
+
+    const { idEDDEvalProyEmp, idImpugnacionEmp, nomEvaluacion, mes } =
+      datosAfectados[0];
+    if (
+      idEDDEvalProyEmp !== "empty / vacio" ||
+      idImpugnacionEmp !== "empty / vacio" ||
+      nomEvaluacion !== "empty / vacio" ||
+      mes !== "empty / vacio"
+    ) {
+      let errorText = `Este proyecto cuenta con impugnaciones y evaluaciones de desempeño (EDD) relacionadas y no puede ser desactivado. <br> <br>
+        <div style="display: flex; max-height: 200px; overflow-y: auto;">
+        <br>
+          <div style="flex: 1; padding-right: 10px; text-align: left;">
+            <b>Meses afectados:</b><br>`;
+      datosAfectados.forEach((item) => {
+        if (item.mes) {
+          errorText += `<h6>-${convertirFecha(item.mes)}</h6> <br>`;
+        }
+      });
+
+      errorText += `</div><div style="flex: 1; padding-left: 10px; text-align: left;">
+            <b>Evaluaciones afectadas:</b><br>`;
+
+      datosAfectados.forEach((item) => {
+        if (item.nomEvaluacion) {
+          errorText += `<h6>-${item.nomEvaluacion}</h6> <br>`;
+        }
+      });
+
+      errorText += `</div></div><br>
+        <h5>Para poder desactivar un proyecto se deben desasociar estos datos</h5>`;
+      MensajeError(errorText);
+    } else {
+      const response = await ConfirmAlert(text);
+      if (response === true) {
+        var url = "pages/desactivar/ihh_desactivarProyecto.php";
+        var operationUrl = "ihh_desactivarProyecto";
+        var data = {
+          idProyecto: ID,
+          usuarioModificacion: userData.usuario,
+        };
+        const desactivarResponse = await SendDataService(
+          url,
+          operationUrl,
+          data
+        );
+        const { OUT_CODRESULT, OUT_MJERESULT } = desactivarResponse[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        handleChangePaginador()
+      }
+    }
   }
 
   useEffect(
@@ -98,119 +201,12 @@ export default function ListadoEddProyecto() {
 
   //PAGINADOR ---------------------
 
-  //PAGINADOR ---------------------
-
   return userData.statusConected || userData !== null ? (
     <>
       {userData.nomRol === "administrador" ||
       userData.nomRol === "gerencia" ||
       userData.nomRol === "people" ? (
         <>
-          {/* <EditarPresupuestosMensuales
-            cambiarEstado={setEDDProyecto}
-            isActiveFormulario={true}
-            resumenProyectos={[
-              {
-                  "idEDDProyecto": "86",
-                  "nomProyecto": "TEST RED 15",
-                  "fechaIni": "01-01-2024",
-                  "fechaFin": "31-07-2024",
-                  "nomServicio": "BCI",
-                  "tipoProyecto": "ESHOPPING",
-                  "mes": "202401",
-                  "idresumenperproy": "487",
-                  "presupuestoMensualUSD": "29566,75",
-                  "presupuestoMensualpesos": "33034050",
-                  "valorUSDPesos": "943.83",
-                  "presupuestoTotal": "206967,25"
-              },
-              {
-                  "idEDDProyecto": "86",
-                  "nomProyecto": "TEST RED 15",
-                  "fechaIni": "01-01-2024",
-                  "fechaFin": "31-07-2024",
-                  "nomServicio": "BCI",
-                  "tipoProyecto": "ESHOPPING",
-                  "mes": "202402",
-                  "idresumenperproy": "488",
-                  "presupuestoMensualUSD": "29566,75",
-                  "presupuestoMensualpesos": "33034050",
-                  "valorUSDPesos": "943.83",
-                  "presupuestoTotal": "206967,25"
-              },
-              {
-                  "idEDDProyecto": "86",
-                  "nomProyecto": "TEST RED 15",
-                  "fechaIni": "01-01-2024",
-                  "fechaFin": "31-07-2024",
-                  "nomServicio": "BCI",
-                  "tipoProyecto": "ESHOPPING",
-                  "mes": "202403",
-                  "idresumenperproy": "489",
-                  "presupuestoMensualUSD": "29566,75",
-                  "presupuestoMensualpesos": "33034050",
-                  "valorUSDPesos": "943.83",
-                  "presupuestoTotal": "206967,25"
-              },
-              {
-                  "idEDDProyecto": "86",
-                  "nomProyecto": "TEST RED 15",
-                  "fechaIni": "01-01-2024",
-                  "fechaFin": "31-07-2024",
-                  "nomServicio": "BCI",
-                  "tipoProyecto": "ESHOPPING",
-                  "mes": "202404",
-                  "idresumenperproy": "490",
-                  "presupuestoMensualUSD": "29566,75",
-                  "presupuestoMensualpesos": "23595750",
-                  "valorUSDPesos": "943.83",
-                  "presupuestoTotal": "206967,25"
-              },
-              {
-                  "idEDDProyecto": "86",
-                  "nomProyecto": "TEST RED 15",
-                  "fechaIni": "01-01-2024",
-                  "fechaFin": "31-07-2024",
-                  "nomServicio": "BCI",
-                  "tipoProyecto": "ESHOPPING",
-                  "mes": "202405",
-                  "idresumenperproy": "491",
-                  "presupuestoMensualUSD": "29566,75",
-                  "presupuestoMensualpesos": "23595750",
-                  "valorUSDPesos": "943.83",
-                  "presupuestoTotal": "206967,25"
-              },
-              {
-                  "idEDDProyecto": "86",
-                  "nomProyecto": "TEST RED 15",
-                  "fechaIni": "01-01-2024",
-                  "fechaFin": "31-07-2024",
-                  "nomServicio": "BCI",
-                  "tipoProyecto": "ESHOPPING",
-                  "mes": "202406",
-                  "idresumenperproy": "492",
-                  "presupuestoMensualUSD": "29566,75",
-                  "presupuestoMensualpesos": "23595750",
-                  "valorUSDPesos": "943.83",
-                  "presupuestoTotal": "206967,25"
-              },
-              {
-                  "idEDDProyecto": "86",
-                  "nomProyecto": "TEST RED 15",
-                  "fechaIni": "01-01-2024",
-                  "fechaFin": "31-07-2024",
-                  "nomServicio": "BCI",
-                  "tipoProyecto": "ESHOPPING",
-                  "mes": "202407",
-                  "idresumenperproy": "493",
-                  "presupuestoMensualUSD": "29566,75",
-                  "presupuestoMensualpesos": "28314900",
-                  "valorUSDPesos": "943.83",
-                  "presupuestoTotal": "206967,25"
-              }
-              ]}
-          /> */}
-
           <Header></Header>
           <br></br>
           <br></br>
@@ -278,13 +274,15 @@ export default function ListadoEddProyecto() {
                   </select>
                 </div>
               </div>
-
-              <InsertarEddProyecto
-                isActiveEDDProyecto={isActiveInsertEDDProyecto}
-                cambiarEstado={setIsActiveInsertEDDProyecto}
-                EDDProyecto={EDDProyecto}
-              ></InsertarEddProyecto>
-
+              {isActiveInsertEDDProyecto ? (
+                <InsertarEddProyecto
+                  isActiveEDDProyecto={isActiveInsertEDDProyecto}
+                  cambiarEstado={setIsActiveInsertEDDProyecto}
+                  EDDProyecto={EDDProyecto}
+                ></InsertarEddProyecto>
+              ) : (
+                <></>
+              )}
               <EditarEDDProyecto
                 isActiveEditEDDProyecto={isActiveEditEDDProyecto}
                 cambiarEstado={setIsActiveEditEDDProyecto}
@@ -298,7 +296,7 @@ export default function ListadoEddProyecto() {
               <Table id="mainTable" hover responsive>
                 <thead>
                   <tr>
-                    <th>ID</th>
+                    {/* <th>ID</th> */}
                     <th>Proyecto</th>
                     <th>Fecha Inicio</th>
                     <th>Fecha Fin</th>
@@ -310,7 +308,7 @@ export default function ListadoEddProyecto() {
                 <tbody>
                   {EDDProyecto.map((EDDProyecto) => (
                     <tr key={EDDProyecto.idEDDProyecto}>
-                      <td>{EDDProyecto.idEDDProyecto}</td>
+                      {/* <td>{EDDProyecto.idEDDProyecto}</td> */}
                       <td>{EDDProyecto.nomProyecto}</td>
                       <td>{EDDProyecto.fechaIni}</td>
                       <td>{EDDProyecto.fechaFin}</td>
@@ -328,15 +326,14 @@ export default function ListadoEddProyecto() {
                             <RiEditBoxFill id="icons" />
                           </button>
                         ) : null}
-
                         <Link
-                          to={`/listadoEDDProyEmp/${EDDProyecto.idEDDProyecto}/0`}
+                          to={`/ihh/listado_acop_proy/${EDDProyecto.idEDDProyecto}/0`}
                         >
                           <button
-                            data-title="Proy. colaborador relacionados"
+                            data-title="Detalle proyecto - ACOP"
                             id="OperationBtns"
                           >
-                            <AiFillProject id="icons" />
+                            <FaLink id="icons" />
                           </button>
                         </Link>
                         <Link
@@ -349,6 +346,17 @@ export default function ListadoEddProyecto() {
                             <FaMoneyBill id="icons" />
                           </button>
                         </Link>
+                        <Link
+                          to={`/listadoEDDProyEmp/${EDDProyecto.idEDDProyecto}/0`}
+                        >
+                          <button
+                            data-title="Proy. colaborador relacionados"
+                            id="OperationBtns"
+                          >
+                            <AiFillProject id="icons" />
+                          </button>
+                        </Link>
+
                         {userData.nomRol === "administrador" ? (
                           <button
                             data-title="Desactivar proyecto"

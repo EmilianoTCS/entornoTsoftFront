@@ -6,6 +6,7 @@ import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
+import Select from "react-select";
 
 const EditarEDDProyecto = ({
   isActiveEditEDDProyecto,
@@ -22,6 +23,7 @@ const EditarEDDProyecto = ({
   const [tipoProyecto, setTipoProyecto] = useState("");
 
   const [idServicio, setidServicio] = useState("");
+  const [idAcops, setIdsAcops] = useState("");
 
   const [listTipoProyectos, setlistTipoProyectos] = useState([""]);
   const [listServicio, setlistServicio] = useState([""]);
@@ -102,6 +104,7 @@ const EditarEDDProyecto = ({
       );
       setEDDProyecto(nuevosEDDProyecto);
     }
+    cambiarEstado(false);
   }
 
   useEffect(
@@ -145,7 +148,7 @@ const EditarEDDProyecto = ({
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
-                type="datetime"
+                type="date"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"
@@ -159,7 +162,7 @@ const EditarEDDProyecto = ({
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha fin"
-                type="datetime"
+                type="date"
                 className="form-control"
                 name="input_fechaF"
                 id="input_fechaF"

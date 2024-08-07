@@ -216,6 +216,7 @@ export default function ListadoImpEmpProy() {
     const valorHH = listValorHH.filter(
       (empleado) => empleado.idEmpleado === idEmpleado
     );
+    console.log(listValorHH);
     return valorHH[0].valorHH;
   }
   //Añade otra fila a la lista
@@ -427,7 +428,7 @@ export default function ListadoImpEmpProy() {
                     ))}
                   </datalist>
                 </div>
-
+                  <br></br>
                 {/* proyectos y elementos miscelaneos */}
                 <div
                   style={{

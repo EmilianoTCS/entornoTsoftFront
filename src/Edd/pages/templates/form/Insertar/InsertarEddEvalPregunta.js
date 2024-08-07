@@ -4,10 +4,9 @@ import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
 import getDataService from "../../../../../services/GetDataService";
 
-import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 const InsertarEDDEvalPregunta = ({
   isActiveEDDEvalPregunta,
   cambiarEstado,
@@ -60,7 +59,6 @@ const InsertarEDDEvalPregunta = ({
       // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
       competenciaValue = "0";
     }
-
     var data = {
       usuarioCreacion: userData.usuario,
       nomPregunta: nomPregunta,
@@ -71,10 +69,12 @@ const InsertarEDDEvalPregunta = ({
       preguntaObligatoria: preguntaObligatoria,
       isActive: true,
     };
+
     SendDataService(url, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
       actualizarEDDEvalPregunta(datos);
+      cambiarEstado(false)
     });
   }
 
@@ -135,15 +135,14 @@ const InsertarEDDEvalPregunta = ({
               />
             </div>
             <div>
-              <label htmlFor="input_nombreDelEDDEvalPregunta">Orden:</label>
+              <label htmlFor="input_ordenPregunta">Orden:</label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Escriba número"
                 type="number"
                 className="form-control"
-                name="input_nombreDelEDDEvalPregunta"
-                id="input_nombreDelEDDEvalPregunta"
-                maxLength="11"
+                name="input_ordenPregunta"
+                id="input_ordenPregunta"
                 onChange={({ target }) => setordenPregunta(target.value)}
                 required
               />

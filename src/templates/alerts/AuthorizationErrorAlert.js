@@ -13,6 +13,7 @@ export default function AuthorizationError() {
     allowOutsideClick: false,
     allowEscapeKey: false,
     allowEnterKey: false,
+    confirmButtonColor: "red",
     showConfirmButton: false,
     timerProgressBar: true,
   }).then((result) => {
