@@ -65,7 +65,6 @@ const editarEDDEvalPregunta = ({
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idEDDEvalPregunta, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-
       setResponseID(response);
       setnomPregunta(response[0].nomPregunta);
       setordenPregunta(response[0].ordenPregunta);
@@ -76,41 +75,67 @@ const editarEDDEvalPregunta = ({
     });
   }
 
+  function validaciones() {
+    if (nomPregunta.trim() === "") {
+      TopAlertsError("01", "El nombre de la pregunta no debe estar vacío");
+      return true;
+    } else if (ordenPregunta.trim() === "") {
+      TopAlertsError("02", "El orden de la pregunta no debe estar vacío");
+      return true;
+    } else if (tipoResp.trim() === "") {
+      TopAlertsError(
+        "03",
+        "El tipo de respuesta de la pregunta no debe estar vacío"
+      );
+      return true;
+    } else if (preguntaObligatoria.trim() === "") {
+      TopAlertsError(
+        "04",
+        "El campo pregunta obligatoria no debe no debe estar vacío"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    var url = "pages/editar/editarEddEvalPregunta.php";
-    var operationUrl = "editarEddEvalPregunta";
+    const errores = validaciones();
+    if (!errores) {
+      var url = "pages/editar/editarEddEvalPregunta.php";
+      var operationUrl = "editarEddEvalPregunta";
 
-    let competenciaValue = idEDDEvalCompetencia;
-    if (tipoResp === "T") {
-      // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
-      competenciaValue = "0";
+      let competenciaValue = idEDDEvalCompetencia;
+      if (tipoResp === "T") {
+        // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
+        competenciaValue = "0";
+      }
+
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idEDDEvalPregunta: idEDDEvalPregunta,
+        nomPregunta:
+          nomPregunta === "" ? responseID[0].nomPregunta : nomPregunta,
+        ordenPregunta:
+          ordenPregunta === "" ? responseID[0].ordenPregunta : ordenPregunta,
+        tipoResp: tipoResp === "" ? responseID[0].tipoResp : tipoResp,
+        preguntaObligatoria:
+          preguntaObligatoria === ""
+            ? responseID[0].preguntaObligatoria
+            : preguntaObligatoria,
+        idEDDEvalCompetencia: competenciaValue,
+        idEDDEvaluacion:
+          idEDDEvaluacion === ""
+            ? responseID[0].idEDDEvaluacion
+            : idEDDEvaluacion,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEDDEvalPregunta(datos);
+      });
     }
-
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idEDDEvalPregunta: idEDDEvalPregunta,
-      nomPregunta: nomPregunta === "" ? responseID[0].nomPregunta : nomPregunta,
-      ordenPregunta:
-        ordenPregunta === "" ? responseID[0].ordenPregunta : ordenPregunta,
-      tipoResp: tipoResp === "" ? responseID[0].tipoResp : tipoResp,
-      preguntaObligatoria:
-        preguntaObligatoria === ""
-          ? responseID[0].preguntaObligatoria
-          : preguntaObligatoria,
-      idEDDEvalCompetencia: competenciaValue,
-      idEDDEvaluacion:
-        idEDDEvaluacion === ""
-          ? responseID[0].idEDDEvaluacion
-          : idEDDEvaluacion,
-      isActive: true,
-    };
-
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEDDEvalPregunta(datos);
-    });
   }
 
   function actualizarEDDEvalPregunta(EDDEvalPregunta) {

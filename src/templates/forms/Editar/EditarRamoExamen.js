@@ -6,6 +6,7 @@ import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const EditarRamoExamen = ({
   isActiveEditRamoExamen,
@@ -46,7 +47,7 @@ const EditarRamoExamen = ({
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idRamoExamen, nombreTabla: nombreTabla};
+    var data = { idRegistro: idRamoExamen, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -56,34 +57,53 @@ const EditarRamoExamen = ({
     });
   }, [idRamoExamen]);
 
-  function SendData(e) {
-    e.preventDefault();
-    const url = "pages/editar/editarRamoExamen.php";
-    const operationUrl = "editarRamoExamen";
-
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idRamoExamen: idRamoExamen,
-      nomExamen: nomExamen === "" ? responseID[0].nomExamen : nomExamen,
-      fechaExamen: fechaExamen === "" ? responseID[0].fechaExamen : fechaExamen,
-      idRamo: idRamo === "" ? responseID[0].idRamo : idRamo,
-      isActive: true,
-
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      {actualizarRamoExamen(ramoExamen);console.log(response);};
-    });
-
-    function actualizarRamoExamen(ramoExamen) {
-      const nuevosRamoExamen = listRamoExamen.map((c) =>
-        c.idRamoExamen === ramoExamen.idRamoExamen ? ramoExamen : c
+  function validaciones() {
+    if (nomExamen.trim() === "") {
+      TopAlertsError("01", "El nombre del examen no puede estar vacío");
+      return true;
+    } else if (new Date(fechaExamen) < now) {
+      TopAlertsError(
+        "02",
+        "La fecha del examen no puede ser menor a la actual"
       );
-      setRamoExamen(nuevosRamoExamen);
+      return true;
+    } else if (idRamo < 0) {
+      TopAlertsError("02", "El nombre del ramo no puede estar vacío");
+      return true;
+    } else {
+      return false;
     }
   }
 
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/editarRamoExamen.php";
+      const operationUrl = "editarRamoExamen";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idRamoExamen: idRamoExamen,
+        nomExamen: nomExamen === "" ? responseID[0].nomExamen : nomExamen,
+        fechaExamen:
+          fechaExamen === "" ? responseID[0].fechaExamen : fechaExamen,
+        idRamo: idRamo === "" ? responseID[0].idRamo : idRamo,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...ramoExamen } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarRamoExamen(ramoExamen);
+        cambiarEstado(false);
+      });
+    }
+  }
+  function actualizarRamoExamen(ramoExamen) {
+    const nuevosRamoExamen = listRamoExamen.map((c) =>
+      c.idRamoExamen === ramoExamen.idRamoExamen ? ramoExamen : c
+    );
+    setRamoExamen(nuevosRamoExamen);
+  }
   useEffect(
     function () {
       if (idRamoExamen !== null) {
@@ -99,14 +119,14 @@ const EditarRamoExamen = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar Ramo Examen</Modal.Title>
+          <Modal.Title>Editar examen de ramo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
             <div>
               <label htmlFor="input_nombreDelRamoExamen">Nombre examen:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre del examen"
                 value={nomExamen || ""}
                 type="text"
@@ -122,7 +142,7 @@ const EditarRamoExamen = ({
             <div>
               <label htmlFor="input_fechaI">Fecha examen:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
                 value={fechaExamen || ""}
                 type="date"
@@ -133,7 +153,7 @@ const EditarRamoExamen = ({
                 required
               />
             </div>
-            
+
             <div>
               <label htmlFor="input_Pais">Nombre del ramo:</label>
               <select
@@ -152,7 +172,7 @@ const EditarRamoExamen = ({
                 ))}
               </select>
             </div>
-            
+
             <Button
               variant="secondary"
               type="submit"

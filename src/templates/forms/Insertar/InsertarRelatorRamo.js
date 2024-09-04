@@ -4,11 +4,15 @@ import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
 
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-const InsertarRelatorRamo = ({ isActiveRelatorRamo, cambiarEstado, relatorRamo }) => {
+const InsertarRelatorRamo = ({
+  isActiveRelatorRamo,
+  cambiarEstado,
+  relatorRamo,
+}) => {
   // ----------------------CONSTANTES----------------------------
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState("");
@@ -16,7 +20,6 @@ const InsertarRelatorRamo = ({ isActiveRelatorRamo, cambiarEstado, relatorRamo }
   const [idEmpleado, setidEmpleado] = useState("");
   const [idRamo, setidRamo] = useState("");
 
-  
   const [listEmpleado, setlistEmpleado] = useState([""]);
   const [listRamo, setlistRamo] = useState([""]);
 
@@ -33,7 +36,9 @@ const InsertarRelatorRamo = ({ isActiveRelatorRamo, cambiarEstado, relatorRamo }
   function obtenerEmpleado() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistEmpleado(response));
+    getDataService(url, operationUrl).then((response) =>
+      setlistEmpleado(response)
+    );
   }
 
   function obtenerRamo() {
@@ -42,25 +47,48 @@ const InsertarRelatorRamo = ({ isActiveRelatorRamo, cambiarEstado, relatorRamo }
     getDataService(url, operationUrl).then((response) => setlistRamo(response));
   }
 
+  function validaciones() {
+    if (idEmpleado < 0) {
+      TopAlertsError("01", "El nombre del relator no puede estar vacío");
+      return true;
+    } else if (idRamo < 0) {
+      TopAlertsError("02", "El nombre del ramo no debe estar vacío");
+      return true;
+    } else if (fechaFin) {
+      if (fechaIni > fechaFin) {
+        TopAlertsError(
+          "03",
+          "La fecha inicio no puede ser mayor a la fecha término"
+        );
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarRelatorRamo.php";
-    const operationUrl = "insertarRelatorRamo";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      fechaIni: fechaIni,
-      fechaFin: fechaFin,
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarRelatorRamo.php";
+      const operationUrl = "insertarRelatorRamo";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        fechaIni: fechaIni,
+        fechaFin: fechaFin,
 
-      idEmpleado: idEmpleado,
-      idRamo: idRamo,
+        idEmpleado: idEmpleado,
+        idRamo: idRamo,
 
-      isActive: true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarRelatorRamo(relatorRamo);console.log(data);
-    });
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...relatorRamo } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarRelatorRamo(relatorRamo);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarRelatorRamo(response) {
@@ -70,7 +98,7 @@ const InsertarRelatorRamo = ({ isActiveRelatorRamo, cambiarEstado, relatorRamo }
   useEffect(function () {
     obtenerEmpleado();
     obtenerRamo();
-}, []);
+  }, []);
 
   // ----------------------RENDER----------------------------
   return (
@@ -110,7 +138,7 @@ const InsertarRelatorRamo = ({ isActiveRelatorRamo, cambiarEstado, relatorRamo }
               />
             </div>
             <div>
-              <label htmlFor="input_Empleado">Empleado:</label>
+              <label htmlFor="input_Empleado">Relator:</label>
               <select
                 required
                 type="text"

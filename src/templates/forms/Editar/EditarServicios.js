@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
@@ -19,9 +19,7 @@ const EditarServicio = ({
   const [nomServicio, setnomServicio] = useState("");
   const [idCliente, setidCliente] = useState("");
 
-  
   const [listCliente, setlistCliente] = useState([""]);
-
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
@@ -39,13 +37,15 @@ const EditarServicio = ({
   function obtenerCliente() {
     const url = "pages/auxiliares/listadoClienteForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistCliente(response));
+    getDataService(url, operationUrl).then((response) =>
+      setlistCliente(response)
+    );
   }
 
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idServicio, nombreTabla: nombreTabla};
+    var data = { idRegistro: idServicio, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -54,32 +54,43 @@ const EditarServicio = ({
     });
   }, [idServicio]);
 
-  function SendData(e) {
-    e.preventDefault();
-    const url = "pages/editar/editarServicio.php";
-    const operationUrl = "editarServicio";
-
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idServicio: idServicio,
-      nomServicio: nomServicio === "" ? responseID[0].nomServicio : nomServicio,
-      idCliente: idCliente === "" ? responseID[0].idCliente : idCliente,
-
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      {actualizarServicio(servicio);console.log(response);};
-    });
-
-    function actualizarServicio(servicio) {
-      const nuevosServicio = listServicio.map((c) =>
-        c.idServicio === servicio.idServicio ? servicio : c
-      );
-      setServicio(nuevosServicio);
+  function validaciones() {
+    if (nomServicio.trim() === "") {
+      TopAlertsError("01", "El nombre del servicio no puede estar vacío");
+      return true;
+    } else if (idCliente < 0) {
+      TopAlertsError("02", "El cliente no debe estar vacío");
+      return true;
+    } else {
+      return false;
     }
   }
-
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/editarServicio.php";
+      const operationUrl = "editarServicio";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idServicio: idServicio,
+        nomServicio:
+          nomServicio === "" ? responseID[0].nomServicio : nomServicio,
+        idCliente: idCliente === "" ? responseID[0].idCliente : idCliente,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...servicio } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarServicio(servicio);
+      });
+    }
+  }
+  function actualizarServicio(servicio) {
+    const nuevosServicio = listServicio.map((c) =>
+      c.idServicio === servicio.idServicio ? servicio : c
+    );
+    setServicio(nuevosServicio);
+  }
   useEffect(
     function () {
       if (idServicio !== null) {
@@ -99,11 +110,11 @@ const EditarServicio = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_nombreDelservicio">Servicio:</label>
               <input
-               style={{ textTransform: "uppercase" }}
-               value={nomServicio || ""}
+                style={{ textTransform: "uppercase" }}
+                value={nomServicio || ""}
                 placeholder="Escriba nombre del servicio"
                 type="text"
                 className="form-control"
@@ -114,7 +125,7 @@ const EditarServicio = ({
                 required
               />
             </div>
-            
+
             <div>
               <label htmlFor="input_Pais">Cliente:</label>
               <select

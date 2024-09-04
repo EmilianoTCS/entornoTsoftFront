@@ -33,22 +33,39 @@ const InsertarReqCurso = ({ isActiveReqCurso, cambiarEstado, reqCurso }) => {
     );
   }
 
+  function validaciones() {
+    if (idCurso < 0) {
+      TopAlertsError("01", "El nombre del curso no puede estar vacío");
+      return true;
+    } else if (idCursoRequisito < 0) {
+      TopAlertsError("02", "El nombre del curso requisito no debe estar vacío");
+      return true;
+    } else if (idCurso === idCursoRequisito) {
+      TopAlertsError("03", "Un curso no puede ser su propio requisito");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarReqCurso.php";
-    const operationUrl = "insertarReqCurso";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      idCurso: idCurso,
-      idCursoRequisito: idCursoRequisito,
-      isActive: true,
-
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarReqCurso(reqCurso);console.log(response);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarReqCurso.php";
+      const operationUrl = "insertarReqCurso";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        idCurso: idCurso,
+        idCursoRequisito: idCursoRequisito,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...reqCurso } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarReqCurso(reqCurso);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarReqCurso(response) {

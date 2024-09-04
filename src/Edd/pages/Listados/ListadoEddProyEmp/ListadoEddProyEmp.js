@@ -104,6 +104,8 @@ export default function ListadoEDDProyEmp() {
         });
 
     SendDataService(url, operationUrl, data).then((data) => {
+      console.log(data);
+      
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setEDDProyEmp(datos.datos);
@@ -144,7 +146,7 @@ export default function ListadoEDDProyEmp() {
 
           <div id="selectPaginador">
             {userData.nomRol === "administrador" ? (
-              <Button id="btn" onClick={insertarEDDProyEmp}>
+              <Button id="btn" onClick={insertarEDDProyEmp} style={{maxWidth: "200px"}}>
                 Asociar proyecto - colaboradores
               </Button>
             ) : null}

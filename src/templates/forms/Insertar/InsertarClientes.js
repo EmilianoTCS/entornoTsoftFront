@@ -4,7 +4,6 @@ import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
 
-import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import TopAlertsError from "../../alerts/TopAlerts";
@@ -33,22 +32,37 @@ const InsertarClientes = ({ isActiveCliente, cambiarEstado, cliente }) => {
     getDataService(url, operationUrl).then((response) => setlistPais(response));
   }
 
+  function validaciones() {
+    if (nomCliente.trim() === "") {
+      TopAlertsError("01", "El nombre del cliente no puede estar vacío");
+      return true;
+    } else if (idPais < 0) {
+      TopAlertsError("02", "El país del cliente no debe estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarCliente.php";
-    const operationUrl = "insertarCliente";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomCliente: nomCliente,
-      direccionCliente: direccionCliente,
-      idPais: idPais,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
-      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarCliente(cliente);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarCliente.php";
+      const operationUrl = "insertarCliente";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomCliente: nomCliente,
+        direccionCliente: direccionCliente,
+        idPais: idPais,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarCliente(cliente);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarCliente(response) {

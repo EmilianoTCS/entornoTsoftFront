@@ -191,7 +191,7 @@ export default function ListadoCursoAlumnoSesion() {
               userData.nomRol === "people" ||
               userData.nomRol === "relator" ? (
                 <div className="form-group" id="btn2">
-                  <label htmlFor="input_CantidadR">Colaborador: </label>
+                  <label htmlFor="input_CantidadR">Alumno: </label>
                   <select
                     required
                     type="text"
@@ -236,7 +236,7 @@ export default function ListadoCursoAlumnoSesion() {
                 <tr>
                   <th>ID</th>
                   <th>Sesión</th>
-                  <th>Empleado Alumno</th>
+                  <th>Alumno</th>
                   <th>Fecha inicio</th>
                   <th>Fecha fin</th>
                   <th>Hora inicio</th>

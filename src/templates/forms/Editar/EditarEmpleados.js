@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
@@ -177,7 +177,6 @@ const EditarEmpleados = ({
             </div>
             <div>
               <label htmlFor="input_telefono">Teléfono (opcional): </label>
-
               <input
                 placeholder="Escriba el teléfono"
                 value={telefonoEmpleado || ""}

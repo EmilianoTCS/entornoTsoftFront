@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 import Select from "react-select";
+import { NumericFormat } from "react-number-format";
 
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import TopAlertsError from "../../alerts/TopAlerts";
-
 const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   // ----------------------CONSTANTES----------------------------
   const [nomEmpleado, setNomEmpleado] = useState("");
@@ -82,33 +81,77 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
     );
   }
 
+  function validaciones() {
+    if (nomEmpleado.trim() === "") {
+      TopAlertsError("01", "El nombre del colaborador no puede estar vacío");
+      return true;
+    } else if (correoEmpleado.trim() === "") {
+      TopAlertsError("02", "El correo del colaborador no puede estar vacío");
+      return true;
+    } else if (usuario.trim() === "") {
+      TopAlertsError("03", "El usuario del colaborador no puede estar vacío");
+      return true;
+    } else if (password.trim() === "") {
+      TopAlertsError(
+        "04",
+        "La contraseña del colaborador no puede estar vacía"
+      );
+      return true;
+    } else if (idPais < 0) {
+      TopAlertsError("05", "El país del colaborador no debe estar vacío");
+      return true;
+    } else if (idCargo < 0) {
+      TopAlertsError("06", "El cargo del colaborador no debe estar vacío");
+      return true;
+    } else if (idArea < 0) {
+      TopAlertsError("07", "El área del colaborador no debe estar vacío");
+      return true;
+    } else if (tipoUsuario.trim() === "") {
+      TopAlertsError("08", "El tipo de usuario no debe estar vacío");
+      return true;
+    } else if (idRolUsuario < 0) {
+      TopAlertsError("09", "El rol del colaborador no debe estar vacío");
+      return true;
+    } else if (idCliente < 0) {
+      TopAlertsError("09", "El cliente del colaborador no debe estar vacío");
+      return true;
+    } else if (valorHH <= 0) {
+      TopAlertsError("09", "El valor HH del colaborador debe ser mayor a cero");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarEmpleado.php";
-    const operationUrl = "insertarEmpleado";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomEmpleado: nomEmpleado,
-      correoEmpleado: correoEmpleado,
-      idPais: idPais,
-      idCargo: idCargo,
-      idArea: idArea,
-      idCliente: idCliente,
-      valorHH: valorHH,
-      usuario: usuario,
-      password: password,
-      tipoUsuario: tipoUsuario,
-      nomRol: nomRol,
-      telefonoEmpleado: telefonoEmpleado,
-      idSubsistema: idSubsistema,
-    };
-    // console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts("successCreated");
-      const {OUT_CODRESULT, OUT_MJERESULT} = response[0]
-      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT)
-      actualizarEmpleados(empleado);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarEmpleado.php";
+      const operationUrl = "insertarEmpleado";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomEmpleado: nomEmpleado,
+        correoEmpleado: correoEmpleado,
+        idPais: idPais,
+        idCargo: idCargo,
+        idArea: idArea,
+        idCliente: idCliente,
+        valorHH: valorHH,
+        usuario: usuario,
+        password: password,
+        tipoUsuario: tipoUsuario,
+        nomRol: nomRol,
+        telefonoEmpleado: telefonoEmpleado,
+        idSubsistema: idSubsistema,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEmpleados(empleado);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarEmpleados(response) {
@@ -135,7 +178,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
         size="md"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Crear Colaborador</Modal.Title>
+          <Modal.Title>Insertar Colaborador</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
@@ -334,16 +377,22 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
 
               <div>
                 <label htmlFor="input_Usuario">Valor HH:</label>
-                <input
-                  style={{ textTransform: "uppercase" }}
+
+                <NumericFormat
                   placeholder="Escriba el valor hora del colaborador"
-                  type="text"
                   className="form-control"
                   name="input_valorHH"
                   id="input_valorHH"
-                  maxLength="30"
-                  onChange={({ target }) => setValorHH(target.value)}
+                  thousandSeparator={"."}
+                  prefix={"$"}
+                  onValueChange={(values) => {
+                    const { value } = values;
+                    setValorHH(parseFloat(value));
+                  }}
+                  decimalSeparator=","
                   required
+                  decimalScale={2}
+                  fixedDecimalScale={true}
                 />
               </div>
 

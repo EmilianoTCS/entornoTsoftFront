@@ -288,32 +288,7 @@ export default function FormularioEvaluacionExterno() {
                           <td>
                             <div className="form-group">
                               <label htmlFor="evaluado">Seleccione el evaluado: </label>
-                              <select
-                                required
-                                className="form-control"
-                                name="evaluado"
-                                id="evaluado"
-                                placeholder="Seleccione el evaluado"
-
-
-                                onChange={({ target }) => {
-                                  let EDDEvaluado = target.value;
-                                  setidEDDEvaluado(EDDEvaluado); // Actualiza el estado con el idEDDEvaluado seleccionado
-                                  guardaRespEval(idEDDEvaluado, {  // Envía el idEDDEvaluado como target
-                                    idEDDEvalProyEmp: EDDEvaluado,
-
-                                  });
-                                }}
-                              >
-                                <option hidden value="">
-                                  Desplegar lista
-                                </option>
-                                {listEDDEvaluado.map((valor) => (
-                                  <option key={valor.idEDDProyEmpEvaluado} value={valor.idEDDEvalProyEmp}>
-                                    {valor.nomEvaluado}
-                                  </option>
-                                ))}
-                              </select>
+                              c
                             </div>
                           </td>
                         </tr>

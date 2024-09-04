@@ -9,11 +9,11 @@ import Paginador from "../../../templates/Paginador/Paginador";
 import "../../../Edd/pages/Listados/TablasStyles.css";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
-import { MdAccessTimeFilled } from "react-icons/md";
+import { MdAccessTimeFilled, MdCalendarMonth } from "react-icons/md";
 import { FaLink } from "react-icons/fa";
-
 import InsertarAcop from "../../forms/insertar/InsertarAcop";
 import EditarAcop from "../../forms/editar/EditarAcop";
+import EditarMesAcop from "../../forms/editar/EditarMesAcop";
 
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
@@ -35,6 +35,7 @@ export default function IHH_ListadoAcop() {
     insertarAcop: false,
   });
 
+  const [isActiveMesesAcop, setIsActiveMesesAcop] = useState(false);
   const [Registro, setRegistro] = useState(0);
 
   const [mainList, setMainList] = useState({
@@ -54,6 +55,20 @@ export default function IHH_ListadoAcop() {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setMainList({ acops: datos.datos });
+    });
+  };
+
+  const obtenerMesesAcop = (idAcop) => {
+    var url = "pages/auxiliares/ihh_listadoMesesAcop.php";
+    var operationUrl = "listados";
+    var data = {
+      idAcop: idAcop,
+    };
+    SendDataService(url, operationUrl, data).then((response) => {      
+      if (response) {
+        setDatosMesesAcop(response);
+        setIsActiveMesesAcop(true);
+      }
     });
   };
 
@@ -133,7 +148,7 @@ export default function IHH_ListadoAcop() {
         );
         const { OUT_CODRESULT, OUT_MJERESULT } = desactivarResponse[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        obtenerDatos()
+        obtenerDatos();
       }
     }
   }
@@ -147,13 +162,14 @@ export default function IHH_ListadoAcop() {
 
   return userData.statusConected || userData !== null ? (
     <>
-      {/* {isActiveFormularioPresupuesto ? (
+     {isActiveMesesAcop ? (
         <EditarMesAcop
-          cambiarEstado={setisActiveFormularioPresupuesto}
+          cambiarEstado={setIsActiveMesesAcop}
           mesesAcop={datosMesesAcop}
-          isActiveFormulario={isActiveFormularioPresupuesto}
+          isActiveFormulario={isActiveMesesAcop}
         />
-      ) : null} */}
+      ) : null}
+
       <Header></Header>
       <br></br>
       <br></br>
@@ -217,25 +233,27 @@ export default function IHH_ListadoAcop() {
             <thead>
               <tr>
                 <th>Nombre ACOP</th>
+                <th>Número ACOP</th>
                 <th>Fecha Inicio</th>
                 <th>Fecha Fin</th>
                 <th>Valor USD</th>
-                <th>Presupuesto Total (USD)</th>
-                <th>Presupuesto Total (CLP)</th>
+                <th>Presup Total (USD)</th>
+                <th>Presup Total (CLP)</th>
                 <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>
               {mainList.acops.map((item) => (
                 <tr key={item.idAcop}>
-                  <td>{item.nomAcop}</td>
-                  <td>{item.fechaIni}</td>
+                  <td style={{ maxWidth: "350px" }}>{item.nomAcop}</td>
+                  <td style={{ width: "80px" }}>{item.numAcop}</td>
+                  <td style={{ width: "110px" }}>{item.fechaIni}</td>
                   {item.fechaFin === null ? (
                     <td>INDEFINIDA </td>
                   ) : (
-                    <td> {item.fechaFin} </td>
+                    <td style={{ width: "110px" }}> {item.fechaFin} </td>
                   )}
-                  <td>
+                  <td style={{ width: "80px" }}>
                     {parseFloat(item.valorUSD).toLocaleString("es-CL", {
                       style: "currency",
                       currency: "CLP",
@@ -243,7 +261,7 @@ export default function IHH_ListadoAcop() {
                       minimumFractionDigits: 2,
                     })}
                   </td>
-                  <td>
+                  <td style={{ width: "120px" }}>
                     {parseFloat(item.presupuestoTotal).toLocaleString("es-CL", {
                       style: "currency",
                       currency: "CLP",
@@ -251,7 +269,7 @@ export default function IHH_ListadoAcop() {
                       minimumFractionDigits: 2,
                     })}
                   </td>
-                  <td>
+                  <td style={{ width: "130px" }}>
                     {parseFloat(item.presupuestoTotalPesos).toLocaleString(
                       "es-CL",
                       {
@@ -269,6 +287,13 @@ export default function IHH_ListadoAcop() {
                       onClick={() => activarFormulario(item, "editar")}
                     >
                       <RiEditBoxFill id="icons" />
+                    </button>
+                    <button
+                      data-title="Editar meses acop"
+                      id="OperationBtns"
+                      onClick={() => obtenerMesesAcop(item.idAcop)}
+                    >
+                      <MdCalendarMonth id="icons" />
                     </button>
 
                     <Link to={`/ihh/listado_acop_proy/0/${item.idAcop}`}>

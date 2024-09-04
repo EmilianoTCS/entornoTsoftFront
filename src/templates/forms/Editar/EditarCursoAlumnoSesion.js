@@ -6,7 +6,7 @@ import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
-
+import TopAlertsError from "../../alerts/TopAlerts";
 const EditarCursoAlumnoSesion = ({
   isActiveEditCursoAlumnoSesion,
   cambiarEstado,
@@ -29,7 +29,6 @@ const EditarCursoAlumnoSesion = ({
 
   const [listSesion, setlistSesion] = useState([""]);
   const [listCursoAlumno, setlistCursoAlumno] = useState([""]);
-
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
@@ -54,18 +53,22 @@ const EditarCursoAlumnoSesion = ({
   function obtenerSesion() {
     const url = "pages/auxiliares/listadoSesionForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistSesion(response));
+    getDataService(url, operationUrl).then((response) =>
+      setlistSesion(response)
+    );
   }
   function obtenerCursoAlumno() {
     const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistCursoAlumno(response));
+    getDataService(url, operationUrl).then((response) =>
+      setlistCursoAlumno(response)
+    );
   }
 
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idCursoAlumnoSesion, nombreTabla: nombreTabla};
+    var data = { idRegistro: idCursoAlumnoSesion, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -77,45 +80,79 @@ const EditarCursoAlumnoSesion = ({
       setparticipacion(response[0].participacion);
       setidCursoAlumno(response[0].idCursoAlumno);
       setidSesion(response[0].idSesion);
-
     });
   }, [idCursoAlumnoSesion]);
 
-  function SendData(e) {
-    // e.preventDefault();
-    const url = "pages/editar/editarCursoAlumnoSesion.php";
-    const operationUrl = "editarCursoAlumnoSesion";
-
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idCursoAlumnoSesion: idCursoAlumnoSesion,
-
-      fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
-      fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
-      horaFin: horaFin === "" ? responseID[0].horaFin : horaFin,
-      horaIni: horaIni === "" ? responseID[0].horaIni : horaIni,
-
-      asistencia: asistencia === "" ? responseID[0].asistencia : asistencia,
-      participacion: participacion === "" ? responseID[0].participacion : participacion,
-      idCursoAlumno: idCursoAlumno === "" ? responseID[0].idCursoAlumno : idCursoAlumno,
-      idSesion: idSesion === "" ? responseID[0].idSesion : idSesion,
-      isActive:true,
-
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      {actualizarCursoAlumnoSesion(cursoAlumnoSesion);console.log(data);};
-    });
-
-    function actualizarCursoAlumnoSesion(cursoAlumnoSesion) {
-      const nuevosCursoAlumnoSesion = listCursoAlumnoSesion.map((c) =>
-        c.idCursoAlumnoSesion === cursoAlumnoSesion.idCursoAlumnoSesion ? cursoAlumnoSesion : c
+  function validaciones() {
+    if (new Date(fechaIni) > new Date(fechaFin)) {
+      TopAlertsError(
+        "01",
+        "La fecha de inicio no puede ser mayor a la fecha de término"
       );
-      setCursoAlumnoSesion(nuevosCursoAlumnoSesion);
+      return true;
+    } else if (horaIni > horaFin) {
+      TopAlertsError(
+        "02",
+        "La hora de inicio no puede ser mayor a la hora de término"
+      );
+      return true;
+    } else if (asistencia < 0) {
+      TopAlertsError("02", "El % de asistencia no puede ser menor a cero");
+      return true;
+    } else if (participacion < 0 === "") {
+      TopAlertsError("03", "El % de participacion no puede ser mejor a cero");
+      return true;
+    } else if (idSesion <= 0) {
+      TopAlertsError("04", "La sesión no puede estar vacía");
+      return true;
+    } else if (idCursoAlumno <= 0) {
+      TopAlertsError("05", "La relación curso - alumno no puede estar vacía");
+      return true;
+    } else {
+      return false;
     }
   }
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/editarCursoAlumnoSesion.php";
+      const operationUrl = "editarCursoAlumnoSesion";
 
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idCursoAlumnoSesion: idCursoAlumnoSesion,
+
+        fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
+        fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
+        horaFin: horaFin === "" ? responseID[0].horaFin : horaFin,
+        horaIni: horaIni === "" ? responseID[0].horaIni : horaIni,
+
+        asistencia: asistencia === "" ? responseID[0].asistencia : asistencia,
+        participacion:
+          participacion === "" ? responseID[0].participacion : participacion,
+        idCursoAlumno:
+          idCursoAlumno === "" ? responseID[0].idCursoAlumno : idCursoAlumno,
+        idSesion: idSesion === "" ? responseID[0].idSesion : idSesion,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...cursoAlumnoSesion } =
+          response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarCursoAlumnoSesion(cursoAlumnoSesion);
+        cambiarEstado(false);
+      });
+    }
+  }
+  function actualizarCursoAlumnoSesion(cursoAlumnoSesion) {
+    const nuevosCursoAlumnoSesion = listCursoAlumnoSesion.map((c) =>
+      c.idCursoAlumnoSesion === cursoAlumnoSesion.idCursoAlumnoSesion
+        ? cursoAlumnoSesion
+        : c
+    );
+    setCursoAlumnoSesion(nuevosCursoAlumnoSesion);
+  }
   useEffect(
     function () {
       if (idCursoAlumnoSesion !== null) {
@@ -132,11 +169,11 @@ const EditarCursoAlumnoSesion = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar Curso Alumno Sesion</Modal.Title>
+          <Modal.Title>Editar Curso Alumno Sesión</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_fechaI">Fecha inicio:</label>
               <input
                 style={{ textTransform: "uppercase" }}
@@ -177,7 +214,8 @@ const EditarCursoAlumnoSesion = ({
                 onChange={({ target }) => sethoraInicio(target.value)}
                 required
               />
-            </div><div>
+            </div>
+            <div>
               <label htmlFor="input_horaF">Hora fin:</label>
               <input
                 style={{ textTransform: "uppercase" }}
@@ -203,7 +241,6 @@ const EditarCursoAlumnoSesion = ({
                 id="input_PorcA"
                 maxLength="11"
                 onChange={({ target }) => setasistencia(target.value)}
-                
               />
             </div>
             <div>
@@ -218,11 +255,10 @@ const EditarCursoAlumnoSesion = ({
                 id="input_PorcP"
                 maxLength="11"
                 onChange={({ target }) => setparticipacion(target.value)}
-                
               />
             </div>
             <div>
-              <label htmlFor="input_Pais">Sesion:</label>
+              <label htmlFor="input_Pais">Sesión:</label>
               <select
                 required
                 type="text"
@@ -249,7 +285,9 @@ const EditarCursoAlumnoSesion = ({
               >
                 {listCursoAlumno.map((valor) => (
                   <option
-                    selected={valor.idCursoAlumno === idCursoAlumno ? "selected" : ""}
+                    selected={
+                      valor.idCursoAlumno === idCursoAlumno ? "selected" : ""
+                    }
                     value={valor.idCursoAlumno}
                   >
                     {valor.idCursoAlumno}

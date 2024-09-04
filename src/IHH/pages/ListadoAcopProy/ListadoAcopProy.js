@@ -84,6 +84,7 @@ export default function IHH_ListadoAcopProy() {
       num_boton: 1,
       cantidadPorPagina: 99999999999999,
       idServicio: 0,
+      idProyecto: 0
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;

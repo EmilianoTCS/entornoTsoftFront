@@ -54,22 +54,39 @@ const InsertarEDDEvalRespPreg = ({
     });
   }
 
+  function validaciones() {
+    if (nomRespPreg.trim() === "") {
+      TopAlertsError("01", "La respuesta no debe estar vacía");
+      return true;
+    } else if (ordenRespPreg.trim() === "") {
+      TopAlertsError("02", "El orden de la respuesta no debe estar vacío");
+      return true;
+    } else if (idEDDEvalPregunta.trim() === "") {
+      TopAlertsError("03", "La pregunta no debe estar vacía");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarEddEvalRespPreg.php";
-    const operationUrl = "insertarEddEvalRespPreg";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomRespPreg: nomRespPreg,
-      ordenRespPreg: ordenRespPreg,
-      idEDDEvalPregunta: idEDDEvalPregunta,
-      isActive: true,
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEDDEvalRespPreg(datos);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarEddEvalRespPreg.php";
+      const operationUrl = "insertarEddEvalRespPreg";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomRespPreg: nomRespPreg,
+        ordenRespPreg: ordenRespPreg,
+        idEDDEvalPregunta: idEDDEvalPregunta,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEDDEvalRespPreg(datos);
+      });
+    }
   }
 
   function actualizarEDDEvalRespPreg(response) {

@@ -7,6 +7,7 @@ import getDataService from "../../../services/GetDataService";
 import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const InsertarNotaExamen = ({
   isActiveNotaExamen,
@@ -19,7 +20,7 @@ const InsertarNotaExamen = ({
 
   const [idCursoAlumno, setidCursoAlumno] = useState("");
   const [idRamoExamen, setidRamoExamen] = useState("");
-  
+
   const [listRamoExamen, setlistRamoExamen] = useState([""]);
   const [listCursoAlumno, setlistCursoAlumno] = useState([""]);
 
@@ -37,7 +38,7 @@ const InsertarNotaExamen = ({
     const url = "pages/auxiliares/listadoRamoExamenForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistRamoExamen(response)
+      setlistRamoExamen(response)
     );
   }
 
@@ -45,27 +46,52 @@ const InsertarNotaExamen = ({
     const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistCursoAlumno(response)
+      setlistCursoAlumno(response)
     );
+  }
+
+  function validaciones() {
+    if (notaExamen < 0 || notaExamen > 10) {
+      TopAlertsError(
+        "01",
+        "La nota del examen debe ser mayor a cero y menor a diez"
+      );
+      return true;
+    } else if (apruebaExamen.trim() === "") {
+      TopAlertsError("02", "Indique si el colaborador está aprobado o no");
+      return true;
+    } else if (idRamoExamen < 0) {
+      TopAlertsError("03", "El nombre del examen no puede estar vacío");
+      return true;
+    } else if (idCursoAlumno < 0) {
+      TopAlertsError("04", "La relación curso alumno no debe estar vacía");
+      return true;
+    } else {
+      return false;
+    }
   }
 
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarNotaExamen.php";
-    const operationUrl = "insertarNotaExamen";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      notaExamen: notaExamen,
-      apruebaExamen: apruebaExamen,
-      idCursoAlumno: idCursoAlumno,
-      idRamoExamen: idRamoExamen,
-      isActive: true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarNotaExamen(notaExamen);    console.log(response);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarNotaExamen.php";
+      const operationUrl = "insertarNotaExamen";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        notaExamen: notaExamen,
+        apruebaExamen: apruebaExamen,
+        idCursoAlumno: idCursoAlumno,
+        idRamoExamen: idRamoExamen,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...notaExamen } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarNotaExamen(notaExamen);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarNotaExamen(response) {
@@ -150,11 +176,12 @@ const InsertarNotaExamen = ({
                   Desplegar lista
                 </option>
                 {listCursoAlumno.map((valor) => (
-                  <option value={valor.idCursoAlumno}>{valor.nomCursoAlumno}</option>
+                  <option value={valor.idCursoAlumno}>
+                    {valor.nomCursoAlumno}
+                  </option>
                 ))}
               </select>
             </div>
-
 
             <Button
               variant="secondary"

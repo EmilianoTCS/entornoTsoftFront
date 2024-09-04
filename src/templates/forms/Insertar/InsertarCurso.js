@@ -1,10 +1,8 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
-import getDataService from "../../../services/GetDataService";
-
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -25,46 +23,71 @@ const InsertarCurso = ({ isActiveCurso, cambiarEstado, curso }) => {
   const handleClose = () => cambiarEstado(false);
 
   // ----------------------FUNCIONES----------------------------
-
+  function validaciones() {
+    if (codCurso.trim() === "") {
+      TopAlertsError("01", "El código del curso no debe estar vacío");
+      return true;
+    } else if (nomCurso.trim() === "") {
+      TopAlertsError("02", "El nombre del curso no debe estar vacío");
+      return true;
+    } else if (tipoHH <= 0) {
+      TopAlertsError("03", "El tipo de HH mayor a cero");
+      return true;
+    } else if (duracionCursoHH <= 0) {
+      TopAlertsError("04", "La duración del curso debe ser mayor a cero");
+      return true;
+    } else if (cantSesionesCurso <= 0) {
+      TopAlertsError(
+        "05",
+        "La cantidad de sesiones del curso debe ser mayor a cero"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarCurso.php";
-    const operationUrl = "insertarCurso";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      codCurso: codCurso,
-      nomCurso: nomCurso,
-      tipoHH: tipoHH,
-      duracionCursoHH: duracionCursoHH,
-      cantSesionesCurso: cantSesionesCurso,
-      isActive:true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarCurso(curso);console.log(response);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarCurso.php";
+      const operationUrl = "insertarCurso";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        codCurso: codCurso,
+        nomCurso: nomCurso,
+        tipoHH: tipoHH,
+        duracionCursoHH: duracionCursoHH,
+        cantSesionesCurso: cantSesionesCurso,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarCurso(curso);
+        cambiarEstado(false)
+      });
+    }
   }
 
   function actualizarCurso(response) {
     listCurso.push(response);
   }
 
-
   // ----------------------RENDER----------------------------
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear Curso</Modal.Title>
+          <Modal.Title>Insertar curso</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
-              <label htmlFor="input_nombreDelCodigo">Código:</label>
+            <div>
+              <label htmlFor="input_nombreDelCodigo">Código del curso:</label>
               <input
                 style={{ textTransform: "uppercase" }}
-                placeholder="Escriba el código"
+                placeholder="Escriba el código del curso"
                 type="text"
                 className="form-control"
                 name="input_nombreDelCodigo"
@@ -75,7 +98,7 @@ const InsertarCurso = ({ isActiveCurso, cambiarEstado, curso }) => {
               />
             </div>
             <div>
-              <label htmlFor="input_nombreDelCurso">Nombre:</label>
+              <label htmlFor="input_nombreDelCurso">Nombre del curso:</label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre del curso"
@@ -83,13 +106,13 @@ const InsertarCurso = ({ isActiveCurso, cambiarEstado, curso }) => {
                 className="form-control"
                 name="input_nombreDelCurso"
                 id="input_nombreDelCurso"
-                maxLength="50"
+                maxLength="200"
                 onChange={({ target }) => setnomCurso(target.value)}
                 required
               />
             </div>
             <div>
-            <label htmlFor="input_tipoDelRamohh">Tipo ramo HH:</label>
+              <label htmlFor="input_tipoDelRamohh">Tipo ramo HH:</label>
               <select
                 style={{ textTransform: "uppercase" }}
                 placeholder="Escriba tipo del ramo HH"

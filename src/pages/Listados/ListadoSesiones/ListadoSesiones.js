@@ -18,7 +18,6 @@ import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
 import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
-
 export default function ListadoSesion() {
   const [, params] = useRoute("/listadoSesiones/:params");
   const [Sesion, setSesion] = useState([""]);
@@ -114,16 +113,16 @@ export default function ListadoSesion() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
-            <h1 id="TitlesPages">Listado de Sesiones</h1>
+            <h1 id="TitlesPages">Listado de sesiones</h1>
             <h6 style={{ color: "gray" }}>
-              Factory Devops {"->"} Listado de Sesiones
+              Factory Devops {"->"} Listado de sesiones
             </h6>
             <br></br>
 
             <div id="selectPaginador">
               {userData.nomRol === "administrador" ? (
                 <Button id="btn" onClick={insertarSesion}>
-                  Crear Sesión
+                  Insertar sesión
                 </Button>
               ) : null}
 
@@ -212,7 +211,7 @@ export default function ListadoSesion() {
             <Table id="mainTable" hover responsive>
               <thead>
                 <tr>
-                  <th>ID</th>
+                  {/* <th>ID</th> */}
                   <th>N° Sesión</th>
                   <th>Sesión</th>
                   <th>Tipo</th>
@@ -227,7 +226,7 @@ export default function ListadoSesion() {
               <tbody>
                 {Sesion.map((Sesion) => (
                   <tr key={Sesion.idSesion}>
-                    <td>{Sesion.idSesion}</td>
+                    {/* <td>{Sesion.idSesion}</td> */}
                     <td>{Sesion.nroSesion}</td>
                     <td>{Sesion.nomSesion}</td>
                     <td>{Sesion.tipoSesion}</td>

@@ -7,12 +7,13 @@
     width: 600px;
   }
   .div_list_mes_acop_info_acop{
+    justify-content: center;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
     margin: 20px auto;
     padding: 0 20px 0 20px;
     border-radius: 10px;
-    width: 850px;
+    width: 1200px;
     font-size: 15pt;
+    gap: 30px
   }

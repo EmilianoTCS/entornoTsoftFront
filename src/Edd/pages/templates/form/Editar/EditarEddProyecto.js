@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
 import Select from "react-select";
-
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 const EditarEDDProyecto = ({
   isActiveEditEDDProyecto,
   cambiarEstado,
@@ -77,34 +77,59 @@ const EditarEDDProyecto = ({
     });
   }, [idEDDProyecto]);
 
+  function validaciones() {
+    if (nomProyecto.trim() === "") {
+      TopAlertsError("01", "El nombre del proyecto no debe estar vacío");
+      return true;
+    } else if (new Date(fechaIni) > new Date(fechaFin)) {
+      TopAlertsError(
+        "02",
+        "La fecha inicio no puede ser mayor a la fecha término"
+      );
+      return true;
+    } else if (tipoProyecto.trim() === "") {
+      TopAlertsError("03", "El tipo de proyecto no debe estar vacío");
+      return true;
+    } else if (idServicio < 0) {
+      TopAlertsError("04", "El servicio del proyecto no puede estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function SendData(e) {
     e.preventDefault();
-    var url = "pages/editar/editarEddProyecto.php";
-    var operationUrl = "editarEddProyecto";
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idEDDProyecto: idEDDProyecto,
-      nomProyecto: nomProyecto === "" ? responseID[0].nomProyecto : nomProyecto,
-      fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
-      fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
-      tipoProyecto:
-        tipoProyecto === "" ? responseID[0].tipoProyecto : tipoProyecto,
-      idServicio: idServicio === "" ? responseID[0].idServicio : idServicio,
-      isActive: true,
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEDDProyecto(datos);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      var url = "pages/editar/editarEddProyecto.php";
+      var operationUrl = "editarEddProyecto";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idEDDProyecto: idEDDProyecto,
+        nomProyecto:
+          nomProyecto === "" ? responseID[0].nomProyecto : nomProyecto,
+        fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
+        fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
+        tipoProyecto:
+          tipoProyecto === "" ? responseID[0].tipoProyecto : tipoProyecto,
+        idServicio: idServicio === "" ? responseID[0].idServicio : idServicio,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEDDProyecto(datos);
+      });
 
-    function actualizarEDDProyecto(EDDProyecto) {
-      const nuevosEDDProyecto = listEDDProyecto.map((c) =>
-        c.idEDDProyecto === EDDProyecto.idEDDProyecto ? EDDProyecto : c
-      );
-      setEDDProyecto(nuevosEDDProyecto);
+      function actualizarEDDProyecto(EDDProyecto) {
+        const nuevosEDDProyecto = listEDDProyecto.map((c) =>
+          c.idEDDProyecto === EDDProyecto.idEDDProyecto ? EDDProyecto : c
+        );
+        setEDDProyecto(nuevosEDDProyecto);
+      }
+      cambiarEstado(false);
     }
-    cambiarEstado(false);
   }
 
   useEffect(

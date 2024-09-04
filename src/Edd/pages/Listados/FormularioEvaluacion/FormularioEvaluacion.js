@@ -39,7 +39,6 @@ export default function FormularioEvaluacion() {
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
       cicloEvaluacion:cicloEvaluacion,
     };
-    console.log("getdata", data);
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);
       setLoadedData(true); //Cambio el estado del booleano

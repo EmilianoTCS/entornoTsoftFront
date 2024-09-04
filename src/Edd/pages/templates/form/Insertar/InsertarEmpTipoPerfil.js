@@ -44,22 +44,35 @@ const InsertarEmpTipoPerfil = ({
       setlistTipoPerfil(response)
     );
   }
-
+  function validaciones() {
+    if (idEmpleado.trim() === "") {
+      TopAlertsError("01", "El colaborador no debe estar vacío");
+      return true;
+    } else if (idTipoPerfil.trim() === "") {
+      TopAlertsError("02", "El tipo de perfil no debe estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarEmpTipoPerfil.php";
-    const operationUrl = "insertarEmpTipoPerfil";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      idTipoPerfil: idTipoPerfil,
-      idEmpleado: idEmpleado,
-      isActive: true,
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEmpTipoPerfil(datos);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarEmpTipoPerfil.php";
+      const operationUrl = "insertarEmpTipoPerfil";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        idTipoPerfil: idTipoPerfil,
+        idEmpleado: idEmpleado,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEmpTipoPerfil(datos);
+      });
+    }
   }
 
   function actualizarEmpTipoPerfil(response) {
@@ -80,7 +93,7 @@ const InsertarEmpTipoPerfil = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div className="form-group">
+            <div className="form-group">
               <label htmlFor="input_Empleado">Empleado: </label>
               <select
                 required
@@ -120,7 +133,6 @@ const InsertarEmpTipoPerfil = ({
                 ))}
               </select>
             </div>
-            
 
             <Button
               variant="secondary"

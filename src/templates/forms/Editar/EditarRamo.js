@@ -6,7 +6,7 @@ import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
-
+import TopAlertsError from "../../alerts/TopAlerts";
 const EditarRamo = ({
   isActiveEditRamo,
   cambiarEstado,
@@ -40,9 +40,9 @@ const EditarRamo = ({
     setcodRamo(responseID[0].codRamo);
     setnomRamo(responseID[0].nomRamo);
     settipoRamo(responseID[0].tipoRamo);
-    settipoRamoHH(responseID[0].tipoRamoHH);    
+    settipoRamoHH(responseID[0].tipoRamoHH);
     setcantSesionesRamo(responseID[0].cantSesionesRamo);
-    setduracionRamoHH(responseID[0].duracionRamoHH)
+    setduracionRamoHH(responseID[0].duracionRamoHH);
     setidCurso(responseID[0].idCurso);
   };
   // ----------------------FUNCIONES----------------------------
@@ -66,46 +66,79 @@ const EditarRamo = ({
       settipoRamo(response[0].tipoRamo);
       settipoRamoHH(response[0].tipoRamoHH);
       setcantSesionesRamo(response[0].cantSesionesRamo);
-      setduracionRamoHH(response[0].duracionRamo)
+      setduracionRamoHH(response[0].duracionRamo);
       setidCurso(response[0].idCurso);
-      
     });
   }, [idRamo]);
 
-  function SendData(e) {
-    e.preventDefault();
-    const url = "pages/editar/editarRamo.php";
-    const operationUrl = "editarRamo";
-
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idRamo: idRamo,
-      codRamo: codRamo === "" ? responseID[0].codRamo : codRamo,
-      nomRamo: nomRamo === "" ? responseID[0].nomRamo : nomRamo,
-      tipoRamo: tipoRamo === "" ? responseID[0].tipoRamo : tipoRamo,
-      tipoRamoHH: tipoRamoHH === "" ? responseID[0].tipoRamoHH : tipoRamoHH,
-      duracionRamoHH: duracionRamoHH === "" ? responseID[0].duracionRamoHH : duracionRamoHH,
-      cantSesionesRamo:
-        cantSesionesRamo === ""
-          ? responseID[0].cantSesionesRamo
-          : cantSesionesRamo,
-      idCurso: idCurso,
-      isActive: true,
-    };
-console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      actualizarRamo(ramos);
-    });
-
-    function actualizarRamo(ramos) {
-      const nuevosRamos = listRamos.map((c) =>
-        c.idRamo === ramos.idRamo ? ramos : c
+  function validaciones() {
+    if (codRamo.trim() === "") {
+      TopAlertsError("01", "El código del ramo no debe estar vacío");
+      return true;
+    } else if (nomRamo.trim() === "") {
+      TopAlertsError("02", "El nombre del ramo no debe estar vacío");
+      return true;
+    } else if (tipoRamo.trim() === "") {
+      TopAlertsError("03", "El tipo de ramo no puede estar vacío");
+      return true;
+    } else if (tipoRamoHH.trim() === "") {
+      TopAlertsError("04", "El tipo de HH en el ramo no puede estar vacío");
+      return true;
+    } else if (duracionRamoHH <= 0) {
+      TopAlertsError("05", "La duración del ramo debe ser mayor a cero");
+      return true;
+    } else if (cantSesionesRamo <= 0) {
+      TopAlertsError(
+        "06",
+        "La cantidad de sesiones del ramo debe ser mayor a cero"
       );
-      setRamos(nuevosRamos);
+      return true;
+    } else if (idCurso <= 0) {
+      TopAlertsError("07", "El curso relacionado no puede estar vacío");
+      return true;
+    } else {
+      return false;
     }
   }
-  
+
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/editarRamo.php";
+      const operationUrl = "editarRamo";
+
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idRamo: idRamo,
+        codRamo: codRamo === "" ? responseID[0].codRamo : codRamo,
+        nomRamo: nomRamo === "" ? responseID[0].nomRamo : nomRamo,
+        tipoRamo: tipoRamo === "" ? responseID[0].tipoRamo : tipoRamo,
+        tipoRamoHH: tipoRamoHH === "" ? responseID[0].tipoRamoHH : tipoRamoHH,
+        duracionRamoHH:
+          duracionRamoHH === "" ? responseID[0].duracionRamoHH : duracionRamoHH,
+        cantSesionesRamo:
+          cantSesionesRamo === ""
+            ? responseID[0].cantSesionesRamo
+            : cantSesionesRamo,
+        idCurso: idCurso,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...ramos } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarRamo(ramos);
+        cambiarEstado(false);
+      });
+    }
+  }
+
+  function actualizarRamo(ramos) {
+    const nuevosRamos = listRamos.map((c) =>
+      c.idRamo === ramos.idRamo ? ramos : c
+    );
+    setRamos(nuevosRamos);
+  }
   useEffect(
     function () {
       if (idRamo !== null) {
@@ -121,12 +154,12 @@ console.log(data);
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar Ramo</Modal.Title>
+          <Modal.Title>Editar ramo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
             <div>
-              <label htmlFor="input_tipoDelRamo">Código:</label>
+              <label htmlFor="input_tipoDelRamo">Código del ramo:</label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre completo del Ramo"
@@ -174,7 +207,7 @@ console.log(data);
             </div>
 
             <div>
-            <label htmlFor="input_tipoDelRamohh">Tipo ramo HH:</label>
+              <label htmlFor="input_tipoDelRamohh">Tipo ramo HH:</label>
               <select
                 style={{ textTransform: "uppercase" }}
                 value={tipoRamoHH || ""}

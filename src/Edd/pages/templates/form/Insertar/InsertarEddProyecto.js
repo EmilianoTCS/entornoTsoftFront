@@ -9,7 +9,7 @@ import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import EditarPresupuestosMensuales from "../Editar/EditarPresupuestosMensuales";
-
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 const InsertarEDDProyecto = ({
   isActiveEDDProyecto,
   cambiarEstado,
@@ -20,7 +20,6 @@ const InsertarEDDProyecto = ({
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState(null);
   const [tipoProyecto, setTipoProyecto] = useState("");
-
   const [idServicio, setidServicio] = useState("");
 
   const [listServicio, setlistServicio] = useState([""]);
@@ -80,27 +79,55 @@ const InsertarEDDProyecto = ({
     });
   };
 
+  function validaciones() {
+    if (nomProyecto.trim() === "") {
+      TopAlertsError("01", "El nombre del proyecto no debe estar vacío");
+      return true;
+    } else if (new Date(fechaIni) > new Date(fechaFin)) {
+      TopAlertsError(
+        "02",
+        "La fecha inicio no puede ser mayor a la fecha término"
+      );
+      return true;
+    } else if (tipoProyecto.trim() === "") {
+      TopAlertsError("03", "El tipo de proyecto no debe estar vacío");
+      return true;
+    } else if (idServicio < 0) {
+      TopAlertsError("04", "El servicio del proyecto no puede estar vacío");
+      return true;
+    } else if (idAcops.trim() === "") {
+      TopAlertsError("05", "Debes seleccionar 1 o más ACOPS");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarEddProyecto.php";
-    const operationUrl = "insertarEddProyecto";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomProyecto: nomProyecto,
-      fechaIni: fechaIni,
-      fechaFin: fechaFin,
-      tipoProyecto: tipoProyecto,
-      idServicio: idServicio,
-      idAcops: idAcops,
-      isActive: true,
-    };
-    // console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      EDDProyecto.unshift(response[0]);
-      cambiarEstado(false);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarEddProyecto.php";
+      const operationUrl = "insertarEddProyecto";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomProyecto: nomProyecto,
+        fechaIni: fechaIni,
+        fechaFin: fechaFin,
+        tipoProyecto: tipoProyecto,
+        idServicio: idServicio,
+        idAcops: idAcops,
+        isActive: true,
+      };
+      // console.log(data);
+      SendDataService(url, operationUrl, data).then((response) => {
+        console.log(response);
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        EDDProyecto.unshift(response[0]);
+        cambiarEstado(false);
+      });
+    }
   }
 
   const handleSelect = (selected) => {
@@ -232,9 +259,10 @@ const InsertarEDDProyecto = ({
                 closeMenuOnSelect={false}
                 className="form-control"
                 isMulti
-                placeholder= "Desplegar listado"
+                placeholder="Desplegar listado"
                 options={opcionesAcops}
                 onChange={handleSelect}
+                required
               />
             </div>
 

@@ -45,21 +45,35 @@ const InsertarEmpSubsist = ({
     );
   }
 
+  function validaciones() {
+    if (idEmpleado.trim() === "") {
+      TopAlertsError("01", "El colaborador no debe estar vacío");
+      return true;
+    } else if (idSubsistema.trim() === "") {
+      TopAlertsError("02", "El subsistema no debe estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarEmpSubsist.php";
-    const operationUrl = "insertarEmpSubsist";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      idEmpleado: idEmpleado,
-      idSubsistema: idSubsistema,
-      isActive: true,
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEmpSubsist(datos);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarEmpSubsist.php";
+      const operationUrl = "insertarEmpSubsist";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        idEmpleado: idEmpleado,
+        idSubsistema: idSubsistema,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEmpSubsist(datos);
+      });
+    }
   }
 
   function actualizarEmpSubsist(response) {

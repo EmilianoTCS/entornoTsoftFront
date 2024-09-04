@@ -193,7 +193,7 @@ export default function ListadoCursoAlumno() {
               userData.nomRol === "people" ||
               userData.nomRol === "relator" ? (
                 <div className="form-group" id="btn2">
-                  <label htmlFor="input_CantidadR">Empleados: </label>
+                  <label htmlFor="input_CantidadR">Alumnos: </label>
                   <select
                     required
                     type="text"

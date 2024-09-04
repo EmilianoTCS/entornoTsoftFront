@@ -137,7 +137,7 @@ export default function ListadoNotaExamen() {
               {userData.nomRol === "administrador" ||
               userData.nomRol === "relator" ? (
                 <Button id="btn" onClick={insertarNotaExamen}>
-                  Crear Nota Examen
+                  Insertar Nota Examen
                 </Button>
               ) : null}
 

@@ -186,8 +186,8 @@ export default function IHH_ListadoMesesAcop() {
 
           {/* resumen acop */}
           <div className="div_list_mes_acop_info_acop">
-            <b>
-              Presupuesto total:&nbsp;
+            <div>
+              <b>Presupuesto operacional</b>:&nbsp;
               {parseFloat(
                 mainList.mesesAcops[0].presupuestoTotalUSD
               ).toLocaleString("es-CL", {
@@ -197,9 +197,9 @@ export default function IHH_ListadoMesesAcop() {
                 maximumFractionDigits: 2,
               })}{" "}
               &nbsp;(USD)
-            </b>
-            <b>
-              Presupuesto total:&nbsp;
+            </div>
+            <div>
+              <b>Presupuesto operacional</b>:&nbsp;
               {parseFloat(
                 mainList.mesesAcops[0].presupuestoTotalPesos
               ).toLocaleString("es-CL", {
@@ -209,14 +209,18 @@ export default function IHH_ListadoMesesAcop() {
                 maximumFractionDigits: 2,
               })}{" "}
               &nbsp;(CLP)
-            </b>
+            </div>
           </div>
 
           <div className="div_list_mes_acop_info_acop">
-            <b>Fecha Inicio: {mainList.mesesAcops[0].fechaIni}</b>
-            <b>Fecha Fin: {mainList.mesesAcops[0].fechaFin}</b>
-            <b>
-              Valor USD ACOP:&nbsp;
+            <div>
+              <b>Fecha Inicio </b>:&nbsp;{mainList.mesesAcops[0].fechaIni}
+            </div>
+            <div>
+              <b>Fecha Fin</b>:&nbsp;{mainList.mesesAcops[0].fechaFin}
+            </div>
+            <div>
+              <b>Valor USD ACOP</b>:&nbsp;
               {parseFloat(mainList.mesesAcops[0].valorUSD).toLocaleString(
                 "es-CL",
                 {
@@ -227,7 +231,10 @@ export default function IHH_ListadoMesesAcop() {
                 }
               )}
               &nbsp; (CLP)
-            </b>
+            </div>
+            <div>
+              <b>Fecha Valor USD</b>:&nbsp;{mainList.mesesAcops[0].fechaValorUSD}
+            </div>
           </div>
 
           <Table id="mainTable" hover responsive>
@@ -236,6 +243,8 @@ export default function IHH_ListadoMesesAcop() {
                 <th>Mes</th>
                 <th>Pres. Mensual (USD)</th>
                 <th>Pres. Mensual (CLP)</th>
+                <th>Pres. Mensual Misceláneos (USD)</th>
+                <th>Pres. Mensual Misceláneos (CLP)</th>
                 <th>Operaciones</th>
               </tr>
             </thead>
@@ -264,6 +273,26 @@ export default function IHH_ListadoMesesAcop() {
                         minimumFractionDigits: 2,
                       }
                     )}
+                  </td>
+                  <td className="td_num_right_text">
+                    {parseFloat(
+                      item.presupuestoMensualMiscelaneoUSD
+                    ).toLocaleString("es-CL", {
+                      style: "currency",
+                      currency: "CLP",
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="td_num_right_text">
+                    {parseFloat(
+                      item.presupuestoMensualMiscelaneoPesos
+                    ).toLocaleString("es-CL", {
+                      style: "currency",
+                      currency: "CLP",
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 2,
+                    })}
                   </td>
 
                   <td>

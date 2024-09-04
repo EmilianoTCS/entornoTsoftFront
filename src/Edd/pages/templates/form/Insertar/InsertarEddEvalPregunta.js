@@ -49,33 +49,58 @@ const InsertarEDDEvalPregunta = ({
     );
   }
 
+  function validaciones() {
+    if (nomPregunta.trim() === "") {
+      TopAlertsError("01", "El nombre de la pregunta no debe estar vacío");
+      return true;
+    } else if (ordenPregunta.trim() === "") {
+      TopAlertsError("02", "El orden de la pregunta no debe estar vacío");
+      return true;
+    } else if (tipoResp.trim() === "") {
+      TopAlertsError(
+        "03",
+        "El tipo de respuesta de la pregunta no debe estar vacío"
+      );
+      return true;
+    } else if (preguntaObligatoria.trim() === "") {
+      TopAlertsError(
+        "04",
+        "El campo pregunta obligatoria no debe no debe estar vacío"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarEddEvalPregunta.php";
-    const operationUrl = "insertarEddEvalPregunta";
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarEddEvalPregunta.php";
+      const operationUrl = "insertarEddEvalPregunta";
 
-    let competenciaValue = idEDDEvalCompetencia;
-    if (tipoResp === "T") {
-      // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
-      competenciaValue = "0";
+      let competenciaValue = idEDDEvalCompetencia;
+      if (tipoResp === "T") {
+        // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
+        competenciaValue = "0";
+      }
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomPregunta: nomPregunta,
+        ordenPregunta: ordenPregunta,
+        idEDDEvalCompetencia: competenciaValue,
+        idEDDEvaluacion: idEDDEvaluacion,
+        tipoResp: tipoResp,
+        preguntaObligatoria: preguntaObligatoria,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEDDEvalPregunta(datos);
+        cambiarEstado(false);
+      });
     }
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomPregunta: nomPregunta,
-      ordenPregunta: ordenPregunta,
-      idEDDEvalCompetencia: competenciaValue,
-      idEDDEvaluacion: idEDDEvaluacion,
-      tipoResp: tipoResp,
-      preguntaObligatoria: preguntaObligatoria,
-      isActive: true,
-    };
-
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEDDEvalPregunta(datos);
-      cambiarEstado(false)
-    });
   }
 
   function actualizarEDDEvalPregunta(response) {

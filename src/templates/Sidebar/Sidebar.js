@@ -303,7 +303,7 @@ export default function SideBar() {
                         <Link to="/listadoEddEvalProyEmp/0">
                           <button id="submenuSidebar">
                             <ImBook id="icons" />
-                            Evaluaciones a empleados
+                            Evaluaciones a colaboradores
                           </button>
                         </Link>
                       </li>

@@ -4,7 +4,7 @@ import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
 
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -38,30 +38,82 @@ const InsertarCursoAlumno = ({
 
   // ----------------------FUNCIONES----------------------------
 
+  function validaciones() {
+    if (idEmpleado < 0) {
+      TopAlertsError("01", "El nombre del alumno no puede estar vacío");
+      return true;
+    } else if (idCurso < 0) {
+      TopAlertsError("02", "El nombre del curso no puede estar vacío");
+      return true;
+    } else if (fechaIni > fechaFin) {
+      TopAlertsError(
+        "03",
+        "La fecha de inicio no puede ser mayor a la de término"
+      );
+      return true;
+    } else if (horaIni > horaFin) {
+      TopAlertsError(
+        "04",
+        "La hora de inicio no puede ser mayor a la de término"
+      );
+      return true;
+    } else if (porcAsistencia < 0 || porcAsistencia > 100) {
+      TopAlertsError(
+        "05",
+        "El % de asistencia debe ser mayor o igual a cero y menor o igual a 100"
+      );
+      return true;
+    } else if (porcParticipacion < 0 || porcParticipacion > 100) {
+      TopAlertsError(
+        "06",
+        "El % de participación debe ser mayor o igual a cero y menor o igual a 100"
+      );
+      return true;
+    } else if (porcAprobacion < 0 || porcAprobacion > 100) {
+      TopAlertsError(
+        "07",
+        "El % de aprobación debe ser mayor o igual a cero y menor o igual a 100"
+      );
+      return true;
+    } else if (estadoCurso < 0) {
+      TopAlertsError("08", "El estado del curso no puede estar vacío");
+      return true;
+    } else if (claseAprobada.trim() === "") {
+      TopAlertsError("09", "Indique si la clase está aprobada o no");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarCursoAlumno.php";
-    const operationUrl = "insertarCursoAlumno";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      idEmpleado: idEmpleado,
-      idCurso: idCurso,
-      fechaIni: fechaIni,
-      fechaFin: fechaFin,
-      horaIni: horaIni,
-      horaFin: horaFin,
-      porcAsistencia: porcAsistencia,
-      claseAprobada: claseAprobada,
-      porcParticipacion: porcParticipacion,
-      porcAprobacion: porcAprobacion,
-      estadoCurso: estadoCurso,
-      isActive: true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarCursoAlumno(CursoAlumno);console.log(response);;
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarCursoAlumno.php";
+      const operationUrl = "insertarCursoAlumno";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        idEmpleado: idEmpleado,
+        idCurso: idCurso,
+        fechaIni: fechaIni,
+        fechaFin: fechaFin,
+        horaIni: horaIni,
+        horaFin: horaFin,
+        porcAsistencia: porcAsistencia,
+        claseAprobada: claseAprobada,
+        porcParticipacion: porcParticipacion,
+        porcAprobacion: porcAprobacion,
+        estadoCurso: estadoCurso,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...CursoAlumno } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarCursoAlumno(CursoAlumno);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarCursoAlumno(response) {
@@ -71,7 +123,7 @@ const InsertarCursoAlumno = ({
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEmpleados(response)
+      setlistEmpleados(response)
     );
   }
   function obtenerCursos() {
@@ -91,11 +143,11 @@ const InsertarCursoAlumno = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear Curso Alumno</Modal.Title>
+          <Modal.Title>Insertar curso alumno</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_NomA">Nombre alumno:</label>
 
               <select
@@ -185,7 +237,7 @@ const InsertarCursoAlumno = ({
               />
             </div>
             <div>
-              <label htmlFor="input_PorcA">Porc Asistencia (Maxímo 100):</label>
+              <label htmlFor="input_PorcA">Porc Asistencia (Máximo 100):</label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Porcentaje Asistencia"
@@ -195,11 +247,12 @@ const InsertarCursoAlumno = ({
                 id="input_PorcA"
                 maxLength="3"
                 onChange={({ target }) => setporcAsistencia(target.value)}
-                
               />
             </div>
             <div>
-              <label htmlFor="input_PorcP">Porc Participación (Maxímo 100):</label>
+              <label htmlFor="input_PorcP">
+                Porc Participación (Máximo 100):
+              </label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Porcentaje participación"
@@ -209,11 +262,12 @@ const InsertarCursoAlumno = ({
                 id="input_PorcP"
                 maxLength="3"
                 onChange={({ target }) => setporcParticipacion(target.value)}
-                
               />
             </div>
             <div>
-              <label htmlFor="input_PorcAP">Porc Aprobación (Maxímo 100):</label>
+              <label htmlFor="input_PorcAP">
+                Porc Aprobación (Máximo 100):
+              </label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Porcentaje aprobación"
@@ -223,7 +277,6 @@ const InsertarCursoAlumno = ({
                 id="input_PorcAP"
                 maxLength="3"
                 onChange={({ target }) => setporcAprobacion(target.value)}
-                
               />
             </div>
             <div>
@@ -237,7 +290,6 @@ const InsertarCursoAlumno = ({
                 id="input_EstC"
                 maxLength="15"
                 onChange={({ target }) => setestadoCurso(target.value)}
-                
               >
                 <option hidden value="">
                   Desplegar lista
@@ -257,7 +309,6 @@ const InsertarCursoAlumno = ({
                 id="input_ClaseA"
                 maxLength="1"
                 onChange={({ target }) => setclaseAprobada(target.value)}
-                
               >
                 <option hidden value="">
                   Desplegar lista

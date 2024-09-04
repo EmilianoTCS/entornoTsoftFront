@@ -72,34 +72,50 @@ const EditarEDDProyEmp = ({
     });
   }, [idEDDProyEmp]);
 
-  function SendData(e) {
-    e.preventDefault();
-    var url = "pages/editar/editarEddProyEmp.php";
-    var operationUrl = "editarEddProyEmp";
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idEDDProyEmp: idEDDProyEmp,
-      cargoEnProy: cargoEnProy === "" ? responseID[0].cargoEnProy : cargoEnProy,
-      idProyecto: idProyecto === "" ? responseID[0].idProyecto : idProyecto,
-      idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
-      isActive: true,
-    };
-
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEDDProyEmp(datos);
-      cambiarEstado(false)
-    });
-
-    function actualizarEDDProyEmp(EDDProyEmp) {
-      const nuevosEDDProyEmp = listEDDProyEmp.map((c) =>
-        c.idEDDProyEmp === EDDProyEmp.idEDDProyEmp ? EDDProyEmp : c
-      );
-      setEDDProyEmp(nuevosEDDProyEmp);
+  function validaciones() {
+    if (idProyecto.trim() === "") {
+      TopAlertsError("01", "El proyecto no debe estar vacío");
+      return true;
+    } else if (idEmpleado.trim() === "") {
+      TopAlertsError("02", "El colaborador no debe estar vacío");
+      return true;
+    } else if (cargoEnProy.trim() === "") {
+      TopAlertsError("03", "El cargo en el proyecto no debe estar vacío");
+      return true;
+    } else {
+      return false;
     }
   }
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      var url = "pages/editar/editarEddProyEmp.php";
+      var operationUrl = "editarEddProyEmp";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idEDDProyEmp: idEDDProyEmp,
+        cargoEnProy:
+          cargoEnProy === "" ? responseID[0].cargoEnProy : cargoEnProy,
+        idProyecto: idProyecto === "" ? responseID[0].idProyecto : idProyecto,
+        idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
+        isActive: true,
+      };
 
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEDDProyEmp(datos);
+        cambiarEstado(false);
+      });
+    }
+  }
+  function actualizarEDDProyEmp(EDDProyEmp) {
+    const nuevosEDDProyEmp = listEDDProyEmp.map((c) =>
+      c.idEDDProyEmp === EDDProyEmp.idEDDProyEmp ? EDDProyEmp : c
+    );
+    setEDDProyEmp(nuevosEDDProyEmp);
+  }
   useEffect(
     function () {
       if (idEDDProyEmp !== null) {
@@ -144,13 +160,13 @@ const EditarEDDProyEmp = ({
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="input_serv">Empleado: </label>
+              <label htmlFor="input_serv">Colaborador: </label>
               <select
                 required
                 className="form-control"
                 name="input_Empleado"
                 id="input_Empleado"
-                placeholder="Seleccione el empleado"
+                placeholder="Seleccione el colaborador"
                 onChange={({ target }) => setidEmpleado(target.value)}
               >
                 {listEmpleado.map((valor) => (

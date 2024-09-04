@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
@@ -19,11 +19,9 @@ const EditarRelatorRamo = ({
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState("");
 
-
   const [idEmpleado, setidEmpleado] = useState("");
   const [idRamo, setidRamo] = useState("");
 
-  
   const [listEmpleado, setlistEmpleado] = useState([""]);
   const [listRamo, setlistRamo] = useState([""]);
 
@@ -47,7 +45,9 @@ const EditarRelatorRamo = ({
   function obtenerEmpleado() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistEmpleado(response));
+    getDataService(url, operationUrl).then((response) =>
+      setlistEmpleado(response)
+    );
   }
 
   function obtenerRamo() {
@@ -59,7 +59,7 @@ const EditarRelatorRamo = ({
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idRelatorRamo, nombreTabla: nombreTabla};
+    var data = { idRegistro: idRelatorRamo, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -71,36 +71,57 @@ const EditarRelatorRamo = ({
     });
   }, [idRelatorRamo]);
 
-  function SendData(e) {
-    e.preventDefault();
-    const url = "pages/editar/editarRelatorRamo.php";
-    const operationUrl = "editarRelatorRamo";
-
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idRelatorRamo: idRelatorRamo,
-      fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
-      fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
-
-      idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
-      idRamo: idRamo === "" ? responseID[0].idRamo : idRamo,
-
-      isActive:true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      {actualizarRelatorRamo(relatorRamo);console.log(response);};
-    });
-
-    function actualizarRelatorRamo(relatorRamo) {
-      const nuevosRelatorRamo = listRelatorRamo.map((c) =>
-        c.idRelatorRamo === relatorRamo.idRelatorRamo ? relatorRamo : c
-      );
-      setRelatorRamo(nuevosRelatorRamo);
+  function validaciones() {
+    if (idEmpleado < 0) {
+      TopAlertsError("01", "El nombre del relator no puede estar vacío");
+      return true;
+    } else if (idRamo < 0) {
+      TopAlertsError("02", "El nombre del ramo no debe estar vacío");
+      return true;
+    } else if (fechaFin) {
+      if (fechaIni > fechaFin) {
+        TopAlertsError(
+          "03",
+          "La fecha inicio no puede ser mayor a la fecha término"
+        );
+        return true;
+      }
+    } else {
+      return false;
     }
   }
 
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/editarRelatorRamo.php";
+      const operationUrl = "editarRelatorRamo";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idRelatorRamo: idRelatorRamo,
+        fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
+        fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
+
+        idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
+        idRamo: idRamo === "" ? responseID[0].idRamo : idRamo,
+
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...relatorRamo } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarRelatorRamo(relatorRamo);
+        cambiarEstado(false);
+      });
+    }
+  }
+  function actualizarRelatorRamo(relatorRamo) {
+    const nuevosRelatorRamo = listRelatorRamo.map((c) =>
+      c.idRelatorRamo === relatorRamo.idRelatorRamo ? relatorRamo : c
+    );
+    setRelatorRamo(nuevosRelatorRamo);
+  }
   useEffect(
     function () {
       if (idRelatorRamo !== null) {
@@ -121,7 +142,7 @@ const EditarRelatorRamo = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_fechaI">Fecha inicio:</label>
               <input
                 style={{ textTransform: "uppercase" }}
@@ -150,7 +171,7 @@ const EditarRelatorRamo = ({
               />
             </div>
             <div>
-              <label htmlFor="input_Empleado">Empleado:</label>
+              <label htmlFor="input_Empleado">Relator:</label>
               <select
                 required
                 type="text"
@@ -167,7 +188,7 @@ const EditarRelatorRamo = ({
                 ))}
               </select>
             </div>
-            
+
             <div>
               <label htmlFor="input_Ramo">Ramo:</label>
               <select

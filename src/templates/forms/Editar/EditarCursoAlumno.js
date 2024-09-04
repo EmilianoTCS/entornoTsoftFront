@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
@@ -76,7 +76,7 @@ const EditarCursoAlumno = ({
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistEmpleados(response)
+      setlistEmpleados(response)
     );
   }
   function obtenerCursos() {
@@ -87,44 +87,96 @@ const EditarCursoAlumno = ({
     );
   }
 
+  function validaciones() {
+    if (idEmpleado < 0) {
+      TopAlertsError("01", "El nombre del alumno no puede estar vacío");
+      return true;
+    } else if (idCurso < 0) {
+      TopAlertsError("02", "El nombre del curso no puede estar vacío");
+      return true;
+    } else if (fechaIni > fechaFin) {
+      TopAlertsError(
+        "03",
+        "La fecha de inicio no puede ser mayor a la de término"
+      );
+      return true;
+    } else if (horaIni > horaFin) {
+      TopAlertsError(
+        "04",
+        "La hora de inicio no puede ser mayor a la de término"
+      );
+      return true;
+    } else if (porcAsistencia < 0 || porcAsistencia > 100) {
+      TopAlertsError(
+        "05",
+        "El % de asistencia debe ser mayor o igual a cero y menor o igual a 100"
+      );
+      return true;
+    } else if (porcParticipacion < 0 || porcParticipacion > 100) {
+      TopAlertsError(
+        "06",
+        "El % de participación debe ser mayor o igual a cero y menor o igual a 100"
+      );
+      return true;
+    } else if (porcAprobacion < 0 || porcAprobacion > 100) {
+      TopAlertsError(
+        "07",
+        "El % de aprobación debe ser mayor o igual a cero y menor o igual a 100"
+      );
+      return true;
+    } else if (estadoCurso < 0) {
+      TopAlertsError("08", "El estado del curso no puede estar vacío");
+      return true;
+    } else if (claseAprobada.trim() === "") {
+      TopAlertsError("09", "Indique si la clase está aprobada o no");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    var url = "pages/editar/editarCursoAlumno.php";
-    var operationUrl = "editarCursoAlumno";
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idCursoAlumno: idCursoAlumno,
-      idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
-      idCurso: idCurso === "" ? responseID[0].idCurso : idCurso,
-      fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
-      fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
-      horaIni: horaIni === "" ? responseID[0].horaIni : horaIni,
-      horaFin: horaFin === "" ? responseID[0].horaFin : horaFin,
-      porcAsistencia:
-        porcAsistencia === "" ? responseID[0].porcAsistencia : porcAsistencia,
-      porcParticipacion:
-        porcParticipacion === ""
-          ? responseID[0].porcParticipacion
-          : porcParticipacion,
-      claseAprobada:
-        claseAprobada === "" ? responseID[0].claseAprobada : claseAprobada,
-      porcAprobacion:
-        porcAprobacion === "" ? responseID[0].porcAprobacion : porcAprobacion,
-      estadoCurso: estadoCurso === "" ? responseID[0].estadoCurso : estadoCurso,
-      isActive: true,
-    };
-
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      actualizarCursoAlumno(CursoAlumno);
-    });
-
-    function actualizarCursoAlumno(cursoAlumno) {
-      const nuevosCursoAlumno = listCursoAlumno.map((c) =>
-        c.idCursoAlumno === cursoAlumno.idCursoAlumno ? cursoAlumno : c
-      );
-      setCursoAlumno(nuevosCursoAlumno);
+    const errores = validaciones();
+    if (!errores) {
+      var url = "pages/editar/editarCursoAlumno.php";
+      var operationUrl = "editarCursoAlumno";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idCursoAlumno: idCursoAlumno,
+        idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
+        idCurso: idCurso === "" ? responseID[0].idCurso : idCurso,
+        fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
+        fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
+        horaIni: horaIni === "" ? responseID[0].horaIni : horaIni,
+        horaFin: horaFin === "" ? responseID[0].horaFin : horaFin,
+        porcAsistencia:
+          porcAsistencia === "" ? responseID[0].porcAsistencia : porcAsistencia,
+        porcParticipacion:
+          porcParticipacion === ""
+            ? responseID[0].porcParticipacion
+            : porcParticipacion,
+        claseAprobada:
+          claseAprobada === "" ? responseID[0].claseAprobada : claseAprobada,
+        porcAprobacion:
+          porcAprobacion === "" ? responseID[0].porcAprobacion : porcAprobacion,
+        estadoCurso:
+          estadoCurso === "" ? responseID[0].estadoCurso : estadoCurso,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...CursoAlumno } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarCursoAlumno(CursoAlumno);
+        cambiarEstado(false);
+      });
     }
+  }
+
+  function actualizarCursoAlumno(cursoAlumno) {
+    const nuevosCursoAlumno = listCursoAlumno.map((c) =>
+      c.idCursoAlumno === cursoAlumno.idCursoAlumno ? cursoAlumno : c
+    );
+    setCursoAlumno(nuevosCursoAlumno);
   }
 
   useEffect(
@@ -158,9 +210,7 @@ const EditarCursoAlumno = ({
               >
                 {listEmpleados.map((valor) => (
                   <option
-                    selected={
-                      valor.idEmpleado === idEmpleado ? "selected" : ""
-                    }
+                    selected={valor.idEmpleado === idEmpleado ? "selected" : ""}
                     value={valor.idEmpleado}
                   >
                     {valor.nomEmpleado}
@@ -180,9 +230,7 @@ const EditarCursoAlumno = ({
               >
                 {listCursos.map((valor) => (
                   <option
-                  selected={
-                      valor.idCurso === idCurso ? "selected" : ""
-                    }
+                    selected={valor.idCurso === idCurso ? "selected" : ""}
                     value={valor.idCurso}
                   >
                     {valor.nomCurso}
@@ -258,11 +306,12 @@ const EditarCursoAlumno = ({
                 id="input_PorcA"
                 maxLength="3"
                 onChange={({ target }) => setporcAsistencia(target.value)}
-                
               />
             </div>
             <div>
-              <label htmlFor="input_PorcP">Porc Participación (Maxímo 100):</label>
+              <label htmlFor="input_PorcP">
+                Porc Participación (Maxímo 100):
+              </label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Porcentaje participación"
@@ -273,11 +322,12 @@ const EditarCursoAlumno = ({
                 id="input_PorcP"
                 maxLength="3"
                 onChange={({ target }) => setporcParticipacion(target.value)}
-                
               />
             </div>
             <div>
-              <label htmlFor="input_PorcAP">Porc Aprobación (Maxímo 100):</label>
+              <label htmlFor="input_PorcAP">
+                Porc Aprobación (Maxímo 100):
+              </label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Porcentaje aprobación"
@@ -288,7 +338,6 @@ const EditarCursoAlumno = ({
                 id="input_PorcAP"
                 maxLength="3"
                 onChange={({ target }) => setporcAprobacion(target.value)}
-                
               />
             </div>
             <div>
@@ -301,11 +350,9 @@ const EditarCursoAlumno = ({
                 name="input_EstC"
                 id="input_EstC"
                 maxLength="15"
-                value={estadoCurso || ''}
+                value={estadoCurso || ""}
                 onChange={({ target }) => setestadoCurso(target.value)}
-                
               >
-
                 <option value="1">Activado</option>
                 <option value="0">Desactivado</option>
               </select>
@@ -322,7 +369,6 @@ const EditarCursoAlumno = ({
                 id="input_ClaseA"
                 maxLength="1"
                 onChange={({ target }) => setclaseAprobada(target.value)}
-                
               >
                 <option hidden value="">
                   {claseAprobada}

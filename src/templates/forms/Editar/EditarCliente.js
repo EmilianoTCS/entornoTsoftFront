@@ -45,7 +45,7 @@ const EditarClientes = ({
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idCliente, nombreTabla: nombreTabla};
+    var data = { idRegistro: idCliente, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -55,34 +55,50 @@ const EditarClientes = ({
     });
   }, [idCliente]);
 
+  function validaciones() {
+    if (nomCliente.trim() === "") {
+      TopAlertsError("01", "El nombre del cliente no puede estar vacío");
+      return true;
+    } else if (idPais < 0) {
+      TopAlertsError("02", "El país del cliente no debe estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    var url = "pages/editar/editarCliente.php";
-    var operationUrl = "editarCliente";
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idCliente: idCliente,
-      nomCliente: nomCliente === "" ? responseID[0].nomCliente : nomCliente,
+    const errores = validaciones();
+    if (!errores) {
+      var url = "pages/editar/editarCliente.php";
+      var operationUrl = "editarCliente";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idCliente: idCliente,
+        nomCliente: nomCliente === "" ? responseID[0].nomCliente : nomCliente,
 
-      direccionCliente: direccionCliente === "" ? responseID[0].direccionCliente : direccionCliente,
+        direccionCliente:
+          direccionCliente === ""
+            ? responseID[0].direccionCliente
+            : direccionCliente,
 
-      idPais:idPais === "" ? responseID[0].idPais:idPais,
-      
-    };
-
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      actualizarCliente(cliente);
-    });
-
-    function actualizarCliente(cliente) {
-      const nuevosClientes = listClientes.map((c) =>
-        c.idCliente === cliente.idCliente ? cliente : c
-      );
-      setCliente(nuevosClientes);
+        idPais: idPais === "" ? responseID[0].idPais : idPais,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarCliente(cliente);
+        cambiarEstado(false);
+      });
     }
   }
 
+  function actualizarCliente(cliente) {
+    const nuevosClientes = listClientes.map((c) =>
+      c.idCliente === cliente.idCliente ? cliente : c
+    );
+    setCliente(nuevosClientes);
+  }
   useEffect(
     function () {
       if (idCliente !== null) {
@@ -102,10 +118,10 @@ const EditarClientes = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_nombreDelCliente">Nombre:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre completo del cliente"
                 value={nomCliente || ""}
                 type="text"
@@ -119,9 +135,9 @@ const EditarClientes = ({
             </div>
 
             <div>
-            <label htmlFor="input_DirecciónDelCliente">Dirección:</label>
+              <label htmlFor="input_DirecciónDelCliente">Dirección:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre completo del cliente"
                 value={direccionCliente || ""}
                 type="text"

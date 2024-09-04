@@ -79,7 +79,7 @@ const InsertarEDDEvalProyEmp = ({
     const url = "pages/auxiliares/listadoEddProyEmp.php";
     const operationUrl = "listados";
     var data = {
-      idProyecto: idProyecto, // Usar el proyecto seleccionado
+      idProyecto: idProyecto ? idProyecto : 0, // Usar el proyecto seleccionado
     };
     SendDataService(url, operationUrl, data).then((response) => {
       setlistEDDProyEmpEvaluado(response);

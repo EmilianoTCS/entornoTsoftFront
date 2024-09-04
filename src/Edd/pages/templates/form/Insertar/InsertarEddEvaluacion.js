@@ -6,7 +6,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 
-
 const InsertarEDDEvaluacion = ({
   isActiveEDDEvaluacion,
   cambiarEstado,
@@ -29,26 +28,55 @@ const InsertarEDDEvaluacion = ({
 
   // ----------------------FUNCIONES----------------------------
 
+  function validaciones() {
+    if (nomEvaluacion.trim() === "") {
+      TopAlertsError("01", "El nombre de la evaluación no debe estar vacío");
+      return true;
+    } else if (tipoEvaluacion.trim() === "") {
+      TopAlertsError("02", "El tipo de evaluación no debe estar vacío");
+      return true;
+    } else if (descFormulario.trim() === "") {
+      TopAlertsError("03", "La descripción no debe estar vacía");
+      return true;
+    } else if (fechaIni.trim() === "") {
+      TopAlertsError("04", "La fecha de inicio no puede estar vacía");
+      return true;
+    } else if (fechaFin.trim() === "") {
+      TopAlertsError("05", "La fecha de término no puede estar vacía");
+      return true;
+    } else if (fechaIni > fechaFin) {
+      TopAlertsError(
+        "06",
+        "La fecha de inicio no debe ser mayor a la fecha de término"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarEddEvaluacion.php";
-    const operationUrl = "insertarEddEvaluacion";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomEvaluacion: nomEvaluacion,
-      fechaIni: fechaIni,
-      fechaFin: fechaFin,
-      tipoEvaluacion: tipoEvaluacion,
-      descFormulario: descFormulario,
-      isActive: true,
-    };
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarEddEvaluacion.php";
+      const operationUrl = "insertarEddEvaluacion";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomEvaluacion: nomEvaluacion,
+        fechaIni: fechaIni,
+        fechaFin: fechaFin,
+        tipoEvaluacion: tipoEvaluacion,
+        descFormulario: descFormulario,
+        isActive: true,
+      };
 
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEDDEvaluacion(datos);
-      cambiarEstado(false)
-    });
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEDDEvaluacion(datos);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarEDDEvaluacion(response) {

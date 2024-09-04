@@ -1,10 +1,9 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
-import getDataService from "../../../services/GetDataService";
 
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -15,9 +14,8 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
   const [telefonoContacto, settelefonoContacto] = useState("");
   const [fechaIni, setfechaIni] = useState("");
 
-
   const [idServicio, setidServicio] = useState("");
-  
+
   const [listServicio, setlistServicio] = useState([""]);
 
   const listContacto = contacto;
@@ -34,33 +32,48 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
     var data = {
-        idCliente: '',
+      idCliente: "",
     };
     SendDataService(url, operationUrl, data).then((data) => {
-        setlistServicio(data);
+      setlistServicio(data);
     });
-}
+  }
 
-
+  function validaciones() {
+    if (nomContacto.trim() === "") {
+      TopAlertsError("01", "El nombre del contacto no puede estar vacío");
+      return true;
+    } else if (correoContacto.trim() === "") {
+      TopAlertsError("02", "El correo del contacto no debe estar vacío");
+      return true;
+    } else if (telefonoContacto.trim() === "") {
+      TopAlertsError("02", "El teléfono del contacto no debe estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarContacto.php";
-    const operationUrl = "insertarContacto";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomContacto: nomContacto,
-      correoContacto: correoContacto,
-      telefonoContacto: telefonoContacto,
-      fechaIni: fechaIni,
-      idServicio: idServicio,
-      isActive:true,
-    };
-   console.log('data',data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts('successCreated');
-      actualizarContacto(contacto);
-      console.log('response',response);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarContacto.php";
+      const operationUrl = "insertarContacto";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomContacto: nomContacto,
+        correoContacto: correoContacto,
+        telefonoContacto: telefonoContacto,
+        fechaIni: fechaIni,
+        idServicio: idServicio,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...contacto } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarContacto(contacto);
+      });
+    }
   }
 
   function actualizarContacto(response) {
@@ -80,10 +93,10 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_nombreDelContacto">Nombre:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre completo del contacto"
                 type="text"
                 className="form-control"
@@ -98,7 +111,7 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
             <div>
               <label htmlFor="input_Correo">Correo:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba el correo del contacto"
                 type="email"
                 className="form-control"
@@ -136,16 +149,17 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
               >
                 <option hidden value="">
                   Desplegar lista
-                </option>                {listServicio.map((valor) => (
+                </option>{" "}
+                {listServicio.map((valor) => (
                   <option value={valor.idServicio}>{valor.nomServicio}</option>
                 ))}
               </select>
             </div>
-            
+
             <div>
               <label htmlFor="input_fechaI">Fecha inicio:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
                 type="date"
                 className="form-control"
@@ -170,5 +184,3 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
   );
 };
 export default InsertarContacto;
-
-

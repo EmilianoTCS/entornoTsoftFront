@@ -102,16 +102,16 @@ export default function ListadoRamoExamen() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
-            <h1 id="TitlesPages">Listado de Ramos Examenes</h1>
+            <h1 id="TitlesPages">Listado de exámenes de ramos</h1>
             <h6 style={{ color: "gray" }}>
-              Factory Devops {"->"} Listado de Ramo Examenes
+              Factory Devops {"->"} Listado de exámenes de ramos
             </h6>
             <br></br>
 
             <div id="selectPaginador">
               {userData.nomRol === "administrador" ? (
                 <Button id="btn" onClick={insertarRamoExamen}>
-                  Crear Examen
+                  Insertar Examen
                 </Button>
               ) : null}
 
@@ -178,8 +178,8 @@ export default function ListadoRamoExamen() {
             <Table id="mainTable" hover responsive>
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Examen</th>
+                  {/* <th>ID</th> */}
+                  <th>Nombre examen</th>
                   <th>Fecha examen</th>
                   <th>Ramo</th>
                   <th>Operaciones</th>
@@ -188,7 +188,7 @@ export default function ListadoRamoExamen() {
               <tbody>
                 {ramoExamen.map((ramoExamen) => (
                   <tr key={ramoExamen.idRamoExamen}>
-                    <td>{ramoExamen.idRamoExamen}</td>
+                    {/* <td>{ramoExamen.idRamoExamen}</td> */}
                     <td>{ramoExamen.nomExamen}</td>
                     <td>{ramoExamen.fechaExamen}</td>
                     <td>{ramoExamen.nomRamo}</td>

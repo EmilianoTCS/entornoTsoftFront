@@ -7,6 +7,7 @@ import getDataService from "../../../services/GetDataService";
 import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const InsertarRamoExamen = ({
   isActiveRamoExamen,
@@ -23,7 +24,7 @@ const InsertarRamoExamen = ({
   const listRamoExamen = ramoExamen;
 
   const show = isActiveRamoExamen;
-
+  const now = new Date();
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
   const handleClose = () => cambiarEstado(false);
@@ -36,22 +37,44 @@ const InsertarRamoExamen = ({
     getDataService(url, operationUrl).then((response) => setlistRamo(response));
   }
 
+  function validaciones() {
+    if (nomExamen.trim() === "") {
+      TopAlertsError("01", "El nombre del examen no puede estar vacío");
+      return true;
+    } else if (new Date(fechaExamen) < now) {
+      TopAlertsError(
+        "02",
+        "La fecha del examen no puede ser menor a la actual"
+      );
+      return true;
+    } else if (idRamo < 0) {
+      TopAlertsError("02", "El nombre del ramo no puede estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarRamoExamen.php";
-    const operationUrl = "insertarRamoExamen";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomExamen: nomExamen,
-      fechaExamen: fechaExamen,
-      idRamo: idRamo,
-      isActive: true,
-    };
-
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarRamoExamen(ramoExamen);console.log(response);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarRamoExamen.php";
+      const operationUrl = "insertarRamoExamen";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomExamen: nomExamen,
+        fechaExamen: fechaExamen,
+        idRamo: idRamo,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...ramoExamen } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarRamoExamen(ramoExamen);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarRamoExamen(response) {
@@ -67,7 +90,7 @@ const InsertarRamoExamen = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear Ramo Examen</Modal.Title>
+          <Modal.Title>Insertar examen de ramo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>

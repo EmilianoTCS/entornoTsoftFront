@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
@@ -7,6 +7,7 @@ import getDataService from "../../../services/GetDataService";
 import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
   // ----------------------CONSTANTES----------------------------
@@ -17,7 +18,7 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
   const [duracionSesionHH, setduracionSesionHH] = useState("");
 
   const [idRamo, setidRamo] = useState("");
-  
+
   const [listRamo, setlistRamo] = useState([""]);
 
   const listSesion = sesion;
@@ -35,26 +36,49 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => setlistRamo(response));
   }
-
+  function validaciones() {
+    if (nroSesion.trim() <= 0) {
+      TopAlertsError("01", "El número de sesión no debe estar vacío");
+      return true;
+    } else if (nomSesion.trim() === "") {
+      TopAlertsError("02", "El nombre de la sesión no debe estar vacío");
+      return true;
+    } else if (tipoSesion.trim() === "") {
+      TopAlertsError("03", "El tipo de sesión no puede estar vacío");
+      return true;
+    } else if (tipoSesionHH.trim() === "") {
+      TopAlertsError("04", "El tipo de HH de la sesión no puede estar vacío");
+      return true;
+    } else if (duracionSesionHH <= 0) {
+      TopAlertsError("05", "La duración de la sesión debe ser mayor a cero");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarSesion.php";
-    const operationUrl = "insertarSesion";
-    var data = {
-      usuarioCreacion: userData.usuario,
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarSesion.php";
+      const operationUrl = "insertarSesion";
+      var data = {
+        usuarioCreacion: userData.usuario,
         nroSesion: nroSesion,
         nomSesion: nomSesion,
         tipoSesion: tipoSesion,
         tipoSesionHH: tipoSesionHH,
         duracionSesionHH: duracionSesionHH,
         idRamo: idRamo,
-        isActive:true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarSesion(sesion);console.log(response);
-    });
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...sesion } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarSesion(sesion);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarSesion(response) {
@@ -70,16 +94,16 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear Sesión</Modal.Title>
+          <Modal.Title>Insertar sesión</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_NotaExamen">Número de sesión:</label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Número de la sesion"
-                type="int"
+                type="number"
                 className="form-control"
                 name="input_NotaExamen"
                 id="input_NotaExamen"
@@ -88,12 +112,12 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
                 required
               />
             </div>
-
-
             <div>
-              <label htmlFor="input_nombreDelSesion">Nombre de la sesión:</label>
+              <label htmlFor="input_nombreDelSesion">
+                Nombre de la sesión:
+              </label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre de la Sesion"
                 type="text"
                 className="form-control"
@@ -105,7 +129,7 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
               />
             </div>
             <div>
-            <label htmlFor="input_tipoDeShh">Tipo sesión:</label>
+              <label htmlFor="input_tipoDeShh">Tipo sesión:</label>
               <select
                 style={{ textTransform: "uppercase" }}
                 placeholder="Escriba tipo del ramo HH"
@@ -122,9 +146,9 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
                 <option value="REMOTO">REMOTO</option>
                 <option value="MIXTO">MIXTO</option>
               </select>
-            </div>      
+            </div>
             <div>
-            <label htmlFor="input_tipoDeS">Tipo sesión HH:</label>
+              <label htmlFor="input_tipoDeS">Tipo sesión HH:</label>
               <select
                 style={{ textTransform: "uppercase" }}
                 placeholder="Escriba tipo del ramo HH"
@@ -141,11 +165,13 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
                 <option value="CRONOLOGICAS">CRONOLOGICAS</option>
                 <option value="MIXTO">MIXTO</option>
               </select>
-            </div>      
+            </div>
             <div>
-              <label htmlFor="input_nombreDelSesion">Duracion de la sesión:</label>
+              <label htmlFor="input_nombreDelSesion">
+                Duracion de la sesión:
+              </label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba la duración de la Sesion"
                 type="number"
                 className="form-control"
@@ -154,7 +180,7 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
                 onChange={({ target }) => setduracionSesionHH(target.value)}
                 required
               />
-            </div>        
+            </div>
 
             <div>
               <label htmlFor="input_Pais">Ramo:</label>
@@ -172,7 +198,7 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
                 ))}
               </select>
             </div>
-            
+
             <Button
               variant="secondary"
               type="submit"
@@ -188,5 +214,3 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
   );
 };
 export default InsertarSesion;
-
-

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
@@ -22,7 +22,7 @@ const EditarContacto = ({
   const [fechaIni, setfechaIni] = useState("");
 
   const [idServicio, setidServicio] = useState("");
-  
+
   const [listServicio, setlistServicio] = useState([""]);
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -45,17 +45,17 @@ const EditarContacto = ({
     const url = "pages/auxiliares/listadoServicioForms.php";
     const operationUrl = "listados";
     var data = {
-        idCliente: '',
+      idCliente: "",
     };
     SendDataService(url, operationUrl, data).then((data) => {
-        setlistServicio(data);
+      setlistServicio(data);
     });
-}
+  }
 
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idContacto, nombreTabla: nombreTabla};
+    var data = { idRegistro: idContacto, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -67,34 +67,53 @@ const EditarContacto = ({
     });
   }, [idContacto]);
 
+  function validaciones() {
+    if (nomContacto.trim() === "") {
+      TopAlertsError("01", "El nombre del contacto no puede estar vacío");
+      return true;
+    } else if (correoContacto.trim() === "") {
+      TopAlertsError("02", "El correo del contacto no debe estar vacío");
+      return true;
+    } else if (telefonoContacto.trim() === "") {
+      TopAlertsError("02", "El teléfono del contacto no debe estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/editar/editarContacto.php";
-    const operationUrl = "editarContacto";
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/editarContacto.php";
+      const operationUrl = "editarContacto";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idContacto: idContacto,
+        nomContacto:
+          nomContacto === "" ? responseID[0].nomContacto : nomContacto,
+        correoContacto:
+          correoContacto === "" ? responseID[0].correoContacto : correoContacto,
+        telefonoContacto:
+          telefonoContacto === ""
+            ? responseID[0].telefonoContacto
+            : telefonoContacto,
+        fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
 
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idContacto: idContacto,
-      nomContacto: nomContacto === "" ? responseID[0].nomContacto : nomContacto,
-      correoContacto: correoContacto === "" ? responseID[0].correoContacto : correoContacto,
-      telefonoContacto: telefonoContacto === "" ? responseID[0].telefonoContacto : telefonoContacto,
-      fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
-
-      idServicio: idServicio === "" ? responseID[0].idServicio : idServicio,
-
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      {actualizarContacto(contacto);console.log(response);};
-    });
-
-    function actualizarContacto(contacto) {
-      const nuevosContactos = listContacto.map((c) =>
-        c.idContacto === contacto.idContacto ? contacto : c
-      );
-      setContacto(nuevosContactos);
+        idServicio: idServicio === "" ? responseID[0].idServicio : idServicio,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...contacto } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarContacto(contacto);
+      });
     }
+  }
+  function actualizarContacto(contacto) {
+    const nuevosContactos = listContacto.map((c) =>
+      c.idContacto === contacto.idContacto ? contacto : c
+    );
+    setContacto(nuevosContactos);
   }
 
   useEffect(
@@ -119,7 +138,7 @@ const EditarContacto = ({
             <div>
               <label htmlFor="input_nombreDelContacto">Nombre:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba nombre completo del contacto"
                 value={nomContacto || ""}
                 type="text"
@@ -135,7 +154,7 @@ const EditarContacto = ({
             <div>
               <label htmlFor="input_Correo">Correo:</label>
               <input
-               style={{ textTransform: "uppercase" }}
+                style={{ textTransform: "uppercase" }}
                 placeholder="Escriba el correo del contacto"
                 value={correoContacto || ""}
                 type="email"
@@ -181,7 +200,7 @@ const EditarContacto = ({
                 ))}
               </select>
             </div>
-            
+
             <div>
               <label htmlFor="input_fechaI">Fecha inicio:</label>
               <input
@@ -197,7 +216,6 @@ const EditarContacto = ({
               />
             </div>
 
-            
             <Button
               variant="secondary"
               type="submit"

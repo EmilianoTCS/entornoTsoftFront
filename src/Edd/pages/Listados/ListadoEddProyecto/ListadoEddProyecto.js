@@ -9,7 +9,7 @@ import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillProject } from "react-icons/ai";
-import { FaMoneyBill, FaLink  } from "react-icons/fa";
+import { FaMoneyBill, FaLink } from "react-icons/fa";
 import "../TablasStyles.css";
 import InsertarEddProyecto from "../../templates/form/Insertar/InsertarEddProyecto";
 import EditarEDDProyecto from "../../templates/form/Editar/EditarEddProyecto";
@@ -24,6 +24,8 @@ export default function ListadoEddProyecto() {
   const [, params] = useRoute("/listadoEddProyecto/:params");
 
   const [EDDProyecto, setEDDProyecto] = useState([""]);
+  const [auxListProyecto, setAuxListProyecto] = useState([""]);
+  const [auxIdProyecto, setAuxIdProyecto] = useState(null);
   const [isActiveInsertEDDProyecto, setIsActiveInsertEDDProyecto] =
     useState(false);
   const [isActiveEditEDDProyecto, setIsActiveEditEDDProyecto] = useState(false);
@@ -63,6 +65,7 @@ export default function ListadoEddProyecto() {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
       idServicio: idServicio,
+      idProyecto: auxIdProyecto ? auxIdProyecto : 0,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
@@ -186,17 +189,29 @@ export default function ListadoEddProyecto() {
         );
         const { OUT_CODRESULT, OUT_MJERESULT } = desactivarResponse[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        handleChangePaginador()
+        handleChangePaginador();
       }
     }
+  }
+
+  function obtenerProyecto() {
+    const url = "pages/auxiliares/listadoProyectoForms.php";
+    const operationUrl = "listados";
+    var data = {
+      idServicio: "",
+    };
+    SendDataService(url, operationUrl, data).then((data) => {
+      setAuxListProyecto(data);
+    });
   }
 
   useEffect(
     function () {
       handleChangePaginador();
       obtenerServicio();
+      obtenerProyecto();
     },
-    [num_boton, cantidadPorPagina, idServicio]
+    [num_boton, cantidadPorPagina, idServicio, auxIdProyecto]
   );
 
   //PAGINADOR ---------------------
@@ -272,6 +287,35 @@ export default function ListadoEddProyecto() {
                       </option>
                     ))}
                   </select>
+                </div>
+                <div className="form-group" id="btn2">
+                  <label htmlFor="buscadorProyectos">
+                    Seleccione un proyecto:{" "}
+                  </label>
+                  <input
+                    list="auxProyectos"
+                    className="form-control"
+                    name="buscadorProyectos"
+                    placeholder="Seleccione un proyecto"
+                    onChange={(event) => {
+                      const selectedProyecto = auxListProyecto.find(
+                        (item) => item.nomProyecto === event.target.value
+                      );
+                      if (selectedProyecto) {
+                        setAuxIdProyecto(selectedProyecto.idEDDProyecto);
+                      } else {
+                        setAuxIdProyecto(0);
+                      }
+                    }}
+                  ></input>
+                  <datalist id="auxProyectos">
+                    {auxListProyecto.map((item) => (
+                      <option
+                        key={item.idEDDProyecto} // Asegúrate de tener un key único para cada opción
+                        value={item.nomProyecto} // Almacena el nombre del empleado como value
+                      ></option>
+                    ))}
+                  </datalist>
                 </div>
               </div>
               {isActiveInsertEDDProyecto ? (

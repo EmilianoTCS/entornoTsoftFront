@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
@@ -25,7 +25,6 @@ const EditarNotaExamen = ({
   const [listRamoExamen, setlistRamoExamen] = useState([""]);
   const [listCursoAlumno, setlistCursoAlumno] = useState([""]);
 
-
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
   const [responseID, setResponseID] = useState([""]);
@@ -46,22 +45,21 @@ const EditarNotaExamen = ({
     const url = "pages/auxiliares/listadoRamoExamenForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistRamoExamen(response)
+      setlistRamoExamen(response)
     );
   }
   function obtenerCursoAlumno() {
     const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-    setlistCursoAlumno(response)
+      setlistCursoAlumno(response)
     );
   }
-
 
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idNotaExamen, nombreTabla: nombreTabla};
+    var data = { idRegistro: idNotaExamen, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -72,41 +70,65 @@ const EditarNotaExamen = ({
     });
   }, [idNotaExamen]);
 
-  function SendData(e) {
-    e.preventDefault();
-    const url = "pages/editar/editarNotaExamen.php";
-    const operationUrl = "editarNotaExamen";
-
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idNotaExamen: idNotaExamen,
-      notaExamen: notaExamen === "" ? responseID[0].notaExamen : notaExamen,
-      apruebaExamen: apruebaExamen === "" ? responseID[0].apruebaExamen : apruebaExamen,
-      idRamoExamen: idRamoExamen === "" ? responseID[0].idRamoExamen : idRamoExamen,
-      idCursoAlumno: idCursoAlumno === "" ? responseID[0].idCursoAlumno : idCursoAlumno,
-      isActive:true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      {actualizarNotaExamen(notaDeExamen);console.log(response);};
-    });
-
-    function actualizarNotaExamen(notaExamen) {
-      const nuevosNotaExamen = listNotaExamen.map((c) =>
-        c.idNotaExamen === notaExamen.idNotaExamen ? notaExamen : c
+  function validaciones() {
+    if (notaExamen < 0 || notaExamen > 10) {
+      TopAlertsError(
+        "01",
+        "La nota del examen debe ser mayor a cero y menor a diez"
       );
-      setNotaExamen(nuevosNotaExamen);
+      return true;
+    } else if (apruebaExamen.trim() === "") {
+      TopAlertsError("02", "Indique si el colaborador está aprobado o no");
+      return true;
+    } else if (idRamoExamen < 0) {
+      TopAlertsError("03", "El nombre del examen no puede estar vacío");
+      return true;
+    } else if (idCursoAlumno < 0) {
+      TopAlertsError("04", "La relación curso alumno no debe estar vacía");
+      return true;
+    } else {
+      return false;
     }
   }
-
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/editarNotaExamen.php";
+      const operationUrl = "editarNotaExamen";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idNotaExamen: idNotaExamen,
+        notaExamen: notaExamen === "" ? responseID[0].notaExamen : notaExamen,
+        apruebaExamen:
+          apruebaExamen === "" ? responseID[0].apruebaExamen : apruebaExamen,
+        idRamoExamen:
+          idRamoExamen === "" ? responseID[0].idRamoExamen : idRamoExamen,
+        idCursoAlumno:
+          idCursoAlumno === "" ? responseID[0].idCursoAlumno : idCursoAlumno,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...notaDeExamen } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarNotaExamen(notaDeExamen);
+        cambiarEstado(false);
+      });
+    }
+  }
+  function actualizarNotaExamen(notaExamen) {
+    const nuevosNotaExamen = listNotaExamen.map((c) =>
+      c.idNotaExamen === notaExamen.idNotaExamen ? notaExamen : c
+    );
+    setNotaExamen(nuevosNotaExamen);
+  }
   useEffect(
     function () {
       if (idNotaExamen !== null) {
         getData();
         obtenerRamoExamen();
         obtenerCursoAlumno();
-    }
+      }
     },
     [idNotaExamen]
   );
@@ -120,7 +142,7 @@ const EditarNotaExamen = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
+            <div>
               <label htmlFor="input_NotaExamen">Nota examen: (De 0 a 10)</label>
               <input
                 style={{ textTransform: "uppercase" }}
@@ -167,7 +189,9 @@ const EditarNotaExamen = ({
               >
                 {listRamoExamen.map((valor) => (
                   <option
-                    selected={valor.idRamoExamen === idRamoExamen ? "selected" : ""}
+                    selected={
+                      valor.idRamoExamen === idRamoExamen ? "selected" : ""
+                    }
                     value={valor.idRamoExamen}
                   >
                     {valor.nomExamen}
@@ -176,9 +200,8 @@ const EditarNotaExamen = ({
               </select>
             </div>
 
-            
-           <div>
-            <label htmlFor="input_CursoA">Curso Alumno :</label>
+            <div>
+              <label htmlFor="input_CursoA">Curso Alumno :</label>
               <select
                 required
                 type="text"
@@ -187,7 +210,9 @@ const EditarNotaExamen = ({
               >
                 {listCursoAlumno.map((valor) => (
                   <option
-                    selected={valor.idCursoAlumno === idCursoAlumno ? "selected" : ""}
+                    selected={
+                      valor.idCursoAlumno === idCursoAlumno ? "selected" : ""
+                    }
                     value={valor.idCursoAlumno}
                   >
                     {valor.nomCursoAlumno}
@@ -195,10 +220,6 @@ const EditarNotaExamen = ({
                 ))}
               </select>
             </div>
-
-
-
-          
 
             <Button
               variant="secondary"

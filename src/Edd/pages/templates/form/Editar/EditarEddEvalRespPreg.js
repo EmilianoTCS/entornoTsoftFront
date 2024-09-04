@@ -56,29 +56,46 @@ const EditarEDDEvalRespPreg = ({
     });
   }, [idEDDEvalRespPreg]);
 
+  function validaciones() {
+    if (nomRespPreg.trim() === "") {
+      TopAlertsError("01", "La respuesta no debe estar vacía");
+      return true;
+    } else if (ordenRespPreg.trim() === "") {
+      TopAlertsError("02", "El orden de la respuesta no debe estar vacío");
+      return true;
+    } else if (idEDDEvalPregunta.trim() === "") {
+      TopAlertsError("03", "La pregunta no debe estar vacía");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    var url = "pages/editar/editarEddEvalRespPreg.php";
-    var operationUrl = "editarEddEvalRespPreg";
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idEDDEvalRespPreg: idEDDEvalRespPreg,
-      nomRespPreg: nomRespPreg === "" ? responseID[0].nomRespPreg : nomRespPreg,
-      ordenRespPreg:
-        ordenRespPreg === "" ? responseID[0].ordenRespPreg : ordenRespPreg,
-      idEDDEvalPregunta:
-        idEDDEvalPregunta === ""
-          ? responseID[0].idEDDEvalPregunta
-          : idEDDEvalPregunta,
-      isActive: true,
-    };
-    
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEDDEvalRespPreg(datos);
-      cambiarEstado(false)
-    });
+    const errores = validaciones();
+    if (!errores) {
+      var url = "pages/editar/editarEddEvalRespPreg.php";
+      var operationUrl = "editarEddEvalRespPreg";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idEDDEvalRespPreg: idEDDEvalRespPreg,
+        nomRespPreg:
+          nomRespPreg === "" ? responseID[0].nomRespPreg : nomRespPreg,
+        ordenRespPreg:
+          ordenRespPreg === "" ? responseID[0].ordenRespPreg : ordenRespPreg,
+        idEDDEvalPregunta:
+          idEDDEvalPregunta === ""
+            ? responseID[0].idEDDEvalPregunta
+            : idEDDEvalPregunta,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEDDEvalRespPreg(datos);
+        cambiarEstado(false);
+      });
+    }
   }
   function actualizarEDDEvalRespPreg(EDDEvalRespPreg) {
     const nuevosEDDEvalRespPreg = listEDDEvalRespPreg.map((c) =>

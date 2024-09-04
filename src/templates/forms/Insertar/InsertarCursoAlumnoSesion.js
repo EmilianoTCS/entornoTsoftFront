@@ -7,6 +7,7 @@ import getDataService from "../../../services/GetDataService";
 import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const InsertarCursoAlumnoSesion = ({
   isActiveCursoAlumnoSesion,
@@ -31,7 +32,7 @@ const InsertarCursoAlumnoSesion = ({
   const listCursoAlumnoSesion = cursoAlumnoSesion;
 
   const show = isActiveCursoAlumnoSesion;
-
+  const now = new Date();
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
   const handleClose = () => cambiarEstado(false);
@@ -40,10 +41,10 @@ const InsertarCursoAlumnoSesion = ({
   function obtenerSesion() {
     const url = "pages/auxiliares/listadoSesionForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>{
-      setlistSesion(response)
-      console.log(response);}
-    );
+    getDataService(url, operationUrl).then((response) => {
+      setlistSesion(response);
+      console.log(response);
+    });
   }
   function obtenerCursoAlumno() {
     const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
@@ -52,28 +53,63 @@ const InsertarCursoAlumnoSesion = ({
       setlistCursoAlumno(response)
     );
   }
+
+  function validaciones() {
+    if (new Date(fechaIni) > new Date(fechaFin)) {
+      TopAlertsError(
+        "01",
+        "La fecha de inicio no puede ser mayor a la fecha de término"
+      );
+      return true;
+    } else if (horaIni > horaFin) {
+      TopAlertsError(
+        "02",
+        "La hora de inicio no puede ser mayor a la hora de término"
+      );
+      return true;
+    } else if (asistencia < 0) {
+      TopAlertsError("02", "El % de asistencia no puede ser menor a cero");
+      return true;
+    } else if (participacion < 0 === "") {
+      TopAlertsError("03", "El % de participacion no puede ser mejor a cero");
+      return true;
+    } else if (idSesion <= 0) {
+      TopAlertsError("04", "La sesión no puede estar vacía");
+      return true;
+    } else if (idCursoAlumno <= 0) {
+      TopAlertsError("05", "La relación curso - alumno no puede estar vacía");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarCursoAlumnoSesion.php";
-    const operationUrl = "insertarCursoAlumnoSesion";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      fechaIni: fechaIni,
-      fechaFin: fechaFin,
-      horaFin: horaFin,
-      horaIni: horaIni,
-
-      asistencia: asistencia,
-      participacion: participacion,
-      idSesion: idSesion,
-      idCursoAlumno: idCursoAlumno,
-      isActive: true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarCursoAlumnoSesion(cursoAlumnoSesion);console.log(response);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarCursoAlumnoSesion.php";
+      const operationUrl = "insertarCursoAlumnoSesion";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        fechaIni: fechaIni,
+        fechaFin: fechaFin,
+        horaFin: horaFin,
+        horaIni: horaIni,
+        asistencia: asistencia,
+        participacion: participacion,
+        idSesion: idSesion,
+        idCursoAlumno: idCursoAlumno,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...cursoAlumnoSesion } =
+          response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarCursoAlumnoSesion(cursoAlumnoSesion);
+        console.log(response);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarCursoAlumnoSesion(response) {
@@ -156,7 +192,6 @@ const InsertarCursoAlumnoSesion = ({
                 id="input_PorcA"
                 maxLength="11"
                 onChange={({ target }) => setasistencia(target.value)}
-                
               />
             </div>
             <div>
@@ -170,7 +205,6 @@ const InsertarCursoAlumnoSesion = ({
                 id="input_PorcP"
                 maxLength="11"
                 onChange={({ target }) => setparticipacion(target.value)}
-                
               />
             </div>
             <div className="form-group">
@@ -205,7 +239,9 @@ const InsertarCursoAlumnoSesion = ({
                   Desplegar lista
                 </option>
                 {listCursoAlumno.map((valor) => (
-                  <option value={valor.idCursoAlumno}>{valor.idCursoAlumno}</option>
+                  <option value={valor.idCursoAlumno}>
+                    {valor.idCursoAlumno}
+                  </option>
                 ))}
               </select>
             </div>

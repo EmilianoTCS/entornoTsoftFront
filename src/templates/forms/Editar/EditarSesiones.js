@@ -6,6 +6,7 @@ import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const EditarSesion = ({
   isActiveEditSesion,
@@ -23,7 +24,7 @@ const EditarSesion = ({
   const [duracionSesionHH, setduracionSesionHH] = useState("");
 
   const [idRamo, setidRamo] = useState("");
-  
+
   const [listRamo, setlistRamo] = useState([""]);
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -41,7 +42,6 @@ const EditarSesion = ({
     settipoSesionHH(responseID[0].tipoSesionHH);
     setduracionSesionHH(responseID[0].duracionSesionHH);
     setidRamo(responseID[0].idRamo);
-
   };
   // ----------------------FUNCIONES----------------------------
   function obtenerRamo() {
@@ -52,9 +52,8 @@ const EditarSesion = ({
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idSesion, nombreTabla: nombreTabla};
+    var data = { idRegistro: idSesion, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
       setnroSesion(response[0].nroSesion);
       setnomSesion(response[0].nomSesion);
@@ -65,38 +64,63 @@ const EditarSesion = ({
     });
   }, [idSesion]);
 
-  function SendData(e) {
-    e.preventDefault();
-    const url = "pages/editar/editarSesion.php";
-    const operationUrl = "editarSesion";
-
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idSesion: idSesion,
-
-      nroSesion: nroSesion === "" ? responseID[0].nroSesion : nroSesion,
-      nomSesion: nomSesion === "" ? responseID[0].nomSesion : nomSesion,
-      tipoSesion: tipoSesion === "" ? responseID[0].tipoSesion : tipoSesion,
-      tipoSesionHH: tipoSesionHH === "" ? responseID[0].tipoSesionHH : tipoSesionHH,
-      duracionSesionHH: duracionSesionHH === "" ? responseID[0].duracionSesionHH : duracionSesionHH,
-      idRamo: idRamo === "" ? responseID[0].idRamo : idRamo,
-
-      isActive:true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts('successEdited');
-      {actualizarSesion(sesion);console.log(response);};
-    });
-
-    function actualizarSesion(sesion) {
-      const nuevosSesion = listSesion.map((c) =>
-        c.idSesion === sesion.idSesion ? sesion : c
-      );
-      setSesion(nuevosSesion);
+  function validaciones() {
+    if (nroSesion.trim() <= 0) {
+      TopAlertsError("01", "El número de sesión no debe estar vacío");
+      return true;
+    } else if (nomSesion.trim() === "") {
+      TopAlertsError("02", "El nombre de la sesión no debe estar vacío");
+      return true;
+    } else if (tipoSesion.trim() === "") {
+      TopAlertsError("03", "El tipo de sesión no puede estar vacío");
+      return true;
+    } else if (tipoSesionHH.trim() === "") {
+      TopAlertsError("04", "El tipo de HH de la sesión no puede estar vacío");
+      return true;
+    } else if (duracionSesionHH <= 0) {
+      TopAlertsError("05", "La duración de la sesión debe ser mayor a cero");
+      return true;
+    } else {
+      return false;
     }
   }
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/editarSesion.php";
+      const operationUrl = "editarSesion";
 
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idSesion: idSesion,
+        nroSesion: nroSesion === "" ? responseID[0].nroSesion : nroSesion,
+        nomSesion: nomSesion === "" ? responseID[0].nomSesion : nomSesion,
+        tipoSesion: tipoSesion === "" ? responseID[0].tipoSesion : tipoSesion,
+        tipoSesionHH:
+          tipoSesionHH === "" ? responseID[0].tipoSesionHH : tipoSesionHH,
+        duracionSesionHH:
+          duracionSesionHH === ""
+            ? responseID[0].duracionSesionHH
+            : duracionSesionHH,
+        idRamo: idRamo === "" ? responseID[0].idRamo : idRamo,
+
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...sesion } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarSesion(sesion);
+        cambiarEstado(false);
+      });
+    }
+  }
+  function actualizarSesion(sesion) {
+    const nuevosSesion = listSesion.map((c) =>
+      c.idSesion === sesion.idSesion ? sesion : c
+    );
+    setSesion(nuevosSesion);
+  }
   useEffect(
     function () {
       if (idSesion !== null) {
@@ -112,7 +136,7 @@ const EditarSesion = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar Sesión</Modal.Title>
+          <Modal.Title>Editar sesión</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
@@ -132,13 +156,14 @@ const EditarSesion = ({
               />
             </div>
 
-
             <div>
-              <label htmlFor="input_nombreDelSesion">Nombre de la sesión:</label>
+              <label htmlFor="input_nombreDelSesion">
+                Nombre de la sesión:
+              </label>
               <input
-               style={{ textTransform: "uppercase" }}
-               placeholder="Escriba el nombre de la sesión"
-               value={nomSesion || ""}
+                style={{ textTransform: "uppercase" }}
+                placeholder="Escriba el nombre de la sesión"
+                value={nomSesion || ""}
                 type="text"
                 className="form-control"
                 name="input_nombreDelSesion"
@@ -149,9 +174,8 @@ const EditarSesion = ({
               />
             </div>
 
-
             <div>
-            <label htmlFor="input_tipoDeShh">Tipo sesión:</label>
+              <label htmlFor="input_tipoDeShh">Tipo sesión:</label>
               <select
                 style={{ textTransform: "uppercase" }}
                 value={tipoSesion || ""}
@@ -169,9 +193,9 @@ const EditarSesion = ({
                 <option value="REMOTO">REMOTO</option>
                 <option value="MIXTO">MIXTO</option>
               </select>
-            </div>      
+            </div>
             <div>
-            <label htmlFor="input_tipoDeS">Tipo sesión HH:</label>
+              <label htmlFor="input_tipoDeS">Tipo sesión HH:</label>
               <select
                 style={{ textTransform: "uppercase" }}
                 value={tipoSesionHH || ""}
@@ -189,13 +213,15 @@ const EditarSesion = ({
                 <option value="CRONOLOGICAS">CRONOLÓGICAS</option>
                 <option value="MIXTO">MIXTO</option>
               </select>
-            </div>      
+            </div>
             <div>
-              <label htmlFor="input_nombreDelSesion">Duración de la sesión:</label>
+              <label htmlFor="input_nombreDelSesion">
+                Duración de la sesión:
+              </label>
               <input
-               style={{ textTransform: "uppercase" }}
-               placeholder="Escriba la duración de la sesión"
-               value={duracionSesionHH || ""}
+                style={{ textTransform: "uppercase" }}
+                placeholder="Escriba la duración de la sesión"
+                value={duracionSesionHH || ""}
                 type="number"
                 className="form-control"
                 name="input_nombreDelSesion"
@@ -203,7 +229,7 @@ const EditarSesion = ({
                 onChange={({ target }) => setduracionSesionHH(target.value)}
                 required
               />
-            </div>        
+            </div>
 
             <div>
               <label htmlFor="input_Pais">Ramo:</label>
@@ -223,7 +249,7 @@ const EditarSesion = ({
                 ))}
               </select>
             </div>
-            
+
             <Button
               variant="secondary"
               type="submit"

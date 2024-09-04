@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
@@ -18,7 +18,7 @@ const EditarReqCurso = ({
   // ----------------------CONSTANTES----------------------------
   const [idCursoRequisito, setidCursoRequisito] = useState("");
   const [idCurso, setidCurso] = useState("");
-  
+
   const [listCurso, setlistCurso] = useState([""]);
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -38,13 +38,15 @@ const EditarReqCurso = ({
   function obtenerCurso() {
     const url = "pages/auxiliares/listadoCursoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => setlistCurso(response));
+    getDataService(url, operationUrl).then((response) =>
+      setlistCurso(response)
+    );
   }
 
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
-    var data = { idRegistro: idReqCurso, nombreTabla: nombreTabla};
+    var data = { idRegistro: idReqCurso, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
       setResponseID(response);
@@ -54,33 +56,52 @@ const EditarReqCurso = ({
     });
   }, [idReqCurso]);
 
-  function SendData(e) {
-    e.preventDefault();
-    const url = "pages/editar/editarReqCurso.php";
-    const operationUrl = "editarReqCurso";
-
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idReqCurso: idReqCurso,
-      idCursoRequisito: idCursoRequisito === "" ? responseID[0].idCursoRequisito : idCursoRequisito,
-      idCurso: idCurso === "" ? responseID[0].idCurso : idCurso,
-      isActive:true,
-
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successEdited');
-      {actualizarReqCurso(reqCurso);console.log(response);};
-    });
-
-    function actualizarReqCurso(reqCurso) {
-      const nuevosReqCurso = listReqCurso.map((c) =>
-        c.idReqCurso === reqCurso.idReqCurso ? reqCurso : c
-      );
-      setReqCurso(nuevosReqCurso);
+  function validaciones() {
+    if (idCurso < 0) {
+      TopAlertsError("01", "El nombre del curso no puede estar vacío");
+      return true;
+    } else if (idCursoRequisito < 0) {
+      TopAlertsError("02", "El nombre del curso requisito no debe estar vacío");
+      return true;
+    } else if (idCurso === idCursoRequisito) {
+      TopAlertsError("03", "Un curso no puede ser su propio requisito");
+      return true;
+    } else {
+      return false;
     }
   }
 
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/editarReqCurso.php";
+      const operationUrl = "editarReqCurso";
+
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idReqCurso: idReqCurso,
+        idCursoRequisito:
+          idCursoRequisito === ""
+            ? responseID[0].idCursoRequisito
+            : idCursoRequisito,
+        idCurso: idCurso === "" ? responseID[0].idCurso : idCurso,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...reqCurso } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarReqCurso(reqCurso);
+        cambiarEstado(false);
+      });
+    }
+  }
+  function actualizarReqCurso(reqCurso) {
+    const nuevosReqCurso = listReqCurso.map((c) =>
+      c.idReqCurso === reqCurso.idReqCurso ? reqCurso : c
+    );
+    setReqCurso(nuevosReqCurso);
+  }
   useEffect(
     function () {
       if (idReqCurso !== null) {
@@ -96,13 +117,11 @@ const EditarReqCurso = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar req curso</Modal.Title>
+          <Modal.Title>Editar requisito de curso</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-        
-            
-          <div>
+            <div>
               <label htmlFor="input_Curso">Nombre del curso:</label>
               <select
                 required
@@ -121,7 +140,7 @@ const EditarReqCurso = ({
               </select>
             </div>
             <div>
-              <label htmlFor="input_Curso">Nombre del Requisito:</label>
+              <label htmlFor="input_Curso">Nombre del curso requisito:</label>
               <select
                 required
                 type="text"
@@ -138,7 +157,7 @@ const EditarReqCurso = ({
                 ))}
               </select>
             </div>
-           
+
             <Button
               variant="secondary"
               type="submit"

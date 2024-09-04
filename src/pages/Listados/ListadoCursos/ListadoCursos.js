@@ -94,14 +94,14 @@ export default function ListadoCursos() {
             <div id="containerTablas">
               <h1 id="TitlesPages">Listado de cursos</h1>
               <h6 style={{ color: "gray" }}>
-                Factory Devops {"->"} Listado de Cursos
+                Factory Devops {"->"} Listado de cursos
               </h6>
               <br></br>
 
               <div id="selectPaginador">
                 {userData.nomRol === "administrador" ? (
                   <Button id="btn" onClick={insertarCurso}>
-                    Crear Curso
+                    Insertar curso
                   </Button>
                 ) : null}
 
@@ -148,10 +148,10 @@ export default function ListadoCursos() {
               <Table id="mainTable" hover responsive>
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Código</th>
-                    <th>Curso</th>
-                    <th>Tipo Horas</th>
+                    {/* <th>ID</th> */}
+                    <th>Código curso</th>
+                    <th>Nombre curso</th>
+                    <th>Tipo horas</th>
                     <th>Durac horas</th>
                     <th>Cant sesiones</th>
                     <th>Operaciones</th>
@@ -160,7 +160,7 @@ export default function ListadoCursos() {
                 <tbody>
                   {curso.map((curso) => (
                     <tr key={curso.idCurso}>
-                      <td>{curso.idCurso}</td>
+                      {/* <td>{curso.idCurso}</td> */}
                       <td>{curso.codCurso}</td>
                       <td>{curso.nomCurso}</td>
                       <td>{curso.tipoHH}</td>

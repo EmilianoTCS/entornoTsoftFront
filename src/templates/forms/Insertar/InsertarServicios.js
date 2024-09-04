@@ -4,7 +4,6 @@ import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
 
-import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import TopAlertsError from "../../alerts/TopAlerts";
@@ -34,23 +33,35 @@ const InsertarServicio = ({ isActiveServicio, cambiarEstado, servicio }) => {
     );
   }
 
+  function validaciones() {
+    if (nomServicio.trim() === "") {
+      TopAlertsError("01", "El nombre del servicio no puede estar vacío");
+      return true;
+    } else if (idCliente < 0) {
+      TopAlertsError("02", "El cliente no debe estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarServicio.php";
-    const operationUrl = "insertarServicio";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomServicio: nomServicio,
-      idCliente: idCliente,
-      isActive: true,
-    };
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
-      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarServicio(servicio);
-      console.log(response);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarServicio.php";
+      const operationUrl = "insertarServicio";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomServicio: nomServicio,
+        idCliente: idCliente,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...servicio } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarServicio(servicio);
+      });
+    }
   }
 
   function actualizarServicio(response) {

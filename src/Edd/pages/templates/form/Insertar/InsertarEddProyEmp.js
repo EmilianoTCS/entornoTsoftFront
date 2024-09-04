@@ -50,8 +50,25 @@ const InsertarEDDProyEmp = ({
     );
   }
 
+  function validaciones() {
+    if (idProyecto.trim() === "") {
+      TopAlertsError("01", "El proyecto no debe estar vacío");
+      return true;
+    } else if (idEmpleado.trim() === "") {
+      TopAlertsError("02", "El colaborador no debe estar vacío");
+      return true;
+    } else if (cargoEnProy.trim() === "") {
+      TopAlertsError("03", "El cargo en el proyecto no debe estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
   function SendData(e) {
     e.preventDefault();
+    const errores = validaciones()
+    if (!errores) {
+      
     const url = "pages/insertar/insertarEddProyEmp.php";
     const operationUrl = "insertarEddProyEmp";
     var data = {
@@ -68,6 +85,7 @@ const InsertarEDDProyEmp = ({
       cambiarEstado(false)
     });
   }
+}
 
   function actualizarEDDProyEmp(response) {
     listEDDProyEmp.push(response);
@@ -110,13 +128,13 @@ const InsertarEDDProyEmp = ({
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="input_serv">Empleado: </label>
+              <label htmlFor="input_serv">Colaborador: </label>
               <select
                 required
                 className="form-control"
                 name="input_Empleado"
                 id="input_Empleado"
-                placeholder="Seleccione el empleado"
+                placeholder="Seleccione el colaborador"
                 onChange={({ target }) => setidEmpleado(target.value)}
               >
                 <option hidden value="">

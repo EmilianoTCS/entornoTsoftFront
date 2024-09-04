@@ -57,7 +57,6 @@ export default function ListadoEmpleados() {
   function insertarEmpleado() {
     setIsActiveInsertEmpleado(!isActiveInsertEmpleado);
   }
-
   function editarEmpleado(ID) {
     setIsActiveEditEmpleado(!isActiveEditEmpleado);
     setIDEmpleado(ID);
@@ -88,13 +87,6 @@ export default function ListadoEmpleados() {
     getDataService(url, operationUrl).then((response) => setlistArea(response));
   }
 
-  // function obtenerServicio() {
-  //   const url = "pages/auxiliares/listadoServicioForms.php";
-  //   const operationUrl = "listados";
-  //   getDataService(url, operationUrl).then((response) =>
-  //     setlistServicio(response)
-  //   );
-  // }
 
   function desactivar(ID) {
     ConfirmAlert().then((response) => {
@@ -178,15 +170,15 @@ export default function ListadoEmpleados() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
-            <h1 id="TitlesPages">Listado de Empleados</h1>
+            <h1 id="TitlesPages">Listado de Colaboradores</h1>
             <h6 style={{ color: "gray" }}>
-              Factory Devops {"->"} Listado de Empleados
+              Factory Devops {"->"} Listado de Colaboradores
             </h6>
             <br></br>
             <div id="selectPaginador">
               {userData.nomRol === "administrador" ? (
                 <Button id="btn" onClick={insertarEmpleado}>
-                  Crear Colaborador
+                  Insertar Colaborador
                 </Button>
               ) : null}
 

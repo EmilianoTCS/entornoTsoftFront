@@ -41,36 +41,42 @@ const EditarEddEvalCompetencia = ({
     });
   }, [idEDDEvalCompetencia]);
 
-  function SendData(e) {
-    e.preventDefault();
-    var url = "pages/editar/editarEddEvalCompetencia.php";
-    var operationUrl = "editarEddEvalCompetencia";
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idEDDEvalCompetencia: idEDDEvalCompetencia,
-      nomCompetencia:
-        nomCompetencia === "" ? responseID[0].nomCompetencia : nomCompetencia,
-      isActive: true,
-    };
-  
-    SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEddEvalCompetencia(datos);
-    });
-
-    function actualizarEddEvalCompetencia(EddEvalCompetencia) {
-      const nuevosEddEvalCompetencia = listEddEvalCompetencia.map((c) =>
-        c.idEddEvalCompetencia === EddEvalCompetencia.idEddEvalCompetencia
-          ? EddEvalCompetencia
-          : c
-      );
-      setEddEvalCompetencia(nuevosEddEvalCompetencia);
+  function validaciones() {
+    if (nomCompetencia.trim() === "") {
+      TopAlertsError("01", "El nombre de la competencia no debe estar vacío");
+      return true;
+    } else {
+      return false;
     }
   }
-
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      var url = "pages/editar/editarEddEvalCompetencia.php";
+      var operationUrl = "editarEddEvalCompetencia";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idEDDEvalCompetencia: idEDDEvalCompetencia,
+        nomCompetencia:
+          nomCompetencia === "" ? responseID[0].nomCompetencia : nomCompetencia,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEddEvalCompetencia(datos);
+      });
+    }
+  }
+  function actualizarEddEvalCompetencia(EddEvalCompetencia) {
+    const nuevosEddEvalCompetencia = listEddEvalCompetencia.map((c) =>
+      c.idEddEvalCompetencia === EddEvalCompetencia.idEddEvalCompetencia
+        ? EddEvalCompetencia
+        : c
+    );
+    setEddEvalCompetencia(nuevosEddEvalCompetencia);
+  }
   useEffect(
     function () {
       if (idEDDEvalCompetencia !== null) {

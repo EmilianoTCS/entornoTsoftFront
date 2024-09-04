@@ -62,33 +62,46 @@ const EditarEmpSubsist = ({
     });
   }, [idEmpSubsist]);
 
-  function SendData(e) {
-    e.preventDefault();
-    var url = "pages/editar/editarEmpSubsist.php";
-    var operationUrl = "editarEmpSubsist";
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idEmpSubsist: idEmpSubsist,
-      idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
-      idSubsistema:
-        idSubsistema === "" ? responseID[0].idSubsistema : idSubsistema,
-      isActive: true,
-    };
-  
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEmpSubsist(datos);
-    });
-
-    function actualizarEmpSubsist(EmpSubsist) {
-      const nuevosEmpSubsist = listEmpSubsist.map((c) =>
-        c.idEmpSubsist === EmpSubsist.idEmpSubsist ? EmpSubsist : c
-      );
-      setEmpSubsist(nuevosEmpSubsist);
+  function validaciones() {
+    if (idEmpleado.trim() === "") {
+      TopAlertsError("01", "El colaborador no debe estar vacío");
+      return true;
+    } else if (idSubsistema.trim() === "") {
+      TopAlertsError("02", "El subsistema no debe estar vacío");
+      return true;
+    } else {
+      return false;
     }
   }
 
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      var url = "pages/editar/editarEmpSubsist.php";
+      var operationUrl = "editarEmpSubsist";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idEmpSubsist: idEmpSubsist,
+        idEmpleado: idEmpleado === "" ? responseID[0].idEmpleado : idEmpleado,
+        idSubsistema:
+          idSubsistema === "" ? responseID[0].idSubsistema : idSubsistema,
+        isActive: true,
+      };
+
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEmpSubsist(datos);
+      });
+    }
+  }
+  function actualizarEmpSubsist(EmpSubsist) {
+    const nuevosEmpSubsist = listEmpSubsist.map((c) =>
+      c.idEmpSubsist === EmpSubsist.idEmpSubsist ? EmpSubsist : c
+    );
+    setEmpSubsist(nuevosEmpSubsist);
+  }
   useEffect(
     function () {
       if (idEmpSubsist !== null) {
@@ -105,12 +118,12 @@ const EditarEmpSubsist = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar empleado a subsistema</Modal.Title>
+          <Modal.Title>Editar colaborador a subsistema</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
             <div className="form-group">
-              <label htmlFor="input_Empleado">Empleado: </label>
+              <label htmlFor="input_Empleado">Colaborador: </label>
               <select
                 required
                 className="form-control"

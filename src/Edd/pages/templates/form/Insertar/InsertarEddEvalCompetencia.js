@@ -26,20 +26,32 @@ const InsertarEddEvalCompetencia = ({
 
   // ----------------------FUNCIONES----------------------------
 
+  function validaciones() {
+    if (nomCompetencia.trim() === "") {
+      TopAlertsError("01", "El nombre de la competencia no debe estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarEddEvalCompetencia.php";
-    const operationUrl = "insertarEddEvalCompetencia";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      nomCompetencia: nomCompetencia,
-      isActive: true,
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEddEvalCompetencia(datos);
-    });
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarEddEvalCompetencia.php";
+      const operationUrl = "insertarEddEvalCompetencia";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        nomCompetencia: nomCompetencia,
+        isActive: true,
+      };
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEddEvalCompetencia(datos);
+      });
+    }
   }
 
   function actualizarEddEvalCompetencia(response) {

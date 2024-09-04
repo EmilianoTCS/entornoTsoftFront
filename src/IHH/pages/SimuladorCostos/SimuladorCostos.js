@@ -17,7 +17,8 @@ import "ag-grid-community/styles/ag-theme-material.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import Spinner from "../../../templates/spinner/spinner";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
-
+import Insertar_HHEE from "../../forms/insertar/Insertar_HHEE";
+import Insertar_NotaImp from "../../forms/insertar/Insertar_NotaImp";
 export default function SimuladorCostos() {
   const [, params] = useRoute("/ihh/simuladorCostos/:idProyecto/:mes");
 
@@ -28,17 +29,22 @@ export default function SimuladorCostos() {
   const [listDetalleMensual, setListDetalleMensual] = useState([]);
   const [listElementoEliminado, setListElementoEliminado] = useState([]);
   const [listValorHH, setListValorHH] = useState([]);
+  const [listAcops, setListAcops] = useState();
   const [datosResumen, setDatosResumen] = useState([]);
   // booleans
   const [loadedData, setLoadedData] = useState(false);
+  const [isActiveFormularioHHEE, setIsActiveFormularioHHEE] = useState("");
+  const [isActiveFormularioNota, setIsActiveFormularioNota] = useState("");
   // variables
   const [nomEmpleado, setNomEmpleado] = useState("");
   const [idEmpleado, setIdEmpleado] = useState("");
   const [nomElemento, setNomElemento] = useState("");
+  const [nomTipoElemento, setNomTipoElemento] = useState("");
   const [idElemento, setIdElemento] = useState("");
-  const [valorHHEmp, setValorHHEmp] = useState("");
   const [nomProyecto, setNomProyecto] = useState("");
   const [mes, setMes] = useState(params.mes);
+
+  const [DatosRegistro, setDatosRegistro] = useState("");
 
   /**
    * The function `obtenerEmpleados` fetches a list of employees from a specified URL and sets the
@@ -79,17 +85,28 @@ export default function SimuladorCostos() {
    * updates the data accordingly.
    */
 
+  const obtenerAcops = () => {
+    var url = "pages/auxiliares/ihh_listadoAcopForms.php";
+    var operationUrl = "listados";
+    getDataService(url, operationUrl).then((data) => {
+      setListAcops(data);
+    });
+  };
+
   var gridOptions = {
     // otras configuraciones de AG Grid...
     localeText: {
       noRowsToShow: "No hay filas para mostrar",
     },
   };
+
   function obtenerDetalleMensual() {
     var url = "pages/listados/ihh_listadoDetalleMensualProyecto.php";
     var operationUrl = "ihh_listadoDetalleMensualProyecto";
     var data = { idProyecto: params.idProyecto, mes: params.mes };
     SendDataService(url, operationUrl, data).then((response) => {
+      console.log(response);
+
       const { datosResumen, datosTabla } = response;
       setNomProyecto(datosResumen[0].nomProyecto);
       setMes(datosResumen[0].mes);
@@ -97,7 +114,6 @@ export default function SimuladorCostos() {
         ? setListDetalleMensual(datosTabla)
         : setListDetalleMensual([]);
       setDatosResumen(datosResumen);
-      console.log(datosResumen);
 
       setLoadedData(true);
     });
@@ -132,32 +148,56 @@ it in the `rowData` array. */
       field: "cantHorasPeriodo",
       editable: true,
       cellStyle: { textAlign: "right" },
-      width: 100,
+      width: 70,
     },
     {
-      headerName: "Cant. HH extra",
+      headerName: "Cant. HHEE",
       field: "cantHorasExtra",
-      editable: true,
+      editable: false,
       cellStyle: { textAlign: "right" },
-      width: 100,
+      width: 70,
+    },
+    {
+      headerName: "Tipo HHEE",
+      field: "tipoHHEE",
+      editable: false,
+      cellStyle: { textAlign: "right" },
+      width: 70,
+      valueGetter: function (params) {
+        const elemento = listElemento.find(
+          (item) => item.idElementoImp === params.data.tipoHHEE
+        );
+
+        return elemento && elemento.nomElemento;
+      },
+    },
+    {
+      headerName: "Nro ACOP",
+      field: "numAcop",
+      editable: false,
+      cellStyle: { textAlign: "right" },
+      width: 70,
+      valueGetter: function (params) {
+        return params.data.numAcop ? params.data.numAcop : 0;
+      },
     },
     {
       headerName: "Valor HH",
       field: "valorHH",
       editable: true,
       cellStyle: { textAlign: "right" },
-      width: 100,
+      width: 70,
     },
     {
       headerName: "Total",
       cellStyle: { textAlign: "right" },
       headerClass: "headerTextRight",
-      width: 120,
-      colId: "totalColumn", // Asignar un ID único a la columna "Total"
+      width: 100,
+      colId: "totalColumn",
       valueGetter: function (params) {
         return parseFloat(
           params.data.cantHorasPeriodo * params.data.valorHH +
-            params.data.cantHorasExtra * params.data.valorHH
+            params.data.cantHorasExtra * params.data.valorHH * 1.5
         ).toLocaleString("es-CL", {
           style: "currency",
           currency: "CLP",
@@ -165,24 +205,75 @@ it in the `rowData` array. */
       },
     },
     {
+      headerName: "Nota",
+      field: "nota",
+      editable: false,
+      cellStyle: { textAlign: "right" },
+      width: 65,
+      valueGetter: function (params) {
+        if (params.data.nota) {
+          return "SÍ";
+        } else {
+          return "NO";
+        }
+      },
+    },
+    {
       headerName: "Operaciones",
-      width: 120,
+      width: 300,
       colId: "operaciones",
-      cellStyle: { padding: "0", justifyContent: "center", display: "flex" },
       cellRenderer: function (params) {
         return (
-          <Button
+          <div
             style={{
-              backgroundColor: "#e10b1c",
-              border: "none",
-              fontSize: "10pt",
-            }}
-            onClick={() => {
-              removerElemento(params.data.idRandom);
+              display: "flex",
+              flexDirection: "row",
+              gap: "5px",
+              justifyContent: "center",
             }}
           >
-            Quitar
-          </Button>
+            <Button
+              style={{
+                backgroundColor: "#e10b1c",
+                border: "none",
+                fontSize: "10pt",
+              }}
+              disabled={
+                params.data.nomTipoElemento === "MISCELÁNEO" ? true : false
+              }
+              onClick={() => {
+                setDatosRegistro(params.data);
+                setIsActiveFormularioHHEE(true);
+              }}
+            >
+              Agregar HHEE
+            </Button>
+            <Button
+              style={{
+                backgroundColor: "#e10b1c",
+                border: "none",
+                fontSize: "10pt",
+              }}
+              onClick={() => {
+                setDatosRegistro(params.data);
+                setIsActiveFormularioNota(true);
+              }}
+            >
+              Agregar Nota
+            </Button>
+            <Button
+              style={{
+                backgroundColor: "#e10b1c",
+                border: "none",
+                fontSize: "10pt",
+              }}
+              onClick={() => {
+                removerElemento(params.data.idRandom);
+              }}
+            >
+              Quitar
+            </Button>
+          </div>
         );
       },
     },
@@ -217,11 +308,16 @@ it in the `rowData` array. */
       idEmpleado: idEmpleado,
       idElemento: idElemento,
       idAcop: datosResumen[0].idAcop,
+      numAcop: 0,
+      tipoHHEE: null,
       cantHorasPeriodo: 0,
       cantHorasExtra: 0,
       valorHH: encontrarValorHH(idEmpleado),
       idImpugnacionEmp: null,
       Total: 0,
+      nomTipoElemento: nomTipoElemento,
+      nota: "",
+      idNotaImpugnacion: null,
     };
 
     if (listDetalleMensual === "") {
@@ -272,11 +368,33 @@ it in the `rowData` array. */
     if (gridRef.current) {
       gridRef.current.api.updateGridOptions({ rowData: listDetalleMensual });
       gridRef.current.api.forEachNodeAfterFilterAndSort((node) => {
-        const totalValue =
-          node.data.cantHorasPeriodo * node.data.valorHH +
-          node.data.cantHorasExtra * node.data.valorHH;
+        // console.log(node.data);
+        if (node.data.nomTipoElemento !== "MISCELÁNEO") {
+          const totalValue =
+            node.data.cantHorasPeriodo * node.data.valorHH +
+            node.data.cantHorasExtra * node.data.valorHH * 1.5;
 
-        totalSum += totalValue;
+          totalSum += totalValue;
+        }
+      });
+    }
+    return totalSum;
+  }
+
+  function sumTotalMiscelaneo() {
+    let totalSum = 0;
+    if (gridRef.current) {
+      gridRef.current.api.updateGridOptions({ rowData: listDetalleMensual });
+      gridRef.current.api.forEachNodeAfterFilterAndSort((node) => {
+        // console.log(node.data);
+
+        if (node.data.nomTipoElemento === "MISCELÁNEO") {
+          const totalValue =
+            node.data.cantHorasPeriodo * node.data.valorHH +
+            node.data.cantHorasExtra * node.data.valorHH * 1.5;
+
+          totalSum += totalValue;
+        }
       });
     }
     return totalSum;
@@ -286,11 +404,30 @@ it in the `rowData` array. */
     if (gridRef.current) {
       gridRef.current.api.updateGridOptions({ rowData: listDetalleMensual });
       gridRef.current.api.forEachNodeAfterFilterAndSort((node) => {
-        const totalHoras =
-          parseInt(node.data.cantHorasPeriodo) +
-          parseInt(node.data.cantHorasExtra);
+        if (node.data.nomTipoElemento !== "MISCELÁNEO") {
+          const totalHoras =
+            parseInt(node.data.cantHorasPeriodo) +
+            parseInt(node.data.cantHorasExtra);
 
-        totalSum += totalHoras;
+          totalSum += totalHoras;
+        }
+      });
+    }
+    return totalSum;
+  }
+
+  function sumTotalHorasMiscelaneo() {
+    let totalSum = 0;
+    if (gridRef.current) {
+      gridRef.current.api.updateGridOptions({ rowData: listDetalleMensual });
+      gridRef.current.api.forEachNodeAfterFilterAndSort((node) => {
+        if (node.data.nomTipoElemento === "MISCELÁNEO") {
+          const totalHoras =
+            parseInt(node.data.cantHorasPeriodo) +
+            parseInt(node.data.cantHorasExtra);
+
+          totalSum += totalHoras;
+        }
       });
     }
     return totalSum;
@@ -371,8 +508,8 @@ it in the `rowData` array. */
       usuarioCreacion: userData.usuario,
       isActive: 1,
     };
-
     console.log(data);
+
     SendDataService(URL, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -385,6 +522,7 @@ it in the `rowData` array. */
       obtenerElementos();
       obtenerDetalleMensual();
       obtenerValorHH();
+      obtenerAcops();
     },
     [loadedData]
   );
@@ -396,6 +534,19 @@ it in the `rowData` array. */
       <>
         {loadedData ? (
           <>
+            <Insertar_HHEE
+              isActive={isActiveFormularioHHEE}
+              cambiarEstado={setIsActiveFormularioHHEE}
+              Registro={DatosRegistro}
+              datosMain={listDetalleMensual}
+            />
+            <Insertar_NotaImp
+              isActive={isActiveFormularioNota}
+              cambiarEstado={setIsActiveFormularioNota}
+              Registro={DatosRegistro}
+              datosMain={listDetalleMensual}
+            />
+
             <Header></Header>
             <br />
             <div
@@ -403,16 +554,27 @@ it in the `rowData` array. */
                 backgroundColor: "white",
                 padding: "30px",
                 borderRadius: "30px",
-                width: "1000px",
+                width: "1100px",
                 margin: "auto",
               }}
             >
               {/* titulos */}
-              <h2 style={{ margin: "-10px auto", width: "650px", textAlign: "center" }}>
-                Proyecto {nomProyecto} <br></br> {convertirFecha(mes)}
+              <h2
+                style={{
+                  margin: "-10px auto",
+                  width: "800px",
+                  textAlign: "center",
+                }}
+              >
+                Proyecto <br></br>
+                {nomProyecto}
               </h2>
+              <h4>
+                {convertirFecha(mes)} - Días laborables:{" "}
+                {datosResumen[0].diasLaborables} (
+                {datosResumen[0].diasLaborables * 8} horas)
+              </h4>
               <br></br>
-
               {/* selectores */}
               <div
                 style={{
@@ -464,6 +626,7 @@ it in the `rowData` array. */
                       if (selectedElemento) {
                         setIdElemento(selectedElemento.idElementoImp);
                         setNomElemento(selectedElemento.nomElemento);
+                        setNomTipoElemento(selectedElemento.nomTipoElemento);
                       }
                     }}
                   ></input>
@@ -492,9 +655,7 @@ it in the `rowData` array. */
                   Agregar
                 </Button>
               </div>
-
               <br></br>
-
               <div>
                 {/* Ag grid */}
                 <div className="ag-theme-quartz" style={{ height: "300px" }}>
@@ -523,14 +684,17 @@ it in the `rowData` array. */
                 <div
                   style={{ fontSize: "14pt", width: "900px", margin: "auto" }}
                 >
-                  <p style={{ marginLeft: "540px", marginTop: "10px" }}>
-                    Costo mensual total:&nbsp;
+                  <p style={{ marginLeft: "450px", marginTop: "10px" }}>
+                    Costo mensual total (proy + misc):&nbsp;
                     <b>
-                      {sumTotal()
-                        ? sumTotal().toLocaleString("es-CL", {
-                            style: "currency",
-                            currency: "CLP",
-                          })
+                      {sumTotal() + sumTotalMiscelaneo()
+                        ? (sumTotal() + sumTotalMiscelaneo()).toLocaleString(
+                            "es-CL",
+                            {
+                              style: "currency",
+                              currency: "CLP",
+                            }
+                          )
                         : "$0"}
                     </b>
                   </p>
@@ -542,38 +706,41 @@ it in the `rowData` array. */
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-around",
+                    gap: "10px",
                   }}
                 >
-                  {/* RESUMEN */}
+                  {/* RESUMEN PROYECTO */}
                   <div
                     style={{
                       backgroundColor: "lightgray",
                       padding: "20px",
                       borderRadius: "10px",
                       width: "550px",
+                      height: "auto",
                     }}
                   >
-                    <table style={{ fontSize: "13pt", fontWeight: "600" }}>
+                    <b style={{ fontSize: "17pt" }}>Resumen proyecto</b>
+                    <table>
                       <tbody>
+                        {/* p total */}
                         <tr>
-                          <th style={{ width: "450px" }}>
-                            <b>Presupuesto total del proyecto: </b>
-                          </th>
+                          <th style={{ width: "450px" }}>Presup total:</th>
                           <th style={{ textAlign: "right" }}>
-                            {parseFloat(
-                              datosResumen[0].presupuestoTotal
-                            ).toLocaleString("es-CL", {
-                              style: "currency",
-                              currency: "CLP",
-                            })}
+                            <b>
+                              {parseFloat(
+                                datosResumen[0].presupuestoTotal
+                              ).toLocaleString("es-CL", {
+                                style: "currency",
+                                currency: "CLP",
+                              })}
+                            </b>
                           </th>
-                        </tr>{" "}
+                        </tr>
+                        {/* saldo proy */}
                         <tr>
-                          <th>
-                            <b>Saldo proyecto: </b>
-                          </th>
+                          <th>Saldo:</th>
                           <th style={{ textAlign: "right" }}>
-                            <text
+                            <b
                               style={
                                 datosResumen[0].saldoPresupuesto - sumTotal() <
                                 0
@@ -590,46 +757,43 @@ it in the `rowData` array. */
                                     currency: "CLP",
                                   })
                                 : "$0"}
-                            </text>
+                            </b>
                           </th>
                         </tr>
                         <br />
+                        {/* ppto mensual proy */}
                         <tr>
-                          <th>
-                            {" "}
-                            <b>Presupuesto mensual del proyecto: </b>
-                          </th>
+                          <th>Presup mensual:</th>
                           <th style={{ textAlign: "right" }}>
-                            {parseFloat(
-                              datosResumen[0].presupuestoAcumulado
-                            ).toLocaleString("es-CL", {
-                              style: "currency",
-                              currency: "CLP",
-                            })}
+                            <b>
+                              {parseFloat(
+                                datosResumen[0].presupuestoAcumulado
+                              ).toLocaleString("es-CL", {
+                                style: "currency",
+                                currency: "CLP",
+                              })}
+                            </b>
                           </th>
                         </tr>
+                        {/* costo men */}
                         <tr>
-                          <th>
-                            <b>Costo mensual: </b>
-                          </th>
+                          <th>Costo mensual:</th>
                           <th style={{ textAlign: "right" }}>
-                            <text style={{ color: "red" }}>
+                            <b style={{ color: "red" }}>
                               {sumTotal()
                                 ? sumTotal().toLocaleString("es-CL", {
                                     style: "currency",
                                     currency: "CLP",
                                   })
                                 : "$0"}
-                            </text>
+                            </b>
                           </th>
                         </tr>
+                        {/* saldo mes */}
                         <tr>
-                          <th>
-                            <b>Saldo mes: </b>
-                          </th>
+                          <th>Saldo mes:</th>
                           <th style={{ textAlign: "right" }}>
-                            {" "}
-                            <text
+                            <b
                               style={
                                 datosResumen[0].presupuestoAcumulado -
                                   sumTotal() <
@@ -647,33 +811,177 @@ it in the `rowData` array. */
                                     currency: "CLP",
                                   })
                                 : "$0"}
-                            </text>
+                            </b>
                           </th>
                         </tr>
+                        {/* cant horas totales */}
                         <tr>
-                          <th>
-                            <b>Cant total de horas computadas del mes: </b>
-                          </th>
+                          <th>Cant total horas mes:</th>
                           <th style={{ textAlign: "right" }}>
-                            <text>
-                              {sumTotalHoras() ? sumTotalHoras() : "0"}
-                            </text>
+                            <b>{sumTotalHoras() ? sumTotalHoras() : "0"}</b>
                           </th>
                         </tr>
+                        {/* cant Colab */}
                         <tr>
-                          <th>
-                            <b>Cant colaboradores impugnados: </b>
-                          </th>
+                          <th>Cant colab:</th>
                           <th style={{ textAlign: "right" }}>
-                            <text>
-                              {listDetalleMensual ? listDetalleMensual.length : "0"}
-                            </text>
+                            <b>
+                              {listDetalleMensual
+                                ? listDetalleMensual.length
+                                : "0"}
+                            </b>
                           </th>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-
+                  {/* RESUMEN MISCELANEO */}
+                  <div
+                    style={{
+                      backgroundColor: "lightgray",
+                      padding: "20px",
+                      borderRadius: "10px",
+                      width: "600px",
+                    }}
+                  >
+                    <b style={{ fontSize: "17pt" }}>Resumen misceláneos</b>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <th style={{ width: "450px" }}>
+                            Presup total:
+                          </th>
+                          <th style={{ textAlign: "right" }}>
+                            <b>
+                              {isNaN(
+                                parseFloat(
+                                  datosResumen[0].presupuestoTotalMiscelaneo
+                                )
+                              )
+                                ? (0).toLocaleString("es-CL", {
+                                    style: "currency",
+                                    currency: "CLP",
+                                  })
+                                : parseFloat(
+                                    datosResumen[0].presupuestoTotalMiscelaneo
+                                  ).toLocaleString("es-CL", {
+                                    style: "currency",
+                                    currency: "CLP",
+                                  })}
+                            </b>
+                          </th>
+                        </tr>
+                        <tr>
+                          <th>Saldo:</th>
+                          <th style={{ textAlign: "right" }}>
+                            <b
+                              style={
+                                datosResumen[0].saldoPresupuestoMiscelaneo -
+                                  sumTotalMiscelaneo() <
+                                0
+                                  ? { color: "red " }
+                                  : { color: "green" }
+                              }
+                            >
+                              {datosResumen[0].saldoPresupuestoMiscelaneo -
+                              sumTotalMiscelaneo()
+                                ? (
+                                    datosResumen[0].saldoPresupuestoMiscelaneo -
+                                    sumTotalMiscelaneo()
+                                  ).toLocaleString("es-CL", {
+                                    style: "currency",
+                                    currency: "CLP",
+                                  })
+                                : "$0"}
+                            </b>
+                          </th>
+                        </tr>
+                        <br />
+                        <tr>
+                          <th>Presup mensual:</th>
+                          <th style={{ textAlign: "right" }}>
+                            <b>
+                              {isNaN(
+                                datosResumen[0].presupuestoAcumuladoMiscelaneo
+                              ) ||
+                              !datosResumen[0].presupuestoAcumuladoMiscelaneo
+                                ? (0).toLocaleString("es-CL", {
+                                    style: "currency",
+                                    currency: "CLP",
+                                  })
+                                : parseFloat(
+                                    datosResumen[0]
+                                      .presupuestoAcumuladoMiscelaneo
+                                  ).toLocaleString("es-CL", {
+                                    style: "currency",
+                                    currency: "CLP",
+                                  })}
+                            </b>
+                          </th>
+                        </tr>
+                        <tr>
+                          <th>Costo mensual:</th>
+                          <th style={{ textAlign: "right" }}>
+                            <b style={{ color: "red" }}>
+                              {sumTotalMiscelaneo()
+                                ? sumTotalMiscelaneo().toLocaleString("es-CL", {
+                                    style: "currency",
+                                    currency: "CLP",
+                                  })
+                                : "$0"}
+                            </b>
+                          </th>
+                        </tr>
+                        <tr>
+                          <th>Saldo mes misc:</th>
+                          <th style={{ textAlign: "right" }}>
+                            <b
+                              style={
+                                datosResumen[0].presupuestoAcumuladoMiscelaneo -
+                                  sumTotalMiscelaneo() <
+                                0
+                                  ? { color: "red " }
+                                  : { color: "green" }
+                              }
+                            >
+                              {datosResumen[0].presupuestoAcumuladoMiscelaneo -
+                              sumTotalMiscelaneo()
+                                ? (
+                                    datosResumen[0]
+                                      .presupuestoAcumuladoMiscelaneo -
+                                    sumTotalMiscelaneo()
+                                  ).toLocaleString("es-CL", {
+                                    style: "currency",
+                                    currency: "CLP",
+                                  })
+                                : "$0"}
+                            </b>
+                          </th>
+                        </tr>
+                        <tr>
+                          <th>Cant total horas mes:</th>
+                          <th style={{ textAlign: "right" }}>
+                            <b>
+                              {sumTotalHorasMiscelaneo()
+                                ? sumTotalHorasMiscelaneo()
+                                : "0"}
+                            </b>
+                          </th>
+                        </tr>
+                        <tr>
+                          <th>Cant colab:</th>
+                          <th style={{ textAlign: "right" }}>
+                            <b>
+                              {listDetalleMensual
+                                ? listDetalleMensual.length
+                                : "0"}
+                            </b>
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  {/* boton guardar cambios */}
                   <div
                     style={{
                       display: "flex",

@@ -7,6 +7,7 @@ import getDataService from "../../../services/GetDataService";
 import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import TopAlertsError from "../../alerts/TopAlerts";
 
 const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
   // ----------------------CONSTANTES----------------------------
@@ -39,27 +40,62 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
     );
   }
 
+  function validaciones() {
+    if (codRamo.trim() === "") {
+      TopAlertsError("01", "El código del ramo no debe estar vacío");
+      return true;
+    } else if (nomRamo.trim() === "") {
+      TopAlertsError("02", "El nombre del ramo no debe estar vacío");
+      return true;
+    } else if (tipoRamo.trim() === "") {
+      TopAlertsError("03", "El tipo de ramo no puede estar vacío");
+      return true;
+    } else if (tipoRamoHH.trim() === "") {
+      TopAlertsError("04", "El tipo de HH en el ramo no puede estar vacío");
+      return true;
+    } else if (duracionRamoHH <= 0) {
+      TopAlertsError("05", "La duración del ramo debe ser mayor a cero");
+      return true;
+    } else if (cantSesionesRamo <= 0) {
+      TopAlertsError(
+        "06",
+        "La cantidad de sesiones del ramo debe ser mayor a cero"
+      );
+      return true;
+    } else if (idCurso <= 0) {
+      TopAlertsError("07", "El curso relacionado no puede estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/insertarRamo.php";
-    const operationUrl = "insertarRamo";
-    var data = {
-      usuarioCreacion: userData.usuario,
-      codRamo: codRamo,
-      nomRamo: nomRamo,
-      tipoRamo: tipoRamo,
-      tipoRamoHH: tipoRamoHH,
-      duracionRamoHH: duracionRamoHH,
-      cantSesionesRamo: cantSesionesRamo,
-      idCurso:idCurso,
-      isActive: true,
-    };
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/insertar/insertarRamo.php";
+      const operationUrl = "insertarRamo";
+      var data = {
+        usuarioCreacion: userData.usuario,
+        codRamo: codRamo,
+        nomRamo: nomRamo,
+        tipoRamo: tipoRamo,
+        tipoRamoHH: tipoRamoHH,
+        duracionRamoHH: duracionRamoHH,
+        cantSesionesRamo: cantSesionesRamo,
+        idCurso: idCurso,
+        isActive: true,
+      };
 
-    console.log(data);
-    SendDataService(url, operationUrl, data).then((response) => {
-      TopAlerts('successCreated');
-      actualizarRamo(ramos);
-    });
+      SendDataService(url, operationUrl, data).then((response) => {
+        
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarRamo(ramos);
+        cambiarEstado(false);
+      });
+    }
   }
 
   function actualizarRamo(response) {
@@ -75,12 +111,12 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear Ramo</Modal.Title>
+          <Modal.Title>Insertar ramo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-          <div>
-              <label htmlFor="input_codigoDelRamo">Código:</label>
+            <div>
+              <label htmlFor="input_codigoDelRamo">Código del ramo:</label>
               <input
                 style={{ textTransform: "uppercase" }}
                 placeholder="Escriba código del Ramo"
@@ -125,7 +161,7 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
             </div>
 
             <div>
-            <label htmlFor="input_tipoDelRamohh">Tipo ramo HH:</label>
+              <label htmlFor="input_tipoDelRamohh">Tipo ramo HH:</label>
               <select
                 style={{ textTransform: "uppercase" }}
                 placeholder="Escriba tipo del ramo HH"

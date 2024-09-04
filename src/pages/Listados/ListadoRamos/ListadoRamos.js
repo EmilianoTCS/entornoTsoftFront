@@ -111,14 +111,13 @@ export default function ListadoRamos() {
           <div id="containerTablas">
             <h1 id="TitlesPages">Listado de ramos</h1>
             <h6 style={{ color: "gray" }}>
-              Factory Devops {"->"} Listado de Ramos
+              Factory Devops {"->"} Listado de ramos
             </h6>
             <br></br>
-
             <div id="selectPaginador">
               {userData.nomRol === "administrador" ? (
                 <Button id="btn1" onClick={insertarRamo}>
-                  Crear Ramo
+                  Insertar ramo
                 </Button>
               ) : null}
 
@@ -145,7 +144,7 @@ export default function ListadoRamos() {
                 </select>
               </div>
               <div className="form-group" id="btn2">
-                <label htmlFor="input_CantidadR">Cursos: </label>
+                <label htmlFor="input_CantidadR">Cursos:</label>
                 <select
                   required
                   type="text"
@@ -184,12 +183,11 @@ export default function ListadoRamos() {
             <Table id="mainTable" hover responsive>
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Código</th>
-                  <th>Ramo</th>
-                  <th>Tipo</th>
+                  <th>Código ramo</th>
+                  <th>Nombre ramo</th>
+                  <th>Tipo ramo</th>
                   <th>Tipo horario</th>
-                  <th>Duración</th>
+                  <th>Duración HH</th>
                   <th>Cant sesiones</th>
                   <th>Curso</th>
                   <th>Operaciones</th>
@@ -198,9 +196,6 @@ export default function ListadoRamos() {
               <tbody>
                 {ramos.map((ramos) => (
                   <tr key={ramos.idRamo}>
-                    <td align="right" width={1}>
-                      {ramos.idRamo}
-                    </td>
                     <td>{ramos.codRamo}</td>
                     <td>{ramos.nomRamo}</td>
                     <td>{ramos.tipoRamo}</td>

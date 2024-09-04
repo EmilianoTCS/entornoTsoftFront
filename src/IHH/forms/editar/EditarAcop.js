@@ -16,31 +16,82 @@ export default function EditarAcop({ isActive, cambiarEstado, Registro }) {
     useState(false);
   const [acop, setAcop] = useState();
   const [datosMesesAcop, setDatosMesesAcop] = useState([""]);
+  const [porcMiscelaneo, setPorcMiscelaneo] = useState([]);
+  const hoy = new Date();
+
+  function validaciones() {
+    if (acop.numAcop <= 0) {
+      TopAlertsError("01", "El número del ACOP debe ser mayor a cero");
+      return true;
+    } else if (acop.nomAcop.trim() === "") {
+      TopAlertsError("02", "El nombre del ACOP no debe estar vacío");
+      return true;
+    } else if (new Date(acop.fechaIni) > new Date(acop.fechaFin)) {
+      TopAlertsError(
+        "03",
+        "La fecha inicio no puede ser mayor a la fecha término"
+      );
+      return true;
+    } else if (acop.valorUSD <= 0) {
+      TopAlertsError("04", "El valor de USD debe ser mayor a cero");
+      return true;
+    } else if (new Date(acop.fechaValorUSD) > hoy) {
+      TopAlertsError(
+        "05",
+        "La fecha del valor USD no puede ser mayor a la actual"
+      );
+      return true;
+    } else if (acop.presupuestoGeneral <= 0) {
+      TopAlertsError("06", "El presupuesto total debe ser mayor a cero");
+      return true;
+    } else if (acop.presupuestoTotal <= 0) {
+      TopAlertsError("07", "El presupuesto operacional debe ser mayor a cero");
+      return true;
+    } else if (
+      parseFloat(acop.presupuestoTotal) > parseFloat(acop.presupuestoGeneral)
+    ) {
+      TopAlertsError(
+        "08",
+        "El presupuesto operacional no debe ser mayor al presupuesto general"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/editar/ihh_editarAcop.php";
-    const operationUrl = "ihh_editarAcop";
-    var data = {
-      idAcop: acop.idAcop,
-      nomAcop: acop.nomAcop,
-      fechaIni: acop.fechaIni,
-      fechaFin: acop.fechaFin,
-      valorUSD: acop.valorUSD,
-      presupuestoTotal: acop.presupuestoTotal,
-      isActive: 1,
-      usuarioModificacion: userData.usuario,
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+    const errores = validaciones();
+    if (!errores) {
+      const url = "pages/editar/ihh_editarAcop.php";
+      const operationUrl = "ihh_editarAcop";
+      var data = {
+        idAcop: acop.idAcop,
+        numAcop: acop.numAcop,
+        nomAcop: acop.nomAcop,
+        fechaIni: acop.fechaIni,
+        fechaFin: acop.fechaFin,
+        valorUSD: acop.valorUSD,
+        fechaValorUSD: acop.fechaValorUSD,
+        presupuestoTotal: acop.presupuestoTotal,
+        presupuestoGeneral: acop.presupuestoGeneral,
+        isActive: 1,
+        usuarioModificacion: userData.usuario,
+      };
+      console.log(data);
 
-      if (datos.idacopmes && !isActiveFormularioPresupuesto) {
-        setisActiveFormularioPresupuesto(true);
-        setDatosMesesAcop(response);
-        cambiarEstado(false);
-      }
-    });
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+
+        if (datos.idacopmes && !isActiveFormularioPresupuesto) {
+          setisActiveFormularioPresupuesto(true);
+          setDatosMesesAcop(response);
+          cambiarEstado(false);
+        }
+      });
+    }
   }
 
   function convertirFormatoFecha(dateStr) {
@@ -48,13 +99,26 @@ export default function EditarAcop({ isActive, cambiarEstado, Registro }) {
     return `${year}-${month}-${day}`;
   }
 
+  function getPorcMiscelaneo() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "ACOPS",
+      subTipoConfDato: "PORC_MISCELANEO",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setPorcMiscelaneo(parseFloat(response[0].datoVisible));
+    });
+  }
   useEffect(
     function () {
       if (Registro) {
         Registro.fechaIni = convertirFormatoFecha(Registro.fechaIni);
         Registro.fechaFin = convertirFormatoFecha(Registro.fechaFin);
+        Registro.fechaValorUSD = convertirFormatoFecha(Registro.fechaValorUSD);
       }
       setAcop(Registro);
+      getPorcMiscelaneo();
     },
     [Registro]
   );
@@ -75,6 +139,23 @@ export default function EditarAcop({ isActive, cambiarEstado, Registro }) {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
+            <div>
+              <label htmlFor="input_nombreAcop">Número del ACOP:</label>
+              <input
+                type="number"
+                className="form-control"
+                name="input_nombreAcop"
+                id="input_nombreAcop"
+                value={acop.numAcop || ""}
+                onChange={({ target }) => {
+                  setAcop((prevDatos) => ({
+                    ...prevDatos,
+                    numAcop: target.value,
+                  }));
+                }}
+                required
+              />
+            </div>
             <div>
               <label htmlFor="input_nombreAcop">Nombre del ACOP:</label>
               <input
@@ -127,29 +208,50 @@ export default function EditarAcop({ isActive, cambiarEstado, Registro }) {
                 required
               />
             </div>
-            <div>
-              <label htmlFor="input_valorUSD">Valor USD (CLP)</label>
-              <NumericFormat
-                placeholder="Escriba el valor del dólar en CLP"
-                className="form-control"
-                name="input_valorUSD"
-                value={acop.valorUSD || ""}
-                id="input_valorUSD"
-                thousandSeparator={"."}
-                prefix={"$"}
-                onValueChange={(values) => {
-                  const { value } = values;
-                  setAcop((prevDatos) => ({
-                    ...prevDatos,
-                    valorUSD: parseFloat(value),
-                  }));
-                }}
-                decimalSeparator=","
-                required
-                decimalScale={2}
-                fixedDecimalScale={true}
-              />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ width: "65%" }}>
+                <label htmlFor="input_valorUSD">Valor USD (CLP)</label>
+                <NumericFormat
+                  placeholder="Escriba el valor del dólar en CLP"
+                  className="form-control"
+                  name="input_valorUSD"
+                  value={acop.valorUSD || ""}
+                  id="input_valorUSD"
+                  thousandSeparator={"."}
+                  prefix={"$"}
+                  onValueChange={(values) => {
+                    const { value } = values;
+                    setAcop((prevDatos) => ({
+                      ...prevDatos,
+                      valorUSD: parseFloat(value),
+                    }));
+                  }}
+                  decimalSeparator=","
+                  required
+                  decimalScale={2}
+                  fixedDecimalScale={true}
+                />
+              </div>
+              <div style={{ width: "34%" }}>
+                <label htmlFor="input_fechaValorUSD">Fecha Valor USD</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  name="input_fechaValorUSD"
+                  value={acop.fechaValorUSD || ""}
+                  id="input_fechaValorUSD"
+                  onChange={({ target }) =>
+                    setAcop((prevDatos) => ({
+                      ...prevDatos,
+                      fechaValorUSD: target.value,
+                    }))
+                  }
+                  required
+                />
+              </div>
             </div>
+
+            {/* ppto total */}
             <div>
               <label htmlFor="input_presupuestoTotal">
                 Presupuesto total (USD)
@@ -159,9 +261,51 @@ export default function EditarAcop({ isActive, cambiarEstado, Registro }) {
                 className="form-control"
                 name="input_presupuestoTotal"
                 id="input_presupuestoTotal"
-                value={acop.presupuestoTotal || ""}
                 thousandSeparator={"."}
                 prefix={"$"}
+                value={acop.presupuestoGeneral || ""}
+                onValueChange={(values) => {
+                  const { value } = values;
+                  setAcop((prevDatos) => ({
+                    ...prevDatos,
+                    presupuestoGeneral: parseFloat(value),
+                  }));
+                }}
+                decimalSeparator=","
+                required
+                decimalScale={2}
+                fixedDecimalScale={true}
+              />
+              <label style={{ opacity: "0.6" }}>
+                {!isNaN(parseFloat(acop.presupuestoGeneral * acop.valorUSD)) ? (
+                  <>
+                    (En CLP: &nbsp;
+                    {parseFloat(
+                      acop.presupuestoGeneral * acop.valorUSD
+                    ).toLocaleString("es-CL", {
+                      style: "currency",
+                      currency: "CLP",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    )
+                  </>
+                ) : null}
+              </label>
+            </div>
+            {/* ppto operacional  */}
+            <div>
+              <label htmlFor="input_presupuestoTotal">
+                Presupuesto operacional (USD)
+              </label>
+              <NumericFormat
+                placeholder="Escriba el presupuesto operacional en USD"
+                className="form-control"
+                name="input_presupuestoOperacional"
+                id="input_presupuestoOperacional"
+                thousandSeparator={"."}
+                prefix={"$"}
+                value={acop.presupuestoTotal || ""}
                 onValueChange={(values) => {
                   const { value } = values;
                   setAcop((prevDatos) => ({
@@ -174,6 +318,167 @@ export default function EditarAcop({ isActive, cambiarEstado, Registro }) {
                 decimalScale={2}
                 fixedDecimalScale={true}
               />
+              <label style={{ opacity: "0.6" }}>
+                {!isNaN(parseFloat(acop.presupuestoTotal * acop.valorUSD)) ? (
+                  <>
+                    (En CLP: &nbsp;
+                    {parseFloat(
+                      acop.presupuestoTotal * acop.valorUSD
+                    ).toLocaleString("es-CL", {
+                      style: "currency",
+                      currency: "CLP",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    )
+                  </>
+                ) : null}
+              </label>
+            </div>
+            <br />
+                        {/* margen y rentab */}
+                        <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                fontSize: "11pt",
+                gap: "15px",
+              }}
+            >
+              <label style={{ opacity: "0.8" }}>
+                {!isNaN(
+                  parseFloat(acop.presupuestoGeneral - acop.presupuestoTotal)
+                ) ? (
+                  <>
+                    (Margen en USD: &nbsp;
+                    {parseFloat(
+                      acop.presupuestoGeneral - acop.presupuestoTotal
+                    ).toLocaleString("es-CL", {
+                      style: "currency",
+                      currency: "CLP",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    )
+                  </>
+                ) : null}
+              </label>
+              <label style={{ opacity: "0.8" }}>
+                {!isNaN(
+                  parseFloat(
+                    ((acop.presupuestoGeneral - acop.presupuestoTotal) *
+                      100) /
+                      acop.presupuestoGeneral
+                  )
+                ) ? (
+                  <>
+                    (Rentab esperada: &nbsp;
+                    {parseFloat(
+                      ((acop.presupuestoGeneral - acop.presupuestoTotal) *
+                        100) /
+                        acop.presupuestoGeneral
+                    )}
+                    % )
+                  </>
+                ) : null}
+              </label>
+            </div>
+            {/* ppto hh */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                fontSize: "11pt",
+                gap: "15px",
+              }}
+            >
+              <label style={{ opacity: "0.8" }}>
+                {!isNaN(
+                  parseFloat(
+                    acop.presupuestoTotal -
+                      acop.presupuestoTotal * porcMiscelaneo
+                  )
+                ) ? (
+                  <>
+                    (Ppto. HH en USD: &nbsp;
+                    {parseFloat(
+                      acop.presupuestoTotal -
+                        acop.presupuestoTotal * porcMiscelaneo
+                    ).toLocaleString("es-CL", {
+                      style: "currency",
+                      currency: "CLP",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    )
+                  </>
+                ) : null}
+              </label>
+              <label style={{ opacity: "0.8" }}>
+                {!isNaN(
+                  parseFloat(
+                    acop.presupuestoTotal -
+                      acop.presupuestoTotal * porcMiscelaneo
+                  )
+                ) ? (
+                  <>
+                    (Ppto. HH en CLP: &nbsp;
+                    {parseFloat(
+                      (acop.presupuestoTotal -
+                        acop.presupuestoTotal * porcMiscelaneo) *
+                        acop.valorUSD
+                    ).toLocaleString("es-CL", {
+                      style: "currency",
+                      currency: "CLP",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    )
+                  </>
+                ) : null}
+              </label>
+            </div>
+            {/* ppto misc */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                fontSize: "11pt",
+                gap: "10px",
+              }}
+            >
+              <label style={{ opacity: "0.8" }}>
+                {!isNaN(parseFloat(acop.presupuestoTotal * porcMiscelaneo)) ? (
+                  <>
+                    (Ppto. Misc en USD: &nbsp;
+                    {parseFloat(
+                      acop.presupuestoTotal * porcMiscelaneo
+                    ).toLocaleString("es-CL", {
+                      style: "currency",
+                      currency: "CLP",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    )
+                  </>
+                ) : null}
+              </label>
+              <label style={{ opacity: "0.8" }}>
+                {!isNaN(parseFloat(acop.presupuestoTotal * porcMiscelaneo)) ? (
+                  <>
+                    (Ppto. Misc en CLP: &nbsp;
+                    {parseFloat(
+                      acop.presupuestoTotal * porcMiscelaneo * acop.valorUSD
+                    ).toLocaleString("es-CL", {
+                      style: "currency",
+                      currency: "CLP",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    )
+                  </>
+                ) : null}
+              </label>
             </div>
 
             <Button

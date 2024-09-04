@@ -55,41 +55,67 @@ const EditarEDDEvaluacion = ({
       setdescFormulario(response[0].descFormulario);
     });
   };
-
-  function SendData(e) {
-    e.preventDefault();
-    var url = "pages/editar/editarEddEvaluacion.php";
-    var operationUrl = "editarEddEvaluacion";
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idEDDEvaluacion: idEDDEvaluacion,
-      nomEvaluacion:
-        nomEvaluacion === "" ? responseID[0].nomEvaluacion : nomEvaluacion,
-      tipoEvaluacion:
-        tipoEvaluacion === "" ? responseID[0].tipoEvaluacion : tipoEvaluacion,
-      fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
-      fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
-      descFormulario:
-        descFormulario === "" ? responseID[0].descFormulario : descFormulario,
-
-      isActive: true,
-    };
-
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-      actualizarEDDEvaluacion(datos);
-      cambiarEstado(false)
-    });
-
-    function actualizarEDDEvaluacion(EDDEvaluacion) {
-      const nuevosEDDEvaluacion = listEDDEvaluacion.map((c) =>
-        c.idEDDEvaluacion === EDDEvaluacion.idEDDEvaluacion ? EDDEvaluacion : c
+  function validaciones() {
+    if (nomEvaluacion.trim() === "") {
+      TopAlertsError("01", "El nombre de la evaluación no debe estar vacío");
+      return true;
+    } else if (tipoEvaluacion.trim() === "") {
+      TopAlertsError("02", "El tipo de evaluación no debe estar vacío");
+      return true;
+    } else if (descFormulario.trim() === "") {
+      TopAlertsError("03", "La descripción no debe estar vacía");
+      return true;
+    } else if (fechaIni.trim() === "") {
+      TopAlertsError("04", "La fecha de inicio no puede estar vacía");
+      return true;
+    } else if (fechaFin.trim() === "") {
+      TopAlertsError("05", "La fecha de término no puede estar vacía");
+      return true;
+    } else if (fechaIni > fechaFin) {
+      TopAlertsError(
+        "06",
+        "La fecha de inicio no debe ser mayor a la fecha de término"
       );
-      setEDDEvaluacion(nuevosEDDEvaluacion);
+      return true;
+    } else {
+      return false;
     }
   }
+  function SendData(e) {
+    e.preventDefault();
+    const errores = validaciones();
+    if (!errores) {
+      var url = "pages/editar/editarEddEvaluacion.php";
+      var operationUrl = "editarEddEvaluacion";
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idEDDEvaluacion: idEDDEvaluacion,
+        nomEvaluacion:
+          nomEvaluacion === "" ? responseID[0].nomEvaluacion : nomEvaluacion,
+        tipoEvaluacion:
+          tipoEvaluacion === "" ? responseID[0].tipoEvaluacion : tipoEvaluacion,
+        fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
+        fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
+        descFormulario:
+          descFormulario === "" ? responseID[0].descFormulario : descFormulario,
 
+        isActive: true,
+      };
+
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarEDDEvaluacion(datos);
+        cambiarEstado(false);
+      });
+    }
+  }
+  function actualizarEDDEvaluacion(EDDEvaluacion) {
+    const nuevosEDDEvaluacion = listEDDEvaluacion.map((c) =>
+      c.idEDDEvaluacion === EDDEvaluacion.idEDDEvaluacion ? EDDEvaluacion : c
+    );
+    setEDDEvaluacion(nuevosEDDEvaluacion);
+  }
   useEffect(
     function () {
       if (idEDDEvaluacion !== null) {
