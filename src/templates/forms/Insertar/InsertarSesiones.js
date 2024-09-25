@@ -20,6 +20,8 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
   const [idRamo, setidRamo] = useState("");
 
   const [listRamo, setlistRamo] = useState([""]);
+  const [listTipoSesion, setlistTipoSesion] = useState([""]);
+  const [listTipoSesionHH, setlistTipoSesionHH] = useState([""]);
 
   const listSesion = sesion;
 
@@ -35,6 +37,29 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
     const url = "pages/auxiliares/listadoRamoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => setlistRamo(response));
+  }
+
+  function obtenerTipoSesion() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_SESION",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setlistTipoSesion(response);
+    });
+  }
+  function obtenerTipoSesionHH() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_SESION_HH",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setlistTipoSesionHH(response);
+    });
   }
   function validaciones() {
     if (nroSesion.trim() <= 0) {
@@ -87,6 +112,8 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
 
   useEffect(function () {
     obtenerRamo();
+    obtenerTipoSesion();
+    obtenerTipoSesionHH();
   }, []);
 
   // ----------------------RENDER----------------------------
@@ -142,9 +169,12 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="PRESENCIAL">PRESENCIAL</option>
-                <option value="REMOTO">REMOTO</option>
-                <option value="MIXTO">MIXTO</option>
+                {listTipoSesion &&
+                  listTipoSesion.map((valor) => (
+                    <option value={valor.datoVisible}>
+                      {valor.datoVisible}
+                    </option>
+                  ))}
               </select>
             </div>
             <div>
@@ -161,9 +191,12 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="ACADEMICAS">ACADEMICAS</option>
-                <option value="CRONOLOGICAS">CRONOLOGICAS</option>
-                <option value="MIXTO">MIXTO</option>
+                {listTipoSesionHH &&
+                  listTipoSesionHH.map((valor) => (
+                    <option value={valor.datoVisible}>
+                      {valor.datoVisible}
+                    </option>
+                  ))}
               </select>
             </div>
             <div>

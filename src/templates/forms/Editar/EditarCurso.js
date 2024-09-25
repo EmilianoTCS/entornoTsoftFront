@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import "../../css/InsertarCursoCalendario.css";
-import getDataService from "../../../services/GetDataService";
 import SendDataService from "../../../services/SendDataService";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -20,6 +18,7 @@ const EditarCurso = ({
   const [tipoHH, settipoHH] = useState([""]);
   const [duracionCursoHH, setduracionCursoHH] = useState([""]);
   const [cantSesionesCurso, setcantSesionesCurso] = useState([""]);
+  const [listTipoHHCurso, setListTipoHHCurso] = useState();
 
   const [responseID, setResponseID] = useState([""]);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -53,7 +52,17 @@ const EditarCurso = ({
       setcantSesionesCurso(response[0].cantSesionesCurso);
     });
   }
-
+  function obtenerTipoHH() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_CURSO_HH",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setListTipoHHCurso(response);
+    });
+  }
   function validaciones() {
     if (codCurso.trim() === "") {
       TopAlertsError("01", "El código del curso no debe estar vacío");
@@ -117,6 +126,7 @@ const EditarCurso = ({
     function () {
       if (idCurso !== null) {
         getData();
+        obtenerTipoHH();
       }
     },
     [idCurso]
@@ -163,7 +173,7 @@ const EditarCurso = ({
               />
             </div>
             <div>
-              <label htmlFor="input_tipoDelRamohh">Tipo ramo HH:</label>
+              <label htmlFor="input_tipoDelRamohh">Tipo HH:</label>
               <select
                 style={{ textTransform: "uppercase" }}
                 value={tipoHH || ""}
@@ -177,9 +187,15 @@ const EditarCurso = ({
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="ACADEMICAS">ACADEMICAS</option>
-                <option value="CRONOLOGICAS">CRONOLOGICAS</option>
-                <option value="MIXTO">MIXTO</option>
+                {listTipoHHCurso &&
+                  listTipoHHCurso.map((valor) => (
+                    <option
+                      value={valor.datoVisible}
+                      selected={tipoHH === valor.datoVisible ? true : false}
+                    >
+                      {valor.datoVisible}
+                    </option>
+                  ))}
               </select>
             </div>
             <div>

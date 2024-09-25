@@ -10,7 +10,7 @@ import "../../../Edd/pages/Listados/TablasStyles.css";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import { MdAccessTimeFilled, MdCalendarMonth } from "react-icons/md";
-import { FaLink } from "react-icons/fa";
+import { FaLink, FaCloudDownloadAlt  } from "react-icons/fa";
 import InsertarAcop from "../../forms/insertar/InsertarAcop";
 import EditarAcop from "../../forms/editar/EditarAcop";
 import EditarMesAcop from "../../forms/editar/EditarMesAcop";
@@ -19,6 +19,8 @@ import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import InsertarAcopDoc from "../../forms/insertar/InsertarAcopDoc";
+import GestorArchivosAcop from "../../forms/editar/GestorAchivosAcop";
 
 export default function IHH_ListadoAcop() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -36,6 +38,9 @@ export default function IHH_ListadoAcop() {
   });
 
   const [isActiveMesesAcop, setIsActiveMesesAcop] = useState(false);
+  const [isActiveInsertarDoc, setIsActiveInsertarDoc] = useState(false);
+  const [isActiveGestorDoc, setIsActiveGestorDoc] = useState(false);
+  const [AcopGestor, setAcopGestor] = useState(null);
   const [Registro, setRegistro] = useState(0);
 
   const [mainList, setMainList] = useState({
@@ -64,7 +69,7 @@ export default function IHH_ListadoAcop() {
     var data = {
       idAcop: idAcop,
     };
-    SendDataService(url, operationUrl, data).then((response) => {      
+    SendDataService(url, operationUrl, data).then((response) => {
       if (response) {
         setDatosMesesAcop(response);
         setIsActiveMesesAcop(true);
@@ -162,11 +167,26 @@ export default function IHH_ListadoAcop() {
 
   return userData.statusConected || userData !== null ? (
     <>
-     {isActiveMesesAcop ? (
+      {isActiveMesesAcop ? (
         <EditarMesAcop
           cambiarEstado={setIsActiveMesesAcop}
           mesesAcop={datosMesesAcop}
           isActiveFormulario={isActiveMesesAcop}
+        />
+      ) : null}
+
+      {isActiveGestorDoc ? (
+        <GestorArchivosAcop
+          cambiarEstado={setIsActiveGestorDoc}
+          acop={AcopGestor}
+          isActiveFormulario={isActiveGestorDoc}
+        />
+      ) : null}
+
+      {isActiveInsertarDoc ? (
+        <InsertarAcopDoc
+          cambiarEstado={setIsActiveInsertarDoc}
+          isActive={isActiveInsertarDoc}
         />
       ) : null}
 
@@ -189,6 +209,14 @@ export default function IHH_ListadoAcop() {
               }}
             >
               Insertar ACOP
+            </Button>
+            <Button
+              id="btn"
+              onClick={() => {
+                setIsActiveInsertarDoc(true);
+              }}
+            >
+              Insertar documento
             </Button>
 
             <InsertarAcop
@@ -287,6 +315,16 @@ export default function IHH_ListadoAcop() {
                       onClick={() => activarFormulario(item, "editar")}
                     >
                       <RiEditBoxFill id="icons" />
+                    </button>
+                    <button
+                      data-title="Gestor archivos"
+                      id="OperationBtns"
+                      onClick={() => {
+                        setAcopGestor(item)
+                        setIsActiveGestorDoc(true)
+                      }}
+                    >
+                      <FaCloudDownloadAlt  id="icons" />
                     </button>
                     <button
                       data-title="Editar meses acop"

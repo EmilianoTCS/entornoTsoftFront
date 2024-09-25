@@ -1,19 +1,15 @@
-export default function SendFilesService(url, file, data) {
+export default async function SendFilesService(url, file, data) {
   const baseURL = `http://localhost/entornoTsoft/${url}`;
 
   const formData = new FormData();
   formData.append("file", file);
   formData.append("data", JSON.stringify(data));
 
-  return fetch(baseURL, {
+  const res = await fetch(baseURL, {
     method: "post",
     body: formData,
-    
-  })
-    .then((res) => res.json())
-    .then((response) => {
-      const data = response;
-
-      return data;
-    });
+  });
+  const response = await res.json();
+  const data_1 = response;
+  return data_1;
 }

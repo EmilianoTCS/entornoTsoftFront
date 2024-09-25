@@ -26,7 +26,8 @@ const EditarSesion = ({
   const [idRamo, setidRamo] = useState("");
 
   const [listRamo, setlistRamo] = useState([""]);
-
+  const [listTipoSesion, setlistTipoSesion] = useState([""]);
+  const [listTipoSesionHH, setlistTipoSesionHH] = useState([""]);
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
   const [responseID, setResponseID] = useState([""]);
@@ -121,11 +122,37 @@ const EditarSesion = ({
     );
     setSesion(nuevosSesion);
   }
+
+  function obtenerTipoSesion() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_SESION",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setlistTipoSesion(response);
+    });
+  }
+  function obtenerTipoSesionHH() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_SESION_HH",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setlistTipoSesionHH(response);
+    });
+  }
+
   useEffect(
     function () {
       if (idSesion !== null) {
         getData();
         obtenerRamo();
+        obtenerTipoSesion();
+        obtenerTipoSesionHH();
       }
     },
     [idSesion]
@@ -189,9 +216,15 @@ const EditarSesion = ({
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="PRESENCIAL">PRESENCIAL</option>
-                <option value="REMOTO">REMOTO</option>
-                <option value="MIXTO">MIXTO</option>
+                {listTipoSesion &&
+                  listTipoSesion.map((valor) => (
+                    <option
+                      value={valor.datoVisible}
+                      selected={tipoSesion === valor.datoVisible ? true : false}
+                    >
+                      {valor.datoVisible}
+                    </option>
+                  ))}
               </select>
             </div>
             <div>
@@ -209,9 +242,17 @@ const EditarSesion = ({
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="ACADEMICAS">ACADÉMICAS</option>
-                <option value="CRONOLOGICAS">CRONOLÓGICAS</option>
-                <option value="MIXTO">MIXTO</option>
+                {listTipoSesionHH &&
+                  listTipoSesionHH.map((valor) => (
+                    <option
+                      value={valor.datoVisible}
+                      selected={
+                        tipoSesionHH === valor.datoVisible ? true : false
+                      }
+                    >
+                      {valor.datoVisible}
+                    </option>
+                  ))}
               </select>
             </div>
             <div>

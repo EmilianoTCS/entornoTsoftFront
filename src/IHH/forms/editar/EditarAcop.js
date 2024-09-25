@@ -35,12 +35,12 @@ export default function EditarAcop({ isActive, cambiarEstado, Registro }) {
     } else if (acop.valorUSD <= 0) {
       TopAlertsError("04", "El valor de USD debe ser mayor a cero");
       return true;
-    } else if (new Date(acop.fechaValorUSD) > hoy) {
-      TopAlertsError(
-        "05",
-        "La fecha del valor USD no puede ser mayor a la actual"
-      );
-      return true;
+    // } else if (new Date(acop.fechaValorUSD) > hoy) {
+    //   TopAlertsError(
+    //     "05",
+    //     "La fecha del valor USD no puede ser mayor a la actual"
+    //   );
+    //   return true;
     } else if (acop.presupuestoGeneral <= 0) {
       TopAlertsError("06", "El presupuesto total debe ser mayor a cero");
       return true;
@@ -377,7 +377,7 @@ export default function EditarAcop({ isActive, cambiarEstado, Registro }) {
                       ((acop.presupuestoGeneral - acop.presupuestoTotal) *
                         100) /
                         acop.presupuestoGeneral
-                    )}
+                    ).toFixed(2)}
                     % )
                   </>
                 ) : null}

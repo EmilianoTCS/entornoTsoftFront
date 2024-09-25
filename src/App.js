@@ -74,6 +74,7 @@ import Resumen_ihh_colab_mes from "./IHH/pages/Resumen_ihh_colab_mes/Resumen_ihh
 import Resumen_ihh_colab_proy from "./IHH/pages/Resumen_ihh_colab_proy/Resumen_ihh_colab_proy.js";
 import IHH_ListadoMesesAcop from "./IHH/pages/ListadoMesesAcop/ListadoMesesAcop.js";
 import IHH_ListadoAcopProy from "./IHH/pages/ListadoAcopProy/ListadoAcopProy.js";
+import InicioDashboardIHH from "./IHH/pages/Dashboard/InicioDashboardIHH.js";
 function App() {
   return (
     <AuthState>
@@ -307,6 +308,10 @@ function App() {
             <Route
               element={<IHH_ListadoAcopProy />}
               path="/ihh/listado_acop_proy/:idProyecto/:idAcop"
+            ></Route>
+            <Route
+              element={<InicioDashboardIHH />}
+              path="/ihh/Dashboard"
             ></Route>
             
 

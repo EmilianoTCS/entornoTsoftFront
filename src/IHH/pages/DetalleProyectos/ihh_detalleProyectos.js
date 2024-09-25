@@ -7,7 +7,6 @@ import { useRoute } from "wouter";
 import ExportCSV from "../../../templates/exports/exportCSV";
 import SendDataService from "../../../services/SendDataService";
 import { MdAccessTimeFilled } from "react-icons/md";
-import { RiEditBoxFill } from "react-icons/ri";
 import EditarDetalleResumen from "../../forms/editar/EditarDetalleResumen";
 import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 import "./ihh_detalleProyectos.css";

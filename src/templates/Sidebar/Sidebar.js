@@ -6,16 +6,12 @@ import userLogo from "../../sources/User_logo.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { IoTime } from "react-icons/io5";
-import { BsHourglassBottom } from "react-icons/bs";
-import { IoHome } from "react-icons/io5";
-import { FaBook, FaUpload } from "react-icons/fa";
+import { IoTime, IoHome, IoBookmarks } from "react-icons/io5";
+import { FaBook, FaUpload, FaPeopleCarry} from "react-icons/fa";
+import { BsArrowLeftCircle, BsArrowRightCircle, BsHourglassBottom } from "react-icons/bs";
 import { ImBook } from "react-icons/im";
 import { IoIosPeople } from "react-icons/io";
-import { IoBookmarks } from "react-icons/io5";
-import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 import { PiExamFill } from "react-icons/pi";
-import { FaPeopleCarry } from "react-icons/fa";
 import FormularioImportarRegistros from "./FormularioImportarRegistros";
 import FormularioImportarRegistros_IHH from "./FormularioImportarRegistros_IHH";
 
@@ -359,6 +355,24 @@ export default function SideBar() {
                       className={isToggledIHH ? "active" : ""}
                     >
                       {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/ihh/Dashboard">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Dashboard
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
 
                       <li
                         id="textLeftSelect"
@@ -515,14 +529,14 @@ export default function SideBar() {
                   </li>
                   {/* -----------------Cambia password ------------------------- */}
 
-                  <li id="li_Academia">
-                    {/* <Link to="/listadoEmpleados"> */}
-                    <button id="submenuSidebar">
+                  {/* <li id="li_Academia"> */}
+                  {/* <Link to="/listadoEmpleados"> */}
+                  {/* <button id="submenuSidebar">
                       <ImBook id="icons" />
                       Perfil (CambiarPass)
-                    </button>
-                    {/* </Link> */}
-                  </li>
+                    </button> */}
+                  {/* </Link> */}
+                  {/* </li> */}
                 </Container>
               </div>
               <Logout></Logout>

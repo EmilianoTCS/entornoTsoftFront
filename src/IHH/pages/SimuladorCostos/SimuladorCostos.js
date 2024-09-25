@@ -4,7 +4,7 @@ import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAler
 import { Navigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useRoute } from "wouter";
-
+import { MdAccessTimeFilled, MdStickyNote2 } from "react-icons/md";
 import { Button } from "react-bootstrap";
 import getDataService from "../../../services/GetDataService";
 import SendDataService from "../../../services/SendDataService";
@@ -19,6 +19,8 @@ import Spinner from "../../../templates/spinner/spinner";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Insertar_HHEE from "../../forms/insertar/Insertar_HHEE";
 import Insertar_NotaImp from "../../forms/insertar/Insertar_NotaImp";
+import { BsFillTrashFill } from "react-icons/bs";
+
 export default function SimuladorCostos() {
   const [, params] = useRoute("/ihh/simuladorCostos/:idProyecto/:mes");
 
@@ -46,10 +48,6 @@ export default function SimuladorCostos() {
 
   const [DatosRegistro, setDatosRegistro] = useState("");
 
-  /**
-   * The function `obtenerEmpleados` fetches a list of employees from a specified URL and sets the
-   * retrieved data to a list of employees.
-   */
   function obtenerEmpleados() {
     var url = "pages/auxiliares/listadoEmpleadoForms.php";
     var operationUrl = "listados";
@@ -57,10 +55,7 @@ export default function SimuladorCostos() {
       setListEmpleado(response);
     });
   }
-  /**
-   * The function `obtenerElementos` retrieves a list of elements from a specified URL using a data
-   * service and sets the list of elements in the response.
-   */
+
   function obtenerElementos() {
     var url = "pages/auxiliares/ihh_listadoElementoForms.php";
     var operationUrl = "listados";
@@ -68,10 +63,7 @@ export default function SimuladorCostos() {
       setListElemento(response);
     });
   }
-  /**
-   * The function `obtenerValorHH` sends a request to retrieve a list of values for human hours from a
-   * specified URL and sets the response data to a variable.
-   */
+
   function obtenerValorHH() {
     var url = "pages/auxiliares/ihh_listadoValorHH.php";
     var operationUrl = "listados";
@@ -80,10 +72,6 @@ export default function SimuladorCostos() {
       setListValorHH(response);
     });
   }
-  /**
-   * The function `obtenerDetalleMensual` retrieves monthly project details from a specified URL and
-   * updates the data accordingly.
-   */
 
   const obtenerAcops = () => {
     var url = "pages/auxiliares/ihh_listadoAcopForms.php";
@@ -120,28 +108,23 @@ export default function SimuladorCostos() {
   }
 
   //----- definiciones data grid
-  /* The above code is using the `map` method to create a new array `rowData` by iterating over each
-element in the `listDetalleMensual` array. For each element, it is creating a new object using the
-spread syntax (`{ ...row }`) to copy all the properties of the current element into a new object.
-This effectively creates a shallow copy of each element in the `listDetalleMensual` array and stores
-it in the `rowData` array. */
+
   const rowData = listDetalleMensual.map((row) => ({ ...row }));
   const gridRef = useRef();
 
-  /* The above code is defining a set of column definitions for a grid or table component in a web
- application. Each column definition specifies the header name, field name from the data source,
- whether it is editable, cell styles, width, and additional properties like value calculation and
- custom cell rendering. */
   const columnDefs = [
     {
       headerName: "Colaborador",
       field: "nomEmpleado",
       editable: false,
+      tooltipField: 'nomEmpleado',
     },
     {
       headerName: "Elemento",
       field: "nomElemento",
       editable: false,
+      tooltipField: 'nomElemento',
+
     },
     {
       headerName: "Cant. HH",
@@ -192,7 +175,7 @@ it in the `rowData` array. */
       headerName: "Total",
       cellStyle: { textAlign: "right" },
       headerClass: "headerTextRight",
-      width: 100,
+      width: 110,
       colId: "totalColumn",
       valueGetter: function (params) {
         return parseFloat(
@@ -202,6 +185,40 @@ it in the `rowData` array. */
           style: "currency",
           currency: "CLP",
         });
+      },
+    },
+    {
+      headerName: "Monet",
+      field: "monetizado",
+      editable: false,
+      // cellStyle: { textAlign: "right" },
+      width: 85,
+      cellRenderer: function (params) {
+        return (
+          <>
+            <select
+              onChange={(e) => {
+                // console.log("antes", params.data.monetizado);
+                params.data.monetizado = e.target.value;
+                // console.log("despues", params.data.monetizado);
+              }}
+              className="form-control"
+            >
+              <option
+                selected={params.data.monetizado === "1" ? "selected" : ""}
+                value={1}
+              >
+                SÍ
+              </option>
+              <option
+                value={0}
+                selected={params.data.monetizado === "0" ? "selected" : ""}
+              >
+                NO
+              </option>
+            </select>
+          </>
+        );
       },
     },
     {
@@ -220,7 +237,7 @@ it in the `rowData` array. */
     },
     {
       headerName: "Operaciones",
-      width: 300,
+      width: 120,
       colId: "operaciones",
       cellRenderer: function (params) {
         return (
@@ -233,11 +250,9 @@ it in the `rowData` array. */
             }}
           >
             <Button
-              style={{
-                backgroundColor: "#e10b1c",
-                border: "none",
-                fontSize: "10pt",
-              }}
+              data-title="Agregar horas extra"
+              id="OperationBtns"
+              style={{ color: "black", padding: "8px" }}
               disabled={
                 params.data.nomTipoElemento === "MISCELÁNEO" ? true : false
               }
@@ -246,32 +261,37 @@ it in the `rowData` array. */
                 setIsActiveFormularioHHEE(true);
               }}
             >
-              Agregar HHEE
+              <MdAccessTimeFilled
+                id="icons"
+                style={{ margin: "auto", width: "20px" }}
+              />
             </Button>
             <Button
-              style={{
-                backgroundColor: "#e10b1c",
-                border: "none",
-                fontSize: "10pt",
-              }}
+              data-title="Agregar nota"
+              id="OperationBtns"
+              style={{ color: "black", padding: "8px" }}
               onClick={() => {
                 setDatosRegistro(params.data);
                 setIsActiveFormularioNota(true);
               }}
             >
-              Agregar Nota
+              <MdStickyNote2
+                id="icons"
+                style={{ margin: "auto", width: "20px" }}
+              />
             </Button>
             <Button
-              style={{
-                backgroundColor: "#e10b1c",
-                border: "none",
-                fontSize: "10pt",
-              }}
+              data-title="Quitar"
+              id="OperationBtns"
+              style={{ color: "black", padding: "8px" }}
               onClick={() => {
                 removerElemento(params.data.idRandom);
               }}
             >
-              Quitar
+              <BsFillTrashFill
+                id="icons"
+                style={{ margin: "auto", width: "20px" }}
+              />
             </Button>
           </div>
         );
@@ -279,15 +299,6 @@ it in the `rowData` array. */
     },
   ];
 
-  /**
-   * The function encontrarValorHH takes an employee ID as input and returns the corresponding hourly
-   * rate value from a list of employee objects.
-   * @param idEmpleado - The `idEmpleado` parameter is the identifier of the employee for whom you want
-   * to find the value per hour (valorHH). The function `encontrarValorHH` takes this employee ID as
-   * input and returns the corresponding value per hour for that employee.
-   * @returns The function `encontrarValorHH` is returning the value of `valorHH` for the employee with
-   * the specified `idEmpleado`.
-   */
   function encontrarValorHH(idEmpleado) {
     const valorHH = listValorHH.filter(
       (empleado) => empleado.idEmpleado === idEmpleado
@@ -295,10 +306,6 @@ it in the `rowData` array. */
     return valorHH[0].valorHH;
   }
 
-  /**
-   * The `addNewRow` function generates a new row object with specific properties and adds it to a list
-   * of monthly details.
-   */
   const addNewRow = () => {
     const newRow = {
       idRandom: generateUniqueId(),
@@ -318,6 +325,7 @@ it in the `rowData` array. */
       nomTipoElemento: nomTipoElemento,
       nota: "",
       idNotaImpugnacion: null,
+      monetizado: null,
     };
 
     if (listDetalleMensual === "") {
@@ -327,21 +335,10 @@ it in the `rowData` array. */
     }
   };
 
-  /**
-   * The function `generateUniqueId` returns a unique identifier using the `uuidv4` function.
-   * @returns A unique identifier generated using the `uuidv4` function.
-   */
   const generateUniqueId = () => {
     return uuidv4();
   };
 
-  /**
-   * The `removerElemento` function removes an element from a list based on a specific condition and
-   * updates the list accordingly.
-   * @param item - The `item` parameter in the `removerElemento` function seems to represent the
-   * identifier of an element that needs to be removed from the `listDetalleMensual` array. The function
-   * first checks if there is an element in the array with the `idRandom` matching the provided `item
-   */
   const removerElemento = (item) => {
     listDetalleMensual.map((element) => {
       if (element.idRandom === item) {
@@ -357,12 +354,7 @@ it in the `rowData` array. */
   };
 
   //Complementarias para frontend
-  /**
-   * The function `sumTotal` calculates the total sum based on specific data values in a grid.
-   * @returns The `sumTotal` function is returning the total sum of values calculated based on the data
-   * in the grid rows. The total sum is calculated by multiplying the number of hours in a period by the
-   * hourly rate, adding the product of extra hours and the hourly rate for each row in the grid.
-   */
+
   function sumTotal() {
     let totalSum = 0;
     if (gridRef.current) {
@@ -433,16 +425,6 @@ it in the `rowData` array. */
     return totalSum;
   }
 
-  /**
-   * The function `convertirFecha` takes a date string in the format "YYYYMM" and converts it into a
-   * formatted date string with the month in Spanish and the year.
-   * @param fechaString - The `convertirFecha` function takes a `fechaString` parameter, which is
-   * expected to be a string representing a date in the format "YYYYMM".
-   * @returns The function `convertirFecha` takes a string representing a date in the format "YYYYMM"
-   * and converts it into a formatted date string in the format "MONTH YEAR". The function extracts the
-   * year and month from the input string, converts the month number to its corresponding name, and then
-   * formats the date accordingly. The formatted date string is then returned by the function.
-   */
   function convertirFecha(fechaString) {
     // Extraer el año y el mes del string
     const anio = fechaString.slice(0, 4);
@@ -471,12 +453,6 @@ it in the `rowData` array. */
     return fechaFormateada;
   }
 
-  /**
-   * The ErrorMessage function checks if the monthly budget is being exceeded and displays an alert
-   * message if it is.
-   * @returns The ErrorMessage component is returning an Alert component with a variant of "danger" and a
-   * message stating "El presupuesto mensual está siendo excedido."
-   */
   const ErrorMessage = () => {
     if (datosResumen[0].presupuestoAcumulado - sumTotal() < 0)
       return (
@@ -489,10 +465,7 @@ it in the `rowData` array. */
   };
 
   //Enviar datos
-  /**
-   * The function `SendData` sends data to a specified URL using `SendDataService` and handles the
-   * response by displaying an alert message.
-   */
+
   function SendData() {
     var URL = "pages/insertar/ihh_validarImpugnacionEmp.php";
     var operationUrl = "ihh_validarImpugnacionEmp";
@@ -508,7 +481,6 @@ it in the `rowData` array. */
       usuarioCreacion: userData.usuario,
       isActive: 1,
     };
-    console.log(data);
 
     SendDataService(URL, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
@@ -848,9 +820,7 @@ it in the `rowData` array. */
                     <table>
                       <tbody>
                         <tr>
-                          <th style={{ width: "450px" }}>
-                            Presup total:
-                          </th>
+                          <th style={{ width: "450px" }}>Presup total:</th>
                           <th style={{ textAlign: "right" }}>
                             <b>
                               {isNaN(

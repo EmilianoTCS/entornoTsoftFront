@@ -1,15 +1,15 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-export default function ConfirmAlert(text) {
+export default function ConfirmAlertEliminarArchivo() {
   const MySwal = withReactContent(Swal);
   const promise1 = new Promise((resolve, reject) => {
     MySwal.fire({
-      title: "¿Deseas desactivar / eliminar este registro?",
-      html: 'El archivo será eliminado permanentemente, esta acción no se puede deshacer',
+      title: "¿Deseas eliminar este archivo?",
+      html: "El archivo será eliminado y esta acción no se puede deshacer",
       icon: "warning",
       iconColor: "#e10b1c",
       showConfirmButton: true,
-      confirmButtonText: "Desactivar",
+      confirmButtonText: "Eliminar",
       confirmButtonColor: "red",
       showCancelButton: true,
       cancelButtonColor: "dark-gray",

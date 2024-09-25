@@ -21,6 +21,8 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
   const [idCurso, setidCurso] = useState("");
 
   const [listCurso, setlistCurso] = useState([""]);
+  const [listTipoRamo, setlistTipoRamo] = useState([""]);
+  const [listTipoRamoHH, setlistTipoRamoHH] = useState([""]);
 
   const listRamos = ramos;
 
@@ -38,6 +40,29 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
     getDataService(url, operationUrl).then((response) =>
       setlistCurso(response)
     );
+  }
+
+  function obtenerTipoRamo() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_RAMO",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setlistTipoRamo(response);
+    });
+  }
+  function obtenerTipoRamoHH() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_RAMO_HH",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setlistTipoRamoHH(response);
+    });
   }
 
   function validaciones() {
@@ -89,7 +114,6 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
       };
 
       SendDataService(url, operationUrl, data).then((response) => {
-        
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         actualizarRamo(ramos);
@@ -104,6 +128,8 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
 
   useEffect(function () {
     obtenerCurso();
+    obtenerTipoRamo();
+    obtenerTipoRamoHH();
   }, []);
 
   // ----------------------RENDER----------------------------
@@ -147,17 +173,26 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
 
             <div>
               <label htmlFor="input_tipoDelRamo">Tipo ramo:</label>
-              <input
+              <select
                 style={{ textTransform: "uppercase" }}
-                placeholder="Escriba tipo del Ramo"
-                type="text"
+                placeholder="Escriba el tipo del Ramo"
                 className="form-control"
                 name="input_tipoDelRamo"
                 id="input_tipoDelRamo"
-                maxLength="10"
                 onChange={({ target }) => settipoRamo(target.value)}
                 required
-              />
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+
+                {listTipoRamo &&
+                  listTipoRamo.map((valor) => (
+                    <option value={valor.datoVisible}>
+                      {valor.datoVisible}
+                    </option>
+                  ))}
+              </select>
             </div>
 
             <div>
@@ -174,9 +209,12 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="ACADEMICAS">ACADEMICAS</option>
-                <option value="CRONOLOGICAS">CRONOLOGICAS</option>
-                <option value="MIXTO">MIXTO</option>
+                {listTipoRamoHH &&
+                  listTipoRamoHH.map((valor) => (
+                    <option value={valor.datoVisible}>
+                      {valor.datoVisible}
+                    </option>
+                  ))}
               </select>
             </div>
 

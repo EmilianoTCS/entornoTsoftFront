@@ -30,7 +30,8 @@ const EditarRamo = ({
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
   const [responseID, setResponseID] = useState([""]);
-
+  const [listTipoRamo, setlistTipoRamo] = useState([""]);
+  const [listTipoRamoHH, setlistTipoRamoHH] = useState([""]);
   const listRamos = ramos;
 
   const show = isActiveEditRamo;
@@ -53,7 +54,28 @@ const EditarRamo = ({
       setlistCurso(response)
     );
   }
-
+  function obtenerTipoRamo() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_RAMO",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setlistTipoRamo(response);
+    });
+  }
+  function obtenerTipoRamoHH() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_RAMO_HH",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setlistTipoRamoHH(response);
+    });
+  }
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
@@ -144,6 +166,8 @@ const EditarRamo = ({
       if (idRamo !== null) {
         getData();
         obtenerCurso();
+        obtenerTipoRamo();
+        obtenerTipoRamoHH();
       }
     },
     [idRamo]
@@ -191,19 +215,30 @@ const EditarRamo = ({
             </div>
 
             <div>
-              <label htmlFor="input_tipoDelRamohh">Tipo ramo:</label>
-              <input
+              <label htmlFor="input_tipoDelRamo">Tipo ramo:</label>
+              <select
                 style={{ textTransform: "uppercase" }}
-                placeholder="Escriba tipo del Ramo"
-                value={tipoRamo || ""}
-                type="text"
+                placeholder="Escriba el tipo del Ramo"
                 className="form-control"
-                name="input_tipoDelRamohh"
-                id="input_tipoDelRamohh"
-                maxLength="10"
+                name="input_tipoDelRamo"
+                id="input_tipoDelRamo"
                 onChange={({ target }) => settipoRamo(target.value)}
                 required
-              />
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+
+                {listTipoRamo &&
+                  listTipoRamo.map((valor) => (
+                    <option
+                      value={valor.datoVisible}
+                      selected={tipoRamo === valor.datoVisible}
+                    >
+                      {valor.datoVisible}
+                    </option>
+                  ))}
+              </select>
             </div>
 
             <div>
@@ -221,9 +256,15 @@ const EditarRamo = ({
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="ACADEMICAS">ACADEMICAS</option>
-                <option value="CRONOLOGICAS">CRONOLOGICAS</option>
-                <option value="MIXTO">MIXTO</option>
+                {listTipoRamoHH &&
+                  listTipoRamoHH.map((valor) => (
+                    <option
+                      value={valor.datoVisible}
+                      selected={tipoRamoHH === valor.datoVisible}
+                    >
+                      {valor.datoVisible}
+                    </option>
+                  ))}
               </select>
             </div>
             <div>

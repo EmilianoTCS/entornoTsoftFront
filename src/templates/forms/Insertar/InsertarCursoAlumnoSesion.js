@@ -240,7 +240,7 @@ const InsertarCursoAlumnoSesion = ({
                 </option>
                 {listCursoAlumno.map((valor) => (
                   <option value={valor.idCursoAlumno}>
-                    {valor.idCursoAlumno}
+                    {valor.nomCursoAlumno}
                   </option>
                 ))}
               </select>

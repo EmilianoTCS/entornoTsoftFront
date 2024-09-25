@@ -145,10 +145,7 @@ export default function InsertarAcop({ isActive, cambiarEstado }) {
                 name="input_numeroAcop"
                 id="input_numeroAcop"
                 onChange={({ target }) =>
-                  setDatos((prevDatos) => ({
-                    ...prevDatos,
-                    numAcop: target.value,
-                  }))
+                 console.log(target.value)
                 }
                 required
               />

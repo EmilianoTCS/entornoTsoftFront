@@ -5,6 +5,7 @@ import SendDataService from "../../../services/SendDataService";
 import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useEffect } from "react";
 
 const InsertarCurso = ({ isActiveCurso, cambiarEstado, curso }) => {
   // ----------------------CONSTANTES----------------------------
@@ -13,7 +14,7 @@ const InsertarCurso = ({ isActiveCurso, cambiarEstado, curso }) => {
   const [tipoHH, settipoHH] = useState([""]);
   const [duracionCursoHH, setduracionCursoHH] = useState([""]);
   const [cantSesionesCurso, setcantSesionesCurso] = useState([""]);
-
+  const [listTipoHHCurso, setListTipoHHCurso] = useState();
   const listCurso = curso;
 
   const show = isActiveCurso;
@@ -65,14 +66,29 @@ const InsertarCurso = ({ isActiveCurso, cambiarEstado, curso }) => {
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         actualizarCurso(curso);
-        cambiarEstado(false)
+        cambiarEstado(false);
       });
     }
   }
-
   function actualizarCurso(response) {
     listCurso.push(response);
   }
+
+  function obtenerTipoHH() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "TIPO_CURSO_HH",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setListTipoHHCurso(response)
+    });
+  }
+
+  useEffect(() => {
+    obtenerTipoHH();
+  }, []);
 
   // ----------------------RENDER----------------------------
   return (
@@ -112,7 +128,7 @@ const InsertarCurso = ({ isActiveCurso, cambiarEstado, curso }) => {
               />
             </div>
             <div>
-              <label htmlFor="input_tipoDelRamohh">Tipo ramo HH:</label>
+              <label htmlFor="input_tipoDelRamohh">Tipo HH:</label>
               <select
                 style={{ textTransform: "uppercase" }}
                 placeholder="Escriba tipo del ramo HH"
@@ -122,12 +138,15 @@ const InsertarCurso = ({ isActiveCurso, cambiarEstado, curso }) => {
                 onChange={({ target }) => settipoHH(target.value)}
                 required
               >
-                <option hidden value="">
+               <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="ACADEMICAS">ACADEMICAS</option>
-                <option value="CRONOLOGICAS">CRONOLOGICAS</option>
-                <option value="MIXTO">MIXTO</option>
+
+                {listTipoHHCurso && listTipoHHCurso.map((valor) => (
+                  <option value={valor.datoVisible}>
+                    {valor.datoVisible}
+                  </option>
+                ))}
               </select>
             </div>
             <div>

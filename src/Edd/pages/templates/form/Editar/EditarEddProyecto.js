@@ -31,6 +31,14 @@ const EditarEDDProyecto = ({
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const listEDDProyecto = EDDProyecto;
 
+
+  const [objeto, setObjeto] = useState({
+    campo1: "",
+    campo2:"",
+    campo3: ""
+  })
+
+
   const show = isActiveEditEDDProyecto;
 
   const handleClose = () => {
@@ -163,7 +171,7 @@ const EditarEDDProyecto = ({
                 id="input_nombreDelEDDProyecto"
                 value={nomProyecto || ""}
                 maxLength="50"
-                onChange={({ target }) => setnomProyecto(target.value)}
+                onChange={({ target }) => {setnomProyecto(target.value)}}
                 required
               />
             </div>
