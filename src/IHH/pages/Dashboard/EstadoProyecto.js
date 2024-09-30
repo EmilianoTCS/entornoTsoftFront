@@ -4,6 +4,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import "./ResumenDashboardIHH.css";
 import SendDataService from "../../../services/SendDataService";
 import EstadoDeMes from "./EstadoDeMes";
+
 export default function EstadoProyecto({
   datosProyecto,
   paramsFechaIni,
@@ -25,7 +26,9 @@ export default function EstadoProyecto({
       idProyecto: datosProyecto.idEDDProyecto,
     };
     SendDataService(url, operationUrl, data).then((response) => {
-      setListadoDetalle(response);
+      const meses = obtenerMesesEntreFechas(paramsFechaIni, paramsFechaFin);
+      const filtrados = response.filter(datos => meses.includes(datos.mes))
+      setListadoDetalle(filtrados);
     });
   }
   function obtenerDatosAcops() {
@@ -67,6 +70,33 @@ export default function EstadoProyecto({
       return fechaFormateada;
     }
   }
+
+  //obtengo un array con los meses en formato yyyymm
+  function obtenerMesesEntreFechas(fechaInicio, fechaFin) {
+    // Convertir las fechas de dd-mm-yyyy a objetos Date correctamente
+    let [diaIni, mesIni, anioIni] = fechaInicio.split('-').map(Number);
+    let [diaFin, mesFin, anioFin] = fechaFin.split('-').map(Number);
+    
+    let fechaIni = new Date(anioIni, mesIni - 1, diaIni); // Crear la fecha de inicio
+    let fechaFinProy = new Date(anioFin, mesFin - 1, diaFin); // Crear la fecha de fin
+    let meses = [];
+
+    // Iterar solo si la fecha de inicio es menor o igual a la de fin
+    while (fechaIni <= fechaFinProy) {
+        let year = fechaIni.getFullYear();
+        let month = (fechaIni.getMonth() + 1).toString().padStart(2, '0'); // Obtener el mes con dos dígitos
+        meses.push(`${year}${month}`);
+        fechaIni.setMonth(fechaIni.getMonth() + 1); // Avanzar al siguiente mes
+
+        // Verificar que la fecha sigue siendo válida (controlando el desbordamiento de meses)
+        if (fechaIni.getDate() !== diaIni) {
+            fechaIni.setDate(0); // Corregir el mes si se desborda (ej. 31 de algún mes)
+        }
+    }
+
+    return meses;
+}
+
   function TablaAcops() {
     return (
       <>
@@ -164,7 +194,9 @@ export default function EstadoProyecto({
           }}
         >
           <Card style={{ width: "300px" }}>
-            <Card.Title style={{ marginTop: "10px" }}>Presupuesto</Card.Title>
+            <Card.Title style={{ marginTop: "10px" }}>
+              Presupuesto proyecto
+            </Card.Title>
             <Card.Body style={{ fontSize: "20pt", fontWeight: "600" }}>
               {parseFloat(datosProyecto.pptoOperativo).toLocaleString("es-CL", {
                 style: "currency",
@@ -175,7 +207,9 @@ export default function EstadoProyecto({
             </Card.Body>
           </Card>
           <Card style={{ width: "300px" }}>
-            <Card.Title style={{ marginTop: "10px" }}>Saldo</Card.Title>
+            <Card.Title style={{ marginTop: "10px" }}>
+              Saldo proyecto
+            </Card.Title>
             <Card.Body style={{ fontSize: "20pt", fontWeight: "600" }}>
               {datosProyecto.saldoPresupuesto
                 ? parseFloat(datosProyecto.saldoPresupuesto).toLocaleString(
@@ -199,7 +233,9 @@ export default function EstadoProyecto({
             </Card.Body>
           </Card>
           <Card style={{ width: "300px" }}>
-            <Card.Title style={{ marginTop: "10px" }}>Costo</Card.Title>
+            <Card.Title style={{ marginTop: "10px" }}>
+              Costo proyecto
+            </Card.Title>
             <Card.Body style={{ fontSize: "20pt", fontWeight: "600" }}>
               {datosProyecto.costoTotal
                 ? parseFloat(datosProyecto.costoTotal).toLocaleString("es-CL", {
@@ -313,151 +349,324 @@ export default function EstadoProyecto({
                 }}
                 onClick={() => handleCardClick(item)}
               >
-                <Card.Title style={{ textAlign: "center", paddingTop: "10px" }}>
+                <Card.Title
+                  style={{
+                    textAlign: "center",
+                    paddingTop: "10px",
+                    fontSize: "16pt",
+                  }}
+                >
                   {convertirFecha(item.mes)}
                 </Card.Title>
                 <Card.Body>
-                  {/* ppto */}
-                  <div
-                    style={{
-                      width: "100%",
-                      marginBottom: "5px",
-                      textAlign: "left",
-                    }}
-                  >
-                    <p>
-                      Presupuesto -{" "}
-                      {parseFloat(item.presupuestoMensual).toLocaleString(
-                        "es-CL",
-                        {
+                  {/* operativo */}
+                  <h5>Proyectado</h5>
+                  <div>
+                    {/* ppto */}
+                    <div
+                      style={{
+                        width: "100%",
+                        marginBottom: "5px",
+                        textAlign: "left",
+                      }}
+                    >
+                      <p>
+                        Presupuesto -{" "}
+                        {parseFloat(item.presupuestoMensual).toLocaleString(
+                          "es-CL",
+                          {
+                            style: "currency",
+                            currency: "CLP",
+                          }
+                        )}{" "}
+                        - (100%)
+                      </p>
+                      <ProgressBar striped now={100} style={{ height: "15px" }}>
+                        <div
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: colores.ppto[0].datoVisible, // Color dinámico desde el objeto colores
+                          }}
+                        />
+                      </ProgressBar>
+                    </div>
+                    {/* costo */}
+                    <div
+                      style={{
+                        width: "100%",
+                        marginBottom: "5px",
+                        textAlign: "left",
+                      }}
+                    >
+                      <p>
+                        Costo -{" "}
+                        {verificarValor(
+                          parseFloat(item.costoMensual)
+                        ).toLocaleString("es-CL", {
                           style: "currency",
                           currency: "CLP",
-                        }
-                      )}{" "}
-                      - (100%)
-                    </p>
-                    <ProgressBar striped now={100} style={{ height: "15px" }}>
-                      <div
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          backgroundColor: colores.ppto[0].datoVisible, // Color dinámico desde el objeto colores
-                        }}
-                      />
-                    </ProgressBar>
-                  </div>
-                  {/* costo */}
-                  <div
-                    style={{
-                      width: "100%",
-                      marginBottom: "5px",
-                      textAlign: "left",
-                    }}
-                  >
-                    <p>
-                      Costo -{" "}
-                      {verificarValor(
-                        parseFloat(item.costoMensual)
-                      ).toLocaleString("es-CL", {
-                        style: "currency",
-                        currency: "CLP",
-                      })}{" "}
-                      - (
-                      {verificarValor(
-                        (item.costoMensual * 100) / item.presupuestoMensual
-                      ).toFixed(2)}
-                      %)
-                    </p>
-                    <ProgressBar
-                      striped
-                      now={verificarValor(
-                        (item.costoMensual * 100) / item.presupuestoMensual
-                      ).toFixed(2)}
-                      style={{ height: "15px" }}
+                        })}{" "}
+                        - (
+                        {verificarValor(
+                          (item.costoMensual * 100) / item.presupuestoMensual
+                        ).toFixed(2)}
+                        %)
+                      </p>
+                      <ProgressBar
+                        striped
+                        now={verificarValor(
+                          (item.costoMensual * 100) / item.presupuestoMensual
+                        ).toFixed(2)}
+                        style={{ height: "15px" }}
+                      >
+                        <div
+                          style={{
+                            width: `${verificarValor(
+                              (item.costoMensual * 100) /
+                                item.presupuestoMensual
+                            ).toFixed(2)}%`,
+                            height: "100%",
+                            backgroundColor: colores.costo[0].datoVisible, // Color dinámico desde el objeto colores
+                          }}
+                        />
+                      </ProgressBar>
+                    </div>
+                    {/* saldo */}
+                    <div
+                      style={{
+                        width: "100%",
+                        marginBottom: "5px",
+                        textAlign: "left",
+                      }}
                     >
-                      <div
-                        style={{
-                          width: `${verificarValor(
-                            (item.costoMensual * 100) / item.presupuestoMensual
-                          ).toFixed(2)}%`,
-                          height: "100%",
-                          backgroundColor: colores.costo[0].datoVisible, // Color dinámico desde el objeto colores
-                        }}
-                      />
-                    </ProgressBar>
+                      {isNaN(parseFloat(item.saldoMensual)) ? (
+                        <>
+                          <p>
+                            Saldo -{" "}
+                            {parseFloat(item.presupuestoMensual).toLocaleString(
+                              "es-CL",
+                              {
+                                style: "currency",
+                                currency: "CLP",
+                              }
+                            )}{" "}
+                            - (100%)
+                          </p>
+                          <ProgressBar
+                            striped
+                            now={100}
+                            style={{ height: "15px" }}
+                          >
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                backgroundColor: colores.saldo[0].datoVisible, // Color dinámico desde el objeto colores
+                              }}
+                            />
+                          </ProgressBar>
+                        </>
+                      ) : (
+                        <>
+                          <p
+                            style={{
+                              color:
+                                parseFloat(item.costoMensual) >
+                                parseFloat(item.presupuestoMensual)
+                                  ? "red"
+                                  : "black",
+                            }}
+                          >
+                            Saldo -{" "}
+                            {parseFloat(
+                              item.presupuestoMensual - item.costoMensual
+                            ).toLocaleString("es-CL", {
+                              style: "currency",
+                              currency: "CLP",
+                            })}{" "}
+                            - (
+                            {verificarValor(
+                              ((item.presupuestoMensual - item.costoMensual) *
+                                100) /
+                                item.presupuestoMensual
+                            ).toFixed(2)}
+                            %)
+                          </p>
+                          <ProgressBar
+                            striped
+                            now={verificarValor(
+                              ((item.presupuestoMensual - item.costoMensual) *
+                                100) /
+                                item.presupuestoMensual
+                            ).toFixed(2)}
+                            style={{ height: "15px" }}
+                          >
+                            <div
+                              style={{
+                                width: `${verificarValor(
+                                  (item.saldoMensual * 100) /
+                                    item.presupuestoMensual
+                                ).toFixed(2)}%`,
+                                height: "100%",
+                                backgroundColor: colores.saldo[0].datoVisible, // Color dinámico desde el objeto colores
+                              }}
+                            />
+                          </ProgressBar>
+                        </>
+                      )}
+                    </div>
+
+                    {/* cant colab */}
                   </div>
-                  {/* saldo */}
-                  <div
-                    style={{
-                      width: "100%",
-                      marginBottom: "5px",
-                      textAlign: "left",
-                    }}
-                  >
-                    {isNaN(parseFloat(item.saldoMensual)) ? (
-                      <>
-                        <p>
-                          Saldo -{" "}
-                          {parseFloat(item.presupuestoMensual).toLocaleString(
-                            "es-CL",
-                            {
-                              style: "currency",
-                              currency: "CLP",
-                            }
-                          )}{" "}
-                          - (100%)
-                        </p>
-                        <ProgressBar
-                          striped
-                          now={100}
-                          style={{ height: "15px" }}
-                        >
-                          <div
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              backgroundColor: colores.saldo[0].datoVisible, // Color dinámico desde el objeto colores
-                            }}
-                          />
-                        </ProgressBar>
-                      </>
-                    ) : (
-                      <>
-                        <p>
-                          Saldo -{" "}
-                          {parseFloat(item.saldoMensual).toLocaleString(
-                            "es-CL",
-                            {
-                              style: "currency",
-                              currency: "CLP",
-                            }
-                          )}{" "}
-                          - (
-                          {verificarValor(
-                            (item.saldoMensual * 100) / item.presupuestoMensual
-                          ).toFixed(2)}
-                          %)
-                        </p>
-                        <ProgressBar
-                          striped
-                          now={verificarValor(
-                            (item.saldoMensual * 100) / item.presupuestoMensual
-                          ).toFixed(2)}
-                          style={{ height: "15px" }}
-                        >
-                          <div
-                            style={{
-                              width: `${verificarValor(
-                                (item.saldoMensual * 100) /
-                                  item.presupuestoMensual
-                              ).toFixed(2)}%`,
-                              height: "100%",
-                              backgroundColor: colores.saldo[0].datoVisible, // Color dinámico desde el objeto colores
-                            }}
-                          />
-                        </ProgressBar>
-                      </>
-                    )}
+                  <h5>Acumulado</h5>
+                  {/* misc */}
+                  <div>
+                    {/* ppto */}
+                    <div
+                      style={{
+                        width: "100%",
+                        marginBottom: "5px",
+                        textAlign: "left",
+                      }}
+                    >
+                      <p>
+                        Presupuesto -{" "}
+                        {parseFloat(item.presupuestoAcumulado).toLocaleString(
+                          "es-CL",
+                          {
+                            style: "currency",
+                            currency: "CLP",
+                          }
+                        )}{" "}
+                        - (100%)
+                      </p>
+                      <ProgressBar striped now={100} style={{ height: "15px" }}>
+                        <div
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: colores.ppto[0].datoVisible, // Color dinámico desde el objeto colores
+                          }}
+                        />
+                      </ProgressBar>
+                    </div>
+                    {/* costo */}
+                    <div
+                      style={{
+                        width: "100%",
+                        marginBottom: "5px",
+                        textAlign: "left",
+                      }}
+                    >
+                      <p>
+                        Costo -{" "}
+                        {verificarValor(
+                          parseFloat(item.costoMensual)
+                        ).toLocaleString("es-CL", {
+                          style: "currency",
+                          currency: "CLP",
+                        })}{" "}
+                        - (
+                        {verificarValor(
+                          (item.costoMensual * 100) / item.presupuestoAcumulado
+                        ).toFixed(2)}
+                        %)
+                      </p>
+                      <ProgressBar
+                        striped
+                        now={verificarValor(
+                          (item.costoMensual * 100) / item.presupuestoMensual
+                        ).toFixed(2)}
+                        style={{ height: "15px" }}
+                      >
+                        <div
+                          style={{
+                            width: `${verificarValor(
+                              (item.costoMensual * 100) /
+                                item.presupuestoMensual
+                            ).toFixed(2)}%`,
+                            height: "100%",
+                            backgroundColor: colores.costo[0].datoVisible, // Color dinámico desde el objeto colores
+                          }}
+                        />
+                      </ProgressBar>
+                    </div>
+                    {/* saldo */}
+                    <div
+                      style={{
+                        width: "100%",
+                        marginBottom: "5px",
+                        textAlign: "left",
+                      }}
+                    >
+                      {isNaN(parseFloat(item.saldoMensual)) ? (
+                        <>
+                          <p>
+                            Saldo -{" "}
+                            {parseFloat(item.presupuestoMensual).toLocaleString(
+                              "es-CL",
+                              {
+                                style: "currency",
+                                currency: "CLP",
+                              }
+                            )}{" "}
+                            - (100%)
+                          </p>
+                          <ProgressBar
+                            striped
+                            now={100}
+                            style={{ height: "15px" }}
+                          >
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                backgroundColor: colores.saldo[0].datoVisible, // Color dinámico desde el objeto colores
+                              }}
+                            />
+                          </ProgressBar>
+                        </>
+                      ) : (
+                        <>
+                          <p>
+                            Saldo -{" "}
+                            {parseFloat(item.saldoMensual).toLocaleString(
+                              "es-CL",
+                              {
+                                style: "currency",
+                                currency: "CLP",
+                              }
+                            )}{" "}
+                            - (
+                            {verificarValor(
+                              (item.saldoMensual * 100) /
+                                item.presupuestoMensual
+                            ).toFixed(2)}
+                            %)
+                          </p>
+                          <ProgressBar
+                            striped
+                            now={verificarValor(
+                              (item.saldoMensual * 100) /
+                                item.presupuestoMensual
+                            ).toFixed(2)}
+                            style={{ height: "15px" }}
+                          >
+                            <div
+                              style={{
+                                width: `${verificarValor(
+                                  (item.saldoMensual * 100) /
+                                    item.presupuestoMensual
+                                ).toFixed(2)}%`,
+                                height: "100%",
+                                backgroundColor: colores.saldo[0].datoVisible, // Color dinámico desde el objeto colores
+                              }}
+                            />
+                          </ProgressBar>
+                        </>
+                      )}
+                    </div>
                   </div>
                   {/* cant colab */}
                   <table

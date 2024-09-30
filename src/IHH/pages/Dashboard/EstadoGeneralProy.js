@@ -171,180 +171,180 @@ export default function EstadoGeneralProy({
   }
   
 
-  function ResumenProyectos() {
-    const handleCardClick = (item) => {
-      setDatosProyecto({
-        nomProyecto: item.nomProyecto,
-        idEDDProyecto: item.idEDDProyecto,
-        pptoOperativo: item.pptoOperativo,
-        saldoPresupuesto: item.saldoPresupuesto,
-        costoTotal: item.costoTotal,
-        fechaIniProyecto: item.fechaInicio,
-        fechaFinProyecto: item.fechaFin,
-        cantColaboradores: item.cantColaboradores,
-        cantMonetizados: item.cantMonetizados,
-        cantNoMonetizados: item.cantNoMonetizados,
-      });
-      setIsActiveEstadoProyecto(true);
-    };
+    function ResumenProyectos() {
+      const handleCardClick = (item) => {
+        setDatosProyecto({
+          nomProyecto: item.nomProyecto,
+          idEDDProyecto: item.idEDDProyecto,
+          pptoOperativo: item.pptoOperativo,
+          saldoPresupuesto: item.saldoPresupuesto,
+          costoTotal: item.costoTotal,
+          fechaIniProyecto: item.fechaInicio,
+          fechaFinProyecto: item.fechaFin,
+          cantColaboradores: item.cantColaboradores,
+          cantMonetizados: item.cantMonetizados,
+          cantNoMonetizados: item.cantNoMonetizados,
+        });
+        setIsActiveEstadoProyecto(true);
+      };
 
-    const verificarValor = (valor) => {
-      return isNaN(valor) ? 0 : valor;
-    };
+      const verificarValor = (valor) => {
+        return isNaN(valor) ? 0 : valor;
+      };
 
-    return (
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)", // Máximo 3 columnas
-          gap: "10px", // Espacio entre las tarjetas
-          margin: "auto", // Centra el grid en la página
-          justifyContent: "center", // Centra las tarjetas horizontalmente
-        }}
-      >
-        {datosProyectos.map((item) => {
-          // Verifica si los valores son válidos
-          const ppto = parseFloat(item.pptoOperativo) || 0;
-          const costo = parseFloat(item.costoTotal) || 0;
-          const saldo = parseFloat(item.saldoPresupuesto) || 0;
+      return (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)", // Máximo 3 columnas
+            gap: "10px", // Espacio entre las tarjetas
+            margin: "auto", // Centra el grid en la página
+            justifyContent: "center", // Centra las tarjetas horizontalmente
+          }}
+        >
+          {datosProyectos.map((item) => {
+            // Verifica si los valores son válidos
+            const ppto = parseFloat(item.pptoOperativo) || 0;
+            const costo = parseFloat(item.costoTotal) || 0;
+            const saldo = parseFloat(item.saldoPresupuesto) || 0;
 
-          const porcentajeCosto = isNaN((costo / ppto) * 100)
-            ? 0
-            : ((costo / ppto) * 100).toFixed(2);
-          const porcentajeSaldo = isNaN((saldo / ppto) * 100)
-            ? 0
-            : ((saldo / ppto) * 100).toFixed(2);
+            const porcentajeCosto = isNaN((costo / ppto) * 100)
+              ? 0
+              : ((costo / ppto) * 100).toFixed(2);
+            const porcentajeSaldo = isNaN((saldo / ppto) * 100)
+              ? 0
+              : ((saldo / ppto) * 100).toFixed(2);
 
-          return (
-            <Card
-              key={item.idEDDProyecto}
-              className="card-hover"
-              style={{
-                width: "320px",
-                cursor: "pointer",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-              onClick={() => handleCardClick(item)}
-            >
-              <Card.Title
+            return (
+              <Card
+                key={item.idEDDProyecto}
+                className="card-hover"
                 style={{
-                  textAlign: "center",
-                  paddingTop: "10px",
-                  width: "310px",
-                }}
-              >
-                {item.nomProyecto.toString().length <= 25 ? (
-                  <>
-                    {item.nomProyecto}
-                    <br></br>
-                    <br></br>
-                  </>
-                ) : (
-                  <>{item.nomProyecto}</>
-                )}
-              </Card.Title>
-              <Card.Body
-                style={{
+                  width: "320px",
+                  cursor: "pointer",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  height: "100%",
-                  marginTop: "-10px",
-                  textAlign: "left",
                 }}
+                onClick={() => handleCardClick(item)}
               >
-                <div
+                <Card.Title
                   style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "20px",
-                    fontSize: "10pt",
-                    justifyContent: "space-between",
-                    marginBottom: "20px",
+                    textAlign: "center",
+                    paddingTop: "10px",
+                    width: "310px",
                   }}
                 >
-                  <text>Fecha Ini: {item.fechaInicio}</text>
-                  <text>Fecha Fin: {item.fechaFin}</text>
-                </div>
-
-                <div style={{ width: "100%", marginBottom: "5px" }}>
-                  <p>
-                    Ppto -{" "}
-                    {ppto.toLocaleString("es-CL", {
-                      style: "currency",
-                      currency: "CLP",
-                    })}{" "}
-                    - (100%)
-                  </p>
-                  <ProgressBar striped now={100} style={{ height: "15px" }}>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: colores.ppto[0].datoVisible, 
-                      }}
-                    />
-                  </ProgressBar>
-                </div>
-
-                <div style={{ width: "100%", marginBottom: "5px" }}>
-                  <p>
-                    Costo -{" "}
-                    {costo.toLocaleString("es-CL", {
-                      style: "currency",
-                      currency: "CLP",
-                    })}{" "}
-                    - ({verificarValor(porcentajeCosto)}%)
-                  </p>
-                  <ProgressBar
-                    striped
-                    now={verificarValor(porcentajeCosto)}
-                    style={{ height: "15px" }}
+                  {item.nomProyecto.toString().length <= 25 ? (
+                    <>
+                      {item.nomProyecto}
+                      <br></br>
+                      <br></br>
+                    </>
+                  ) : (
+                    <>{item.nomProyecto}</>
+                  )}
+                </Card.Title>
+                <Card.Body
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    height: "100%",
+                    marginTop: "-10px",
+                    textAlign: "left",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: "20px",
+                      fontSize: "10pt",
+                      justifyContent: "space-between",
+                      marginBottom: "20px",
+                    }}
                   >
-                    <div
-                      style={{
-                        width: `${verificarValor(porcentajeCosto)}%`, 
-                        height: "100%",
-                        backgroundColor: colores.costo[0].datoVisible, 
-                      }}
-                    />
-                  </ProgressBar>
-                </div>
+                    <text>Fecha Ini: {item.fechaInicio}</text>
+                    <text>Fecha Fin: {item.fechaFin}</text>
+                  </div>
 
-                <div style={{ width: "100%", marginBottom: "5px" }}>
-                  <p>
-                    Saldo -{" "}
-                    {saldo.toLocaleString("es-CL", {
-                      style: "currency",
-                      currency: "CLP",
-                    })}{" "}
-                    - ({verificarValor(porcentajeSaldo)}%)
-                  </p>
-                  <ProgressBar
-                    striped
-                    now={verificarValor(porcentajeSaldo)}
-                    style={{ height: "15px" }}
-                  >
-                    <div
-                      style={{
-                        width: `${verificarValor(porcentajeSaldo)}%`, 
-                        height: "100%",
-                        backgroundColor: colores.saldo[0].datoVisible, 
-                      }}
-                    />
-                  </ProgressBar>
-                </div>
-              </Card.Body>
-            </Card>
-          );
-        })}
-      </div>
-    );
-  }
+                  <div style={{ width: "100%", marginBottom: "5px" }}>
+                    <p>
+                      Ppto -{" "}
+                      {ppto.toLocaleString("es-CL", {
+                        style: "currency",
+                        currency: "CLP",
+                      })}{" "}
+                      - (100%)
+                    </p>
+                    <ProgressBar striped now={100} style={{ height: "15px" }}>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: colores.ppto[0].datoVisible, 
+                        }}
+                      />
+                    </ProgressBar>
+                  </div>
+
+                  <div style={{ width: "100%", marginBottom: "5px" }}>
+                    <p>
+                      Costo -{" "}
+                      {costo.toLocaleString("es-CL", {
+                        style: "currency",
+                        currency: "CLP",
+                      })}{" "}
+                      - ({verificarValor(porcentajeCosto)}%)
+                    </p>
+                    <ProgressBar
+                      striped
+                      now={verificarValor(porcentajeCosto)}
+                      style={{ height: "15px" }}
+                    >
+                      <div
+                        style={{
+                          width: `${verificarValor(porcentajeCosto)}%`, 
+                          height: "100%",
+                          backgroundColor: colores.costo[0].datoVisible, 
+                        }}
+                      />
+                    </ProgressBar>
+                  </div>
+
+                  <div style={{ width: "100%", marginBottom: "5px" }}>
+                    <p>
+                      Saldo -{" "}
+                      {saldo.toLocaleString("es-CL", {
+                        style: "currency",
+                        currency: "CLP",
+                      })}{" "}
+                      - ({verificarValor(porcentajeSaldo)}%)
+                    </p>
+                    <ProgressBar
+                      striped
+                      now={verificarValor(porcentajeSaldo)}
+                      style={{ height: "15px" }}
+                    >
+                      <div
+                        style={{
+                          width: `${verificarValor(porcentajeSaldo)}%`, 
+                          height: "100%",
+                          backgroundColor: colores.saldo[0].datoVisible, 
+                        }}
+                      />
+                    </ProgressBar>
+                  </div>
+                </Card.Body>
+              </Card>
+            );
+          })}
+        </div>
+      );
+    }
 
   return (
     <>

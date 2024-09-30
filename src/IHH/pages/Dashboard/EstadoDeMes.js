@@ -102,358 +102,811 @@ export default function EstadoDeMes({
 
   function Circulos() {
     const presupuestoMensual = parseFloat(datosMes.presupuestoMensual) || 0;
+    const presupuestoAcumulado = parseFloat(datosMes.presupuestoAcumulado) || 0;
     const costoMensual = parseFloat(datosMes.costoMensual) || 0;
 
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-          width: "850px",
-          margin: "auto",
-          gap: "10px",
-        }}
-      >
-        {/* ppto */}
-        <div>
-          <CircularProgressbarWithChildren
-            value={presupuestoMensual > 0 ? presupuestoMensual : 0}
-            maxValue={100}
-            background
-            strokeWidth={10}
-            styles={buildStyles({
-              pathColor: `${colores.ppto[0].datoVisible}`,
-              strokeLinecap: "butt",
-              trailColor: "#E5E7E9",
-              backgroundColor: "white",
-            })}
-          >
-            <div style={{ fontSize: 17, textAlign: "center" }}>
-              <strong>Presupuesto</strong>
-              <br />
-              <strong>mensual</strong>
-              <br />
+      <>
+        {/* proyectado */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            width: "850px",
+            margin: "auto",
+            gap: "10px",
+          }}
+        >
+          {/* ppto */}
+          <div>
+            <CircularProgressbarWithChildren
+              value={presupuestoMensual > 0 ? presupuestoMensual : 0}
+              maxValue={100}
+              background
+              strokeWidth={10}
+              styles={buildStyles({
+                pathColor: `${colores.ppto[0].datoVisible}`,
+                strokeLinecap: "butt",
+                trailColor: "#E5E7E9",
+                backgroundColor: "white",
+              })}
+            >
+              <div style={{ fontSize: 17, textAlign: "center" }}>
+                <strong>Presupuesto</strong>
+                <br />
+                <strong>mensual</strong>
+                <br />
 
-              <strong style={{ fontSize: "18pt" }}>
-                {presupuestoMensual.toLocaleString("es-CL", {
-                  style: "currency",
-                  currency: "CLP",
-                })}
-              </strong>
-            </div>
-          </CircularProgressbarWithChildren>
-        </div>
-        {/* costo */}
-        <div>
-          <CircularProgressbarWithChildren
-            value={costoMensual > 0 ? costoMensual : 0}
-            maxValue={100}
-            background
-            strokeWidth={10}
-            styles={buildStyles({
-              pathColor: `${colores.costo[0].datoVisible}`,
-              strokeLinecap: "butt",
-              trailColor: "#E5E7E9",
-              backgroundColor: "white",
-            })}
-          >
-            <div style={{ fontSize: 17, textAlign: "center" }}>
-              <strong>Costo</strong>
-              <br />
-              <strong>mensual</strong>
-              <br />
+                <strong style={{ fontSize: "18pt" }}>
+                  {presupuestoMensual.toLocaleString("es-CL", {
+                    style: "currency",
+                    currency: "CLP",
+                  })}
+                </strong>
+              </div>
+            </CircularProgressbarWithChildren>
+          </div>
+          {/* costo */}
+          <div>
+            <CircularProgressbarWithChildren
+              value={costoMensual > 0 ? costoMensual : 0}
+              maxValue={100}
+              background
+              strokeWidth={10}
+              styles={buildStyles({
+                pathColor: `${colores.costo[0].datoVisible}`,
+                strokeLinecap: "butt",
+                trailColor: "#E5E7E9",
+                backgroundColor: "white",
+              })}
+            >
+              <div style={{ fontSize: 17, textAlign: "center" }}>
+                <strong>Costo</strong>
+                <br />
+                <strong>mensual</strong>
+                <br />
 
-              <strong style={{ fontSize: "18pt" }}>
-                {costoMensual.toLocaleString("es-CL", {
-                  style: "currency",
-                  currency: "CLP",
-                })}
-              </strong>
-            </div>
-          </CircularProgressbarWithChildren>
-        </div>
-        <div>
-          <CircularProgressbarWithChildren
-            value={
-              (costoMensual * 100) / presupuestoMensual > 0
-                ? (costoMensual * 100) / presupuestoMensual
-                : 0
-            }
-            maxValue={100}
-            background
-            strokeWidth={10}
-            styles={buildStyles({
-              pathColor: `#3e98c7`,
-              strokeLinecap: "butt",
-              trailColor: "#E5E7E9",
-              backgroundColor: "white",
-            })}
-          >
-            <div style={{ fontSize: 17, textAlign: "center" }}>
-              <strong>Porcentaje ppto</strong>
-              <br />
-              <strong>utilizado</strong>
-              <br />
+                <strong style={{ fontSize: "18pt" }}>
+                  {costoMensual.toLocaleString("es-CL", {
+                    style: "currency",
+                    currency: "CLP",
+                  })}
+                </strong>
+              </div>
+            </CircularProgressbarWithChildren>
+          </div>
+          <div>
+            <CircularProgressbarWithChildren
+              value={
+                (costoMensual * 100) / presupuestoMensual > 0
+                  ? (costoMensual * 100) / presupuestoMensual
+                  : 0
+              }
+              maxValue={100}
+              background
+              strokeWidth={10}
+              styles={buildStyles({
+                pathColor: `#3e98c7`,
+                strokeLinecap: "butt",
+                trailColor: "#E5E7E9",
+                backgroundColor: "white",
+              })}
+            >
+              <div style={{ fontSize: 17, textAlign: "center" }}>
+                <strong>Porcentaje ppto</strong>
+                <br />
+                <strong>utilizado</strong>
+                <br />
 
-              <strong style={{ fontSize: "19pt" }}>
-                {((costoMensual * 100) / presupuestoMensual).toFixed(2) + "%"}
-              </strong>
-            </div>
-          </CircularProgressbarWithChildren>
-        </div>
-        <div>
-          <CircularProgressbarWithChildren
-            value={presupuestoMensual > 0 ? presupuestoMensual : 0}
-            maxValue={100}
-            background
-            strokeWidth={10}
-            styles={buildStyles({
-              pathColor: `#3e98c7`,
-              strokeLinecap: "butt",
-              trailColor: "#E5E7E9",
-              backgroundColor: "white",
-            })}
-          >
-            <div style={{ fontSize: 17, textAlign: "center" }}>
-              <strong>Cantidad</strong>
-              <br />
-              <strong>Colab</strong>
-              <br />
+                <strong style={{ fontSize: "19pt" }}>
+                  {((costoMensual * 100) / presupuestoMensual).toFixed(2) + "%"}
+                </strong>
+              </div>
+            </CircularProgressbarWithChildren>
+          </div>
+          <div>
+            <CircularProgressbarWithChildren
+              value={presupuestoMensual > 0 ? presupuestoMensual : 0}
+              maxValue={100}
+              background
+              strokeWidth={10}
+              styles={buildStyles({
+                pathColor: `#3e98c7`,
+                strokeLinecap: "butt",
+                trailColor: "#E5E7E9",
+                backgroundColor: "white",
+              })}
+            >
+              <div style={{ fontSize: 17, textAlign: "center" }}>
+                <strong>Cantidad</strong>
+                <br />
+                <strong>Colab</strong>
+                <br />
 
-              <strong style={{ fontSize: "18pt" }}>
-                {datosMes.cantColaboradores}
-              </strong>
-            </div>
-          </CircularProgressbarWithChildren>
+                <strong style={{ fontSize: "18pt" }}>
+                  {datosMes.cantColaboradores}
+                </strong>
+              </div>
+            </CircularProgressbarWithChildren>
+          </div>
         </div>
-      </div>
+        <br></br>
+        {/* acumulado */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            width: "400px",
+            margin: "auto",
+            gap: "10px",
+          }}
+        >
+          {/* ppto */}
+          <div>
+            <CircularProgressbarWithChildren
+              value={presupuestoAcumulado > 0 ? presupuestoAcumulado : 0}
+              maxValue={100}
+              background
+              strokeWidth={10}
+              styles={buildStyles({
+                pathColor: `${colores.ppto[0].datoVisible}`,
+                strokeLinecap: "butt",
+                trailColor: `${colores.ppto[0].datoVisible}`,
+                backgroundColor: "white",
+              })}
+            >
+              <div style={{ fontSize: 17, textAlign: "center" }}>
+                <strong>Presup mensual</strong>
+                <br />
+                <strong>acumulado</strong>
+                <br />
+
+                <strong style={{ fontSize: "17pt" }}>
+                  {presupuestoAcumulado.toLocaleString("es-CL", {
+                    style: "currency",
+                    currency: "CLP",
+                  })}
+                </strong>
+              </div>
+            </CircularProgressbarWithChildren>
+          </div>
+          {/* costo
+          <div>
+            <CircularProgressbarWithChildren
+              value={costoMensual > 0 ? costoMensual : 0}
+              maxValue={100}
+              background
+              strokeWidth={10}
+              styles={buildStyles({
+                pathColor: `${colores.costo[0].datoVisible}`,
+                strokeLinecap: "butt",
+                trailColor: "#E5E7E9",
+                backgroundColor: "white",
+              })}
+            >
+              <div style={{ fontSize: 17, textAlign: "center" }}>
+                <strong>Costo</strong>
+                <br />
+                <strong>mensual</strong>
+                <br />
+
+                <strong style={{ fontSize: "18pt" }}>
+                  {costoMensual.toLocaleString("es-CL", {
+                    style: "currency",
+                    currency: "CLP",
+                  })}
+                </strong>
+              </div>
+            </CircularProgressbarWithChildren>
+          </div> */}
+          {/* porc presupuesto */}
+          <div>
+            <CircularProgressbarWithChildren
+              value={
+                (costoMensual * 100) / presupuestoAcumulado > 0
+                  ? (costoMensual * 100) / presupuestoAcumulado
+                  : 0
+              }
+              maxValue={100}
+              background
+              strokeWidth={10}
+              styles={buildStyles({
+                pathColor: `#3e98c7`,
+                strokeLinecap: "butt",
+                trailColor: "#E5E7E9",
+                backgroundColor: "white",
+              })}
+            >
+              <div style={{ fontSize: 17, textAlign: "center", width:"100px" }}>
+                <strong >% Presup acumulado</strong>
+                <br />
+                <strong>utilizado</strong>
+                <br />
+
+                <strong style={{ fontSize: "17pt" }}>
+                  {((costoMensual * 100) / presupuestoAcumulado).toFixed(2) +
+                    "%"}
+                </strong>
+              </div>
+            </CircularProgressbarWithChildren>
+          </div>
+        </div>
+      </>
     );
   }
 
   function ResumenMes() {
-    return (
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)", // Máximo 3 columnas
-          gap: "10px", // Espacio entre las tarjetas
-          margin: "auto", // Centra el grid en la página
-          justifyContent: "center", // Centra las tarjetas horizontalmente
-          alignItems: "stretch", // Alinea las tarjetas a la altura máxima
-          marginTop: "10px",
-        }}
-      >
-        {detalleMensual &&
-          detalleMensual.map((item) => (
-            <Card
-              key={item.idImpugnacionEmp}
-              style={{
-                width: "300px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              <Card.Body
+    if (tipoImpugnacion === "TODOS") {
+      return (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)", // Máximo 3 columnas
+            gap: "10px", // Espacio entre las tarjetas
+            margin: "auto", // Centra el grid en la página
+            justifyContent: "center", // Centra las tarjetas horizontalmente
+            alignItems: "stretch", // Alinea las tarjetas a la altura máxima
+            marginTop: "10px",
+          }}
+        >
+          {detalleMensual &&
+            detalleMensual.map((item) => (
+              <Card
+                key={item.idImpugnacionEmp}
                 style={{
-                  padding: "10px",
-                  margin: "auto",
+                  width: "300px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                 }}
               >
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <h4
-                    style={{
-                      marginTop: "-15px",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    {item.nomEmpleado.toString().length <= 15 ? (
-                      <>
-                        {item.nomEmpleado}
-                        <br></br>
-                        <br></br>
-                        <p style={{ fontSize: "10pt" }}>{item.nomCargo}</p>
-                        {item.monetizado === "1" ? (
-                          <p style={{ fontSize: "10pt" }}>Monetizado</p>
-                        ) : (
-                          <p style={{ fontSize: "10pt" }}>No monetizado</p>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {item.nomEmpleado}
-                        <p style={{ fontSize: "10pt" }}>{item.nomCargo}</p>
+                <Card.Body
+                  style={{
+                    padding: "10px",
+                    margin: "auto",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <h4
+                      style={{
+                        marginTop: "-15px",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      {item.nomEmpleado.toString().length <= 15 ? (
+                        <>
+                          {item.nomEmpleado}
+                          <br></br>
+                          <br></br>
+                          <p style={{ fontSize: "10pt" }}>{item.nomCargo}</p>
+                          {item.monetizado === "1" ? (
+                            <p style={{ fontSize: "10pt" }}>Monetizado</p>
+                          ) : (
+                            <p style={{ fontSize: "10pt" }}>No monetizado</p>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {item.nomEmpleado}
+                          <p style={{ fontSize: "10pt" }}>{item.nomCargo}</p>
 
-                        {item.monetizado === "1" ? (
-                          <p style={{ fontSize: "10pt" }}>Monetizado</p>
-                        ) : (
-                          <p style={{ fontSize: "10pt" }}>No monetizado</p>
-                        )}
-                      </>
-                    )}
-                  </h4>
+                          {item.monetizado === "1" ? (
+                            <p style={{ fontSize: "10pt" }}>Monetizado</p>
+                          ) : (
+                            <p style={{ fontSize: "10pt" }}>No monetizado</p>
+                          )}
+                        </>
+                      )}
+                    </h4>
 
-                  <table
-                    style={{
-                      width: "100%",
-                      margin: "auto",
-                      borderCollapse: "collapse",
-                    }}
-                  >
-                    <tbody>
-                      <tr>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "left",
-                          }}
-                        >
-                          <b>Valor HH:</b>
-                        </td>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "right",
-                          }}
-                        >
-                          {parseFloat(item.valorHH).toLocaleString("es-CL", {
-                            style: "currency",
-                            currency: "CLP",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          })}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "left",
-                            width: "260px",
-                          }}
-                        >
-                          <b>Horas impugnadas:</b>
-                        </td>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "right",
-                          }}
-                        >
-                          {item.cantHorasPeriodo}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "left",
-                          }}
-                        >
-                          <b>Horas extras:</b>
-                        </td>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "right",
-                          }}
-                        >
-                          {item.cantHorasExtra}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colSpan={2}>
-                          _________________________________________
-                        </td>
-                      </tr>
-                      <tr>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "left",
-                            width: "70%",
-                          }}
-                        >
-                          <b>Costo:</b>
-                        </td>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "right",
-                            width: "30%",
-                            fontWeight: "700",
-                          }}
-                        >
-                          {parseFloat(
-                            item.cantHorasPeriodo * item.valorHH +
-                              item.cantHorasExtra * item.valorHH * 1.5
-                          ).toLocaleString("es-CL", {
-                            style: "currency",
-                            currency: "CLP",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          })}
-                        </td>
-                      </tr>
-                      <br></br>
-                      <tr>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "left",
-                            width: "70%",
-                          }}
-                        >
-                          <b>Horas misc:</b>
-                        </td>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "right",
-                            width: "30%",
-                            fontWeight: "700",
-                          }}
-                        >
-                          {item.horasMiscelaneo ? item.horasMiscelaneo : "0"}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "left",
-                            width: "70%",
-                          }}
-                        >
-                          <b>Costo misc:</b>
-                        </td>
-                        <td
-                          style={{
-                            padding: "5px",
-                            textAlign: "right",
-                            width: "30%",
-                            fontWeight: "700",
-                          }}
-                        >
-                          {item.horasMiscelaneo
-                            ? parseFloat(
-                                item.horasMiscelaneo * item.valorHH
-                              ).toLocaleString("es-CL", {
-                                style: "currency",
-                                currency: "CLP",
-                              })
-                            : "$0"}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </Card.Body>
-            </Card>
-          ))}
-      </div>
-    );
+                    <table
+                      style={{
+                        width: "100%",
+                        margin: "auto",
+                        borderCollapse: "collapse",
+                      }}
+                    >
+                      <tbody>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                            }}
+                          >
+                            <b>Valor HH:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                            }}
+                          >
+                            {parseFloat(item.valorHH).toLocaleString("es-CL", {
+                              style: "currency",
+                              currency: "CLP",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                              width: "260px",
+                            }}
+                          >
+                            <b>Horas impugnadas:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                            }}
+                          >
+                            {item.cantHorasPeriodo}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                            }}
+                          >
+                            <b>Horas extras:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                            }}
+                          >
+                            {item.cantHorasExtra}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan={2}>
+                            _________________________________________
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                              width: "70%",
+                            }}
+                          >
+                            <b>Costo oper:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                              width: "30%",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {parseFloat(
+                              item.cantHorasPeriodo * item.valorHH +
+                                item.cantHorasExtra * item.valorHH * 1.5
+                            ).toLocaleString("es-CL", {
+                              style: "currency",
+                              currency: "CLP",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </td>
+                        </tr>
+                        <br></br>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                              width: "70%",
+                            }}
+                          >
+                            <b>Horas misceláneo:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                              width: "30%",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {item.horasMiscelaneo ? item.horasMiscelaneo : "0"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                              width: "70%",
+                            }}
+                          >
+                            <b>Costo misceláneo:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                              width: "30%",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {item.horasMiscelaneo
+                              ? parseFloat(
+                                  item.horasMiscelaneo * item.valorHH
+                                ).toLocaleString("es-CL", {
+                                  style: "currency",
+                                  currency: "CLP",
+                                })
+                              : "$0"}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </Card.Body>
+              </Card>
+            ))}
+        </div>
+      );
+    } else if (tipoImpugnacion === "OPERATIVO") {
+      return (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)", // Máximo 3 columnas
+            gap: "10px", // Espacio entre las tarjetas
+            margin: "auto", // Centra el grid en la página
+            justifyContent: "center", // Centra las tarjetas horizontalmente
+            alignItems: "stretch", // Alinea las tarjetas a la altura máxima
+            marginTop: "10px",
+          }}
+        >
+          {detalleMensual &&
+            detalleMensual.map((item) => (
+              <Card
+                key={item.idImpugnacionEmp}
+                style={{
+                  width: "300px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Card.Body
+                  style={{
+                    padding: "10px",
+                    margin: "auto",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <h4
+                      style={{
+                        marginTop: "-15px",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      {item.nomEmpleado.toString().length <= 15 ? (
+                        <>
+                          {item.nomEmpleado}
+                          <br></br>
+                          <br></br>
+                          <p style={{ fontSize: "10pt" }}>{item.nomCargo}</p>
+                          {item.monetizado === "1" ? (
+                            <p style={{ fontSize: "10pt" }}>Monetizado</p>
+                          ) : (
+                            <p style={{ fontSize: "10pt" }}>No monetizado</p>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {item.nomEmpleado}
+                          <p style={{ fontSize: "10pt" }}>{item.nomCargo}</p>
+
+                          {item.monetizado === "1" ? (
+                            <p style={{ fontSize: "10pt" }}>Monetizado</p>
+                          ) : (
+                            <p style={{ fontSize: "10pt" }}>No monetizado</p>
+                          )}
+                        </>
+                      )}
+                    </h4>
+
+                    <table
+                      style={{
+                        width: "100%",
+                        margin: "auto",
+                        borderCollapse: "collapse",
+                      }}
+                    >
+                      <tbody>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                            }}
+                          >
+                            <b>Valor HH:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                            }}
+                          >
+                            {parseFloat(item.valorHH).toLocaleString("es-CL", {
+                              style: "currency",
+                              currency: "CLP",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                              width: "260px",
+                            }}
+                          >
+                            <b>Horas impugnadas:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                            }}
+                          >
+                            {item.cantHorasPeriodo}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                            }}
+                          >
+                            <b>Horas extras:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                            }}
+                          >
+                            {item.cantHorasExtra}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan={2}>
+                            _________________________________________
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                              width: "70%",
+                            }}
+                          >
+                            <b>Costo operativo:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                              width: "30%",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {parseFloat(
+                              item.cantHorasPeriodo * item.valorHH +
+                                item.cantHorasExtra * item.valorHH * 1.5
+                            ).toLocaleString("es-CL", {
+                              style: "currency",
+                              currency: "CLP",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </Card.Body>
+              </Card>
+            ))}
+        </div>
+      );
+    } else {
+      return (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)", // Máximo 3 columnas
+            gap: "10px", // Espacio entre las tarjetas
+            margin: "auto", // Centra el grid en la página
+            justifyContent: "center", // Centra las tarjetas horizontalmente
+            alignItems: "stretch", // Alinea las tarjetas a la altura máxima
+            marginTop: "10px",
+          }}
+        >
+          {detalleMensual &&
+            detalleMensual.map((item) => (
+              <Card
+                key={item.idImpugnacionEmp}
+                style={{
+                  width: "300px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Card.Body
+                  style={{
+                    padding: "10px",
+                    margin: "auto",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <h4
+                      style={{
+                        marginTop: "-15px",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      {item.nomEmpleado.toString().length <= 15 ? (
+                        <>
+                          {item.nomEmpleado}
+                          <br></br>
+                          <br></br>
+                          <p style={{ fontSize: "10pt" }}>{item.nomCargo}</p>
+                          {item.monetizado === "1" ? (
+                            <p style={{ fontSize: "10pt" }}>Monetizado</p>
+                          ) : (
+                            <p style={{ fontSize: "10pt" }}>No monetizado</p>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {item.nomEmpleado}
+                          <p style={{ fontSize: "10pt" }}>{item.nomCargo}</p>
+
+                          {item.monetizado === "1" ? (
+                            <p style={{ fontSize: "10pt" }}>Monetizado</p>
+                          ) : (
+                            <p style={{ fontSize: "10pt" }}>No monetizado</p>
+                          )}
+                        </>
+                      )}
+                    </h4>
+
+                    <table
+                      style={{
+                        width: "100%",
+                        margin: "auto",
+                        borderCollapse: "collapse",
+                      }}
+                    >
+                      <tbody>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                            }}
+                          >
+                            <b>Valor HH:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                            }}
+                          >
+                            {parseFloat(item.valorHH).toLocaleString("es-CL", {
+                              style: "currency",
+                              currency: "CLP",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                              width: "260px",
+                            }}
+                          >
+                            <b>Horas misceláneo:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                            }}
+                          >
+                            {item.horasMiscelaneo ? item.horasMiscelaneo : "0"}
+                          </td>
+                        </tr>
+                        {/* <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                            }}
+                          >
+                            <b>Horas extras:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                            }}
+                          >
+                            {item.cantHorasExtra}
+                          </td>
+                        </tr> */}
+                        <tr>
+                          <td colSpan={2}>
+                            _________________________________________
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "left",
+                              width: "70%",
+                            }}
+                          >
+                            <b>Costo misceláneo:</b>
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "right",
+                              width: "30%",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {item.horasMiscelaneo
+                              ? parseFloat(
+                                  item.horasMiscelaneo * item.valorHH
+                                ).toLocaleString("es-CL", {
+                                  style: "currency",
+                                  currency: "CLP",
+                                })
+                              : "$0"}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </Card.Body>
+              </Card>
+            ))}
+        </div>
+      );
+    }
   }
 
   return (

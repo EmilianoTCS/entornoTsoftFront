@@ -90,7 +90,9 @@ export default function InicioDashboardIHH() {
         tipoImpugnacion: tipoImp,
         estadoProyecto: estadoProyecto,
       };
+
       SendDataService(url, operationUrl, data).then((response) => {
+
         if (response.length === 0) {
           TopAlertsError(
             "01",
@@ -101,18 +103,23 @@ export default function InicioDashboardIHH() {
           setDatosResumenGralProy(response);
           setIsActiveResumenGralProy(true);
 
-          // Encontrar la fecha de inicio más antigua del conjunto de datos
-          const fechasInicio = response.map((item) => item.fechaInicio);
-          const fechaMasAntigua = fechasInicio.sort(
-            (a, b) =>
-              new Date(a.split("-").reverse().join("-")) -
-              new Date(b.split("-").reverse().join("-"))
-          )[0];
-          setFechaini(fechaMasAntigua.split("-").reverse().join("-"));
+          if (fechaIni === "" && fechaFin === "") {
+            // Obtener el primer día del mes actual
+            const fechaHoy = new Date();
+            const primerDiaMes = new Date(
+              fechaHoy.getFullYear(),
+              fechaHoy.getMonth(),
+              1
+            )
+              .toISOString()
+              .split("T")[0];
 
-          // Obtener la fecha actual
-          const fechaHoy = new Date().toISOString().split("T")[0];
-          setFechaFin(fechaHoy);
+            setFechaini(primerDiaMes);
+
+            // Obtener la fecha actual
+            const fechaActual = fechaHoy.toISOString().split("T")[0];
+            setFechaFin(fechaActual);
+          }
         }
       });
     }
