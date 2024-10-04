@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SendDataService from "../../../services/SendDataService";
 import { Navigate } from "react-router-dom";
 import Header from "../../../templates/Header/Header";
@@ -17,14 +17,24 @@ export default function InicioDashboardIHH() {
   const nomDocPDF = "Dashboard_IHH_";
   const [datosResumenGralProy, setDatosResumenGralProy] = useState([]);
   const [isActiveResumenGralProy, setIsActiveResumenGralProy] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   const [colores, setColores] = useState({
     ppto: "",
+    ppto_acu: "",
     costo: "",
     saldo: "",
   });
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
+
+  const componenteRef = useRef(null); // Ref para el componente
+
+  useEffect(() => {
+    if (isActiveResumenGralProy) {
+      componenteRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isActiveResumenGralProy]);
 
   const obtenerConfigIHH = () => {
     var url = "pages/listados/listadoConfigDatos.php";
@@ -54,11 +64,13 @@ export default function InicioDashboardIHH() {
     };
     SendDataService(url, operationUrl, data).then((response) => {
       const ppto = response.filter((item) => item.datoNoVisible === "PPTO");
+      const ppto_acu = response.filter((item) => item.datoNoVisible === "PPTO_ACU");
       const costo = response.filter((item) => item.datoNoVisible === "COSTO");
       const saldo = response.filter((item) => item.datoNoVisible === "SALDO");
 
       setColores({
         ppto: ppto,
+        ppto_acu: ppto_acu,
         costo: costo,
         saldo: saldo,
       });
@@ -79,7 +91,7 @@ export default function InicioDashboardIHH() {
 
   const obtenerDatosProyectos = (e) => {
     e.preventDefault();
-
+    setIsActiveResumenGralProy(false);
     const errores = validaciones();
     if (!errores) {
       var url = "pages/listados/ihh_listado_resumenGralProy.php";
@@ -92,7 +104,6 @@ export default function InicioDashboardIHH() {
       };
 
       SendDataService(url, operationUrl, data).then((response) => {
-
         if (response.length === 0) {
           TopAlertsError(
             "01",
@@ -100,6 +111,8 @@ export default function InicioDashboardIHH() {
           );
         } else {
           // Establecer el conjunto de datos para proyectos
+          console.log(response);
+
           setDatosResumenGralProy(response);
           setIsActiveResumenGralProy(true);
 
@@ -129,12 +142,46 @@ export default function InicioDashboardIHH() {
     obtenerConfigIHH();
     obtenerConfigColorIHH();
     obtenerDatosProyectos({ preventDefault: () => {} });
+    // Agrega un listener de scroll para mostrar u ocultar el botón
+    window.addEventListener("scroll", toggleScrollButton);
+
+    // Limpia el listener cuando el componente se desmonta
+    return () => {
+      window.removeEventListener("scroll", toggleScrollButton);
+    };
   }, []);
 
+  // Muestra u oculta el botón basado en la posición del usuario en la página
+  const toggleScrollButton = () => {
+    if (
+      document.body.scrollTop > 20 ||
+      document.documentElement.scrollTop > 20
+    ) {
+      setShowScrollButton(true);
+    } else {
+      setShowScrollButton(false);
+    }
+  };
+
+  // Desplázate hacia arriba cuando se hace clic en el botón
+  const scrollToTop = () => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  };
   return userData.statusConected || userData !== null ? (
     <>
       <Header />
-
+      {showScrollButton && (
+        <button
+          onClick={scrollToTop}
+          id="scrollBtn"
+          title="Ir arriba"
+          data-html2canvas-ignore="true"
+          style={{float: "right"}}
+        >
+          ↑
+        </button>
+      )}
       <section
         style={{
           backgroundColor: "white",
@@ -239,14 +286,16 @@ export default function InicioDashboardIHH() {
       </section>
       <br />
       {isActiveResumenGralProy && datosResumenGralProy && (
-        <EstadoGeneralProy
-          datosProyectos={datosResumenGralProy}
-          paramsFechaFin={fechaFin}
-          paramsFechaIni={fechaIni}
-          tipoImpugnacion={tipoImp}
-          estadoProyecto={estadoProyecto}
-          colores={colores}
-        ></EstadoGeneralProy>
+        <div ref={componenteRef}>
+          <EstadoGeneralProy
+            datosProyectos={datosResumenGralProy}
+            paramsFechaFin={fechaFin}
+            paramsFechaIni={fechaIni}
+            tipoImpugnacion={tipoImp}
+            estadoProyecto={estadoProyecto}
+            colores={colores}
+          ></EstadoGeneralProy>
+        </div>
       )}
       <div style={{ float: "right", width: "280px", margin: "10px auto" }}>
         <ExportPDF

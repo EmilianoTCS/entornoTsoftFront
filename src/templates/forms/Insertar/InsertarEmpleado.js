@@ -109,7 +109,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
     } else if (tipoUsuario.trim() === "") {
       TopAlertsError("08", "El tipo de usuario no debe estar vacío");
       return true;
-    } else if (idRolUsuario < 0) {
+    } else if (nomRol < 0) {
       TopAlertsError("09", "El rol del colaborador no debe estar vacío");
       return true;
     } else if (idCliente < 0) {

@@ -86,9 +86,10 @@ p {
   background-color: #e10b1c;
   color: white;
   position: fixed;
-  margin: auto;
-  left: 50%;
-  right: 50%;
+  /* margin: auto; */
+
+  left: 92%;
+  /* right: 80%; */
   width: 15px;
   bottom: 1.25rem;
   text-align: center;
