@@ -1,79 +1,73 @@
 import React, { useState, useEffect, useRef } from "react";
-import SendDataService from "../../../services/SendDataService";
 import { Navigate } from "react-router-dom";
 import Header from "../../../templates/Header/Header";
-import { Button } from "react-bootstrap";
+import SendDataService from "../../../services/SendDataService";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
-import EstadoGeneralProy from "./EstadoGeneralProy";
 import ExportPDF from "../../../templates/exports/exportPDF";
+import { Button } from "react-bootstrap";
+import ResumenGeneralCursos from "./ResumenGeneralCursos";
 
-export default function InicioDashboardIHH() {
-  const [ListTipoImpugnacion, setListTipoImpugnacion] = useState();
-  const [ListEstadoProyecto, setListEstadoProyecto] = useState();
+export default function InicioDashboardAF() {
+  const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
+  const [ListEstadoCurso, setListEstadoCurso] = useState();
+  const [ListDatosCursos, setListDatosCursos] = useState();
   const [fechaIni, setFechaini] = useState("");
   const [fechaFin, setFechaFin] = useState("");
-  const [tipoImp, setTipoImp] = useState("OPERATIVO");
-  const [estadoProyecto, setEstadoProyecto] = useState("ACTIVO");
-  const now = new Date();
-  const nomDocPDF = "Dashboard_IHH_";
-  const [datosResumenGralProy, setDatosResumenGralProy] = useState([]);
-  const [isActiveResumenGralProy, setIsActiveResumenGralProy] = useState(false);
+  const [estadoCurso, setEstadoCurso] = useState("ACTIVO");
+  const [isActiveResumenGralCursos, setIsActiveResumenGralCursos] =
+    useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const now = new Date();
+  const nomDocPDF = "Dashboard_AF_";
 
   const [colores, setColores] = useState({
-    ppto: "",
-    ppto_acu: "",
-    costo: "",
-    saldo: "",
+    aprobados: "",
+    desaprobados: "",
+    aprobGral: "",
+    coloresGral: "",
   });
-
-  const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
   const componenteRef = useRef(null); // Ref para el componente
 
   useEffect(() => {
-    if (isActiveResumenGralProy) {
+    if (isActiveResumenGralCursos) {
       componenteRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [isActiveResumenGralProy]);
+  }, [isActiveResumenGralCursos]);
 
-  const obtenerConfigIHH = () => {
+  const obtenerConfigColorAF = () => {
     var url = "pages/listados/listadoConfigDatos.php";
     var operationUrl = "listadoConfigDatos";
     var data = {
-      tipoConfDato: "IHH",
+      tipoConfDato: "AF",
       subTipoConfDato: "",
     };
-    SendDataService(url, operationUrl, data).then((response) => {
-      const tipoImp = response.filter(
-        (item) => item.subTipoConfDato === "TIPO_IMPUGNACION"
+    SendDataService(url, operationUrl, data).then((response) => {      
+      const aprobados = response.filter(
+        (item) =>
+          item.datoNoVisible === "aprobados" &&
+          item.subTipoConfDato === "COLOR_DASHBOARD"
       );
-      const estadoProyecto = response.filter(
-        (item) => item.subTipoConfDato === "ESTADO_PROYECTO"
+      const desaprobados = response.filter(
+        (item) =>
+          item.datoNoVisible === "desaprobados" &&
+          item.subTipoConfDato === "COLOR_DASHBOARD"
       );
-      setListTipoImpugnacion(tipoImp);
-      setListEstadoProyecto(estadoProyecto);
-    });
-  };
+      const aprobGral = response.filter(
+        (item) =>
+          item.datoNoVisible === "porc_aprob_general" &&
+          item.subTipoConfDato === "COLOR_DASHBOARD"
+      );
+      const coloresGral = response
+        .filter((item) => item.subTipoConfDato === "RANCO_COLOR_CURSOS")
+        .sort((a, b) => a.orden - b.orden);
 
-  const obtenerConfigColorIHH = () => {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
-    var data = {
-      tipoConfDato: "IHH",
-      subTipoConfDato: "COLOR_DASHBOARD",
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      const ppto = response.filter((item) => item.datoNoVisible === "PPTO");
-      const ppto_acu = response.filter((item) => item.datoNoVisible === "PPTO_ACU");
-      const costo = response.filter((item) => item.datoNoVisible === "COSTO");
-      const saldo = response.filter((item) => item.datoNoVisible === "SALDO");
-
+        
       setColores({
-        ppto: ppto,
-        ppto_acu: ppto_acu,
-        costo: costo,
-        saldo: saldo,
+        aprobados: aprobados,
+        desaprobados: desaprobados,
+        aprobGral: aprobGral,
+        coloresGral: coloresGral,
       });
     });
   };
@@ -90,32 +84,42 @@ export default function InicioDashboardIHH() {
     }
   }
 
+  function getDataConfig() {
+    var url = "pages/listados/listadoConfigDatos.php";
+    var operationUrl = "listadoConfigDatos";
+    var data = {
+      tipoConfDato: "AF",
+      subTipoConfDato: "ESTADO_CURSO",
+    };
+    SendDataService(url, operationUrl, data).then((response) => {
+      setListEstadoCurso(response);
+    });
+  }
+
   const obtenerDatosProyectos = (e) => {
     e.preventDefault();
-    setIsActiveResumenGralProy(false);
+    // setIsActiveResumenGralProy(false);
     const errores = validaciones();
     if (!errores) {
-      var url = "pages/listados/ihh_listado_resumenGralProy.php";
-      var operationUrl = "ihh_listadoResumenGralProy";
+      var url = "pages/listados/AF_listado_resumenGralCurso.php";
+      var operationUrl = "AF_listado_resumenGralCurso";
       const data = {
         fechaInicio: fechaIni,
         fechaFin: fechaFin,
-        tipoImpugnacion: tipoImp,
-        estadoProyecto: estadoProyecto,
+        estadoCurso: estadoCurso,
       };
 
       SendDataService(url, operationUrl, data).then((response) => {
         if (response.length === 0) {
           TopAlertsError(
             "01",
-            "No se han encontrado proyectos con estos parámetros"
+            "No se han encontrado cursos con estos parámetros"
           );
         } else {
-          // Establecer el conjunto de datos para proyectos
-          console.log(response);
+          //   console.log(response);
 
-          setDatosResumenGralProy(response);
-          setIsActiveResumenGralProy(true);
+          setListDatosCursos(response);
+          setIsActiveResumenGralCursos(true);
 
           if (fechaIni === "" && fechaFin === "") {
             // Obtener el primer día del mes actual
@@ -127,9 +131,7 @@ export default function InicioDashboardIHH() {
             )
               .toISOString()
               .split("T")[0];
-
             setFechaini(primerDiaMes);
-
             // Obtener la fecha actual
             const fechaActual = fechaHoy.toISOString().split("T")[0];
             setFechaFin(fechaActual);
@@ -140,8 +142,8 @@ export default function InicioDashboardIHH() {
   };
 
   useEffect(() => {
-    obtenerConfigIHH();
-    obtenerConfigColorIHH();
+    getDataConfig();
+    obtenerConfigColorAF();
     obtenerDatosProyectos({ preventDefault: () => {} });
 
     // Agrega un listener de scroll para mostrar u ocultar el botón
@@ -149,7 +151,6 @@ export default function InicioDashboardIHH() {
     return () => {
       window.removeEventListener("scroll", toggleScrollButton);
     };
-    
   }, []);
 
   // Muestra u oculta el botón basado en la posición del usuario en la página
@@ -169,7 +170,6 @@ export default function InicioDashboardIHH() {
     document.documentElement.scrollTop = 0;
   };
 
-
   return userData.statusConected || userData !== null ? (
     <>
       <Header />
@@ -179,7 +179,7 @@ export default function InicioDashboardIHH() {
           id="scrollBtn"
           title="Ir arriba"
           data-html2canvas-ignore="true"
-          style={{float: "right"}}
+          style={{ float: "right" }}
         >
           ↑
         </button>
@@ -188,7 +188,7 @@ export default function InicioDashboardIHH() {
         style={{
           backgroundColor: "white",
           margin: "auto",
-          width: "800px",
+          width: "700px",
           textAlign: "center",
           marginTop: "20px",
           borderRadius: "15px",
@@ -196,7 +196,7 @@ export default function InicioDashboardIHH() {
         }}
       >
         <form onSubmit={obtenerDatosProyectos}>
-          <h3>Generador Dashboard Impugnación de Horas</h3>
+          <h3>Generador Dashboard Academia de Formación</h3>
           <div
             style={{
               display: "flex",
@@ -205,7 +205,7 @@ export default function InicioDashboardIHH() {
               marginTop: "20px",
             }}
           >
-            <div>
+            <div style={{ textAlign: "left" }}>
               <label htmlFor="input_fechaInicio">Fecha inicio</label>
               <input
                 name="input_fechaInicio"
@@ -219,7 +219,7 @@ export default function InicioDashboardIHH() {
                 value={fechaIni || ""}
               />
             </div>
-            <div>
+            <div style={{ textAlign: "left" }}>
               <label htmlFor="input_fechaFin">Fecha fin</label>
               <input
                 name="input_fechaFin"
@@ -233,47 +233,24 @@ export default function InicioDashboardIHH() {
                 }}
               />
             </div>
-            <div>
-              <label htmlFor="input_tipoImpugnacion">Tipo de impugnación</label>
+            <div style={{ textAlign: "left" }}>
+              <label htmlFor="input_estadoProyecto">Estado de curso</label>
               <select
-                name="slct_tipoImpugnacion"
-                id="slct_tipoImpugnacion"
+                name="slct_estadoCurso"
+                id="slct_estadoCurso"
                 className="form-control"
                 required
-                value={tipoImp || ""}
+                value={estadoCurso || ""}
                 onChange={({ target }) => {
-                  setTipoImp(target.value);
-                }}
-              >
-                <option hidden value="">
-                  Desplegar lista
-                </option>
-                {ListTipoImpugnacion &&
-                  ListTipoImpugnacion.map((item) => (
-                    <option key={item.datoVisible} value={item.datoVisible}>
-                      {item.datoVisible}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="input_estadoProyecto">Estado de proyecto</label>
-              <select
-                name="slct_estadoProyecto"
-                id="slct_estadoProyecto"
-                className="form-control"
-                required
-                value={estadoProyecto || ""}
-                onChange={({ target }) => {
-                  setEstadoProyecto(target.value);
+                  setEstadoCurso(target.value);
                 }}
               >
                 {" "}
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                {ListEstadoProyecto &&
-                  ListEstadoProyecto.map((item) => (
+                {ListEstadoCurso &&
+                  ListEstadoCurso.map((item) => (
                     <option key={item.datoVisible} value={item.datoVisible}>
                       {item.datoVisible}
                     </option>
@@ -286,19 +263,20 @@ export default function InicioDashboardIHH() {
           </div>
         </form>
       </section>
-      <br />
-      {isActiveResumenGralProy && datosResumenGralProy && (
-        <div ref={componenteRef}>
-          <EstadoGeneralProy
-            datosProyectos={datosResumenGralProy}
+      <br></br>
+
+      <div ref={componenteRef}>
+        {isActiveResumenGralCursos && (
+          <ResumenGeneralCursos
+            datosCursos={ListDatosCursos}
             paramsFechaFin={fechaFin}
             paramsFechaIni={fechaIni}
-            tipoImpugnacion={tipoImp}
-            estadoProyecto={estadoProyecto}
             colores={colores}
-          ></EstadoGeneralProy>
-        </div>
-      )}
+            estadoCurso={estadoCurso}
+          ></ResumenGeneralCursos>
+        )}
+      </div>
+
       <div style={{ float: "right", width: "280px", margin: "10px auto" }}>
         <ExportPDF
           nombreTabla={

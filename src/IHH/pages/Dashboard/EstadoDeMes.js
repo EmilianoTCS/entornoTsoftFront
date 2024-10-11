@@ -649,13 +649,14 @@ export default function EstadoDeMes({
                   <br />
                   {/* <strong>acumulado</strong>
                   <br></br> */}
+                  
 
                   <strong style={{ fontSize: "17pt" }}>
                     {presupuestoAcumulado.toLocaleString("es-CL", {
                       style: "currency",
                       currency: "CLP",
                     })}
-                  </strong>
+                  </strong><br></br><strong>100%</strong>
                 </div>
               </CircularProgressbarWithChildren>
             </div>

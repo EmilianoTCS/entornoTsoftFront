@@ -18,7 +18,7 @@ import ListadoServicios from "./pages/Listados/ListadoServicios/ListadoServicios
 import ListadoCursos from "./pages/Listados/ListadoCursos/ListadoCursos";
 import ListadoContacto from "./pages/Listados/ListadoContacto/ListadoContacto";
 import ListadoCursoAlumnos from "./pages/Listados/ListadoCursoAlumno/ListadoCursoAlumno";
-import ListadoCursoAlumnoSesion from "./pages/Listados/ListadoCursoAlumnoSesion/ListadoCursoAlumnoSesion";
+import ListadoCursoAlumnoRamoSesion from "./pages/Listados/ListadoCursoAlumnoRamoSesion/ListadoCursoAlumnoRamoSesion";
 import ListadoNotaExamen from "./pages/Listados/ListadoNotaExamen/ListadoNotaExamen";
 import ListadoRamoExamen from "./pages/Listados/ListadoRamoExamen/ListadoRamoExamen";
 import ListadoRelatorRamo from "./pages/Listados/ListadoRelatorRamo/ListadoRelatorRamo";
@@ -75,6 +75,7 @@ import Resumen_ihh_colab_proy from "./IHH/pages/Resumen_ihh_colab_proy/Resumen_i
 import IHH_ListadoMesesAcop from "./IHH/pages/ListadoMesesAcop/ListadoMesesAcop.js";
 import IHH_ListadoAcopProy from "./IHH/pages/ListadoAcopProy/ListadoAcopProy.js";
 import InicioDashboardIHH from "./IHH/pages/Dashboard/InicioDashboardIHH.js";
+import InicioDashboardAF from "./pages/Listados/Dashboard/InicioDashboardAF.js";
 function App() {
   return (
     <AuthState>
@@ -143,8 +144,8 @@ function App() {
               path="/listadoCursoAlumnos/:params"
             ></Route>
             <Route
-              element={<ListadoCursoAlumnoSesion />}
-              path="/listadoCursoAlumnoSesion/:params"
+              element={<ListadoCursoAlumnoRamoSesion />}
+              path="/listadoCursoAlumnoRamoSesion/:params"
             ></Route>
             <Route
               element={<ListadoNotaExamen />}
@@ -162,6 +163,10 @@ function App() {
             <Route
               element={<ListadoReqCurso />}
               path="/listadoReqCurso/:params"
+            ></Route>
+             <Route
+              element={<InicioDashboardAF />}
+              path="/Dashboard_AF"
             ></Route>
             {/* ------------------------------------------------------------------------------------------ */}
 

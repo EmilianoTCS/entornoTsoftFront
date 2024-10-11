@@ -19,8 +19,8 @@ import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
 import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 
-export default function ListadoCursoAlumnoSesion() {
-  const [, params] = useRoute("/listadoCursoAlumnoSesion/:params");
+export default function ListadoCursoAlumnoRamoSesion() {
+  const [, params] = useRoute("/listadoCursoAlumnoRamoSesion/:params");
 
   const [cursoAlumnoSesion, setCursoAlumnoSesion] = useState([""]);
   const [isActiveInsertCursoAlumnoSesion, setIsActiveInsertCursoAlumnoSesion] =
@@ -39,7 +39,7 @@ export default function ListadoCursoAlumnoSesion() {
   const [listSesion, setlistSesion] = useState([""]);
   const [listEmpleado, setlistEmpleado] = useState([""]);
 
-  const nombreTabla = "cursoalumno_sesion";
+  const nombreTabla = "cursoalumnoramo_sesion";
 
   function obtenerSesion() {
     const url = "pages/auxiliares/listadoSesionForms.php";
@@ -90,8 +90,8 @@ export default function ListadoCursoAlumnoSesion() {
 
   //PAGINADOR ---------------------
   function handleChangePaginador() {
-    var url = "pages/listados/listadoCursoAlumnoSesion.php";
-    var operationUrl = "listadoCursoAlumnoSesion";
+    var url = "pages/listados/listadoCursoAlumnoRamoSesion.php";
+    var operationUrl = "listadoCursoAlumnoRamoSesion";
 
     if (userData.nomRol === "alumno") {
       var data = {
@@ -251,9 +251,9 @@ export default function ListadoCursoAlumnoSesion() {
               </thead>
               <tbody>
                 {cursoAlumnoSesion.map((cursoAlumnoSesion) => (
-                  <tr key={cursoAlumnoSesion.idCursoAlumnoSesion}>
+                  <tr key={cursoAlumnoSesion.idCursoAlumnoRamoSesion}>
                     <td align="right" width={30}>
-                      {cursoAlumnoSesion.idCursoAlumnoSesion}
+                      {cursoAlumnoSesion.idCursoAlumnoRamoSesion}
                     </td>
                     <td>{cursoAlumnoSesion.nomSesion}</td>
                     <td>{cursoAlumnoSesion.nomEmpleado}</td>

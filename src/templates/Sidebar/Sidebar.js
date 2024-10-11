@@ -7,8 +7,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { IoTime, IoHome, IoBookmarks } from "react-icons/io5";
-import { FaBook, FaUpload, FaPeopleCarry} from "react-icons/fa";
-import { BsArrowLeftCircle, BsArrowRightCircle, BsHourglassBottom } from "react-icons/bs";
+import { FaBook, FaUpload, FaPeopleCarry } from "react-icons/fa";
+import {
+  BsArrowLeftCircle,
+  BsArrowRightCircle,
+  BsHourglassBottom,
+} from "react-icons/bs";
 import { ImBook } from "react-icons/im";
 import { IoIosPeople } from "react-icons/io";
 import { PiExamFill } from "react-icons/pi";
@@ -179,6 +183,15 @@ export default function SideBar() {
                       id="COE_Academia"
                       className={isToggledAcademia ? "active" : ""}
                     >
+                      <li id="textLeftSelect">
+                        <Link to="/Dashboard_AF">
+                          <button id="submenuSidebar">
+                            <ImBook id="icons" />
+                            Dashboard
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
                       <li id="textLeftSelect">
                         <Link to="/listadoCursos/0">
                           <button id="submenuSidebar">

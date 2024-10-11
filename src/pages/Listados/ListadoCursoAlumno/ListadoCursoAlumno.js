@@ -278,7 +278,7 @@ export default function ListadoCursoAlumno() {
                       ) : null}
 
                       <Link
-                        to={`/listadoCursoAlumnoSesion/${CursoAlumno.idCursoAlumno}`}
+                        to={`/listadoCursoAlumnoRamoSesion/${CursoAlumno.idCursoAlumno}`}
                       >
                         <button
                           data-title="Curso-Alum-Sesion relacionado"
