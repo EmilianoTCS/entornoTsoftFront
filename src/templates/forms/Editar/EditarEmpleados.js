@@ -6,6 +6,7 @@ import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
+import { NumericFormat } from "react-number-format";
 
 const EditarEmpleados = ({
   isActiveEditEmpleado,
@@ -23,6 +24,7 @@ const EditarEmpleados = ({
   const [idArea, setidArea] = useState("");
   const [idCargo, setidCargo] = useState("");
   const [idCliente, setidCliente] = useState("");
+  const [valorHH, setValorHH] = useState("");
 
   const [listCliente, setlistCliente] = useState([""]);
   const [listPais, setlistPais] = useState([""]);
@@ -45,7 +47,6 @@ const EditarEmpleados = ({
     setidArea(responseID[0].idArea);
     setidCargo(responseID[0].idCargo);
     setidCliente(responseID[0].idCliente);
-
   };
   // ----------------------FUNCIONES----------------------------
   function obtenerPais() {
@@ -78,6 +79,7 @@ const EditarEmpleados = ({
     var data = { idRegistro: idEmpleado, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
       console.log(response);
+
       setResponseID(response);
       setnomEmpleado(response[0].nomEmpleado);
       setcorreoEmpleado(response[0].correoEmpleado);
@@ -86,41 +88,114 @@ const EditarEmpleados = ({
       setidArea(response[0].idArea);
       setidCargo(response[0].idCargo);
       setidCliente(response[0].idCliente);
-      
+      setValorHH(response[0].valorHH);
     });
   }, [idEmpleado]);
 
+  function validaciones() {
+    const regexTelefono = /^\+?\d[\d +\-]*$/;
+    const regexInvalidoNombre = /[^a-zA-Z\sáéíóúÁÉÍÓÚñÑ]/;
+    if (nomEmpleado.trim() === "") {
+      TopAlertsError("01", "El nombre del colaborador no puede estar vacío");
+      return true;
+    }
+    const regexCorreo =
+      /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+
+    // Validación para evitar números en el nombre del colaborador
+    if (regexInvalidoNombre.test(nomEmpleado)) {
+      TopAlertsError(
+        "12",
+        "El nombre del colaborador no puede contener números ni caracteres especiales"
+      );
+      return true;
+    }
+
+    if (correoEmpleado.trim() === "") {
+      TopAlertsError("02", "El correo del colaborador no puede estar vacío");
+      return true;
+    }
+    if (!regexCorreo.test(correoEmpleado)) {
+      TopAlertsError("15", "El correo ingresado es inválido. Los caracteres '<>()[].,;:' no son permitidos");
+      return true;
+    }
+
+    // Validación del campo teléfono
+
+    if (
+      telefonoEmpleado.trim() !== "" &&
+      !regexTelefono.test(telefonoEmpleado)
+    ) {
+      TopAlertsError(
+        "14",
+        "El teléfono solo puede contener números, el signo '+' y el signo '-'"
+      );
+      return true;
+    }
+
+    if (idPais < 0) {
+      TopAlertsError("05", "El país del colaborador no debe estar vacío");
+      return true;
+    }
+
+    if (idCargo < 0) {
+      TopAlertsError("06", "El cargo del colaborador no debe estar vacío");
+      return true;
+    }
+
+    if (idArea < 0) {
+      TopAlertsError("07", "El área del colaborador no debe estar vacía");
+      return true;
+    }
+
+    if (idCliente < 0) {
+      TopAlertsError("10", "El cliente del colaborador no debe estar vacío");
+      return true;
+    }
+
+    if (valorHH <= 0) {
+      TopAlertsError("11", "El valor HH del colaborador debe ser mayor a cero");
+      return true;
+    }
+
+    return false; // Si ninguna validación falla, se devuelve `false`
+  }
+
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/editar/editarEmpleado.php";
-    const operationUrl = "editarEmpleado";
+    if (!validaciones()) {
+      const url = "pages/editar/editarEmpleado.php";
+      const operationUrl = "editarEmpleado";
 
-    var data = {
-      usuarioModificacion: userData.usuario,
-      idEmpleado: idEmpleado,
-      nomEmpleado: nomEmpleado === "" ? responseID[0].nomEmpleado : nomEmpleado,
-      correoEmpleado:
-        correoEmpleado === "" ? responseID[0].correoEmpleado : correoEmpleado,
-      telefonoEmpleado:
-        telefonoEmpleado === ""
-          ? responseID[0].telefonoEmpleado
-          : telefonoEmpleado,
-      idPais: idPais === "" ? responseID[0].idPais : idPais,
-      idArea: idArea === "" ? responseID[0].idArea : idArea,
-      idCargo: idCargo === "" ? responseID[0].idCargo : idCargo,
-      idCliente: idCliente=== "" ? responseID[0].idCliente : idCliente,
+      var data = {
+        usuarioModificacion: userData.usuario,
+        idEmpleado: idEmpleado,
+        nomEmpleado: nomEmpleado,
+        correoEmpleado: correoEmpleado,
+        telefonoEmpleado: telefonoEmpleado,
+        idPais: idPais,
+        idArea: idArea,
+        idCargo: idCargo,
+        idCliente: idCliente,
+        valorHH: valorHH,
+      };
+      console.log(data);
 
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      // TopAlerts('successEdited');
-      { actualizarEmpleado(empleado); console.log(response); };
-    });
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        {
+          actualizarEmpleado(empleado);
+          cambiarEstado(false);
+        }
+      });
 
-    function actualizarEmpleado(empleado) {
-      const nuevosEmpleados = listEmpleados.map((c) =>
-        c.idEmpleado === empleado.idEmpleado ? empleado : c
-      );
-      setEmpleado(nuevosEmpleados);
+      function actualizarEmpleado(empleado) {
+        const nuevosEmpleados = listEmpleados.map((c) =>
+          c.idEmpleado === empleado.idEmpleado ? empleado : c
+        );
+        setEmpleado(nuevosEmpleados);
+      }
     }
   }
 
@@ -175,6 +250,7 @@ const EditarEmpleados = ({
                 required
               />
             </div>
+
             <div>
               <label htmlFor="input_telefono">Teléfono (opcional): </label>
               <input
@@ -253,14 +329,14 @@ const EditarEmpleados = ({
               <label htmlFor="input_Area">Cliente: </label>
               <select
                 required
-                value={idCliente||''}
+                value={idCliente || ""}
                 className="form-control"
                 name="input_Area"
                 id="input_Area"
                 placeholder="Seleccione el área"
-              onChange={({ target }) => setidCliente(target.value)}
+                onChange={({ target }) => setidCliente(target.value)}
               >
-              {listCliente.map((valor) => (
+                {listCliente.map((valor) => (
                   <option
                     selected={valor.idCliente === idCliente ? false : ""}
                     value={valor.idCliente}
@@ -268,8 +344,29 @@ const EditarEmpleados = ({
                     {valor.nomCliente}
                   </option>
                 ))}
-                
               </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="input_valorHH">Valor HH:</label>
+
+              <NumericFormat
+                placeholder="Escriba el valor hora del colaborador"
+                className="form-control"
+                name="input_valorHH"
+                id="input_valorHH"
+                thousandSeparator={"."}
+                prefix={"$"}
+                onValueChange={(values) => {
+                  const { value } = values;
+                  setValorHH(parseFloat(value));
+                }}
+                value={valorHH || ""}
+                decimalSeparator=","
+                required
+                decimalScale={2}
+                fixedDecimalScale={true}
+              />
             </div>
             <Button
               variant="secondary"

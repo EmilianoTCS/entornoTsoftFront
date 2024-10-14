@@ -11,7 +11,6 @@ import Header from "../../../templates/Header/Header";
 import InsertarEmpleado from "../../../templates/forms/Insertar/InsertarEmpleado";
 import EditarEmpleados from "../../../templates/forms/Editar/EditarEmpleados";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import { Table } from "react-bootstrap";
@@ -26,6 +25,7 @@ import { RiEditBoxFill } from "react-icons/ri";
 import { AiFillProject } from "react-icons/ai";
 import { FaFlipboard } from "react-icons/fa";
 import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 
 export default function ListadoEmpleados() {
   const [empleado, setEmpleado] = useState([""]);
@@ -48,7 +48,7 @@ export default function ListadoEmpleados() {
   const [listPais, setlistPais] = useState([""]);
   const [listCargo, setlistCargo] = useState([""]);
   const [listArea, setlistArea] = useState([""]);
-  const [listEmpleado, setlistEmpleado] = useState(['']);
+  const [listEmpleado, setlistEmpleado] = useState([""]);
 
   // const [listServicio, setlistServicio] = useState([""]);
 
@@ -70,7 +70,6 @@ export default function ListadoEmpleados() {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => {
-      console.log(response);
       setlistEmpleado(response);
     });
   }
@@ -87,7 +86,6 @@ export default function ListadoEmpleados() {
     getDataService(url, operationUrl).then((response) => setlistArea(response));
   }
 
-
   function desactivar(ID) {
     ConfirmAlert().then((response) => {
       if (response === true) {
@@ -99,7 +97,8 @@ export default function ListadoEmpleados() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response;
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });
@@ -147,7 +146,6 @@ export default function ListadoEmpleados() {
       };
     }
     SendDataService(url, operationUrl, data).then((data) => {
-      console.log(data);
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setEmpleado(datos.datos);

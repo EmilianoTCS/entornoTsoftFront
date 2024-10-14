@@ -40,7 +40,7 @@ export default function SimuladorCostos() {
   // variables
   const [nomEmpleado, setNomEmpleado] = useState("");
   const [idEmpleado, setIdEmpleado] = useState("");
-  const [nomElemento, setNomElemento] = useState("");
+  const [nomElemento, setNomElemento] = useState("JORNADA NORMAL");
   const [nomTipoElemento, setNomTipoElemento] = useState("");
   const [idElemento, setIdElemento] = useState("");
   const [nomProyecto, setNomProyecto] = useState("");
@@ -61,6 +61,14 @@ export default function SimuladorCostos() {
     var operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => {
       setListElemento(response);
+      const selectedElemento = response.find(
+        (item) => item.nomElemento === "JORNADA NORMAL"
+      );
+      if (selectedElemento) {
+        setIdElemento(selectedElemento.idElementoImp);
+        setNomElemento(selectedElemento.nomElemento);
+        setNomTipoElemento(selectedElemento.nomTipoElemento);
+      }
     });
   }
 
@@ -481,8 +489,11 @@ export default function SimuladorCostos() {
       usuarioCreacion: userData.usuario,
       isActive: 1,
     };
+    console.log(data);
 
     SendDataService(URL, operationUrl, data).then((response) => {
+      console.log(response);
+      
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
     });
@@ -562,7 +573,7 @@ export default function SimuladorCostos() {
                     list="colaboradores"
                     name="buscadorColaboradores"
                     placeholder="Busca un colaborador TSOFT"
-                    defaultValue={nomElemento || ""}
+                    defaultValue={nomEmpleado || ""}
                     onChange={(event) => {
                       setNomEmpleado(event.target.value);
                       const selectedNombre = event.target.value; // Obtén el nombre del empleado seleccionado

@@ -44,9 +44,10 @@ const EditarMesAcop = ({ isActiveFormulario, cambiarEstado, mesesAcop }) => {
       usuarioModificacion: userData.usuario, // filtra los elementos vacíos
     };
 
-    console.log(data);
-    
+    console.log("data", data);
     SendDataService(url, operationUrl, data).then((response) => {
+      console.log(response);
+
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
       cambiarEstado(false);
@@ -296,7 +297,9 @@ const EditarMesAcop = ({ isActiveFormulario, cambiarEstado, mesesAcop }) => {
   };
 
   useEffect(() => {
+    
     if (mesesAcop) {
+      // console.log("mesesAcopAntes", mesesAcop);
       const totalPresupuestoMensual = mesesAcop.reduce(
         (acc, item) => acc + parseFloat(item.presupuestoMensual),
         0
@@ -328,6 +331,8 @@ const EditarMesAcop = ({ isActiveFormulario, cambiarEstado, mesesAcop }) => {
       };
 
       setPresupuestosCambiados(nuevosMesesAcop);
+      // console.log("mesesAcopDesp", nuevosMesesAcop);
+
       obtenerDiasNoLaborables();
     }
   }, [mesesAcop]);
@@ -383,8 +388,8 @@ const EditarMesAcop = ({ isActiveFormulario, cambiarEstado, mesesAcop }) => {
                         : null;
 
                     return (
-                      <Card key={item.idacopmes}>
-                        <Card.Header as="h1" style={{ fontSize: "15pt" }}>
+                      <Card key={item.idacopmes} style={{ maxWidth: "350px" }}>
+                        <Card.Header as="h1" style={{ fontSize: "15pt"}}>
                           {convertirFecha(item.mes)} (USD)
                           <p>
                             Días laborables: {diasFinales} ({diasFinales * 8}{" "}

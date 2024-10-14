@@ -25,13 +25,15 @@ export default function EditarMesAcopIndividual({
     var data = {
       idAcopMes: mesAcop.idAcopMes,
       presupuestoMensual: mesAcop.presupuestoMensualUSD,
+      presupuestoMensualMiscelaneo: mesAcop.presupuestoMensualMiscelaneoUSD,
+      observaciones: mesAcop.observaciones,
       isActive: 1,
       usuarioModificacion: userData.usuario,
     };
     SendDataService(url, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-      cambiarEstado(false)
+      cambiarEstado(false);
     });
   }
 
@@ -74,6 +76,40 @@ export default function EditarMesAcopIndividual({
                 decimalScale={2}
                 fixedDecimalScale={true}
               />
+            </div>
+            <div>
+              <label htmlFor="input_presupuestoMensual">
+                Presupuesto mensual misceláneo (USD)
+              </label>
+              <NumericFormat
+                placeholder="Escriba el presupuesto mensual de misceláneo en USD"
+                className="form-control"
+                name="input_presupuestoMensual"
+                id="input_presupuestoMensual"
+                value={mesAcop.presupuestoMensualMiscelaneoUSD || ""}
+                thousandSeparator={"."}
+                prefix={"$"}
+                onValueChange={(values) => {
+                  const { value } = values;
+                  setMesAcop((prevDatos) => ({
+                    ...prevDatos,
+                    presupuestoMensualMiscelaneoUSD: parseFloat(value),
+                  }));
+                }}
+                decimalSeparator=","
+                required
+                decimalScale={2}
+                fixedDecimalScale={true}
+              />
+            </div>
+            <div>
+              <label htmlFor="input_observaciones">
+                Observaciones (opcional)
+              </label>
+              <textarea
+                className="form-control"
+                value={mesAcop.observaciones || ""}
+              ></textarea>
             </div>
 
             <Button

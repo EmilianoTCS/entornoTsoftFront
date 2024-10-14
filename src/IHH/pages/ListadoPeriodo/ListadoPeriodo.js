@@ -13,8 +13,8 @@ import { MdDashboard } from "react-icons/md";
 
 import Spinner from "../../../templates/spinner/spinner";
 
-import TopAlerts from "../../../templates/alerts/TopAlerts";
-
+import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import "../../../Edd/pages/Listados/TablasStyles.css";
 import "../WordWrap.css";
 import { AgGridReact } from "ag-grid-react";
@@ -158,6 +158,7 @@ export default function IHH_ListadoPeriodo() {
 
     {
       headerName: "Operaciones",
+      colId: "operaciones",
       cellRenderer: function (params) {
         return (
           <div style={{ color: "black" }}>
@@ -282,17 +283,18 @@ export default function IHH_ListadoPeriodo() {
   }
 
   function desactivar(ID) {
-    ConfirmAlert().then((response) => {
+    let text = "Esta acción no se puede deshacer";
+    ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
+        var url = "pages/desactivar/ihh_desactivarPeriodo.php";
+        var operationUrl = "ihh_desactivarPeriodo";
         var data = {
-          idRegistro: ID,
+          idPeriodo: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT} = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

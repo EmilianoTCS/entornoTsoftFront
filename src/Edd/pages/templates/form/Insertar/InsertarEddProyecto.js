@@ -5,7 +5,6 @@ import SendDataService from "../../../../../services/SendDataService";
 import getDataService from "../../../../../services/GetDataService";
 import Select from "react-select";
 
-import TopAlerts from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import EditarPresupuestosMensuales from "../Editar/EditarPresupuestosMensuales";
@@ -121,10 +120,10 @@ const InsertarEDDProyecto = ({
       };
       // console.log(data);
       SendDataService(url, operationUrl, data).then((response) => {
-        console.log(response);
+
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-        EDDProyecto.unshift(response[0]);
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        // EDDProyecto.unshift(response[0]);
         cambiarEstado(false);
       });
     }

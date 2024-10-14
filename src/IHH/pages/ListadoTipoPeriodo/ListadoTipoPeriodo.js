@@ -10,8 +10,8 @@ import Paginador from "../../../templates/Paginador/Paginador";
 import "../../../Edd/pages/Listados/TablasStyles.css";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
-
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
+import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
 import Spinner from "../../../templates/spinner/spinner";
 
 import { AgGridReact } from "ag-grid-react";
@@ -50,7 +50,7 @@ export default function IHH_ListadoTipoPeriodo() {
     var data = {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
-      idTipoPeriodo: filters.idTipoPeriodo
+      idTipoPeriodo: filters.idTipoPeriodo,
     };
 
     SendDataService(url, operationUrl, data).then((data) => {
@@ -80,14 +80,15 @@ export default function IHH_ListadoTipoPeriodo() {
       field: "nomTipoPeriodo",
       editable: true,
       width: 200,
+      // colId: "nomTipoPeriodo",
     },
     {
       headerName: "Días",
       field: "dias",
       editable: true,
       width: 80,
-      cellClass: "cellStyleNumber",
-
+      // cellClass: "cellStyleNumber",
+      // colId: "dias",
     },
     {
       headerName: "Descripción",
@@ -96,29 +97,14 @@ export default function IHH_ListadoTipoPeriodo() {
       width: 600,
       wrapText: true,
       autoHeight: true,
+      // colId: "descripcion",
     },
     {
       headerName: "Operaciones",
+      colId: "Operaciones",
       cellRenderer: function (params) {
         return (
           <div style={{ color: "black" }}>
-            {/* <Button
-              data-title="Editar cliente"
-              id="OperationBtns"
-              onClick={() => editarCliente(params.data.idCliente)}
-              style={{color: "black"}}
-            >
-              <RiEditBoxFill id="icons" />
-            </Button> */}
-            {/* <Link to={`/listadoServicios/${params.data.idAcop}`}>
-              <Button
-                data-title="Servicios relacionados"
-                id="OperationBtns"
-                style={{ color: "black" }}
-              >
-                <BsFillKeyFill id="icons" />
-              </Button>
-            </Link> */}
             <Button
               data-title="Desactivar tipo de periodo"
               id="OperationBtns"
@@ -192,6 +178,18 @@ export default function IHH_ListadoTipoPeriodo() {
     }, 0);
   };
 
+  function validaciones(params) {
+    const regexNumeros = /\d/;
+
+    // Validación para evitar letras en días
+    if (!regexNumeros.test(params.data.dias)) {
+      TopAlertsError("1", "Los días no pueden contener letras");
+      return true;
+    }
+
+    return false;
+  }
+
   function insertarTipoPeriodo(params) {
     const url = "pages/insertar/ihh_insertarTipoPeriodo.php";
     const operationUrl = "ihh_insertarTipoPeriodo";
@@ -211,26 +209,30 @@ export default function IHH_ListadoTipoPeriodo() {
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
     } else {
-      SendDataService(url, operationUrl, data).then((response) => {
-        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarRegistros(datos);
-      });
+      const errores = validaciones(params);
+      if (!errores) {
+        SendDataService(url, operationUrl, data).then((response) => {
+          const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+          actualizarRegistros(datos);
+        });
+      }
     }
   }
 
   function desactivar(ID) {
-    ConfirmAlert().then((response) => {
+    let text = "Esta acción no se puede deshacer";
+    ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
+        var url = "pages/desactivar/ihh_desactivarTipoPeriodo.php";
+        var operationUrl = "ihh_desactivarTipoPeriodo";
         var data = {
-          idRegistro: ID,
+          idTipoPeriodo: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });
@@ -241,7 +243,7 @@ export default function IHH_ListadoTipoPeriodo() {
   useEffect(
     function () {
       obtenerDatos();
-      obtenerTipoPeriodos()
+      obtenerTipoPeriodos();
     },
     [num_boton, cantidadPorPagina, loadedData, filters.idTipoPeriodo]
   );

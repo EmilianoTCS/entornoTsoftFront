@@ -10,9 +10,8 @@ import "../../../Edd/pages/Listados/TablasStyles.css";
 import { BsFillTrashFill } from "react-icons/bs";
 import getDataService from "../../../services/GetDataService";
 import { MdDashboard } from "react-icons/md";
-
-import TopAlerts from "../../../templates/alerts/TopAlerts";
-
+import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -283,17 +282,18 @@ export default function IHH_ListadoElementoImp() {
   }
 
   function desactivar(ID) {
-    ConfirmAlert().then((response) => {
+    let text = "Esta acción no se puede deshacer";
+    ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
+        var url = "pages/desactivar/ihh_desactivarElementoImp.php";
+        var operationUrl = "ihh_desactivarElementoImp";
         var data = {
-          idRegistro: ID,
+          idElemento: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

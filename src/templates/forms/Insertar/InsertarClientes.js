@@ -33,13 +33,19 @@ const InsertarClientes = ({ isActiveCliente, cambiarEstado, cliente }) => {
   }
 
   function validaciones() {
+    // const regexInvalidoNombre = /[^a-zA-Z\sáéíóúÁÉÍÓÚñÑ]/;
+
     if (nomCliente.trim() === "") {
       TopAlertsError("01", "El nombre del cliente no puede estar vacío");
       return true;
     } else if (idPais < 0) {
       TopAlertsError("02", "El país del cliente no debe estar vacío");
       return true;
-    } else {
+    // } else if(regexInvalidoNombre.test(nomCliente)){
+    //   TopAlertsError("03", "El nombre del cliente no puede contener números ni caracteres especiales");
+    //   return true;
+
+    }else {
       return false;
     }
   }

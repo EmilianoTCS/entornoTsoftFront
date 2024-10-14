@@ -3,7 +3,8 @@ import Header from "../../../templates/Header/Header";
 import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 import { Navigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { useRoute } from "wouter";
+import { BsFillTrashFill } from "react-icons/bs";
+import { MdAccessTimeFilled, MdStickyNote2 } from "react-icons/md";
 
 import { Button } from "react-bootstrap";
 import getDataService from "../../../services/GetDataService";
@@ -31,13 +32,17 @@ export default function ListadoImpEmpProy() {
   const [listProyectosActivos, setProyectosActivos] = useState([]);
   // booleans
   const [loadedData, setLoadedData] = useState(true);
+
   // variables
   const [nomEmpleado, setNomEmpleado] = useState("");
   const [idEmpleado, setIdEmpleado] = useState("");
+
   const [nomElemento, setNomElemento] = useState("");
   const [idElemento, setIdElemento] = useState("");
+
   const [nomProyecto, setNomProyecto] = useState("");
   const [idProyecto, setIdProyecto] = useState("");
+
   //   const [valorHHEmp, setValorHHEmp] = useState("");
   //   const [mes, setMes] = useState("");
   const [datosResumenProyecto, setDatosResumenProyecto] = useState({
@@ -75,6 +80,13 @@ export default function ListadoImpEmpProy() {
     var operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => {
       setListElemento(response);
+      const selectedElemento = response.find(
+        (item) => item.nomElemento === "JORNADA NORMAL"
+      );
+      if (selectedElemento) {
+        setIdElemento(selectedElemento.idElementoImp);
+        setNomElemento(selectedElemento.nomElemento);
+      }
     });
   }
   //Devuelve un listado de proyectos que aún no están finalizados
@@ -159,35 +171,41 @@ export default function ListadoImpEmpProy() {
       width: 400,
     },
     {
-      headerName: "Cant. HH",
+      headerName: "Cant HH",
       field: "cantHorasPeriodo",
       editable: true,
       cellStyle: { textAlign: "right" },
-      width: 100,
+      width: 70,
     },
     {
       headerName: "Cant. HHEE",
       field: "cantHorasExtra",
       editable: true,
       cellStyle: { textAlign: "right" },
-      width: 100,
+      width: 70,
     },
-    // {
-    //   headerName: "Total",
-    //   cellStyle: { textAlign: "right" },
-    //   headerClass: "headerTextRight",
-    //   width: 120,
-    //   colId: "totalColumn", // Asignar un ID único a la columna "Total"
-    //   valueGetter: function (params) {
-    //     return parseFloat(
-    //       params.data.cantHorasPeriodo * params.data.valorHH +
-    //         params.data.cantHorasExtra * (params.data.valorHH * 1.5)
-    //     ).toLocaleString("es-CL", {
-    //       style: "currency",
-    //       currency: "CLP",
-    //     });
-    //   },
-    // },
+    {
+      headerName: "Tipo HHEE",
+      field: "cantHorasExtra",
+      editable: true,
+      cellStyle: { textAlign: "right" },
+      width: 80,
+    },
+    {
+      headerName: "Monet",
+      field: "cantHorasExtra",
+      editable: true,
+      cellStyle: { textAlign: "right" },
+      width: 80,
+    },
+    {
+      headerName: "Nota",
+      field: "cantHorasExtra",
+      editable: true,
+      cellStyle: { textAlign: "right" },
+      width: 80,
+    },
+
     {
       headerName: "Operaciones",
       colId: "operaciones",
@@ -195,28 +213,69 @@ export default function ListadoImpEmpProy() {
       cellStyle: { padding: "0", justifyContent: "center", display: "flex" },
       cellRenderer: function (params) {
         return (
-          <Button
+          <div
             style={{
-              backgroundColor: "#e10b1c",
-              border: "none",
-              fontSize: "10pt",
-            }}
-            onClick={() => {
-              removerElemento(params.data.idRandom);
+              display: "flex",
+              flexDirection: "row",
+              gap: "5px",
+              justifyContent: "center",
             }}
           >
-            Quitar
-          </Button>
+            <Button
+              data-title="Agregar horas extra"
+              id="OperationBtns"
+              style={{ color: "black", padding: "8px" }}
+              disabled={
+                params.data.nomTipoElemento === "MISCELÁNEO" ? true : false
+              }
+              onClick={() => {
+                setDatosRegistro(params.data);
+                setIsActiveFormularioHHEE(true);
+              }}
+            >
+              <MdAccessTimeFilled
+                id="icons"
+                style={{ margin: "auto", width: "20px" }}
+              />
+            </Button>
+            <Button
+              data-title="Agregar nota"
+              id="OperationBtns"
+              style={{ color: "black", padding: "8px" }}
+              onClick={() => {
+                setDatosRegistro(params.data);
+                setIsActiveFormularioNota(true);
+              }}
+            >
+              <MdStickyNote2
+                id="icons"
+                style={{ margin: "auto", width: "20px" }}
+              />
+            </Button>
+            <Button
+              data-title="Quitar"
+              id="OperationBtns"
+              style={{ color: "black", padding: "8px" }}
+              onClick={() => {
+                removerElemento(params.data.idRandom);
+              }}
+            >
+              <BsFillTrashFill
+                id="icons"
+                style={{ margin: "auto", width: "20px" }}
+              />
+            </Button>
+          </div>
         );
       },
     },
   ];
+
   //Encuentra el valor HH del colaborador seleccionado
   function encontrarValorHH(idEmpleado) {
     const valorHH = listValorHH.filter(
       (empleado) => empleado.idEmpleado === idEmpleado
     );
-    console.log(listValorHH);
     return valorHH[0].valorHH;
   }
   //Añade otra fila a la lista
@@ -225,7 +284,7 @@ export default function ListadoImpEmpProy() {
       idRandom: generateUniqueId(),
       nomEmpleado: nomEmpleado,
       nomProyecto: nomProyecto,
-      nomElemento: nomProyecto !== "MISCELÁNEO" ? "JORNADA NORMAL" : nomElemento,
+      nomElemento: nomElemento,
       cantHorasPeriodo: 0,
       cantHorasExtra: 0,
       valorHH: encontrarValorHH(idEmpleado),
@@ -259,7 +318,6 @@ export default function ListadoImpEmpProy() {
   };
 
   //Complementarias para frontend
-
   function sumTotalHoras() {
     let totalSum = 0;
     if (gridRef.current) {
@@ -307,6 +365,7 @@ export default function ListadoImpEmpProy() {
 
     return fechaFormateada;
   }
+
   // function sumTotalHoras() {
   //   let totalSum = 0;
   //   if (gridRef.current) {
@@ -321,6 +380,7 @@ export default function ListadoImpEmpProy() {
   //   }
   //   return totalSum;
   // }
+
   const ErrorMessage = () => {
     if (datosResumen[0].presupuestoAcumulado - sumTotal() < 0)
       return (
@@ -390,6 +450,7 @@ export default function ListadoImpEmpProy() {
                   flexDirection: "column",
                   width: "1000px",
                   margin: "auto",
+                  gap: "10px",
                   justifyContent: "center",
                 }}
               >
@@ -428,7 +489,6 @@ export default function ListadoImpEmpProy() {
                     ))}
                   </datalist>
                 </div>
-                  <br></br>
                 {/* proyectos y elementos miscelaneos */}
                 <div
                   style={{
@@ -471,37 +531,33 @@ export default function ListadoImpEmpProy() {
 
                   {/* elementos misc */}
 
-                  {nomProyecto === "MISCELÁNEO" ? (
-                    <div>
-                      <input
-                        style={{ width: "350px", margin: "auto" }}
-                        list="elementos"
-                        name="buscadorElementos"
-                        placeholder="Busca un elemento misceláneo (opcional)"
-                        onChange={(event) => {
-                          const selectedNombre = event.target.value;
-                          const selectedElemento = listElemento.find(
-                            (item) => item.nomElemento === selectedNombre
-                          );
-                          if (selectedElemento) {
-                            setIdElemento(selectedElemento.idElementoImp);
-                            setNomElemento(selectedElemento.nomElemento);
-                          }
-                        }}
-                      ></input>
+                  <div>
+                    <input
+                      style={{ width: "350px", margin: "auto" }}
+                      list="elementos"
+                      name="buscadorElementos"
+                      placeholder="Busca un elemento misceláneo (opcional)"
+                      onChange={(event) => {
+                        const selectedNombre = event.target.value;
+                        const selectedElemento = listElemento.find(
+                          (item) => item.nomElemento === selectedNombre
+                        );
+                        if (selectedElemento) {
+                          setIdElemento(selectedElemento.idElementoImp);
+                          setNomElemento(selectedElemento.nomElemento);
+                        }
+                      }}
+                    ></input>
 
-                      <datalist id="elementos">
-                        {listElemento.map((item) => (
-                          <option
-                            key={item.idElemento} // Asegúrate de tener un key único para cada opción
-                            value={item.nomElemento} // Almacena el nombre del empleado como value
-                          ></option>
-                        ))}
-                      </datalist>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
+                    <datalist id="elementos">
+                      {listElemento.map((item) => (
+                        <option
+                          key={item.idElemento} // Asegúrate de tener un key único para cada opción
+                          value={item.nomElemento} // Almacena el nombre del empleado como value
+                        ></option>
+                      ))}
+                    </datalist>
+                  </div>
 
                   {/* btn agregar */}
                   <Button
@@ -554,7 +610,7 @@ export default function ListadoImpEmpProy() {
                     borderRadius: "10px",
                     width: "350px",
                     fontSize: "12pt",
-                    marginLeft: "750px"
+                    marginLeft: "750px",
                   }}
                 >
                   <td>
@@ -572,7 +628,6 @@ export default function ListadoImpEmpProy() {
                     </tr>
                   </td>
                 </table>
-
 
                 {/* container resumen y boton guardar cambios */}
                 <div

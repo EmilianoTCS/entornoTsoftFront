@@ -10,7 +10,7 @@ import "../../../Edd/pages/Listados/TablasStyles.css";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import { MdAccessTimeFilled, MdCalendarMonth } from "react-icons/md";
-import { FaLink, FaCloudDownloadAlt  } from "react-icons/fa";
+import { FaLink, FaCloudDownloadAlt } from "react-icons/fa";
 import InsertarAcop from "../../forms/insertar/InsertarAcop";
 import EditarAcop from "../../forms/editar/EditarAcop";
 import EditarMesAcop from "../../forms/editar/EditarMesAcop";
@@ -71,6 +71,8 @@ export default function IHH_ListadoAcop() {
     };
     SendDataService(url, operationUrl, data).then((response) => {
       if (response) {
+        console.log("response", response);
+        
         setDatosMesesAcop(response);
         setIsActiveMesesAcop(true);
       }
@@ -320,11 +322,11 @@ export default function IHH_ListadoAcop() {
                       data-title="Gestor archivos"
                       id="OperationBtns"
                       onClick={() => {
-                        setAcopGestor(item)
-                        setIsActiveGestorDoc(true)
+                        setAcopGestor(item);
+                        setIsActiveGestorDoc(true);
                       }}
                     >
-                      <FaCloudDownloadAlt  id="icons" />
+                      <FaCloudDownloadAlt id="icons" />
                     </button>
                     <button
                       data-title="Editar meses acop"

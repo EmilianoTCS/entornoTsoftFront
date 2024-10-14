@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-import Select from "react-select";
+// import Select from "react-select";
 import { NumericFormat } from "react-number-format";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
 import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+
 const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   // ----------------------CONSTANTES----------------------------
   const [nomEmpleado, setNomEmpleado] = useState("");
@@ -31,6 +32,7 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
   const [listCargo, setlistCargo] = useState([""]);
   const [listArea, setlistArea] = useState([""]);
   const [listNomRol, setlistNomRol] = useState([""]);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
@@ -81,46 +83,93 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
     );
   }
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
   function validaciones() {
+    const regexInvalidoNombre = /[^a-zA-Z\sáéíóúÁÉÍÓÚñÑ]/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+
+    const regexTelefono = /^\+?\d[\d +\-]*$/;
+    const regexCorreo =
+      /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+
     if (nomEmpleado.trim() === "") {
       TopAlertsError("01", "El nombre del colaborador no puede estar vacío");
       return true;
-    } else if (correoEmpleado.trim() === "") {
-      TopAlertsError("02", "El correo del colaborador no puede estar vacío");
-      return true;
-    } else if (usuario.trim() === "") {
-      TopAlertsError("03", "El usuario del colaborador no puede estar vacío");
-      return true;
-    } else if (password.trim() === "") {
+    }
+
+    if (!passwordRegex.test(password)) {
       TopAlertsError(
-        "04",
-        "La contraseña del colaborador no puede estar vacía"
+        "13",
+        "La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial"
       );
       return true;
-    } else if (idPais < 0) {
+    }
+
+    if (regexInvalidoNombre.test(nomEmpleado)) {
+      TopAlertsError(
+        "12",
+        "El nombre del colaborador no puede contener números ni caracteres especiales"
+      );
+      return true;
+    }
+
+    if (correoEmpleado.trim() === "" && regexCorreo.test(correoEmpleado)) {
+      TopAlertsError("02", "El correo del colaborador no puede estar vacío");
+      return true;
+    }
+
+    // Validación del campo teléfono
+    if (
+      telefonoEmpleado.trim() !== "" &&
+      !regexTelefono.test(telefonoEmpleado)
+    ) {
+      TopAlertsError(
+        "14",
+        "El teléfono solo puede contener números, el signo '+' y el signo '-'"
+      );
+      return true;
+    }
+
+    if (idPais < 0) {
       TopAlertsError("05", "El país del colaborador no debe estar vacío");
       return true;
-    } else if (idCargo < 0) {
+    }
+
+    if (idCargo < 0) {
       TopAlertsError("06", "El cargo del colaborador no debe estar vacío");
       return true;
-    } else if (idArea < 0) {
-      TopAlertsError("07", "El área del colaborador no debe estar vacío");
+    }
+
+    if (idArea < 0) {
+      TopAlertsError("07", "El área del colaborador no debe estar vacía");
       return true;
-    } else if (tipoUsuario.trim() === "") {
+    }
+
+    if (tipoUsuario.trim() === "") {
       TopAlertsError("08", "El tipo de usuario no debe estar vacío");
       return true;
-    } else if (nomRol < 0) {
+    }
+
+    if (nomRol < 0) {
       TopAlertsError("09", "El rol del colaborador no debe estar vacío");
       return true;
-    } else if (idCliente < 0) {
-      TopAlertsError("09", "El cliente del colaborador no debe estar vacío");
-      return true;
-    } else if (valorHH <= 0) {
-      TopAlertsError("09", "El valor HH del colaborador debe ser mayor a cero");
-      return true;
-    } else {
-      return false;
     }
+
+    if (idCliente < 0) {
+      TopAlertsError("10", "El cliente del colaborador no debe estar vacío");
+      return true;
+    }
+
+    if (valorHH <= 0) {
+      TopAlertsError("11", "El valor HH del colaborador debe ser mayor a cero");
+      return true;
+    }
+
+    return false; // Si ninguna validación falla, se devuelve `false`
   }
 
   function SendData(e) {
@@ -145,6 +194,8 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
         telefonoEmpleado: telefonoEmpleado,
         idSubsistema: idSubsistema,
       };
+      console.log(data);
+
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -218,12 +269,13 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
                 <label htmlFor="input_Usuario">Usuario del colaborador:</label>
                 <input
                   style={{ textTransform: "uppercase" }}
-                  placeholder="Escriba el correo del usuario a loguear"
+                  placeholder="Escriba el usuario del colaborador"
                   type="text"
                   className="form-control"
-                  name="input_Usuario"
-                  id="input_Usuario"
+                  name="input_usuarioCustom"
+                  id="input_usuarioCustom"
                   maxLength="20"
+                  autoComplete="off"
                   onChange={({ target }) => setUsuario(target.value)}
                   required
                 />
@@ -231,16 +283,26 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
 
               <div>
                 <label htmlFor="input_contraseña">Contraseña:</label>
-                <input
-                  placeholder="Escriba la contraseña"
-                  type="password"
-                  className="form-control"
-                  name="input_contraseña"
-                  id="input_contraseña"
-                  maxLength="50"
-                  onChange={({ target }) => setPassword(target.value)}
-                  required
-                />
+                <div className="input-group">
+                  <input
+                    placeholder="Escriba la contraseña"
+                    type={passwordVisible ? "text" : "password"}
+                    className="form-control"
+                    name="input_contraseña"
+                    id="input_contraseña"
+                    maxLength="50"
+                    autoComplete="new-password"
+                    onChange={({ target }) => setPassword(target.value)}
+                    required
+                  />
+                  <span
+                    className="input-group-text"
+                    onClick={togglePasswordVisibility}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
               </div>
 
               <div>

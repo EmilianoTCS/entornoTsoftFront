@@ -42,6 +42,8 @@ export default function IHH_ListadoMesesAcop() {
       idAcop: AuxIdAcop,
     };
     SendDataService(url, operationUrl, data).then((response) => {
+      console.log(response);
+
       setMainList({ mesesAcops: response });
     });
   };
@@ -112,10 +114,10 @@ export default function IHH_ListadoMesesAcop() {
           const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
           TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
 
-          if (datos.idacopmes && !isActiveFormularioPresupuesto) {
-            setisActiveFormularioPresupuesto(true);
-            setDatosMesesAcop(response);
-          }
+          // if (datos.idacopmes && !isActiveFormularioPresupuesto) {
+          //   setisActiveFormularioPresupuesto(true);
+          //   setDatosMesesAcop(response);
+          // }
         });
       }
     });
@@ -233,7 +235,8 @@ export default function IHH_ListadoMesesAcop() {
               &nbsp; (CLP)
             </div>
             <div>
-              <b>Fecha Valor USD</b>:&nbsp;{mainList.mesesAcops[0].fechaValorUSD}
+              <b>Fecha Valor USD</b>:&nbsp;
+              {mainList.mesesAcops[0].fechaValorUSD}
             </div>
           </div>
 
@@ -243,8 +246,9 @@ export default function IHH_ListadoMesesAcop() {
                 <th>Mes</th>
                 <th>Pres. Mensual (USD)</th>
                 <th>Pres. Mensual (CLP)</th>
-                <th>Pres. Mensual Misceláneos (USD)</th>
-                <th>Pres. Mensual Misceláneos (CLP)</th>
+                <th>Pres. Mensual Misc (USD)</th>
+                <th>Pres. Mensual Misc (CLP)</th>
+                <th>Observaciones(CLP)</th>
                 <th>Operaciones</th>
               </tr>
             </thead>
@@ -294,7 +298,7 @@ export default function IHH_ListadoMesesAcop() {
                       minimumFractionDigits: 2,
                     })}
                   </td>
-
+                  <td className="td_num_right_text">{item.observaciones}</td>
                   <td>
                     <button
                       data-title="Editar acop"

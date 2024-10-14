@@ -45,7 +45,7 @@ export default function InsertarAcop({ isActive, cambiarEstado }) {
   }
 
   function validaciones() {
-    if (datos.numAcop <= 0) {
+    if (parseInt(datos.numAcop) <= 0) {
       TopAlertsError("01", "El número del ACOP debe ser mayor a cero");
       return true;
     } else if (datos.nomAcop.trim() === "") {
@@ -145,7 +145,11 @@ export default function InsertarAcop({ isActive, cambiarEstado }) {
                 name="input_numeroAcop"
                 id="input_numeroAcop"
                 onChange={({ target }) =>
-                 console.log(target.value)
+                  setDatos((prevDatos) => ({
+                    ...prevDatos,
+                    numAcop: target.value,
+                  }))
+                
                 }
                 required
               />
