@@ -99,8 +99,7 @@ const EditarEmpleados = ({
       TopAlertsError("01", "El nombre del colaborador no puede estar vacío");
       return true;
     }
-    const regexCorreo =
-      /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+    const regexCorreo = /^(([^<>()\[\]\\/,:;@”]+(\.[^<>()\[\]\\/,:;@”]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}))$/;
 
     // Validación para evitar números en el nombre del colaborador
     if (regexInvalidoNombre.test(nomEmpleado)) {
@@ -116,7 +115,7 @@ const EditarEmpleados = ({
       return true;
     }
     if (!regexCorreo.test(correoEmpleado)) {
-      TopAlertsError("15", "El correo ingresado es inválido. Los caracteres '<>()[].,;:' no son permitidos");
+      TopAlertsError("15", "El correo ingresado es inválido. Los caracteres '<>()[]/\.,;:' no son permitidos");
       return true;
     }
 

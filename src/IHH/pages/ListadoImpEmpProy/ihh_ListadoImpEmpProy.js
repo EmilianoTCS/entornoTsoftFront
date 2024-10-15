@@ -18,6 +18,8 @@ import "ag-grid-community/styles/ag-theme-material.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import Spinner from "../../../templates/spinner/spinner";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
+import Insertar_HHEE from "../../forms/insertar/Insertar_HHEE";
+import Insertar_NotaImp from "../../forms/insertar/Insertar_NotaImp";
 
 export default function ListadoImpEmpProy() {
   //   const [, params] = useRoute("/ihh/simuladorCostos/:idProyecto/:mes/:idAcop");
@@ -30,29 +32,35 @@ export default function ListadoImpEmpProy() {
   const [listElementoEliminado, setListElementoEliminado] = useState([]);
   const [listValorHH, setListValorHH] = useState([]);
   const [listProyectosActivos, setProyectosActivos] = useState([]);
+
   // booleans
   const [loadedData, setLoadedData] = useState(true);
-
+  const [isActiveFormularioHHEE, setIsActiveFormularioHHEE] = useState("");
+  const [isActiveFormularioNota, setIsActiveFormularioNota] = useState("");
   // variables
+  const [DatosRegistro, setDatosRegistro] = useState("");
+  const [datosMesLaborables, setDatosMesLaborables] = useState("");
+
   const [nomEmpleado, setNomEmpleado] = useState("");
   const [idEmpleado, setIdEmpleado] = useState("");
 
   const [nomElemento, setNomElemento] = useState("");
   const [idElemento, setIdElemento] = useState("");
+  const [nomTipoElemento, setNomTipoElemento] = useState("");
 
   const [nomProyecto, setNomProyecto] = useState("");
   const [idProyecto, setIdProyecto] = useState("");
 
   //   const [valorHHEmp, setValorHHEmp] = useState("");
   //   const [mes, setMes] = useState("");
-  const [datosResumenProyecto, setDatosResumenProyecto] = useState({
-    idResumenPerProy: null,
-    costoMensual: null,
-    saldoMensual: null,
-    saldoPresupuesto: null,
-    presupuestoAcumulado: null,
-    idAcop: null,
-  });
+  // const [datosResumenProyecto, setDatosResumenProyecto] = useState({
+  //   idResumenPerProy: null,
+  //   costoMensual: null,
+  //   saldoMensual: null,
+  //   saldoPresupuesto: null,
+  //   presupuestoAcumulado: null,
+  //   idAcop: null,
+  // });
 
   //Devuelve la fecha actual en formato YYYYMM
   function fechaActual() {
@@ -65,6 +73,17 @@ export default function ListadoImpEmpProy() {
 
     var formattedDate = `${year}${month}`;
     return formattedDate;
+  }
+  function obtenerDatosMesLaborables() {
+    var url = "pages/listados/listadoCalendarioDiasLaborables.php";
+    var operationUrl = "listadoCalendarioDiasLaborables";
+    var data = { mes: fechaActual() };
+    SendDataService(url, operationUrl, data).then((response) => {
+      console.log(response);
+      if (response !== null) {
+        setDatosMesLaborables(response);
+      }
+    });
   }
   //Devuelve el listado de empleados
   function obtenerEmpleados() {
@@ -119,24 +138,24 @@ export default function ListadoImpEmpProy() {
       // setLoadedData(true);
     });
   }
-  //Se encarga de obtener los diferentes datos de la tabla resumen buscando un proyecto y mes en específico
-  function obtenerDatosResumenProyecto(idProyecto) {
-    var url = "pages/listados/ihh_listadoDetalleMensualProyecto.php";
-    var operationUrl = "ihh_listadoDetalleMensualProyecto";
-    var data = { idProyecto: idProyecto, mes: fechaActual() };
-    SendDataService(url, operationUrl, data).then((response) => {
-      const { datosResumen } = response;
-      console.log(datosResumen);
-      setDatosResumenProyecto({
-        idResumenPerProy: datosResumen[0].idresumenperproy,
-        costoMensual: datosResumen[0].costoMensual,
-        saldoMensual: datosResumen[0].saldoMensual,
-        saldoPresupuesto: datosResumen[0].saldoPresupuesto,
-        presupuestoAcumulado: datosResumen[0].presupuestoAcumulado,
-        idAcop: datosResumen[0].idAcop,
-      });
-    });
-  }
+  // //Se encarga de obtener los diferentes datos de la tabla resumen buscando un proyecto y mes en específico
+  // function obtenerDatosResumenProyecto(idProyecto) {
+  //   var url = "pages/listados/ihh_listadoDetalleMensualProyecto.php";
+  //   var operationUrl = "ihh_listadoDetalleMensualProyecto";
+  //   var data = { idProyecto: idProyecto, mes: fechaActual() };
+  //   SendDataService(url, operationUrl, data).then((response) => {
+  //     const { datosResumen } = response;
+  //     console.log(datosResumen);
+  //     setDatosResumenProyecto({
+  //       idResumenPerProy: datosResumen[0].idresumenperproy,
+  //       costoMensual: datosResumen[0].costoMensual,
+  //       saldoMensual: datosResumen[0].saldoMensual,
+  //       saldoPresupuesto: datosResumen[0].saldoPresupuesto,
+  //       presupuestoAcumulado: datosResumen[0].presupuestoAcumulado,
+  //       idAcop: datosResumen[0].idAcop,
+  //     });
+  //   });
+  // }
 
   //Establece parámetros de configuración para la tabla AG GRID.
   var gridOptions = {
@@ -186,26 +205,76 @@ export default function ListadoImpEmpProy() {
     },
     {
       headerName: "Tipo HHEE",
-      field: "cantHorasExtra",
-      editable: true,
+      field: "tipoHHEE",
+      editable: false,
       cellStyle: { textAlign: "right" },
-      width: 80,
+      width: 70,
+      valueGetter: function (params) {
+        const elemento = listElemento.find(
+          (item) => item.idElementoImp === params.data.tipoHHEE
+        );
+
+        return elemento && elemento.nomElemento;
+      },
+    },
+    {
+      headerName: "Nro ACOP",
+      field: "numAcop",
+      editable: false,
+      cellStyle: { textAlign: "right" },
+      width: 70,
+      valueGetter: function (params) {
+        return params.data.numAcop ? params.data.numAcop : 0;
+      },
     },
     {
       headerName: "Monet",
-      field: "cantHorasExtra",
-      editable: true,
-      cellStyle: { textAlign: "right" },
-      width: 80,
+      field: "monetizado",
+      editable: false,
+      // cellStyle: { textAlign: "right" },
+      width: 85,
+      cellRenderer: function (params) {
+        return (
+          <>
+            <select
+              onChange={(e) => {
+                // console.log("antes", params.data.monetizado);
+                params.data.monetizado = e.target.value;
+                // console.log("despues", params.data.monetizado);
+              }}
+              className="form-control"
+            >
+              <option
+                selected={params.data.monetizado === "1" ? "selected" : ""}
+                value={1}
+              >
+                SÍ
+              </option>
+              <option
+                value={0}
+                selected={params.data.monetizado === "0" ? "selected" : ""}
+              >
+                NO
+              </option>
+            </select>
+          </>
+        );
+      },
     },
     {
       headerName: "Nota",
-      field: "cantHorasExtra",
-      editable: true,
+      field: "nota",
+      editable: false,
       cellStyle: { textAlign: "right" },
-      width: 80,
+      width: 65,
+      valueGetter: function (params) {
+        if (params.data.nota) {
+          return "SÍ";
+        } else {
+          return "NO";
+        }
+      },
     },
-
     {
       headerName: "Operaciones",
       colId: "operaciones",
@@ -288,7 +357,12 @@ export default function ListadoImpEmpProy() {
       cantHorasPeriodo: 0,
       cantHorasExtra: 0,
       valorHH: encontrarValorHH(idEmpleado),
-      idImpugnacionEmp: null,
+      numAcop: 0,
+      tipoHHEE: null,
+      nota: null,
+      idNotaImpugnacion: null,
+      monetizado: null,
+      nomTipoElemento: nomTipoElemento,
       Total: 0,
     };
 
@@ -323,7 +397,9 @@ export default function ListadoImpEmpProy() {
     if (gridRef.current) {
       gridRef.current.api.updateGridOptions({ rowData: listImpugnacionEmp });
       gridRef.current.api.forEachNodeAfterFilterAndSort((node) => {
-        totalSum += parseFloat(node.data.cantHorasPeriodo) || 0;
+        if (node.data.nomTipoElemento !== "MISCELÁNEO") {
+          totalSum += parseFloat(node.data.cantHorasPeriodo) || 0;
+        }
       });
     }
     return totalSum;
@@ -366,20 +442,22 @@ export default function ListadoImpEmpProy() {
     return fechaFormateada;
   }
 
-  // function sumTotalHoras() {
-  //   let totalSum = 0;
-  //   if (gridRef.current) {
-  //     gridRef.current.api.updateGridOptions({ rowData: listImpugnacionEmp });
-  //     gridRef.current.api.forEachNodeAfterFilterAndSort((node) => {
-  //       const totalHoras =
-  //         parseInt(node.data.cantHorasPeriodo) +
-  //         parseInt(node.data.cantHorasExtra);
+  function sumTotalHorasMiscelaneo() {
+    let totalSum = 0;
+    if (gridRef.current) {
+      gridRef.current.api.updateGridOptions({ rowData: listImpugnacionEmp });
+      gridRef.current.api.forEachNodeAfterFilterAndSort((node) => {
+        if (node.data.nomTipoElemento === "MISCELÁNEO") {
+          const totalHoras =
+            parseInt(node.data.cantHorasPeriodo) +
+            parseInt(node.data.cantHorasExtra);
 
-  //       totalSum += totalHoras;
-  //     });
-  //   }
-  //   return totalSum;
-  // }
+          totalSum += totalHoras;
+        }
+      });
+    }
+    return totalSum;
+  }
 
   const ErrorMessage = () => {
     if (datosResumen[0].presupuestoAcumulado - sumTotal() < 0)
@@ -402,7 +480,6 @@ export default function ListadoImpEmpProy() {
       elementosEliminados: listElementoEliminado,
       mes: fechaActual(),
     };
-    console.log(data);
     SendDataService(URL, operationUrl, data).then((response) => {
       // console.log(response);
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
@@ -415,6 +492,7 @@ export default function ListadoImpEmpProy() {
       obtenerEmpleados();
       obtenerElementos();
       obtenerProyectosActivos();
+      obtenerDatosMesLaborables();
     },
     [loadedData, listImpugnacionEmp, nomProyecto]
   );
@@ -426,6 +504,19 @@ export default function ListadoImpEmpProy() {
       <>
         {loadedData ? (
           <>
+            <Insertar_HHEE
+              isActive={isActiveFormularioHHEE}
+              cambiarEstado={setIsActiveFormularioHHEE}
+              Registro={DatosRegistro}
+              datosMain={listImpugnacionEmp}
+            />
+            <Insertar_NotaImp
+              isActive={isActiveFormularioNota}
+              cambiarEstado={setIsActiveFormularioNota}
+              Registro={DatosRegistro}
+              datosMain={listImpugnacionEmp}
+            />
+
             <Header></Header>
             <br />
             <div
@@ -441,6 +532,12 @@ export default function ListadoImpEmpProy() {
               <h2 style={{ margin: "auto auto", width: "650px" }}>
                 Impugnación de horas - {convertirFecha(fechaActual())}
               </h2>
+              {datosMesLaborables ? (
+                <h4>
+                  Días laborables: {datosMesLaborables[0].totalDiasLaborables} (
+                  {datosMesLaborables[0].totalHorasLaborables} Horas)
+                </h4>
+              ) : null}
               <br></br>
 
               {/* selectores */}
@@ -545,6 +642,7 @@ export default function ListadoImpEmpProy() {
                         if (selectedElemento) {
                           setIdElemento(selectedElemento.idElementoImp);
                           setNomElemento(selectedElemento.nomElemento);
+                          setNomTipoElemento(selectedElemento.nomTipoElemento);
                         }
                       }}
                     ></input>
@@ -624,6 +722,12 @@ export default function ListadoImpEmpProy() {
                       <th>Cantidad HHEE totales: </th>
                       <th style={{ textAlign: "right" }}>
                         <b>{sumTotalHorasEE()}</b>
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>Cantidad HH Misceláneo: </th>
+                      <th style={{ textAlign: "right" }}>
+                        <b>{sumTotalHorasMiscelaneo()}</b>
                       </th>
                     </tr>
                   </td>
