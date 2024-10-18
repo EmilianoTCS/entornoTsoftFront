@@ -278,10 +278,10 @@ export default function ListadoCursoAlumno() {
                       ) : null}
 
                       <Link
-                        to={`/listadoCursoAlumnoRamoSesion/${CursoAlumno.idCursoAlumno}`}
+                        to={`/listadoCursoAlumnoRamo/${CursoAlumno.idCursoAlumno}`}
                       >
                         <button
-                          data-title="Curso-Alum-Sesion relacionado"
+                          data-title="Curso-Alum-Ramo relacionado"
                           id="OperationBtns"
                         >
                           <ImBook id="icons" />

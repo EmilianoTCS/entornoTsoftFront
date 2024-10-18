@@ -18,6 +18,7 @@ import ListadoServicios from "./pages/Listados/ListadoServicios/ListadoServicios
 import ListadoCursos from "./pages/Listados/ListadoCursos/ListadoCursos";
 import ListadoContacto from "./pages/Listados/ListadoContacto/ListadoContacto";
 import ListadoCursoAlumnos from "./pages/Listados/ListadoCursoAlumno/ListadoCursoAlumno";
+import ListadoCursoAlumnoRamo from "./pages/Listados/ListadoCursoAlumnoRamo/ListadoCursoAlumnoRamo.js";
 import ListadoCursoAlumnoRamoSesion from "./pages/Listados/ListadoCursoAlumnoRamoSesion/ListadoCursoAlumnoRamoSesion";
 import ListadoNotaExamen from "./pages/Listados/ListadoNotaExamen/ListadoNotaExamen";
 import ListadoRamoExamen from "./pages/Listados/ListadoRamoExamen/ListadoRamoExamen";
@@ -142,6 +143,10 @@ function App() {
             <Route
               element={<ListadoCursoAlumnos />}
               path="/listadoCursoAlumnos/:params"
+            ></Route>
+                        <Route
+              element={<ListadoCursoAlumnoRamo />}
+              path="/listadoCursoAlumnoRamo/:params"
             ></Route>
             <Route
               element={<ListadoCursoAlumnoRamoSesion />}

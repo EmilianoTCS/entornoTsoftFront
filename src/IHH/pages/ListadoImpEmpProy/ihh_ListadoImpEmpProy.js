@@ -481,7 +481,7 @@ export default function ListadoImpEmpProy() {
       mes: fechaActual(),
     };
     SendDataService(URL, operationUrl, data).then((response) => {
-      // console.log(response);
+      console.log(response);
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
     });

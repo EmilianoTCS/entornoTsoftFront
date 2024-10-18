@@ -8,14 +8,13 @@ export default function TopAlertsError(cod, msj) {
     return MySwal.fire({
       title: "Operación exitosa",
       icon: "success",
-      position: "top-right",
+      // position: "top-right",
       timer: 3000,
-      toast: true,
+      toast: false,
       showConfirmButton: false,
       timerProgressBar: true,
     }).then(function () {
-      // location.reload();
-      console.log("RELOADED");
+      location.reload();
     });
   } else {
     return MySwal.fire({

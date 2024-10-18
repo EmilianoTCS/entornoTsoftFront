@@ -7,7 +7,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
 import TopAlertsError from "../../alerts/TopAlerts";
-const EditarCursoAlumnoSesion = ({
+
+const EditarCursoAlumnoRamoSesion = ({
   isActiveEditCursoAlumnoSesion,
   cambiarEstado,
   idCursoAlumnoSesion,
@@ -24,7 +25,7 @@ const EditarCursoAlumnoSesion = ({
   const [asistencia, setasistencia] = useState("");
   const [participacion, setparticipacion] = useState("");
 
-  const [idCursoAlumno, setidCursoAlumno] = useState("");
+  const [idCursoAlumnoRamo, setidCursoAlumnoRamo] = useState("");
   const [idSesion, setidSesion] = useState("");
 
   const [listSesion, setlistSesion] = useState([""]);
@@ -47,7 +48,7 @@ const EditarCursoAlumnoSesion = ({
     setasistencia(responseID[0].asistencia);
     setparticipacion(responseID[0].participacion);
     setidSesion(responseID[0].idSesion);
-    setidCursoAlumno(responseID[0].idCursoAlumno);
+    setidCursoAlumnoRamo(responseID[0].idCursoAlumnoRamo);
   };
   // ----------------------FUNCIONES----------------------------
   function obtenerSesion() {
@@ -60,17 +61,20 @@ const EditarCursoAlumnoSesion = ({
   function obtenerCursoAlumno() {
     const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistCursoAlumno(response)
-    );
+    getDataService(url, operationUrl).then((response) => {
+      console.log(response);
+      
+      setlistCursoAlumno(response);
+    });
   }
 
-  const getData = useCallback(() => {
+  const getData = () => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idCursoAlumnoSesion, nombreTabla: nombreTabla };
+    console.log(data);
+
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
       setfechaIni(response[0].fechaIni);
       setfechaFin(response[0].fechaFin);
@@ -78,10 +82,10 @@ const EditarCursoAlumnoSesion = ({
       sethoraFin(response[0].horaFin);
       setasistencia(response[0].asistencia);
       setparticipacion(response[0].participacion);
-      setidCursoAlumno(response[0].idCursoAlumno);
+      setidCursoAlumnoRamo(response[0].idCursoAlumnoRamo);
       setidSesion(response[0].idSesion);
     });
-  }, [idCursoAlumnoSesion]);
+  };
 
   function validaciones() {
     if (new Date(fechaIni) > new Date(fechaFin)) {
@@ -105,7 +109,7 @@ const EditarCursoAlumnoSesion = ({
     } else if (idSesion <= 0) {
       TopAlertsError("04", "La sesión no puede estar vacía");
       return true;
-    } else if (idCursoAlumno <= 0) {
+    } else if (idCursoAlumnoRamo <= 0) {
       TopAlertsError("05", "La relación curso - alumno no puede estar vacía");
       return true;
     } else {
@@ -116,12 +120,12 @@ const EditarCursoAlumnoSesion = ({
     e.preventDefault();
     const errores = validaciones();
     if (!errores) {
-      const url = "pages/editar/editarCursoAlumnoSesion.php";
-      const operationUrl = "editarCursoAlumnoSesion";
+      const url = "pages/editar/editarCursoAlumnoRamoSesion.php";
+      const operationUrl = "editarCursoAlumnoRamoSesion";
 
       var data = {
         usuarioModificacion: userData.usuario,
-        idCursoAlumnoSesion: idCursoAlumnoSesion,
+        idCursoAlumnoRamoSesion: idCursoAlumnoSesion,
 
         fechaIni: fechaIni === "" ? responseID[0].fechaIni : fechaIni,
         fechaFin: fechaFin === "" ? responseID[0].fechaFin : fechaFin,
@@ -131,11 +135,13 @@ const EditarCursoAlumnoSesion = ({
         asistencia: asistencia === "" ? responseID[0].asistencia : asistencia,
         participacion:
           participacion === "" ? responseID[0].participacion : participacion,
-        idCursoAlumno:
-          idCursoAlumno === "" ? responseID[0].idCursoAlumno : idCursoAlumno,
+        idCursoAlumnoRamo:
+          idCursoAlumnoRamo === "" ? responseID[0].idCursoAlumnoRamo : idCursoAlumnoRamo,
         idSesion: idSesion === "" ? responseID[0].idSesion : idSesion,
         isActive: true,
       };
+      console.log(data);
+
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...cursoAlumnoSesion } =
           response[0];
@@ -263,7 +269,7 @@ const EditarCursoAlumnoSesion = ({
                 required
                 type="text"
                 className="form-control"
-                onChange={({ target }) => setidCursoAlumno(target.value)}
+                onChange={({ target }) => setidSesion(target.value)}
               >
                 {listSesion.map((valor) => (
                   <option
@@ -281,16 +287,16 @@ const EditarCursoAlumnoSesion = ({
                 required
                 type="text"
                 className="form-control"
-                onChange={({ target }) => setidCursoAlumno(target.value)}
+                onChange={({ target }) => setidCursoAlumnoRamo(target.value)}
               >
                 {listCursoAlumno.map((valor) => (
                   <option
                     selected={
-                      valor.idCursoAlumno === idCursoAlumno ? "selected" : ""
+                      valor.idCursoAlumnoRamo === idCursoAlumnoRamo ? "selected" : ""
                     }
-                    value={valor.idCursoAlumno}
+                    value={valor.idCursoAlumnoRamo}
                   >
-                    {valor.idCursoAlumno}
+                    {valor.nomCursoAlumno}
                   </option>
                 ))}
               </select>
@@ -310,4 +316,4 @@ const EditarCursoAlumnoSesion = ({
   );
 };
 
-export default EditarCursoAlumnoSesion;
+export default EditarCursoAlumnoRamoSesion;

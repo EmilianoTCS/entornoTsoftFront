@@ -8,42 +8,33 @@ import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-const InsertarCursoAlumno = ({
-  isActiveCursoAlumno,
-  cambiarEstado,
-  CursoAlumno,
-}) => {
+const InsertarCursoAlumnoRamo = ({ isActiveCursoAlumno, cambiarEstado }) => {
   // ----------------------CONSTANTES----------------------------
-  const [idEmpleado, setidEmpleado] = useState("");
-  const [idCurso, setidCurso] = useState("");
+  const [idCursoAlumno, setidCursoAlumno] = useState("");
+  const [idRamo, setIdRamo] = useState("");
   const [fechaIni, setfechaIni] = useState("");
   const [fechaFin, setfechaFin] = useState("");
   const [horaIni, sethoraIni] = useState("");
   const [horaFin, sethoraFin] = useState("");
   const [porcAsistencia, setporcAsistencia] = useState(0);
   const [porcParticipacion, setporcParticipacion] = useState(0);
-  const [claseAprobada, setclaseAprobada] = useState("N");
+  const [ramoAprobado, setRamoAprobado] = useState("N");
   const [porcAprobacion, setporcAprobacion] = useState(0);
-  const [estadoCurso, setestadoCurso] = useState(1);
-
-  const listCursoAlumno = CursoAlumno;
+  const [estadoRamo, setEstadoRamo] = useState(1);
 
   const show = isActiveCursoAlumno;
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-  const [listEmpleados, setlistEmpleados] = useState([]);
-  const [listCursos, setlistCursos] = useState([]);
+  const [listCursosAlumnos, setlistCursosAlumnos] = useState([]);
+  const [listRamos, setlistRamos] = useState([]);
 
   const handleClose = () => cambiarEstado(false);
 
   // ----------------------FUNCIONES----------------------------
 
   function validaciones() {
-    if (idEmpleado < 0) {
-      TopAlertsError("01", "El nombre del alumno no puede estar vacío");
-      return true;
-    } else if (idCurso < 0) {
-      TopAlertsError("02", "El nombre del curso no puede estar vacío");
+    if (idCursoAlumno < 0) {
+      TopAlertsError("01", "El nombre del curso-alumno no puede estar vacío");
       return true;
     } else if (fechaIni > fechaFin) {
       TopAlertsError(
@@ -75,11 +66,11 @@ const InsertarCursoAlumno = ({
         "El % de aprobación debe ser mayor o igual a cero y menor o igual a 100"
       );
       return true;
-    } else if (estadoCurso < 0) {
-      TopAlertsError("08", "El estado del curso no puede estar vacío");
+    } else if (estadoRamo < 0) {
+      TopAlertsError("08", "El estado del ramo no puede estar vacío");
       return true;
-    } else if (claseAprobada.trim() === "") {
-      TopAlertsError("09", "Indique si la clase está aprobada o no");
+    } else if (ramoAprobado.trim() === "") {
+      TopAlertsError("09", "Indique si el ramo está aprobado o no");
       return true;
     } else {
       return false;
@@ -90,104 +81,100 @@ const InsertarCursoAlumno = ({
     e.preventDefault();
     const errores = validaciones();
     if (!errores) {
-      const url = "pages/insertar/insertarCursoAlumno.php";
-      const operationUrl = "insertarCursoAlumno";
+      const url = "pages/insertar/insertarCursoAlumnoRamo.php";
+      const operationUrl = "insertarCursoAlumnoRamo";
       var data = {
         usuarioCreacion: userData.usuario,
-        idEmpleado: idEmpleado,
-        idCurso: idCurso,
+        idCursoAlumno: idCursoAlumno,
+        idRamo: idRamo,
         fechaIni: fechaIni,
         fechaFin: fechaFin,
         horaIni: horaIni,
         horaFin: horaFin,
         porcAsistencia: porcAsistencia,
-        claseAprobada: claseAprobada,
+        ramoAprobado: ramoAprobado,
         porcParticipacion: porcParticipacion,
         porcAprobacion: porcAprobacion,
-        estadoCurso: estadoCurso,
+        estadoRamo: estadoRamo,
         isActive: true,
       };
       SendDataService(url, operationUrl, data).then((response) => {
-        const { OUT_CODRESULT, OUT_MJERESULT, ...CursoAlumno } = response[0];
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarCursoAlumno(CursoAlumno);
         cambiarEstado(false);
       });
     }
   }
 
-  function actualizarCursoAlumno(response) {
-    listCursoAlumno.push(response);
-  }
-  function obtenerEmpleado() {
-    const url = "pages/auxiliares/listadoEmpleadoForms.php";
+  function obtenerCursoAlumno() {
+    const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) =>
-      setlistEmpleados(response)
+      setlistCursosAlumnos(response)
     );
   }
-  function obtenerCursos() {
-    const url = "pages/auxiliares/listadoCursoForms.php";
+  function obtenerRamo() {
+    const url = "pages/auxiliares/listadoRamoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistCursos(response)
-    );
+    getDataService(url, operationUrl).then((response) => {
+      setlistRamos(response);
+    });
   }
-
-  useEffect(function () {
-    obtenerEmpleado();
-    obtenerCursos();
-  }, []);
+  useEffect(
+    function () {
+      obtenerCursoAlumno();
+      obtenerRamo();
+    },
+    [isActiveCursoAlumno]
+  );
   // ----------------------RENDER----------------------------
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Insertar curso alumno</Modal.Title>
+          <Modal.Title>Insertar curso alumno ramo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
             <div>
-              <label htmlFor="input_NomA">Nombre alumno:</label>
-
+              <label htmlFor="input_NomA">Nombre curso alumno:</label>
               <select
                 required
                 type="text"
                 className="form-control"
-                onChange={({ target }) => setidEmpleado(target.value)}
+                onChange={({ target }) => setidCursoAlumno(target.value)}
               >
                 <option hidden value="">
                   Desplegar lista
                 </option>
 
-                {listEmpleados.map((valor) => (
-                  <option value={valor.idEmpleado}>{valor.nomEmpleado}</option>
+                {listCursosAlumnos.map((valor) => (
+                  <option value={valor.idCursoAlumno}>
+                    {valor.nomCursoAlumno}
+                  </option>
                 ))}
               </select>
             </div>
-
             <div>
-              <label htmlFor="input_idCurso">Nombre curso:</label>
-
+              <label htmlFor="input_NomA">Nombre ramo:</label>
               <select
                 required
                 type="text"
                 className="form-control"
-                onChange={({ target }) => setidCurso(target.value)}
+                onChange={({ target }) => setIdRamo(target.value)}
               >
                 <option hidden value="">
                   Desplegar lista
                 </option>
 
-                {listCursos.map((valor) => (
-                  <option value={valor.idCurso}>{valor.nomCurso}</option>
+                {listRamos.map((valor) => (
+                  <option value={valor.idRamo}>{valor.nomRamo}</option>
                 ))}
               </select>
             </div>
             <div>
               <label htmlFor="input_fechaI">Fecha inicio:</label>
               <input
-                style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
                 type="date"
                 className="form-control"
@@ -200,7 +187,6 @@ const InsertarCursoAlumno = ({
             <div>
               <label htmlFor="input_fechaI">Fecha Fin:</label>
               <input
-                style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
                 type="date"
                 className="form-control"
@@ -239,7 +225,6 @@ const InsertarCursoAlumno = ({
             {/* <div>
               <label htmlFor="input_PorcA">Porc Asistencia (Máximo 100):</label>
               <input
-                style={{ textTransform: "uppercase" }}
                 placeholder="Porcentaje Asistencia"
                 type="number"
                 className="form-control"
@@ -254,7 +239,6 @@ const InsertarCursoAlumno = ({
                 Porc Participación (Máximo 100):
               </label>
               <input
-                style={{ textTransform: "uppercase" }}
                 placeholder="Porcentaje participación"
                 type="number"
                 className="form-control"
@@ -269,7 +253,6 @@ const InsertarCursoAlumno = ({
                 Porc Aprobación (Máximo 100):
               </label>
               <input
-                style={{ textTransform: "uppercase" }}
                 placeholder="Porcentaje aprobación"
                 type="number"
                 className="form-control"
@@ -280,16 +263,15 @@ const InsertarCursoAlumno = ({
               />
             </div> */}
             {/* <div>
-              <label htmlFor="input_EstC">Estado Curso:</label>
+              <label htmlFor="input_EstC">Estado ramo:</label>
               <select
-                style={{ textTransform: "uppercase" }}
-                placeholder="Clase aprobada "
+                placeholder="Estado ramo "
                 type="text"
                 className="form-control"
                 name="input_EstC"
                 id="input_EstC"
                 maxLength="15"
-                onChange={({ target }) => setestadoCurso(target.value)}
+                onChange={({ target }) => setEstadoRamo(target.value)}
               >
                 <option hidden value="">
                   Desplegar lista
@@ -299,16 +281,16 @@ const InsertarCursoAlumno = ({
               </select>
             </div> */}
             {/* <div>
-              <label htmlFor="input_ClaseA">Clase Aprobada:</label>
+              <label htmlFor="input_ClaseA">Ramo aprobado:</label>
               <select
                 style={{ textTransform: "uppercase" }}
-                placeholder="Clase aprobada "
+                placeholder="Ramo aprobado"
                 type="text"
                 className="form-control"
                 name="input_ClaseA"
                 id="input_ClaseA"
                 maxLength="1"
-                onChange={({ target }) => setclaseAprobada(target.value)}
+                onChange={({ target }) => setRamoAprobado(target.value)}
               >
                 <option hidden value="">
                   Desplegar lista
@@ -332,4 +314,4 @@ const InsertarCursoAlumno = ({
     </>
   );
 };
-export default InsertarCursoAlumno;
+export default InsertarCursoAlumnoRamo;

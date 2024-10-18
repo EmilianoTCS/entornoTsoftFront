@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import TopAlertsError from "../../alerts/TopAlerts";
 
-const InsertarCursoAlumnoSesion = ({
+const InsertarCursoAlumnoRamoSesion = ({
   isActiveCursoAlumnoSesion,
   cambiarEstado,
   cursoAlumnoSesion,
@@ -43,15 +43,16 @@ const InsertarCursoAlumnoSesion = ({
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => {
       setlistSesion(response);
-      console.log(response);
     });
   }
-  function obtenerCursoAlumno() {
-    const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
+  function obtenerCursoAlumnoRamo() {
+    const url = "pages/auxiliares/listadoCursoAlumnoRamoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistCursoAlumno(response)
-    );
+    getDataService(url, operationUrl).then((response) => {
+      console.log(response);
+
+      setlistCursoAlumno(response);
+    });
   }
 
   function validaciones() {
@@ -87,8 +88,8 @@ const InsertarCursoAlumnoSesion = ({
     e.preventDefault();
     const errores = validaciones();
     if (!errores) {
-      const url = "pages/insertar/insertarCursoAlumnoSesion.php";
-      const operationUrl = "insertarCursoAlumnoSesion";
+      const url = "pages/insertar/insertarCursoAlumnoRamoSesion.php";
+      const operationUrl = "insertarCursoAlumnoRamoSesion";
       var data = {
         usuarioCreacion: userData.usuario,
         fechaIni: fechaIni,
@@ -98,7 +99,7 @@ const InsertarCursoAlumnoSesion = ({
         asistencia: asistencia,
         participacion: participacion,
         idSesion: idSesion,
-        idCursoAlumno: idCursoAlumno,
+        idCursoAlumnoRamo: idCursoAlumno,
         isActive: true,
       };
       SendDataService(url, operationUrl, data).then((response) => {
@@ -115,17 +116,20 @@ const InsertarCursoAlumnoSesion = ({
   function actualizarCursoAlumnoSesion(response) {
     listCursoAlumnoSesion.push(response);
   }
-  useEffect(function () {
-    obtenerCursoAlumno();
-    obtenerSesion();
-  }, []);
+  useEffect(
+    function () {
+      obtenerCursoAlumnoRamo();
+      obtenerSesion();
+    },
+    [isActiveCursoAlumnoSesion]
+  );
 
   // ----------------------RENDER----------------------------
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear Curso Alumno Sesion</Modal.Title>
+          <Modal.Title>Crear Curso Alumno Ramo Sesión</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
@@ -239,7 +243,7 @@ const InsertarCursoAlumnoSesion = ({
                   Desplegar lista
                 </option>
                 {listCursoAlumno.map((valor) => (
-                  <option value={valor.idCursoAlumno}>
+                  <option value={valor.idCursoAlumnoRamo}>
                     {valor.nomCursoAlumno}
                   </option>
                 ))}
@@ -259,4 +263,4 @@ const InsertarCursoAlumnoSesion = ({
     </>
   );
 };
-export default InsertarCursoAlumnoSesion;
+export default InsertarCursoAlumnoRamoSesion;

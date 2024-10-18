@@ -97,7 +97,7 @@ export default function ListadoEmpleados() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          const { OUT_CODRESULT, OUT_MJERESULT } = response;
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
           TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
@@ -398,7 +398,7 @@ export default function ListadoEmpleados() {
 
                       {userData.nomRol === "administrador" ? (
                         <button
-                          data-title="Desactivar cliente"
+                          data-title="Desactivar colaborador"
                           onClick={() => desactivar(empleado.idEmpleado)}
                           id="OperationBtns"
                         >

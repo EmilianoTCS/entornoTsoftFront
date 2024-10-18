@@ -232,12 +232,12 @@ export default function DetalleCursoDashboard({
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  gap: "50px",
+                  gap: "40px",
                   margin: "auto",
-                  width: "90%",
-                  justifyContent: "space-around",
+                  width: "80%",
+                  justifyContent: "center",
                   cursor: "pointer",
-                  textAlign: "left",
+                  // textAlign: "left",
                 }}
                 key={item.idRamo}
                 onClick={() => handlerClickBarras(item)}
@@ -258,8 +258,10 @@ export default function DetalleCursoDashboard({
                       display: "flex",
                       flexDirection: "row",
                       gap: "20px",
-                      justifyContent: "space-between",
+                      justifyContent: "space-around",
                       verticalAlign: "center",
+                      width: "90%",
+                      margin: "auto",
                     }}
                   >
                     <div
@@ -294,7 +296,11 @@ export default function DetalleCursoDashboard({
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      gap: "30px",
+                      gap: "20px",
+                      justifyContent: "space-around",
+                      verticalAlign: "center",
+                      width: "90%",
+                      margin: "auto",
                     }}
                   >
                     <div
@@ -348,11 +354,10 @@ export default function DetalleCursoDashboard({
                     height: "110px",
                   }}
                 ></div>
-                <div>
-                  <h4 style={{ margin: "0px 40px 30px 0px", width: "150px" }}>
-                    {item.nomRamo}
-                  </h4>
-                </div>
+
+                <h4 style={{ margin: "auto", width: "150px", padding: "0" }}>
+                  {item.nomRamo}
+                </h4>
               </div>
             </div>
           ))}

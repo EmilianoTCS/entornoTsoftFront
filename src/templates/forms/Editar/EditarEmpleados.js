@@ -93,7 +93,7 @@ const EditarEmpleados = ({
   }, [idEmpleado]);
 
   function validaciones() {
-    const regexTelefono = /^\+?\d[\d +\-]*$/;
+    const regexTelefono = /^\+?[\d\s\-\(\)]+$/;
     const regexInvalidoNombre = /[^a-zA-Z\sáéíóúÁÉÍÓÚñÑ]/;
     if (nomEmpleado.trim() === "") {
       TopAlertsError("01", "El nombre del colaborador no puede estar vacío");

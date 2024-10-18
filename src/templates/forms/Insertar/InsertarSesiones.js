@@ -200,16 +200,16 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
               </select>
             </div>
             <div>
-              <label htmlFor="input_nombreDelSesion">
-                Duracion de la sesión:
+              <label htmlFor="input_duracionSesion">
+                Duración de la sesión:
               </label>
               <input
                 style={{ textTransform: "uppercase" }}
-                placeholder="Escriba la duración de la Sesion"
+                placeholder="Escriba la duración de la sesion"
                 type="number"
                 className="form-control"
-                name="input_nombreDelSesion"
-                id="input_nombreDelSesion"
+                name="input_duracionSesion"
+                id="input_duracionSesion"
                 onChange={({ target }) => setduracionSesionHH(target.value)}
                 required
               />

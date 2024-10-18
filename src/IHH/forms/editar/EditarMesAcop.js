@@ -297,42 +297,47 @@ const EditarMesAcop = ({ isActiveFormulario, cambiarEstado, mesesAcop }) => {
   };
 
   useEffect(() => {
-    
-    if (mesesAcop) {
-      // console.log("mesesAcopAntes", mesesAcop);
-      const totalPresupuestoMensual = mesesAcop.reduce(
-        (acc, item) => acc + parseFloat(item.presupuestoMensual),
-        0
-      );
-      const totalPresupuestoMiscelaneo = mesesAcop.reduce(
-        (acc, item) => acc + parseFloat(item.presupuestoMensualMiscelaneo),
-        0
-      );
+    if (mesesAcop && mesesAcop.length > 0) {
+      // Verificamos si hay más de un mes en el array
+      if (mesesAcop.length > 1) {
+        const totalPresupuestoMensual = mesesAcop.reduce(
+          (acc, item) => acc + parseFloat(item.presupuestoMensual),
+          0
+        );
 
-      const diferenciaPresupuestal =
-        parseFloat(mesesAcop[0].presupuestoHH) - totalPresupuestoMensual;
+        const totalPresupuestoMiscelaneo = mesesAcop.reduce(
+          (acc, item) => acc + parseFloat(item.presupuestoMensualMiscelaneo),
+          0
+        );
 
-      const diferenciaMiscelanea =
-        parseFloat(mesesAcop[0].presupuestoMiscelaneo) -
-        totalPresupuestoMiscelaneo;
+        const diferenciaPresupuestal =
+          parseFloat(mesesAcop[0].presupuestoHH) - totalPresupuestoMensual;
 
-      const nuevosMesesAcop = [...mesesAcop];
-      const ultimoIndice = nuevosMesesAcop.length - 1;
+        const diferenciaMiscelanea =
+          parseFloat(mesesAcop[0].presupuestoMiscelaneo) -
+          totalPresupuestoMiscelaneo;
 
-      nuevosMesesAcop[ultimoIndice] = {
-        ...nuevosMesesAcop[ultimoIndice],
-        presupuestoMensual:
-          parseFloat(nuevosMesesAcop[ultimoIndice].presupuestoMensual) +
-          diferenciaPresupuestal,
-        presupuestoMensualMiscelaneo:
-          parseFloat(
-            nuevosMesesAcop[ultimoIndice].presupuestoMensualMiscelaneo
-          ) + diferenciaMiscelanea,
-      };
+        // Clonamos el array para evitar modificar el original directamente
+        const nuevosMesesAcop = [...mesesAcop];
+        const ultimoIndice = nuevosMesesAcop.length - 1;
 
-      setPresupuestosCambiados(nuevosMesesAcop);
-      // console.log("mesesAcopDesp", nuevosMesesAcop);
+        // Solo se modifica el último elemento
+        nuevosMesesAcop[ultimoIndice] = {
+          ...nuevosMesesAcop[ultimoIndice],
+          presupuestoMensual:
+            parseFloat(nuevosMesesAcop[ultimoIndice].presupuestoMensual) +
+            diferenciaPresupuestal,
+          presupuestoMensualMiscelaneo:
+            parseFloat(
+              nuevosMesesAcop[ultimoIndice].presupuestoMensualMiscelaneo
+            ) + diferenciaMiscelanea,
+        };
 
+        // Guardamos el nuevo array con las modificaciones
+        setPresupuestosCambiados(nuevosMesesAcop);
+      }
+
+      // Ejecutamos la función obtenerDiasNoLaborables() sin importar la cantidad de meses
       obtenerDiasNoLaborables();
     }
   }, [mesesAcop]);
@@ -389,7 +394,7 @@ const EditarMesAcop = ({ isActiveFormulario, cambiarEstado, mesesAcop }) => {
 
                     return (
                       <Card key={item.idacopmes} style={{ maxWidth: "350px" }}>
-                        <Card.Header as="h1" style={{ fontSize: "15pt"}}>
+                        <Card.Header as="h1" style={{ fontSize: "15pt" }}>
                           {convertirFecha(item.mes)} (USD)
                           <p>
                             Días laborables: {diasFinales} ({diasFinales * 8}{" "}

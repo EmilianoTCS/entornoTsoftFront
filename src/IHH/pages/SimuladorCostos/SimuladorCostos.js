@@ -125,14 +125,13 @@ export default function SimuladorCostos() {
       headerName: "Colaborador",
       field: "nomEmpleado",
       editable: false,
-      tooltipField: 'nomEmpleado',
+      tooltipField: "nomEmpleado",
     },
     {
       headerName: "Elemento",
       field: "nomElemento",
       editable: false,
-      tooltipField: 'nomElemento',
-
+      tooltipField: "nomElemento",
     },
     {
       headerName: "Cant. HH",
@@ -492,10 +491,13 @@ export default function SimuladorCostos() {
     console.log(data);
 
     SendDataService(URL, operationUrl, data).then((response) => {
-      console.log(response);
-      
-      const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
-      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+      // console.log(response);
+      // const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+      // TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+      const resp = response;
+      resp.map((item) => {
+        TopAlertsError(item.OUT_CODRESULT, item.OUT_MJERESULT);
+      });
     });
   }
 

@@ -138,22 +138,25 @@ export default function IHH_ListadoTipoPeriodo() {
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
     } else {
-      var data = {
-        idTipoPeriodo: params.data.idTipoPeriodo,
-        nomTipoPeriodo: params.data.nomTipoPeriodo,
-        dias: params.data.dias,
-        descripcion: params.data.descripcion,
-        isActive: 1,
-        usuarioCreacion: userData.usuario,
-      };
-      const url = "pages/editar/ihh_editarTipoPeriodo.php";
-      const operationUrl = "ihh_editarTipoPeriodo";
+      const errores = validaciones(params);
+      if (!errores) {
+        var data = {
+          idTipoPeriodo: params.data.idTipoPeriodo,
+          nomTipoPeriodo: params.data.nomTipoPeriodo,
+          dias: params.data.dias,
+          descripcion: params.data.descripcion,
+          isActive: 1,
+          usuarioCreacion: userData.usuario,
+        };
+        const url = "pages/editar/ihh_editarTipoPeriodo.php";
+        const operationUrl = "ihh_editarTipoPeriodo";
 
-      SendDataService(url, operationUrl, data).then((response) => {
-        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarRegistros(datos);
-      });
+        SendDataService(url, operationUrl, data).then((response) => {
+          const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+          actualizarRegistros(datos);
+        });
+      }
     }
   }
 
@@ -179,11 +182,16 @@ export default function IHH_ListadoTipoPeriodo() {
   };
 
   function validaciones(params) {
-    const regexNumeros = /\d/;
+    console.log(params);
+
+    const regexNumeros = /^[0-9]+$/;
 
     // Validación para evitar letras en días
     if (!regexNumeros.test(params.data.dias)) {
-      TopAlertsError("1", "Los días no pueden contener letras");
+      TopAlertsError(
+        "1",
+        "Los días no pueden contener letras ni caracteres especiales"
+      );
       return true;
     }
 
@@ -212,6 +220,8 @@ export default function IHH_ListadoTipoPeriodo() {
       const errores = validaciones(params);
       if (!errores) {
         SendDataService(url, operationUrl, data).then((response) => {
+          console.log(response);
+
           const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
           TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
           actualizarRegistros(datos);
@@ -306,7 +316,14 @@ export default function IHH_ListadoTipoPeriodo() {
               >
                 <option value="">Todos</option>
                 {auxList.tipoPeriodo.map((valor) => (
-                  <option value={valor.idTipoPeriodo}>
+                  <option
+                    value={valor.idTipoPeriodo}
+                    selected={
+                      valor.idTipoPeriodo === filters.idTipoPeriodo
+                        ? true
+                        : false
+                    }
+                  >
                     {valor.nomTipoPeriodo}
                   </option>
                 ))}

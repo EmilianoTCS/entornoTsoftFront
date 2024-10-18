@@ -370,10 +370,10 @@ export default function DetalleRamoDashboard({
             </table>
           </div>
           {/* card porc gral  */}
-          <div style={{ margin: "auto", width: "250px" }}>
+          <div style={{ margin: "auto", width: "220px", padding: "10px" }}>
             <Card>
               <Card.Title>Promedio aprobación del ramo</Card.Title>
-              <Card.Body style={{ fontSize: "38pt" }}>
+              <Card.Body style={{ fontSize: "35pt" }}>
                 {porcAprobGeneral}%
               </Card.Body>
             </Card>

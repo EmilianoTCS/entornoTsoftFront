@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
 import { useRoute } from "wouter";
 
@@ -8,12 +8,12 @@ import SendDataService from "../../../services/SendDataService";
 import Header from "../../../templates/Header/Header";
 import { BsFillTrashFill } from "react-icons/bs";
 import { RiEditBoxFill } from "react-icons/ri";
-import { HiEye } from "react-icons/hi";
+// import { HiEye } from "react-icons/hi";
 import "../TablasStyles.css";
-import InsertarCursoAlumnoSesion from "../../../templates/forms/Insertar/InsertarCursoAlumnoSesion";
-import EditarCursoAlumnoSesion from "../../../templates/forms/Editar/EditarCursoAlumnoSesion";
+import InsertarCursoAlumnoSesion from "../../../templates/forms/Insertar/InsertarCursoAlumnoRamoSesion";
+import EditarCursoAlumnoSesion from "../../../templates/forms/Editar/EditarCursoAlumnoRamoSesion";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -74,7 +74,8 @@ export default function ListadoCursoAlumnoRamoSesion() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });
@@ -275,7 +276,7 @@ export default function ListadoCursoAlumnoRamoSesion() {
                           id="OperationBtns"
                           onClick={() =>
                             editarCursoAlumnoSesion(
-                              cursoAlumnoSesion.idCursoAlumnoSesion
+                              cursoAlumnoSesion.idCursoAlumnoRamoSesion
                             )
                           }
                         >
@@ -287,7 +288,9 @@ export default function ListadoCursoAlumnoRamoSesion() {
                         <button
                           data-title="Desactivar cursoAlumnoSesion"
                           onClick={() =>
-                            desactivar(cursoAlumnoSesion.idCursoAlumnoSesion)
+                            desactivar(
+                              cursoAlumnoSesion.idCursoAlumnoRamoSesion
+                            )
                           }
                           id="OperationBtns"
                         >
