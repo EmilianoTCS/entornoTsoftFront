@@ -199,7 +199,7 @@ export default function IHH_ListadoPeriodo() {
 
   function editarPeriodo(params) {
     if (params.data.idTipoPeriodo === null || params.data.nomPeriodo === null) {
-      TopAlerts(
+      TopAlertsError(
         "02",
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
@@ -227,7 +227,7 @@ export default function IHH_ListadoPeriodo() {
       const operationUrl = "ihh_editarPeriodo";
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         actualizarRegistros(datos);
       });
     }
@@ -269,14 +269,14 @@ export default function IHH_ListadoPeriodo() {
       params.data.nomPeriodo === nuevoNomPeriodo ||
       params.idTipoPeriodo === null
     ) {
-      TopAlerts(
+      TopAlertsError(
         "02",
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
     } else {
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         actualizarRegistros(datos);
       });
     }

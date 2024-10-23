@@ -50,7 +50,6 @@ const InsertarCursoAlumnoRamoSesion = ({
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => {
       console.log(response);
-
       setlistCursoAlumno(response);
     });
   }
@@ -230,7 +229,7 @@ const InsertarCursoAlumnoRamoSesion = ({
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="input_alumno">Curso Alumno: </label>
+              <label htmlFor="input_alumno">Curso Alumno Ramo: </label>
               <select
                 required
                 className="form-control"

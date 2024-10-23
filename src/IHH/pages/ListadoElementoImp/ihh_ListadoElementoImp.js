@@ -64,7 +64,6 @@ export default function IHH_ListadoElementoImp() {
     var operationUrl = "listados";
 
     getDataService(url, operationUrl).then((data) => {
-      console.log(data);
       setAuxList({ tipoElementos: data });
     });
   };
@@ -189,7 +188,7 @@ export default function IHH_ListadoElementoImp() {
       params.data.idTipoElemento === null ||
       params.data.nomElemento === null
     ) {
-      TopAlerts(
+      TopAlertsError(
         "02",
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
@@ -220,7 +219,7 @@ export default function IHH_ListadoElementoImp() {
       console.log(data);
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         actualizarRegistros(datos);
       });
     }
@@ -268,14 +267,14 @@ export default function IHH_ListadoElementoImp() {
       params.data.nomElemento === null ||
       params.data.nomElemento === nuevoNomElementoImp
     ) {
-      TopAlerts(
+      TopAlertsError(
         "02",
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
     } else {
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         // actualizarRegistros(datos);
       });
     }

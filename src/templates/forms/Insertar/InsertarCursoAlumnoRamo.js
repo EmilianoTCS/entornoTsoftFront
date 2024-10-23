@@ -98,10 +98,14 @@ const InsertarCursoAlumnoRamo = ({ isActiveCursoAlumno, cambiarEstado }) => {
         estadoRamo: estadoRamo,
         isActive: true,
       };
+      console.log(data);
+
       SendDataService(url, operationUrl, data).then((response) => {
+        console.log(response);
+
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        cambiarEstado(false);
+        // cambiarEstado(false);
       });
     }
   }

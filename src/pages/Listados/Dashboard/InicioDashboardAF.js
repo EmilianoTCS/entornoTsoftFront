@@ -11,9 +11,9 @@ export default function InicioDashboardAF() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [ListEstadoCurso, setListEstadoCurso] = useState();
   const [ListDatosCursos, setListDatosCursos] = useState();
-  const [fechaIni, setFechaini] = useState("");
-  const [fechaFin, setFechaFin] = useState("");
-  const [estadoCurso, setEstadoCurso] = useState("ACTIVO");
+  const [fechaIni, setFechaini] = useState("2024-10-21");
+  const [fechaFin, setFechaFin] = useState("2024-12-31");
+  const [estadoCurso, setEstadoCurso] = useState("TODOS");
   const [isActiveResumenGralCursos, setIsActiveResumenGralCursos] =
     useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);

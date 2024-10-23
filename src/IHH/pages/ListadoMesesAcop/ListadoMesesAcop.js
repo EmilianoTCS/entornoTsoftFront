@@ -248,7 +248,7 @@ export default function IHH_ListadoMesesAcop() {
                 <th>Pres. Mensual (CLP)</th>
                 <th>Pres. Mensual Misc (USD)</th>
                 <th>Pres. Mensual Misc (CLP)</th>
-                <th>Observaciones(CLP)</th>
+                <th>Observaciones</th>
                 <th>Operaciones</th>
               </tr>
             </thead>

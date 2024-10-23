@@ -133,7 +133,7 @@ export default function IHH_ListadoTipoPeriodo() {
 
   function editarTipoPeriodo(params) {
     if (params.data.nomTipoPeriodo === null || params.data.dias === null) {
-      TopAlerts(
+      TopAlertsError(
         "02",
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
@@ -212,7 +212,7 @@ export default function IHH_ListadoTipoPeriodo() {
       usuarioCreacion: userData.usuario,
     };
     if (params.data.nomTipoPeriodo === null || params.data.dias === null) {
-      TopAlerts(
+      TopAlertsError(
         "02",
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );

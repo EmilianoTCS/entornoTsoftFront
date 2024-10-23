@@ -30,6 +30,7 @@ export default function EditarMesAcopIndividual({
       isActive: 1,
       usuarioModificacion: userData.usuario,
     };
+    console.log(data)
     SendDataService(url, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -109,6 +110,12 @@ export default function EditarMesAcopIndividual({
               <textarea
                 className="form-control"
                 value={mesAcop.observaciones || ""}
+                onChange={(e) => {
+                  setMesAcop((prevDatos) => ({
+                    ...prevDatos,
+                    observaciones: e.target.value,
+                  }));
+                }}
               ></textarea>
             </div>
 

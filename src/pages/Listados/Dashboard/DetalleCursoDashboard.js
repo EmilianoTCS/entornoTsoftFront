@@ -33,7 +33,7 @@ export default function DetalleCursoDashboard({
     // Retornar la fecha en el formato yyyy-mm-dd
     return `${anio}-${mes}-${dia}`;
   }
-  const obtenerDatosProyectos = () => {
+  const obtenerDatosCurso = () => {
     var url = "pages/listados/AF_listado_resumenGralRamo.php";
     var operationUrl = "AF_listado_resumenGralRamo";
     const data = {
@@ -44,6 +44,8 @@ export default function DetalleCursoDashboard({
     };
 
     SendDataService(url, operationUrl, data).then((response) => {
+      console.log(response);
+
       if (response.length === 0) {
         TopAlertsError(
           "01",
@@ -272,18 +274,18 @@ export default function DetalleCursoDashboard({
                       }}
                     >
                       <h6 style={{ margin: "auto" }}>
-                        {item.porcAsistenciaGeneral}% Asistencia
+                        {item.promedioAsistencia}% Asistencia
                       </h6>
                     </div>
                     <ProgressBar
                       striped
-                      now={item.porcAsistenciaGeneral}
+                      now={item.promedioAsistencia}
                       max={100}
                       style={{ height: "30px", width: "300px" }}
                     >
                       <div
                         style={{
-                          width: `${item.porcAsistenciaGeneral}%`,
+                          width: `${item.promedioAsistencia}%`,
                           height: "100%",
                           backgroundColor: "lightblue",
                         }}
@@ -313,12 +315,12 @@ export default function DetalleCursoDashboard({
                       <h6 style={{ margin: "auto" }}>
                         {verificarValor(
                           parseFloat(
-                            (item.cantSesionesRealizadas * 100) /
-                              item.cantSesionesRamo
+                            (item.cantSesionesTerminadas * 100) /
+                              item.cantSesiones
                           )
                         ).toFixed(2)}
                         % Terminado <br></br>
-                        {item.cantSesionesRealizadas}/{item.cantSesionesRamo}{" "}
+                        {item.cantSesionesTerminadas}/{item.cantSesiones}{" "}
                         Sesiones
                       </h6>
                     </div>
@@ -326,8 +328,8 @@ export default function DetalleCursoDashboard({
                       striped
                       now={verificarValor(
                         parseFloat(
-                          (item.cantSesionesRealizadas * 100) /
-                            item.cantSesionesRamo
+                          (item.cantSesionesTerminadas * 100) /
+                            item.cantSesiones
                         ).toFixed(2)
                       )}
                       style={{ height: "30px", width: "300px" }}
@@ -336,8 +338,8 @@ export default function DetalleCursoDashboard({
                         style={{
                           width: `${verificarValor(
                             parseFloat(
-                              (item.cantSesionesRealizadas * 100) /
-                                item.cantSesionesRamo
+                              (item.cantSesionesTerminadas * 100) /
+                                item.cantSesiones
                             ).toFixed(2)
                           )}%`,
                           height: "100%",
@@ -366,7 +368,7 @@ export default function DetalleCursoDashboard({
   }
 
   useEffect(() => {
-    obtenerDatosProyectos();
+    obtenerDatosCurso();
     obtenerDatosEmpleadoRamo();
     setIsActiveDetalleRamo(false);
   }, [curso]);

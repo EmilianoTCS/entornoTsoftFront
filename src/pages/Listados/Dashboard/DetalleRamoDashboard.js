@@ -75,7 +75,9 @@ export default function DetalleRamoDashboard({
   };
 
   function agruparPorExamen(data) {
-    return data.reduce((acc, curr) => {
+    return data
+    .filter((item) => item.nomExamen !== null)
+    .reduce((acc, curr) => {
       const examenExistente = acc.find(
         (examen) => examen.nomExamen === curr.nomExamen
       );
@@ -101,11 +103,34 @@ export default function DetalleRamoDashboard({
 
   function resumenRamo() {
     const cantColab = datosRamo.length;
-
-    const porcAsistencia = datosRamo.reduce(
+    let porcAsistencia = datosRamo.reduce(
       (total, cursos) => total + parseFloat(cursos.porcAsistencia),
       0
     );
+    let cantSesiones = datosRamo.reduce(
+      (total, cursos) => total + parseFloat(cursos.cantSesiones),
+      0
+    );
+    let cantSesionesTerminadas = datosRamo.reduce(
+      (total, cursos) => total + parseFloat(cursos.cantSesionesTerminadas),
+      0
+    );
+    // let cantExamenesReprobados = datosRamo.reduce(
+    //   (total, cursos) =>
+    //     total + parseFloat(cursos.cantReprobados),
+    //   0
+    // );
+    // let cantExamenesAprobados = datosRamo.reduce(
+    //   (total, cursos) =>
+    //     total + parseFloat(cursos.cantAprobados),
+    //   0
+    // );
+    // let cantExamenesTerminados = cantExamenesAprobados + cantExamenesReprobados
+    let cantExamenes = datosRamo.reduce(
+      (total, cursos) => total + parseFloat(cursos.cantExamenes),
+      0
+    );
+    // porcAsistencia = porcAsistencia / datosRamo.length;
     return (
       <>
         <div
@@ -138,9 +163,7 @@ export default function DetalleRamoDashboard({
               Cantidad sesiones<br></br> terminadas
             </Card.Title>
             <Card.Body>
-              <h1>
-                {ramo.cantSesionesRealizadas + "/" + ramo.cantSesionesRamo}
-              </h1>
+              <h1>{cantSesionesTerminadas + "/" + cantSesiones}</h1>
             </Card.Body>
           </Card>
           <Card style={{ width: "250px" }}>
@@ -148,7 +171,9 @@ export default function DetalleRamoDashboard({
               Exámenes <br></br>terminados
             </Card.Title>
             <Card.Body>
-              <h1>1/5</h1>
+              <h1>
+                {cantExamenes}
+              </h1>
             </Card.Body>
           </Card>
         </div>

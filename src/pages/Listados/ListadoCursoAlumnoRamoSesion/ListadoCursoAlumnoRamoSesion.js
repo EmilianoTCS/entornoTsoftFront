@@ -64,14 +64,14 @@ export default function ListadoCursoAlumnoRamoSesion() {
   }
 
   function desactivar(ID) {
-    ConfirmAlert().then((response) => {
+    let text = "Esta acción no se puede deshacer";
+    ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
+        var url = "pages/desactivar/af_desactivarCursoAlumnoRamoSesion.php";
+        var operationUrl = "af_desactivarCursoAlumnoRamoSesion";
         var data = {
-          idRegistro: ID,
+          idCursoAlumnoRamoSesion: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
           const { OUT_CODRESULT, OUT_MJERESULT } = response[0];

@@ -48,12 +48,13 @@ const EditarNotaExamen = ({
       setlistRamoExamen(response)
     );
   }
-  function obtenerCursoAlumno() {
-    const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
+  function obtenerCursoAlumnoRamo() {
+    const url = "pages/auxiliares/listadoCursoAlumnoRamoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistCursoAlumno(response)
-    );
+    getDataService(url, operationUrl).then((response) => {
+      console.log(response);
+      setlistCursoAlumno(response);
+    });
   }
 
   const getData = useCallback(() => {
@@ -66,7 +67,7 @@ const EditarNotaExamen = ({
       setnotaExamen(response[0].notaExamen);
       setapruebaExamen(response[0].apruebaExamen);
       setidRamoExamen(response[0].idRamoExamen);
-      setidCursoAlumno(response[0].idCursoAlumno);
+      setidCursoAlumno(response[0].idCursoAlumnoRamo);
     });
   }, [idNotaExamen]);
 
@@ -104,10 +105,12 @@ const EditarNotaExamen = ({
           apruebaExamen === "" ? responseID[0].apruebaExamen : apruebaExamen,
         idRamoExamen:
           idRamoExamen === "" ? responseID[0].idRamoExamen : idRamoExamen,
-        idCursoAlumno:
-          idCursoAlumno === "" ? responseID[0].idCursoAlumno : idCursoAlumno,
+        idCursoAlumnoRamo:
+          idCursoAlumno === "" ? responseID[0].idCursoAlumnoRamo : idCursoAlumno,
         isActive: true,
       };
+      console.log(data);
+      
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...notaDeExamen } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -127,7 +130,7 @@ const EditarNotaExamen = ({
       if (idNotaExamen !== null) {
         getData();
         obtenerRamoExamen();
-        obtenerCursoAlumno();
+        obtenerCursoAlumnoRamo();
       }
     },
     [idNotaExamen]
@@ -201,7 +204,7 @@ const EditarNotaExamen = ({
             </div>
 
             <div>
-              <label htmlFor="input_CursoA">Curso Alumno :</label>
+              <label htmlFor="input_CursoA">Curso Alumno Ramo :</label>
               <select
                 required
                 type="text"
@@ -211,9 +214,9 @@ const EditarNotaExamen = ({
                 {listCursoAlumno.map((valor) => (
                   <option
                     selected={
-                      valor.idCursoAlumno === idCursoAlumno ? "selected" : ""
+                      valor.idCursoAlumnoRamo === idCursoAlumno ? "selected" : ""
                     }
-                    value={valor.idCursoAlumno}
+                    value={valor.idCursoAlumnoRamo}
                   >
                     {valor.nomCursoAlumno}
                   </option>

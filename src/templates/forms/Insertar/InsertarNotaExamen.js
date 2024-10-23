@@ -42,12 +42,14 @@ const InsertarNotaExamen = ({
     );
   }
 
-  function obtenerCursoAlumno() {
-    const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
+  function obtenerCursoAlumnoRamo() {
+    const url = "pages/auxiliares/listadoCursoAlumnoRamoForms.php";
     const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistCursoAlumno(response)
-    );
+    getDataService(url, operationUrl).then((response) => {
+      console.log(response);
+
+      setlistCursoAlumno(response);
+    });
   }
 
   function validaciones() {
@@ -100,7 +102,7 @@ const InsertarNotaExamen = ({
 
   useEffect(function () {
     obtenerRamoExamen();
-    obtenerCursoAlumno();
+    obtenerCursoAlumnoRamo();
   }, []);
 
   // ----------------------RENDER----------------------------
@@ -164,19 +166,21 @@ const InsertarNotaExamen = ({
               </select>
             </div>
 
-            <div>
-              <label htmlFor="input_Pais">Curso Alumno:</label>
+            <div className="form-group">
+              <label htmlFor="input_alumno">Curso Alumno Ramo: </label>
               <select
                 required
-                type="text"
                 className="form-control"
+                name="input_alumno"
+                id="input_alumno"
+                placeholder="Seleccione el ervicio"
                 onChange={({ target }) => setidCursoAlumno(target.value)}
               >
                 <option hidden value="">
                   Desplegar lista
                 </option>
                 {listCursoAlumno.map((valor) => (
-                  <option value={valor.idCursoAlumno}>
+                  <option value={valor.idCursoAlumnoRamo}>
                     {valor.nomCursoAlumno}
                   </option>
                 ))}
