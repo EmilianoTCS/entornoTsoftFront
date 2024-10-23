@@ -97,10 +97,12 @@ export default function IHH_ListadoPeriodo() {
       editable: true,
       width: 200,
       cellClass: "cellStyleText",
+      colId: "nomPeriodo",
     },
     {
       headerName: "Tipo período",
       field: "idTipoPeriodo",
+      colId: "idTipoPeriodo",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
       cellRenderer: function (params) {
         return (
@@ -154,6 +156,7 @@ export default function IHH_ListadoPeriodo() {
       width: 600,
       wrapText: true,
       autoHeight: true,
+      colId: "descripcion",
     },
 
     {
@@ -293,7 +296,7 @@ export default function IHH_ListadoPeriodo() {
           usuarioModificacion: userData.usuario,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          const { OUT_CODRESULT, OUT_MJERESULT} = response[0];
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
           TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }

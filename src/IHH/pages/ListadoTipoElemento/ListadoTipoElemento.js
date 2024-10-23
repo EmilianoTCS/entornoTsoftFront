@@ -92,7 +92,6 @@ export default function IHH_ListadoTipoElemento() {
       headerName: "Operaciones",
       width: 120,
       colId: "Operaciones",
-
       cellRenderer: function (params) {
         return (
           <div style={{ color: "black" }}>

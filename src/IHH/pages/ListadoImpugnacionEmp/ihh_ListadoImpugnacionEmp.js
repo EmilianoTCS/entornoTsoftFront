@@ -130,6 +130,7 @@ export default function IHH_ListadoImpugnacionEmp() {
     {
       headerName: "Nombre empleado",
       field: "nomEmpleado",
+      colId: "nomEmpleado",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
       cellRenderer: function (params) {
         return (
@@ -176,6 +177,7 @@ export default function IHH_ListadoImpugnacionEmp() {
     {
       headerName: "Nombre elemento",
       field: "nomElemento",
+      colId: "nomElemento",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
       cellRenderer: function (params) {
         return (
@@ -222,6 +224,7 @@ export default function IHH_ListadoImpugnacionEmp() {
     {
       headerName: "Nombre período",
       field: "nomPeriodo",
+      colId: "nomPeriodo",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
       width: 150,
       cellRenderer: function (params) {
@@ -270,6 +273,7 @@ export default function IHH_ListadoImpugnacionEmp() {
       cellClass: "cellStyleNumber",
       editable: true,
       width: 120,
+      colId: "cantHorasPeriodo",
     },
     {
       headerName: "Cant. horas extra",
@@ -277,18 +281,21 @@ export default function IHH_ListadoImpugnacionEmp() {
       cellClass: "cellStyleNumber",
       editable: true,
       width: 120,
+      colId: "cantHorasExtra",
     },
     {
       headerName: "Proyecto asociado (ACOP)",
       field: "nomProyecto",
       cellClass: "cellStyleText",
       width: 150,
+      colId: "nomProyecto",
     },
     {
       headerName: "Valor HH",
       field: "valorHH",
       cellClass: "cellStyleText",
       width: 150,
+      colId: "valorHH",
     },
     {
       headerName: "Operaciones",
@@ -296,6 +303,7 @@ export default function IHH_ListadoImpugnacionEmp() {
       wrapText: true,
       width: 350,
       cellClass: "operaciones",
+      colId: "operaciones",
       cellRenderer: function (params) {
         return (
           <div className="containerOperations">

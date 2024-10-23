@@ -80,7 +80,7 @@ export default function IHH_ListadoTipoPeriodo() {
       field: "nomTipoPeriodo",
       editable: true,
       width: 200,
-      // colId: "nomTipoPeriodo",
+      colId: "nomTipoPeriodo",
     },
     {
       headerName: "Días",
@@ -88,7 +88,7 @@ export default function IHH_ListadoTipoPeriodo() {
       editable: true,
       width: 80,
       // cellClass: "cellStyleNumber",
-      // colId: "dias",
+      colId: "dias",
     },
     {
       headerName: "Descripción",
@@ -97,7 +97,7 @@ export default function IHH_ListadoTipoPeriodo() {
       width: 600,
       wrapText: true,
       autoHeight: true,
-      // colId: "descripcion",
+      colId: "descripcion",
     },
     {
       headerName: "Operaciones",

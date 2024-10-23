@@ -86,10 +86,12 @@ export default function IHH_ListadoElementoImp() {
       field: "nomElemento",
       editable: true,
       cellClass: "cellStyleText",
+      colId: "nomElemento",
     },
     {
       headerName: "Tipo de elemento",
       field: "nomTipoElemento",
+      colId: "nomTipoElemento",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
       cellRenderer: function (params) {
         return (
@@ -142,9 +144,11 @@ export default function IHH_ListadoElementoImp() {
       width: 500,
       wrapText: true,
       autoHeight: true,
+      colId: "descripcion",
     },
     {
       headerName: "Operaciones",
+      colId: "operaciones",
       cellRenderer: function (params) {
         return (
           <div style={{ color: "black" }}>
