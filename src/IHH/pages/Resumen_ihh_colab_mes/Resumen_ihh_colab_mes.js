@@ -150,6 +150,10 @@ export default function Resumen_ihh_colab_mes() {
         <br />
         <section className="containerTitulo_ihh_res_colab_mes">
           <h2>Resumen de carga de horas por colaborador y mes</h2>
+          <h6 style={{ color: "gray" }}>
+            Impugnación de Horas {"->"} Resumen de carga de horas por
+            colaborador y mes
+          </h6>
         </section>
         <br />
         <section>

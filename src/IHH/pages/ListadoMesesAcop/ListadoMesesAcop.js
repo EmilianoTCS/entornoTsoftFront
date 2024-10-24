@@ -152,7 +152,13 @@ export default function IHH_ListadoMesesAcop() {
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
+          <a id="btnAtras" href="/ihh/listadoAcop"> 
+            Volver
+          </a>
           <h1 id="TitlesPages">Listado de meses de ACOP</h1>
+          <h6 style={{ color: "gray" }}>
+            Impugnación de Horas {"->"} Listado de meses de ACOPS
+          </h6>
           <br></br>
 
           <div className="cl_slct_acop">

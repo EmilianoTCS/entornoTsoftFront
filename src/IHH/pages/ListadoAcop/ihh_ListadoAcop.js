@@ -72,7 +72,7 @@ export default function IHH_ListadoAcop() {
     SendDataService(url, operationUrl, data).then((response) => {
       if (response) {
         console.log("response", response);
-        
+
         setDatosMesesAcop(response);
         setIsActiveMesesAcop(true);
       }
@@ -198,6 +198,9 @@ export default function IHH_ListadoAcop() {
       <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de ACOPS</h1>
+          <h6 style={{ color: "gray" }}>
+            Impugnación de Horas {"->"} Listado de ACOPS
+          </h6>
           <br></br>
 
           <div id="selectPaginador">

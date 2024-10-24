@@ -18,9 +18,9 @@ export default function TopAlertsError(cod, msj) {
     });
   } else {
     return MySwal.fire({
-      title: "Error " + cod,
+      title: `<h1>¡Atención!</h1> <p>(codResp: ${cod})</p>`,
       text: msj,
-      icon: "error",
+      icon: "warning",
       showConfirmButton: true,
       confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
     });

@@ -132,31 +132,24 @@ export default function IHH_ListadoTipoPeriodo() {
   //----------------------- Operaciones
 
   function editarTipoPeriodo(params) {
-    if (params.data.nomTipoPeriodo === null || params.data.dias === null) {
-      TopAlertsError(
-        "02",
-        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
-      );
-    } else {
-      const errores = validaciones(params);
-      if (!errores) {
-        var data = {
-          idTipoPeriodo: params.data.idTipoPeriodo,
-          nomTipoPeriodo: params.data.nomTipoPeriodo,
-          dias: params.data.dias,
-          descripcion: params.data.descripcion,
-          isActive: 1,
-          usuarioCreacion: userData.usuario,
-        };
-        const url = "pages/editar/ihh_editarTipoPeriodo.php";
-        const operationUrl = "ihh_editarTipoPeriodo";
+    const errores = validaciones(params);
+    if (!errores) {
+      var data = {
+        idTipoPeriodo: params.data.idTipoPeriodo,
+        nomTipoPeriodo: params.data.nomTipoPeriodo,
+        dias: params.data.dias,
+        descripcion: params.data.descripcion,
+        isActive: 1,
+        usuarioCreacion: userData.usuario,
+      };
+      const url = "pages/editar/ihh_editarTipoPeriodo.php";
+      const operationUrl = "ihh_editarTipoPeriodo";
 
-        SendDataService(url, operationUrl, data).then((response) => {
-          const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-          actualizarRegistros(datos);
-        });
-      }
+      SendDataService(url, operationUrl, data).then((response) => {
+        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        actualizarRegistros(datos);
+      });
     }
   }
 
@@ -265,9 +258,12 @@ export default function IHH_ListadoTipoPeriodo() {
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
+          <a id="btnAtras" href="/ihh/listadoPeriodo/0">
+            Volver
+          </a>
           <h1 id="TitlesPages">Listado de tipos de períodos</h1>
           <h6 style={{ color: "gray" }}>
-            Factory Devops {"->"} Listado de tipos de períodos
+            Impugnación de Horas {"->"} Listado de tipos de períodos
           </h6>
           <br></br>
 

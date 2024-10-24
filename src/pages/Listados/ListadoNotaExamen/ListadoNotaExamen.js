@@ -127,6 +127,9 @@ export default function ListadoNotaExamen() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
+            <a id="btnAtras" href="/listadoRamoExamen/0">
+              Volver
+            </a>
             <h1 id="TitlesPages">Listado de Notas de Exámenes</h1>
             <h6 style={{ color: "gray" }}>
               Factory Devops {"->"} Listado de Notas de Exámenes

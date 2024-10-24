@@ -28,7 +28,7 @@ export default function IHH_ListadoElementoImp() {
   const [idElementoImp, setidElementoImp] = useState(params.idElementoImp);
   const nombreTabla = "ihhelementoimp";
 
-  const nuevoNomTipoElemento = "Ingrese un nuevo tipo de elemento";
+  const nuevoNomTipoElemento = "";
   const nuevoNomElementoImp = "Ingrese una nuevo nombre al elemento";
   const nuevoDescripcion = "Ingrese una nueva descripción";
 
@@ -53,12 +53,10 @@ export default function IHH_ListadoElementoImp() {
 
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
-      console.log(datos);
       setCantidadPaginas(paginador.cantPaginas);
       setMainList({ elementos: datos.datos });
     });
   };
-
   const obtenerTipoElementos = () => {
     var url = "pages/auxiliares/ihh_listadoTipoElementoForms.php";
     var operationUrl = "listados";
@@ -80,6 +78,19 @@ export default function IHH_ListadoElementoImp() {
 
   const gridRef = useRef();
 
+  const generateUniqueId = () => {
+    return uuidv4();
+  };
+  const removerElemento = (item) => {
+    const newArray = mainList.elementos.filter(
+      (element) => element.idRandom !== item
+    );
+    // setListDetalleMensual(newArray);
+    setMainList({ elementos: newArray });
+
+    gridRef.current.api.updateGridOptions({ rowData: mainList.elementos });
+  };
+
   const columnDefs = [
     {
       headerName: "Nombre del elemento",
@@ -97,23 +108,10 @@ export default function IHH_ListadoElementoImp() {
         return (
           <select
             onChange={(e) => {
-              params.data.idElementoImp === null
-                ? setidTipoElementoSelect(e.target.value)
-                : // insertarElementoImp({
-                  //     ...params,
-                  //     idTipoElemento: e.target.value,
-                  //   })
-                  editarElementoImp({
-                    ...params,
-                    idTipoElemento: e.target.value,
-                    field: "tipoElemento",
-                  });
+              params.data.idTipoElemento = e.target.value;
             }}
             inputProps={{ "aria-label": "Without label" }}
-            defaultValue={
-              params.data.idTipoElemento || idTipoElementoSelect || ""
-            }
-            // className="ag-theme-material"
+            defaultValue={params.data.idTipoElemento || ""}
             className="select-hover-ag-grid"
             style={{ width: "100%", border: "none" }}
           >
@@ -164,7 +162,7 @@ export default function IHH_ListadoElementoImp() {
             <Button
               data-title="Desactivar elemento de impugnación"
               id="OperationBtns"
-              onClick={() => desactivar(params.data.idElementoImp)}
+              onClick={() => desactivar(params)}
               style={{ color: "black" }}
             >
               <BsFillTrashFill id="icons" />
@@ -187,40 +185,41 @@ export default function IHH_ListadoElementoImp() {
 
   //----------------------- Operaciones
 
-  function editarElementoImp(params) {
-    if (
-      params.data.idTipoElemento === null ||
-      params.data.nomElemento === null
-    ) {
-      TopAlertsError(
-        "02",
-        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
-      );
-      location.reload();
+  function validaciones(params) {
+    if (params.data.nomElemento === "") {
+      TopAlertsError("01", "El nombre del elemento no debe estar vacío");
+      return true;
+    } else if (parseInt(params.data.idTipoElemento) < 1) {
+      TopAlertsError("02", "Seleccione un tipo de elemento válido");
+      return true;
     } else {
-      if (params.field === "tipoElemento") {
-        var data = {
-          idElementoImp: params.data.idElementoImp,
-          idTipoElemento: params.idTipoElemento,
-          nomElemento: params.data.nomElemento,
-          descripcion: params.data.descripcion,
-          isActive: 1,
-          usuarioCreacion: userData.usuario,
-        };
-      } else {
-        var data = {
-          idElementoImp: params.data.idElementoImp,
-          idTipoElemento: params.data.idTipoElemento,
-          nomElemento: params.data.nomElemento,
-          descripcion: params.data.descripcion,
-          isActive: 1,
-          usuarioCreacion: userData.usuario,
-        };
-      }
+      return false;
+    }
+  }
+
+  const onCellKeyPress = (params) => {
+    console.log(params);
+    
+    if (params.event.key === "Enter") {
+      params.data.idElementoImp === null
+        ? insertarElementoImp(params)
+        : editarElementoImp(params);
+    }
+  };
+  function editarElementoImp(params) {
+    if (!validaciones(params)) {
+      var data = {
+        idElementoImp: params.data.idElementoImp,
+        idTipoElemento: params.data.idTipoElemento,
+        nomElemento: params.data.nomElemento,
+        descripcion: params.data.descripcion,
+        isActive: 1,
+        usuarioCreacion: userData.usuario,
+      };
+
       const url = "pages/editar/ihh_editarElementoImp.php";
       const operationUrl = "ihh_editarElementoImp";
 
-      console.log(data);
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -238,70 +237,60 @@ export default function IHH_ListadoElementoImp() {
     setMainList({ elementos: nuevosRegistros });
     // gridRef.current.api.redrawRows();
   }
-  const generateUniqueId = () => {
-    return uuidv4();
-  };
 
   const addNewRow = () => {
     const newRow = {
       idElementoImp: null,
-      nomTipoElemento: nuevoNomTipoElemento,
+      idTipoElemento: nuevoNomTipoElemento,
       nomElemento: nuevoNomElementoImp,
       descripcion: nuevoDescripcion,
-      randomID: generateUniqueId(),
-    }; // Crea una nueva fila vacía
+      idRandom: generateUniqueId(),
+    };
     setMainList({ elementos: [newRow, ...mainList.elementos] }); // Agrega la nueva fila al estado
-    // setTimeout(() => {
-    //   gridRef.current.api.ensureIndexVisible(1); // Asegura que la nueva fila sea visible
-    // }, 0);
   };
 
   function insertarElementoImp(params) {
-    const url = "pages/insertar/ihh_insertarElementoImp.php";
-    const operationUrl = "ihh_insertarElementoImp";
-    var data = {
-      idTipoElemento: idTipoElementoSelect,
-      nomElemento: params.data.nomElemento,
-      descripcion: params.data.descripcion,
-      isActive: 1,
-      usuarioCreacion: userData.usuario,
-    };
-    if (
-      idTipoElementoSelect === null ||
-      params.data.nomElemento === null ||
-      params.data.nomElemento === nuevoNomElementoImp
-    ) {
-      TopAlertsError(
-        "02",
-        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
-      );
-    } else {
+    console.log("insert", params);
+    
+    if (!validaciones(params)) {
+      const url = "pages/insertar/ihh_insertarElementoImp.php";
+      const operationUrl = "ihh_insertarElementoImp";
+      var data = {
+        idTipoElemento: params.data.idTipoElemento,
+        nomElemento: params.data.nomElemento,
+        descripcion: params.data.descripcion,
+        isActive: 1,
+        usuarioCreacion: userData.usuario,
+      };
+
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        // actualizarRegistros(datos);
       });
     }
   }
 
-  function desactivar(ID) {
-    let text = "Esta acción no se puede deshacer";
-    ConfirmAlert(text).then((response) => {
-      if (response === true) {
-        var url = "pages/desactivar/ihh_desactivarElementoImp.php";
-        var operationUrl = "ihh_desactivarElementoImp";
-        var data = {
-          idElemento: ID,
-          usuarioModificacion: userData.usuario,
-        };
-        SendDataService(url, operationUrl, data).then((response) => {
-          const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        });
-      }
-    });
+  function desactivar(params) {
+    if (params.data.idElementoImp) {
+      let text = "Esta acción no se puede deshacer";
+      ConfirmAlert(text).then((response) => {
+        if (response === true) {
+          var url = "pages/desactivar/ihh_desactivarElementoImp.php";
+          var operationUrl = "ihh_desactivarElementoImp";
+          var data = {
+            idElemento: params.data.idElementoImp,
+            usuarioModificacion: userData.usuario,
+          };
+          SendDataService(url, operationUrl, data).then((response) => {
+            const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+            TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+          });
+        }
+      });
+    }else{
+      removerElemento(params.data.idRandom)
+    }
   }
-
   //-------------- useEffect y render
 
   useEffect(
@@ -328,7 +317,7 @@ export default function IHH_ListadoElementoImp() {
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de elementos de impugnación</h1>
           <h6 style={{ color: "gray" }}>
-            Factory Devops {"->"} Listado de elementos de impugnación
+            Impugnación de Horas {"->"} Listado de elementos de impugnación
           </h6>
           <br></br>
 
@@ -400,14 +389,10 @@ export default function IHH_ListadoElementoImp() {
               ref={gridRef}
               rowSelection="single"
               editType="fullRow"
-              getRowId={(params) => params.data.randomID}
+              getRowId={(params) => params.data.idRandom}
               suppressRowClickSelection={true}
               suppressCellSelection={true}
-              onRowValueChanged={(params) => {
-                params.data.idElementoImp === null
-                  ? insertarElementoImp(params)
-                  : editarElementoImp(params);
-              }}
+              onCellKeyDown={onCellKeyPress}
             />
           </div>
         </div>

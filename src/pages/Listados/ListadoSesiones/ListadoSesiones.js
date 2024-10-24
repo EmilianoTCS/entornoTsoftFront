@@ -113,6 +113,9 @@ export default function ListadoSesion() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
+          <a id="btnAtras" href="/listadoRamos/0">
+              Volver
+            </a>
             <h1 id="TitlesPages">Listado de sesiones</h1>
             <h6 style={{ color: "gray" }}>
               Factory Devops {"->"} Listado de sesiones
@@ -246,7 +249,7 @@ export default function ListadoSesion() {
                         </button>
                       ) : null}
 
-                      <Link to={`/listadoCursoAlumnoSesion/${Sesion.idSesion}`}>
+                      <Link to={`/listadoCursoAlumnoRamoSesion/${Sesion.idSesion}`}>
                         <button
                           data-title="Asistencia relacionadas"
                           id="OperationBtns"

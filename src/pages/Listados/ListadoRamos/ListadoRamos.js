@@ -109,6 +109,9 @@ export default function ListadoRamos() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
+            <a id="btnAtras" href="/listadoCursos/0">
+              Volver
+            </a>
             <h1 id="TitlesPages">Listado de ramos</h1>
             <h6 style={{ color: "gray" }}>
               Factory Devops {"->"} Listado de ramos

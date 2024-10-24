@@ -379,7 +379,6 @@ export default function SimuladorCostos() {
     }
     return totalSum;
   }
-
   function sumTotalMiscelaneo() {
     let totalSum = 0;
     if (gridRef.current) {
@@ -414,7 +413,6 @@ export default function SimuladorCostos() {
     }
     return totalSum;
   }
-
   function sumTotalHorasMiscelaneo() {
     let totalSum = 0;
     if (gridRef.current) {
@@ -431,7 +429,6 @@ export default function SimuladorCostos() {
     }
     return totalSum;
   }
-
   function convertirFecha(fechaString) {
     // Extraer el año y el mes del string
     const anio = fechaString.slice(0, 4);
@@ -459,7 +456,6 @@ export default function SimuladorCostos() {
 
     return fechaFormateada;
   }
-
   const ErrorMessage = () => {
     if (datosResumen[0].presupuestoAcumulado - sumTotal() < 0)
       return (

@@ -263,6 +263,9 @@ export default function IHH_ListadoNotaImpugnacion() {
       <div id="fondoTabla">
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de notas de impugnación</h1>
+          <h6 style={{ color: "gray" }}>
+            Impugnación de Horas {"->"} Listado de notas de impugnación
+          </h6>
           <br></br>
 
           <div id="selectPaginador">

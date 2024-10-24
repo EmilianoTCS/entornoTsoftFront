@@ -19,6 +19,7 @@ export default function InicioDashboardIHH() {
   const [datosResumenGralProy, setDatosResumenGralProy] = useState([]);
   const [isActiveResumenGralProy, setIsActiveResumenGralProy] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [preCarga, setPreCarga] = useState(false); // booleano que permite detectar cuando se realiza una búsqueda por primera vez
 
   const [colores, setColores] = useState({
     ppto: "",
@@ -65,7 +66,9 @@ export default function InicioDashboardIHH() {
     };
     SendDataService(url, operationUrl, data).then((response) => {
       const ppto = response.filter((item) => item.datoNoVisible === "PPTO");
-      const ppto_acu = response.filter((item) => item.datoNoVisible === "PPTO_ACU");
+      const ppto_acu = response.filter(
+        (item) => item.datoNoVisible === "PPTO_ACU"
+      );
       const costo = response.filter((item) => item.datoNoVisible === "COSTO");
       const saldo = response.filter((item) => item.datoNoVisible === "SALDO");
 
@@ -111,9 +114,6 @@ export default function InicioDashboardIHH() {
             "No se han encontrado proyectos con estos parámetros"
           );
         } else {
-          // Establecer el conjunto de datos para proyectos
-          console.log(response);
-
           setDatosResumenGralProy(response);
           setIsActiveResumenGralProy(true);
 
@@ -134,10 +134,17 @@ export default function InicioDashboardIHH() {
             const fechaActual = fechaHoy.toISOString().split("T")[0];
             setFechaFin(fechaActual);
           }
+          setPreCarga(true);
         }
       });
     }
   };
+
+  useEffect(() => {
+    if (preCarga) {
+      setIsActiveResumenGralProy(false);
+    }
+  }, [fechaIni, fechaFin, tipoImp, estadoProyecto, preCarga]);
 
   useEffect(() => {
     obtenerConfigIHH();
@@ -149,8 +156,7 @@ export default function InicioDashboardIHH() {
     return () => {
       window.removeEventListener("scroll", toggleScrollButton);
     };
-    
-  }, []);
+  }, [preCarga]);
 
   // Muestra u oculta el botón basado en la posición del usuario en la página
   const toggleScrollButton = () => {
@@ -169,7 +175,6 @@ export default function InicioDashboardIHH() {
     document.documentElement.scrollTop = 0;
   };
 
-
   return userData.statusConected || userData !== null ? (
     <>
       <Header />
@@ -179,7 +184,7 @@ export default function InicioDashboardIHH() {
           id="scrollBtn"
           title="Ir arriba"
           data-html2canvas-ignore="true"
-          style={{float: "right"}}
+          style={{ float: "right" }}
         >
           ↑
         </button>

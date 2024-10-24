@@ -119,6 +119,9 @@ export default function ListadoEmpSubsist() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
+          <a id="btnAtras" href="/listadoEmpleados/0">
+              Volver
+            </a>
             <h1 id="TitlesPages">
               Listado de subsistemas asociados a colaboradores
             </h1>

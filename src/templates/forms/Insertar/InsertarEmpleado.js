@@ -101,19 +101,17 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
       TopAlertsError("01", "El nombre del colaborador no puede estar vacío");
       return true;
     }
-
-    if (!passwordRegex.test(password)) {
-      TopAlertsError(
-        "13",
-        "La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial"
-      );
-      return true;
-    }
-
     if (regexInvalidoNombre.test(nomEmpleado)) {
       TopAlertsError(
         "12",
         "El nombre del colaborador no puede contener números ni caracteres especiales"
+      );
+      return true;
+    }
+    if (!passwordRegex.test(password)) {
+      TopAlertsError(
+        "13",
+        "La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial"
       );
       return true;
     }

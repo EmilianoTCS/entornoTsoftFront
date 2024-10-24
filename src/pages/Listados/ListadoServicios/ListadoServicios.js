@@ -103,6 +103,12 @@ export default function ListadoServicio() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
+            <a
+              id="btnAtras"
+              href="/listadoClientes/0"
+            >
+              Volver
+            </a>
             <h1 id="TitlesPages">Listado de servicios</h1>
             <h6 style={{ color: "gray" }}>Eval desempeño {"->"} Servicios</h6>
             <br></br>

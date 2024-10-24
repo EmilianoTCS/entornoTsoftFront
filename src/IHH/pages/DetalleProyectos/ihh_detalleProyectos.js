@@ -158,6 +158,13 @@ export default function DetalleProyectos() {
         />
         <Header></Header>
         <br></br>
+        <a
+          id="btnAtras"
+          style={{ display: "flex", float: "left", marginLeft: "100px" }}
+          href="/listadoEddProyecto/0"
+        >
+          Volver
+        </a>
         <h3 style={styleH3}>Fecha actual: {now.toLocaleDateString("es-CL")}</h3>
         <div style={mainContainerDiv}>
           <div style={styleDivTitle}>

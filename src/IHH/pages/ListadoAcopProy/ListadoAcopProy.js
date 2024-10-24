@@ -84,7 +84,7 @@ export default function IHH_ListadoAcopProy() {
       num_boton: 1,
       cantidadPorPagina: 99999999999999,
       idServicio: 0,
-      idProyecto: 0
+      idProyecto: 0,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
@@ -139,7 +139,13 @@ export default function IHH_ListadoAcopProy() {
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
+          <a id="btnAtras" href="/listadoEddProyecto/0">
+            Volver
+          </a>
           <h1 id="TitlesPages">Listado de asociaciones PROYECTOS - ACOPS</h1>
+          <h6 style={{ color: "gray" }}>
+            Impugnación de Horas {"->"} Listado de asociaciones de proyectos - ACOPS
+          </h6>
           <br></br>
 
           <div id="selectPaginador">

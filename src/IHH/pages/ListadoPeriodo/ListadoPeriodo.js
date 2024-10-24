@@ -4,10 +4,11 @@ import { Navigate, Link } from "react-router-dom";
 import { useRoute } from "wouter";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
+import { v4 as uuidv4 } from "uuid";
 
 import Header from "../../../templates/Header/Header";
 import Paginador from "../../../templates/Paginador/Paginador";
-import { RiEditBoxFill } from "react-icons/ri";
+// import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
 
@@ -34,7 +35,7 @@ export default function IHH_ListadoPeriodo() {
 
   const nuevaDescripcion = "Ingrese una nueva descripción (opcional)";
   const nuevoNomPeriodo = "Ingrese una nuevo nombre de periodo";
-  const nuevoTipoPeriodo = "Ingrese una tipo de periodo";
+  const nuevoTipoPeriodo = "";
 
   const [filters, setFilters] = useState({
     idTipoPeriodo: "",
@@ -90,6 +91,19 @@ export default function IHH_ListadoPeriodo() {
 
   const gridRef = useRef();
 
+  const generateUniqueId = () => {
+    return uuidv4();
+  };
+  const removerElemento = (item) => {
+    const newArray = mainList.periodos.filter(
+      (element) => element.idRandom !== item
+    );
+    // setListDetalleMensual(newArray);
+    setMainList({ periodos: newArray });
+
+    gridRef.current.api.updateGridOptions({ rowData: mainList.periodos });
+  };
+
   const columnDefs = [
     {
       headerName: "Nombre período",
@@ -108,26 +122,16 @@ export default function IHH_ListadoPeriodo() {
         return (
           <select
             onChange={(e) => {
-              params.data.idPeriodo === null
-                ? setidTipoPeriodoSelect(e.target.value)
-                : // insertarPeriodo({
-                  //     ...params,
-                  //     idTipoPeriodo: e.target.value,
-                  //     field: "idTipoPeriodo",
-                  //   })
-                  editarPeriodo({
-                    ...params,
-                    idTipoPeriodo: e.target.value,
-                    field: "idTipoPeriodo",
-                  });
+              params.data.idTipoPeriodo = e.target.value;
             }}
-            inputProps={{ "aria-label": "Without label" }}
+            // inputProps={{ "aria-label": "Without label" }}
             defaultValue={
               params.data.idTipoPeriodo || idTipoPeriodoSelect || ""
             }
             // className="ag-theme-material"
             className="select-hover-ag-grid"
             style={{ width: "100%", border: "none" }}
+            required
           >
             <option value="" disabled>
               Selecciona un tipo de periodo
@@ -158,26 +162,29 @@ export default function IHH_ListadoPeriodo() {
       autoHeight: true,
       colId: "descripcion",
     },
-
     {
       headerName: "Operaciones",
       colId: "operaciones",
       cellRenderer: function (params) {
         return (
           <div style={{ color: "black" }}>
-            <Link to={`/ihh/listadoTipoPeriodo/${params.data.idTipoPeriodo}`}>
-              <Button
-                data-title="Tipo de periodo relacionado"
-                id="OperationBtns"
-                style={{ color: "black" }}
-              >
-                <MdDashboard id="icons" />
-              </Button>
-            </Link>
+            {params.data.idTipoPeriodo ? (
+              <Link to={`/ihh/listadoTipoPeriodo/${params.data.idTipoPeriodo}`}>
+                <Button
+                  data-title="Tipo de periodo relacionado"
+                  id="OperationBtns"
+                  style={{ color: "black" }}
+                  // disabled={params.data.idTipoPeriodo ? false : true}
+                >
+                  <MdDashboard id="icons" />
+                </Button>
+              </Link>
+            ) : null}
+
             <Button
               data-title="Desactivar periodo"
               id="OperationBtns"
-              onClick={() => desactivar(params.data.idPeriodo)}
+              onClick={() => desactivar(params)}
               style={{ color: "black" }}
             >
               <BsFillTrashFill id="icons" />
@@ -200,32 +207,53 @@ export default function IHH_ListadoPeriodo() {
 
   //----------------------- Operaciones
 
-  function editarPeriodo(params) {
-    if (params.data.idTipoPeriodo === null || params.data.nomPeriodo === null) {
-      TopAlertsError(
-        "02",
-        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
-      );
-    } else {
-      if (params.field === "idTipoPeriodo") {
-        var data = {
-          idPeriodo: params.data.idPeriodo,
-          idTipoPeriodo: params.idTipoPeriodo,
-          nomPeriodo: params.data.nomPeriodo,
-          descripcion: params.data.descripcion,
-          isActive: 1,
-          usuarioCreacion: userData.usuario,
-        };
+  function validacionesEditar(params) {
+    if (params.field === "idTipoPeriodo") {
+      if (params.data.nomPeriodo.trim() === "") {
+        TopAlertsError("01", "El nombre del período no debe estar vacío");
+        return true;
+      } else if (parseInt(params.data.idTipoPeriodo) < 1) {
+        TopAlertsError("02", "Seleccione un tipo de período válido");
+        return true;
       } else {
-        var data = {
-          idPeriodo: params.data.idPeriodo,
-          idTipoPeriodo: params.data.idTipoPeriodo,
-          nomPeriodo: params.data.nomPeriodo,
-          descripcion: params.data.descripcion,
-          isActive: 1,
-          usuarioCreacion: userData.usuario,
-        };
+        return false;
       }
+    } else {
+      if (params.data.nomPeriodo.trim() === "") {
+        TopAlertsError("01", "El nombre del período no debe estar vacío");
+        return true;
+      } else if (parseInt(params.data.idTipoPeriodo) < 1) {
+        TopAlertsError("02", "Seleccione un tipo de período válido");
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+  function validacionesInsertar(params) {
+    if (params.data.nomPeriodo === "") {
+      TopAlertsError("01", "El nombre del período no debe estar vacío");
+      return true;
+    } else if (parseInt(params.data.idTipoPeriodo) < 1) {
+      TopAlertsError("02", "Seleccione un tipo de período válido");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function editarPeriodo(params) {
+    const errores = validacionesEditar(params);
+    if (!errores) {
+      var data = {
+        idPeriodo: params.data.idPeriodo,
+        idTipoPeriodo: params.data.idTipoPeriodo,
+        nomPeriodo: params.data.nomPeriodo,
+        descripcion: params.data.descripcion,
+        isActive: 1,
+        usuarioCreacion: userData.usuario,
+      };
+
       const url = "pages/editar/ihh_editarPeriodo.php";
       const operationUrl = "ihh_editarPeriodo";
       SendDataService(url, operationUrl, data).then((response) => {
@@ -250,7 +278,9 @@ export default function IHH_ListadoPeriodo() {
       idTipoPeriodo: nuevoTipoPeriodo,
       nomPeriodo: nuevoNomPeriodo,
       descripcion: nuevaDescripcion,
-    }; // Crea una nueva fila vacía
+      idRandom: generateUniqueId(),
+    };
+
     setMainList({ periodos: [newRow, ...mainList.periodos] }); // Agrega la nueva fila al estado
     setTimeout(() => {
       gridRef.current.api.ensureIndexVisible(1); // Asegura que la nueva fila sea visible
@@ -258,25 +288,18 @@ export default function IHH_ListadoPeriodo() {
   };
 
   function insertarPeriodo(params) {
-    const url = "pages/insertar/ihh_insertarPeriodo.php";
-    const operationUrl = "ihh_insertarPeriodo";
-    var data = {
-      idTipoPeriodo: idTipoPeriodoSelect,
-      nomPeriodo: params.data.nomPeriodo,
-      descripcion: params.data.descripcion,
-      isActive: 1,
-      usuarioCreacion: userData.usuario,
-    };
-    if (
-      params.data.nomPeriodo === null ||
-      params.data.nomPeriodo === nuevoNomPeriodo ||
-      params.idTipoPeriodo === null
-    ) {
-      TopAlertsError(
-        "02",
-        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
-      );
-    } else {
+    const errores = validacionesInsertar(params);
+    if (!errores) {
+      const url = "pages/insertar/ihh_insertarPeriodo.php";
+      const operationUrl = "ihh_insertarPeriodo";
+      var data = {
+        idTipoPeriodo: params.data.idTipoPeriodo,
+        nomPeriodo: params.data.nomPeriodo,
+        descripcion: params.data.descripcion,
+        isActive: 1,
+        usuarioCreacion: userData.usuario,
+      };
+
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -285,24 +308,35 @@ export default function IHH_ListadoPeriodo() {
     }
   }
 
-  function desactivar(ID) {
-    let text = "Esta acción no se puede deshacer";
-    ConfirmAlert(text).then((response) => {
-      if (response === true) {
-        var url = "pages/desactivar/ihh_desactivarPeriodo.php";
-        var operationUrl = "ihh_desactivarPeriodo";
-        var data = {
-          idPeriodo: ID,
-          usuarioModificacion: userData.usuario,
-        };
-        SendDataService(url, operationUrl, data).then((response) => {
-          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
-          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        });
-      }
-    });
+  function desactivar(params) {
+    console.log(params);
+    if (params.data.idPeriodo) {
+      let text = "Esta acción no se puede deshacer";
+      ConfirmAlert(text).then((response) => {
+        if (response === true) {
+          var url = "pages/desactivar/ihh_desactivarPeriodo.php";
+          var operationUrl = "ihh_desactivarPeriodo";
+          var data = {
+            idPeriodo: ID,
+            usuarioModificacion: userData.usuario,
+          };
+          SendDataService(url, operationUrl, data).then((response) => {
+            const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+            TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+          });
+        }
+      });
+    } else {
+      removerElemento(params.data.idRandom);
+    }
   }
-
+  const onCellKeyPress = (params) => {
+    if (params.event.key === "Enter") {
+      params.data.idPeriodo === null
+        ? insertarPeriodo(params)
+        : editarPeriodo(params);
+    }
+  };
   //-------------- useEffect y render
 
   useEffect(
@@ -329,7 +363,7 @@ export default function IHH_ListadoPeriodo() {
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de períodos</h1>
           <h6 style={{ color: "gray" }}>
-            Factory Devops {"->"} Listado de períodos
+            Impugnación de horas {"->"} Listado de períodos
           </h6>
           <br></br>
 
@@ -411,7 +445,12 @@ export default function IHH_ListadoPeriodo() {
               </select>
             </div>
           </div>
-
+          <br></br>
+          <span style={{ opacity: 0.7 }}>
+            Para guardar los cambios realizados, se necesita apretar la
+            tecla&nbsp;
+            <b>Enter</b>
+          </span>
           {loadedData ? (
             <>
               <br />
@@ -426,12 +465,7 @@ export default function IHH_ListadoPeriodo() {
                   getRowId={(params) => params.data.idPeriodo}
                   suppressRowClickSelection={true}
                   suppressCellSelection={true}
-                  onRowValueChanged={(params) => {
-                    console.log(params);
-                    params.data.idPeriodo === null
-                      ? insertarPeriodo(params)
-                      : editarPeriodo(params);
-                  }}
+                  onCellKeyDown={onCellKeyPress}
                 />
               </div>
             </>

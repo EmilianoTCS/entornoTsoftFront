@@ -245,9 +245,12 @@ export default function IHH_ListadoTipoElemento() {
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
+          <a id="btnAtras" href="/ihh/listadoElementoImp/0">
+            Volver
+          </a>
           <h1 id="TitlesPages">Listado de tipos de elementos</h1>
           <h6 style={{ color: "gray" }}>
-            Factory Devops {"->"} Listado de tipos de elementos
+            Impugnación de Horas {"->"} Listado de tipos de elementos
           </h6>
           <br></br>
 
