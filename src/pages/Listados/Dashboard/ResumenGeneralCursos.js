@@ -170,16 +170,12 @@ export default function ResumenGeneralCursos({
       return label;
     });
 
-  
-
     const dataAprobacion = {
       data: datosCursos.map((curso) => parseFloat(curso.porcAprobacionGeneral)),
       colores: datosCursos.map((curso) =>
         obtenerColorCara(parseFloat(curso.porcAprobacionGeneral), colores.coloresGral)
       ),
     };
-
-
     // Datos para Chart.js
     const data = {
       labels: labels,

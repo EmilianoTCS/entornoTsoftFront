@@ -116,15 +116,11 @@ const InsertarRamo = ({ isActiveRamo, cambiarEstado, ramos }) => {
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarRamo(ramos);
         cambiarEstado(false);
       });
     }
   }
 
-  function actualizarRamo(response) {
-    listRamos.push(response);
-  }
 
   useEffect(function () {
     obtenerCurso();

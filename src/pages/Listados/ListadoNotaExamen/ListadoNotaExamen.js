@@ -13,7 +13,7 @@ import "../TablasStyles.css";
 import InsertarNotaExamen from "../../../templates/forms/Insertar/InsertarNotaExamen";
 import EditarNotaExamen from "../../../templates/forms/Editar/EditarNotaExamen";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -71,8 +71,9 @@ export default function ListadoNotaExamen() {
           usuarioModificacion: userData.usuario,
           nombreTabla: nombreTabla,
         };
-        SendDataService(url, operationUrl, data).then((data) => {
-          TopAlerts("successEdited");
+        SendDataService(url, operationUrl, data).then((response) => {
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

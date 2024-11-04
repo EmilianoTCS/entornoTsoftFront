@@ -13,7 +13,7 @@ import "../TablasStyles.css";
 import InsertarRelatorRamo from "../../../templates/forms/Insertar/InsertarRelatorRamo";
 import EditarRelatorRamo from "../../../templates/forms/Editar/EditarRelatorRamo";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -72,7 +72,8 @@ export default function ListadoRelatorRamo() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

@@ -33,8 +33,8 @@ export default function ListadoCursoAlumnoRamoSesion() {
   const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
 
-  const [idSesion, setidSesion] = useState(params.params);
-  const [idEmpleado, setidEmpleado] = useState(0);
+  const [idSesion, setidSesion] = useState(0);
+  const [idEmpleado, setidEmpleado] = useState(params.params);
 
   const [listSesion, setlistSesion] = useState([""]);
   const [listEmpleado, setlistEmpleado] = useState([""]);
@@ -130,9 +130,9 @@ export default function ListadoCursoAlumnoRamoSesion() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
-            <h1 id="TitlesPages">Listado de Cursos Alumnos Sesiones</h1>
+            <h1 id="TitlesPages">Listado de sesiones de un ramo por alumno</h1>
             <h6 style={{ color: "gray" }}>
-              Factory Devops {"->"} Listado de Cursos Alumnos Sesiones
+              Factory Devops {"->"} Listado de sesiones de un ramo por alumno
             </h6>
             <br></br>
 

@@ -13,7 +13,7 @@ import "../TablasStyles.css";
 import InsertarRamoExamen from "../../../templates/forms/Insertar/InsertarRamoExamen";
 import EditarRamoExamen from "../../../templates/forms/Editar/EditarRamoExamen";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -50,6 +50,7 @@ export default function ListadoRamoExamen() {
     setidRamoExamen(ID);
   }
 
+
   function desactivar(ID) {
     ConfirmAlert().then((response) => {
       if (response === true) {
@@ -61,7 +62,8 @@ export default function ListadoRamoExamen() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });
@@ -102,7 +104,7 @@ export default function ListadoRamoExamen() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
-          <a id="btnAtras" href="/listadoRamos/0">
+            <a id="btnAtras" href="/listadoRamos/0">
               Volver
             </a>
             <h1 id="TitlesPages">Listado de exámenes de ramos</h1>

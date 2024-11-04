@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
 import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 import GetDataService from "../../../services/GetDataService";
@@ -14,7 +14,7 @@ import "../TablasStyles.css";
 import InsertarCurso from "../../../templates/forms/Insertar/InsertarCurso";
 import EditarCurso from "../../../templates/forms/Editar/EditarCurso";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../../Listados/BtnInsertar.css";
@@ -50,7 +50,8 @@ export default function ListadoCursos() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

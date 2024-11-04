@@ -115,22 +115,11 @@ export default function DetalleRamoDashboard({
       (total, cursos) => total + parseFloat(cursos.cantSesionesTerminadas),
       0
     );
-    // let cantExamenesReprobados = datosRamo.reduce(
-    //   (total, cursos) =>
-    //     total + parseFloat(cursos.cantReprobados),
-    //   0
-    // );
-    // let cantExamenesAprobados = datosRamo.reduce(
-    //   (total, cursos) =>
-    //     total + parseFloat(cursos.cantAprobados),
-    //   0
-    // );
-    // let cantExamenesTerminados = cantExamenesAprobados + cantExamenesReprobados
+ 
     let cantExamenes = datosRamo.reduce(
       (total, cursos) => total + parseFloat(cursos.cantExamenes),
       0
     );
-    // porcAsistencia = porcAsistencia / datosRamo.length;
     return (
       <>
         <div

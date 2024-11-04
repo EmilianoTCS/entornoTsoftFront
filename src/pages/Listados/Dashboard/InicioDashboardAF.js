@@ -11,12 +11,13 @@ export default function InicioDashboardAF() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [ListEstadoCurso, setListEstadoCurso] = useState();
   const [ListDatosCursos, setListDatosCursos] = useState();
-  const [fechaIni, setFechaini] = useState("2024-10-21");
-  const [fechaFin, setFechaFin] = useState("2024-12-31");
-  const [estadoCurso, setEstadoCurso] = useState("TODOS");
+  const [fechaIni, setFechaini] = useState("");
+  const [fechaFin, setFechaFin] = useState("");
+  const [estadoCurso, setEstadoCurso] = useState("ACTIVO");
   const [isActiveResumenGralCursos, setIsActiveResumenGralCursos] =
     useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [loadedColours, setLoadedColours] = useState(false);
   const now = new Date();
   const nomDocPDF = "Dashboard_AF_";
 
@@ -42,7 +43,7 @@ export default function InicioDashboardAF() {
       tipoConfDato: "AF",
       subTipoConfDato: "",
     };
-    SendDataService(url, operationUrl, data).then((response) => {      
+    SendDataService(url, operationUrl, data).then((response) => {
       const aprobados = response.filter(
         (item) =>
           item.datoNoVisible === "aprobados" &&
@@ -62,13 +63,13 @@ export default function InicioDashboardAF() {
         .filter((item) => item.subTipoConfDato === "RANCO_COLOR_CURSOS")
         .sort((a, b) => a.orden - b.orden);
 
-        
       setColores({
         aprobados: aprobados,
         desaprobados: desaprobados,
         aprobGral: aprobGral,
         coloresGral: coloresGral,
       });
+      setLoadedColours(true);
     });
   };
 
@@ -266,7 +267,7 @@ export default function InicioDashboardAF() {
       <br></br>
 
       <div ref={componenteRef}>
-        {isActiveResumenGralCursos && (
+        {isActiveResumenGralCursos && loadedColours && (
           <ResumenGeneralCursos
             datosCursos={ListDatosCursos}
             paramsFechaFin={fechaFin}

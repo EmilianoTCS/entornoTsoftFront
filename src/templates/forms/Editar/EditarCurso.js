@@ -111,16 +111,9 @@ const EditarCurso = ({
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarCurso(curso);
         cambiarEstado(false);
       });
     }
-  }
-  function actualizarCurso(curso) {
-    const nuevosCursos = listCurso.map((c) =>
-      c.idCurso === curso.idCurso ? curso : c
-    );
-    setCurso(nuevosCursos);
   }
   useEffect(
     function () {

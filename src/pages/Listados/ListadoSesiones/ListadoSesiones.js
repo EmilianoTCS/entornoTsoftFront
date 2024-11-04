@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
+import {Table } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
 import { useRoute } from "wouter";
 
@@ -13,7 +13,7 @@ import "../TablasStyles.css";
 import InsertarSesion from "../../../templates/forms/Insertar/InsertarSesiones";
 import EditarSesion from "../../../templates/forms/Editar/EditarSesiones";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -69,7 +69,8 @@ export default function ListadoSesion() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });
@@ -97,7 +98,6 @@ export default function ListadoSesion() {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setSesion(datos.datos);
-      console.log(data);
     });
   }
   //PAGINADOR ---------------------
@@ -113,7 +113,7 @@ export default function ListadoSesion() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
-          <a id="btnAtras" href="/listadoRamos/0">
+            <a id="btnAtras" href="/listadoRamos/0">
               Volver
             </a>
             <h1 id="TitlesPages">Listado de sesiones</h1>
@@ -249,7 +249,9 @@ export default function ListadoSesion() {
                         </button>
                       ) : null}
 
-                      <Link to={`/listadoCursoAlumnoRamoSesion/${Sesion.idSesion}`}>
+                      <Link
+                        to={`/listadoCursoAlumnoRamoSesion/${Sesion.idSesion}`}
+                      >
                         <button
                           data-title="Asistencia relacionadas"
                           id="OperationBtns"

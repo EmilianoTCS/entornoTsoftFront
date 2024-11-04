@@ -46,8 +46,6 @@ const InsertarNotaExamen = ({
     const url = "pages/auxiliares/listadoCursoAlumnoRamoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => {
-      console.log(response);
-
       setlistCursoAlumno(response);
     });
   }
@@ -87,17 +85,14 @@ const InsertarNotaExamen = ({
         idRamoExamen: idRamoExamen,
         isActive: true,
       };
+      console.log(data);
+      
       SendDataService(url, operationUrl, data).then((response) => {
-        const { OUT_CODRESULT, OUT_MJERESULT, ...notaExamen } = response[0];
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarNotaExamen(notaExamen);
         cambiarEstado(false);
       });
     }
-  }
-
-  function actualizarNotaExamen(response) {
-    listNotaExamen.push(response);
   }
 
   useEffect(function () {

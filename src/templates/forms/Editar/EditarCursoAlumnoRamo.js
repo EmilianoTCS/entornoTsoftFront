@@ -14,7 +14,22 @@ const EditarCursoAlumnoRamo = ({
   cursoAlumnoRamo,
 }) => {
   // ----------------------CONSTANTES----------------------------
-  const [datosCursoAlumnoRamo, setCursoAlumnoRamo] = useState([]);
+  const [datosCursoAlumnoRamo, setCursoAlumnoRamo] = useState({
+    usuarioCreacion: "",
+    idCursoAlumnoRamo: "",
+    idCursoAlumno: "",
+    idRamo: "",
+    fechaIni: "",
+    fechaFin: "",
+    horaIni: "",
+    horaFin: "",
+    porcAsistencia: "",
+    ramoAprobado: "",
+    porcParticipacion: "",
+    porcAprobacion: "",
+    estadoRamo: "",
+    isActive: "",
+  });
 
   const show = isActiveCursoAlumno;
 
@@ -25,12 +40,9 @@ const EditarCursoAlumnoRamo = ({
   const handleClose = () => cambiarEstado(false);
 
   function transformarFecha(fecha) {
-    if (fecha) {
-      const [dia, mes, year] = fecha.split("/");
-
-      // Retornar la fecha en el formato yyyy-mm-dd
-      return `${year}-${mes}-${dia}`;
-    }
+    console.log(fecha);
+    const [dia, mes, year] = fecha.split("/");
+    return `${year}-${mes}-${dia}`;
   }
 
   // ----------------------FUNCIONES----------------------------
@@ -100,8 +112,8 @@ const EditarCursoAlumnoRamo = ({
         idCursoAlumnoRamo: datosCursoAlumnoRamo.idCursoAlumnoRamo,
         idCursoAlumno: datosCursoAlumnoRamo.idCursoAlumno,
         idRamo: datosCursoAlumnoRamo.idRamo,
-        fechaIni: transformarFecha(datosCursoAlumnoRamo.fechaIni),
-        fechaFin: transformarFecha(datosCursoAlumnoRamo.fechaFin),
+        fechaIni: datosCursoAlumnoRamo.fechaIni,
+        fechaFin: datosCursoAlumnoRamo.fechaFin,
         horaIni: datosCursoAlumnoRamo.horaIni,
         horaFin: datosCursoAlumnoRamo.horaFin,
         porcAsistencia: datosCursoAlumnoRamo.porcAsistencia,
@@ -111,7 +123,7 @@ const EditarCursoAlumnoRamo = ({
         estadoRamo: datosCursoAlumnoRamo.estadoRamo,
         isActive: true,
       };
-      
+
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -137,9 +149,20 @@ const EditarCursoAlumnoRamo = ({
   useEffect(
     function () {
       if (cursoAlumnoRamo) {
-        console.log(cursoAlumnoRamo);
-
-        setCursoAlumnoRamo(cursoAlumnoRamo);
+        setCursoAlumnoRamo({
+          idCursoAlumnoRamo: cursoAlumnoRamo.idCursoAlumnoRamo,
+          idCursoAlumno: cursoAlumnoRamo.idCursoAlumno,
+          idRamo: cursoAlumnoRamo.idRamo,
+          fechaIni: transformarFecha(cursoAlumnoRamo.fechaIni),
+          fechaFin: transformarFecha(cursoAlumnoRamo.fechaFin),
+          horaIni: cursoAlumnoRamo.horaIni,
+          horaFin: cursoAlumnoRamo.horaFin,
+          porcAsistencia: cursoAlumnoRamo.porcAsistencia,
+          ramoAprobado: cursoAlumnoRamo.ramoAprobado,
+          porcParticipacion: cursoAlumnoRamo.porcParticipacion,
+          porcAprobacion: cursoAlumnoRamo.porcAprobacion,
+          estadoRamo: cursoAlumnoRamo.estadoRamo,
+        });
       }
       obtenerCursoAlumno();
       obtenerRamo();
@@ -234,10 +257,7 @@ const EditarCursoAlumnoRamo = ({
                   }))
                 }
                 required
-                value={
-                  transformarFecha(datosCursoAlumnoRamo.fechaIni) ||
-                  ""
-                }
+                value={datosCursoAlumnoRamo.fechaIni || ""}
               />
             </div>
             <div>
@@ -255,7 +275,7 @@ const EditarCursoAlumnoRamo = ({
                   }))
                 }
                 required
-                value={transformarFecha(datosCursoAlumnoRamo.fechaFin) || ""}
+                value={datosCursoAlumnoRamo.fechaFin || ""}
               />
             </div>
             <div>
@@ -372,10 +392,26 @@ const EditarCursoAlumnoRamo = ({
                 value={datosCursoAlumnoRamo.estadoRamo || ""}
               >
                 <option hidden value="">
-                  Desplegar lista
+                  DESPLEGAR LISTA
                 </option>
-                <option value="1">Activado</option>
-                <option value="0">Desactivado</option>
+                <option
+                  selected={
+                    datosCursoAlumnoRamo.estadoRamo === "ACTIVO" ? true : false
+                  }
+                  value="1"
+                >
+                  ACTIVO
+                </option>
+                <option
+                  selected={
+                    datosCursoAlumnoRamo.estadoRamo === "INACTIVO"
+                      ? true
+                      : false
+                  }
+                  value="0"
+                >
+                  INACTIVO
+                </option>
               </select>
             </div>
             <div>

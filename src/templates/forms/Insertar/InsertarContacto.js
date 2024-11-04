@@ -40,18 +40,47 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
   }
 
   function validaciones() {
+    const regexInvalidoNombre = /[^a-zA-Z\sáéíóúÁÉÍÓÚñÑ]/;
+    const regexTelefono = /^\+?[\d\s\-\(\)]+$/;
+    const regexCorreo =
+      /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+
     if (nomContacto.trim() === "") {
       TopAlertsError("01", "El nombre del contacto no puede estar vacío");
       return true;
-    } else if (correoContacto.trim() === "") {
-      TopAlertsError("02", "El correo del contacto no debe estar vacío");
-      return true;
-    } else if (telefonoContacto.trim() === "") {
-      TopAlertsError("02", "El teléfono del contacto no debe estar vacío");
-      return true;
-    } else {
-      return false;
     }
+    if (regexInvalidoNombre.test(nomContacto)) {
+      TopAlertsError(
+        "02",
+        "El nombre del contacto no puede contener números ni caracteres especiales"
+      );
+      return true;
+    }
+
+    if (correoContacto.trim() === "") {
+      TopAlertsError("03", "El correo del contacto no debe estar vacío");
+      return true;
+    }
+
+    if (regexCorreo.test(correoContacto)) {
+      TopAlertsError("04", "El correo del contacto es inválido");
+      return true;
+    }
+
+    if (telefonoContacto.trim() === "") {
+      TopAlertsError("05", "El teléfono del contacto no debe estar vacío");
+      return true;
+    }
+
+    if (!regexTelefono.test(telefonoContacto)) {
+      TopAlertsError(
+        "06",
+        "El teléfono solo puede contener números, el signo '+' y el signo '-'"
+      );
+      return true;
+    }
+
+    return false;
   }
   function SendData(e) {
     e.preventDefault();
@@ -71,7 +100,8 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...contacto } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarContacto(contacto);
+        cambiarEstado(false);
+        // actualizarContacto(contacto);
       });
     }
   }

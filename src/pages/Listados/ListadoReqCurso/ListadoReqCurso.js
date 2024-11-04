@@ -13,7 +13,7 @@ import "../TablasStyles.css";
 import InsertarReqCurso from "../../../templates/forms/Insertar/InsertarReqCurso";
 import EditarReqCurso from "../../../templates/forms/Editar/EditarReqCurso";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -63,7 +63,8 @@ export default function ListadoReqCurso() {
         };
         console.log(data);
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

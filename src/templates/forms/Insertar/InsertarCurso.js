@@ -65,13 +65,9 @@ const InsertarCurso = ({ isActiveCurso, cambiarEstado, curso }) => {
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarCurso(curso);
         cambiarEstado(false);
       });
     }
-  }
-  function actualizarCurso(response) {
-    listCurso.push(response);
   }
 
   function obtenerTipoHH() {

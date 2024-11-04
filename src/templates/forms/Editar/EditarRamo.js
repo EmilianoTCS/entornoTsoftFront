@@ -147,20 +147,13 @@ const EditarRamo = ({
         isActive: true,
       };
       SendDataService(url, operationUrl, data).then((response) => {
-        const { OUT_CODRESULT, OUT_MJERESULT, ...ramos } = response[0];
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarRamo(ramos);
         cambiarEstado(false);
       });
     }
   }
 
-  function actualizarRamo(ramos) {
-    const nuevosRamos = listRamos.map((c) =>
-      c.idRamo === ramos.idRamo ? ramos : c
-    );
-    setRamos(nuevosRamos);
-  }
   useEffect(
     function () {
       if (idRamo !== null) {

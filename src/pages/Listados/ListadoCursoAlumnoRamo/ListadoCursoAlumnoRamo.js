@@ -3,7 +3,7 @@ import { Navigate, Link } from "react-router-dom";
 import "../TablasStyles.css";
 import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 import SendDataService from "../../../services/SendDataService";
-// import TopAlertsError from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Header from "../../../templates/Header/Header";
 import { Table, Button } from "react-bootstrap";
 import Paginador from "../../../templates/Paginador/Paginador";
@@ -21,6 +21,7 @@ export default function ListadoCursoAlumnoRamo() {
   const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
   const [datosRamo, setDatosRamo] = useState();
+  const nombreTabla = "cursoalumnoramo";
 
   const [, params] = useRoute("/listadoCursoAlumnoRamo/:params");
   const [idCurso, setIDCurso] = useState(params.params);
@@ -69,12 +70,13 @@ export default function ListadoCursoAlumnoRamo() {
         idEmpleado: idEmpleado,
       };
     }
-    console.log(data);
 
     SendDataService(url, operationUrl, data).then((response) => {
       const { paginador, ...datos } = response;
       setCantidadPaginas(paginador.cantPaginas);
       setDatosRamo(datos.datos);
+    console.log(datos.datos);
+
     });
   }
 
@@ -82,6 +84,25 @@ export default function ListadoCursoAlumnoRamo() {
     setDatosCursoAlumnoRamo(item);
     setIsActiveFormularioEditar(true);
   }
+
+  function desactivar(ID) {
+    ConfirmAlert().then((response) => {
+      if (response === true) {
+        var url = "pages/cambiarEstado/cambiarEstado.php";
+        var operationUrl = "cambiarEstado";
+        var data = {
+          idRegistro: ID,
+          usuarioModificacion: userData.usuario,
+          nombreTabla: nombreTabla,
+        };
+        SendDataService(url, operationUrl, data).then((response) => {
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        });
+      }
+    });
+  }
+
   useEffect(() => {
     ObtenerDatos();
     obtenerCurso();
@@ -169,9 +190,7 @@ export default function ListadoCursoAlumnoRamo() {
                   <option hidden value="">
                     Desplegar lista
                   </option>
-                  <option value="0">
-                   Todos
-                  </option>
+                  <option value="0">Todos</option>
 
                   {listEmpleados.map((valor) => (
                     <option value={valor.idEmpleado}>
@@ -225,7 +244,7 @@ export default function ListadoCursoAlumnoRamo() {
                         ) : null}
 
                         <Link
-                          to={`/listadoCursoAlumnoRamoSesion/${item.idCursoAlumnoRamo}`}
+                          to={`/listadoCursoAlumnoRamoSesion/${item.idEmpleado}`}
                         >
                           <button
                             data-title="Curso-Alum-Sesion relacionado"
@@ -248,11 +267,11 @@ export default function ListadoCursoAlumnoRamo() {
                   ))}
               </tbody>
             </Table>
-            {/* <Paginador
+            <Paginador
               paginas={cantidadPaginas}
               cambiarNumero={setNumBoton}
               num_boton={num_boton}
-            ></Paginador> */}
+            ></Paginador>
           </div>
         </div>
       </>

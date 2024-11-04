@@ -157,13 +157,13 @@ const InsertarEDDProyecto = ({
   // ----------------------RENDER----------------------------
   return (
     <>
-      {isActiveFormularioPresupuesto ? (
+      {/* {isActiveFormularioPresupuesto ? (
         <EditarPresupuestosMensuales
           isActiveFormulario={isActiveFormularioPresupuesto}
           cambiarEstado={setisActiveFormularioPresupuesto}
           resumenProyectos={datosResumen}
         ></EditarPresupuestosMensuales>
-      ) : null}
+      ) : null} */}
 
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>

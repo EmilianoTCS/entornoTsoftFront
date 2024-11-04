@@ -17,7 +17,7 @@ import "../TablasStyles.css";
 import InsertarRamo from "../../../templates/forms/Insertar/InsertarRamo";
 import EditarRamo from "../../../templates/forms/Editar/EditarRamo";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import "../InsertarCursoListadoCursosYRamos.css";
 import Button from "react-bootstrap/Button";
 import Paginador from "../../../templates/Paginador/Paginador";
@@ -66,7 +66,8 @@ export default function ListadoRamos() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });
@@ -88,12 +89,10 @@ export default function ListadoRamos() {
       cantidadPorPagina: cantidadPorPagina,
       idCurso: idCurso,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setRamos(datos.datos);
-      console.log(data);
     });
   }
   //PAGINADOR ---------------------

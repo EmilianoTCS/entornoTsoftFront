@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
-import { Navigate, useParams } from "react-router-dom";
+import { Table } from "react-bootstrap";
+import { Navigate } from "react-router-dom";
 import { useRoute } from "wouter";
 
 import getDataService from "../../../services/GetDataService";
@@ -8,12 +8,11 @@ import SendDataService from "../../../services/SendDataService";
 import Header from "../../../templates/Header/Header";
 import { BsFillTrashFill } from "react-icons/bs";
 import { RiEditBoxFill } from "react-icons/ri";
-import { HiEye } from "react-icons/hi";
 import "../TablasStyles.css";
 import InsertarContacto from "../../../templates/forms/Insertar/InsertarContacto";
 import EditarContacto from "../../../templates/forms/Editar/EditarContacto";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -75,7 +74,8 @@ export default function ListadoContacto() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

@@ -59,7 +59,8 @@ const InsertarServicio = ({ isActiveServicio, cambiarEstado, servicio }) => {
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...servicio } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarServicio(servicio);
+        cambiarEstado(false);
+        // actualizarServicio(servicio);
       });
     }
   }

@@ -14,7 +14,7 @@ import "../TablasStyles.css";
 import InsertarCursoAlumno from "../../../templates/forms/Insertar/InsertarCursoAlumno";
 import EditarCursoAlumno from "../../../templates/forms/Editar/EditarCursoAlumno";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -76,8 +76,8 @@ export default function ListadoCursoAlumno() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
-        });
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);        });
       }
     });
   }
@@ -278,7 +278,7 @@ export default function ListadoCursoAlumno() {
                       ) : null}
 
                       <Link
-                        to={`/listadoCursoAlumnoRamo/${CursoAlumno.idCursoAlumno}`}
+                        to={`/listadoCursoAlumnoRamo/${CursoAlumno.idCurso}`}
                       >
                         <button
                           data-title="Curso-Alum-Ramo relacionado"

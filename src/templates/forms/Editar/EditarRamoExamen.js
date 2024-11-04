@@ -20,6 +20,7 @@ const EditarRamoExamen = ({
   const [nomExamen, setnomExamen] = useState("");
   const [fechaExamen, setfechaExamen] = useState("");
   const [idRamo, setidRamo] = useState("");
+  const now = new Date();
 
   const [listRamo, setlistRamo] = useState([""]);
 
@@ -43,6 +44,13 @@ const EditarRamoExamen = ({
     getDataService(url, operationUrl).then((response) => setlistRamo(response));
   }
 
+  function transformarFecha(fecha) {
+    // Separar la fecha por el guión "-"
+    const [dia, mes, anio] = fecha.split("-");
+
+    // Retornar la fecha en el formato dd-mm-yyyy
+    return `${anio}-${mes}-${dia}`;
+  }
   // ----------------------FUNCIONES----------------------------
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
@@ -52,6 +60,7 @@ const EditarRamoExamen = ({
       console.log(response);
       setResponseID(response);
       setnomExamen(response[0].nomExamen);
+      // setfechaExamen(transformarFecha(response[0].fechaExamen));
       setfechaExamen(response[0].fechaExamen);
       setidRamo(response[0].idRamo);
     });
@@ -145,7 +154,7 @@ const EditarRamoExamen = ({
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
                 value={fechaExamen || ""}
-                type="date"
+                type="datetime-local"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"

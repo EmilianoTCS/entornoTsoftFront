@@ -12,7 +12,7 @@ import "../TablasStyles.css";
 import InsertarServicio from "../../../templates/forms/Insertar/InsertarServicios";
 import EditarServicio from "../../../templates/forms/Editar/EditarServicios";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 import Paginador from "../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -62,7 +62,8 @@ export default function ListadoServicio() {
           nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });
@@ -77,7 +78,6 @@ export default function ListadoServicio() {
       cantidadPorPagina: cantidadPorPagina,
       idCliente: idCliente,
     };
-    console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
@@ -103,10 +103,7 @@ export default function ListadoServicio() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
-            <a
-              id="btnAtras"
-              href="/listadoClientes/0"
-            >
+            <a id="btnAtras" href="/listadoClientes/0">
               Volver
             </a>
             <h1 id="TitlesPages">Listado de servicios</h1>
