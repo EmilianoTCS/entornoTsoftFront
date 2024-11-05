@@ -4,10 +4,9 @@ import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
 import getDataService from "../../../../../services/GetDataService";
 
-import TopAlerts from "../../../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 
 const InsertarEDDEvalProyEmp = ({
   isActiveEDDEvalProyEmp,
@@ -53,27 +52,6 @@ const InsertarEDDEvalProyEmp = ({
     });
   }
 
-  // function obtenerEvaluado(idProyecto) {
-  //   const url = "pages/auxiliares/listadoEddProyEmp.php";
-  //   const operationUrl = "listados";
-  //   var data = {
-  //     idProyecto: idProyecto, // Usar el proyecto seleccionado
-  //   };
-  //   SendDataService(url, operationUrl, data).then((response) => {
-  //     setlistEDDProyEmpEvaluado(response);
-  //   });
-  // }
-
-  // function obtenerEvaluador(idProyecto) {
-  //   const url = "pages/auxiliares/listadoEddProyEmp.php";
-  //   const operationUrl = "listados";
-  //   var data = {
-  //     idProyecto: idProyecto, // Usar el proyecto seleccionado
-  //   };
-  //   SendDataService(url, operationUrl, data).then((response) => {
-  //     setlistEDDProyEmpEvaluador(response);
-  //   });
-  // }
 
   function obtenerEvaluadorEvaluado(idProyecto) {
     const url = "pages/auxiliares/listadoEddProyEmp.php";
@@ -99,8 +77,7 @@ const InsertarEDDEvalProyEmp = ({
     e.preventDefault();
 
     if (idEDDProyEmpEvaluado === idEDDProyEmpEvaluador) {
-      // Los valores son iguales, mostrar una alerta
-      TopAlerts("MismoEvaludorYEvaluado");
+      TopAlertsError("01", "El evaluador y el evaluado no pueden ser la misma persona")
     } else {
       const url = "pages/insertar/insertarEddEvalProyEmp.php";
       const operationUrl = "insertarEddEvalProyEmp";
@@ -113,13 +90,12 @@ const InsertarEDDEvalProyEmp = ({
         cicloEvaluacion: 0,
         isActive: true,
       };
+      console.log(data);
+      
       SendDataService(url, operationUrl, data).then((response) => {
-        if (response[0].OUT_CODRESULT !== "00") {
-          TopAlertsError(response[0].OUT_CODRESULT, response[0].OUT_MJERESULT);
-        } else {
-          TopAlerts("00");
-          actualizarEDDEvalProyEmp(EDDEvalProyEmp);
-        }
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+        cambiarEstado(false)
       });
     }
   }

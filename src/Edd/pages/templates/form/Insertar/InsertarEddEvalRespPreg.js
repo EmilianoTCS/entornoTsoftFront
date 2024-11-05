@@ -84,14 +84,15 @@ const InsertarEDDEvalRespPreg = ({
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
         TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarEDDEvalRespPreg(datos);
+        cambiarEstado(false)
+        // actualizarEDDEvalRespPreg(datos);
       });
     }
   }
 
-  function actualizarEDDEvalRespPreg(response) {
-    listEDDEvalRespPreg.push(response);
-  }
+  // function actualizarEDDEvalRespPreg(response) {
+  //   listEDDEvalRespPreg.push(response);
+  // }
 
   useEffect(function () {
     obtenerEvaluacion();

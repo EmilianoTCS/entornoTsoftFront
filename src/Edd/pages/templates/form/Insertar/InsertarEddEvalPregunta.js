@@ -94,6 +94,8 @@ const InsertarEDDEvalPregunta = ({
         preguntaObligatoria: preguntaObligatoria,
         isActive: true,
       };
+      console.log(data);
+      
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);

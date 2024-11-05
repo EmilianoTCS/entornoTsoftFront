@@ -71,7 +71,7 @@ const EditarContacto = ({
     const regexInvalidoNombre = /[^a-zA-Z\sáéíóúÁÉÍÓÚñÑ]/;
     const regexTelefono = /^\+?[\d\s\-\(\)]+$/;
     const regexCorreo =
-      /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+      /^(([^<>()\[\]\\/,:;@”]+(\.[^<>()\[\]\\/,:;@”]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}))$/;
 
     if (nomContacto.trim() === "") {
       TopAlertsError("01", "El nombre del contacto no puede estar vacío");
@@ -89,8 +89,11 @@ const EditarContacto = ({
       TopAlertsError("03", "El correo del contacto no debe estar vacío");
       return true;
     }
-    if (regexCorreo.test(correoContacto)) {
-      TopAlertsError("04", "El correo del contacto es inválido");
+    if (!regexCorreo.test(correoContacto)) {
+      TopAlertsError(
+        "04",
+        "El correo ingresado es inválido. Los caracteres '<>()[]/.,;:' no son permitidos"
+      );
       return true;
     }
     if (telefonoContacto.trim() === "") {
@@ -127,6 +130,8 @@ const EditarContacto = ({
 
         idServicio: idServicio === "" ? responseID[0].idServicio : idServicio,
       };
+      console.log(data);
+      
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...contacto } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -233,7 +238,7 @@ const EditarContacto = ({
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
                 value={fechaIni || ""}
-                type="datetime"
+                type="datetime-local"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"

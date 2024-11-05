@@ -65,18 +65,19 @@ const EditarEddEvalCompetencia = ({
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
         TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarEddEvalCompetencia(datos);
+        cambiarEstado(false)
+        // actualizarEddEvalCompetencia(datos);
       });
     }
   }
-  function actualizarEddEvalCompetencia(EddEvalCompetencia) {
-    const nuevosEddEvalCompetencia = listEddEvalCompetencia.map((c) =>
-      c.idEddEvalCompetencia === EddEvalCompetencia.idEddEvalCompetencia
-        ? EddEvalCompetencia
-        : c
-    );
-    setEddEvalCompetencia(nuevosEddEvalCompetencia);
-  }
+  // function actualizarEddEvalCompetencia(EddEvalCompetencia) {
+  //   const nuevosEddEvalCompetencia = listEddEvalCompetencia.map((c) =>
+  //     c.idEddEvalCompetencia === EddEvalCompetencia.idEddEvalCompetencia
+  //       ? EddEvalCompetencia
+  //       : c
+  //   );
+  //   setEddEvalCompetencia(nuevosEddEvalCompetencia);
+  // }
   useEffect(
     function () {
       if (idEDDEvalCompetencia !== null) {

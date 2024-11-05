@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
-import { Navigate, Link } from "react-router-dom";
+import { Table } from "react-bootstrap";
+import { Navigate } from "react-router-dom";
 import { useRoute } from "wouter";
 
 import getDataService from "../../../../services/GetDataService";
@@ -13,7 +13,7 @@ import "../TablasStyles.css";
 import InsertarEDDEvalRespPreg from "../../templates/form/Insertar/InsertarEddEvalRespPreg";
 import EditarEDDEvalRespPreg from "../../templates/form/Editar/EditarEddEvalRespPreg";
 import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -32,6 +32,7 @@ export default function ListadoEDDEvalRespPreg() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
+
   const nombreTabla = "eddevalresppreg";
 
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState(params.params);
@@ -46,13 +47,13 @@ export default function ListadoEDDEvalRespPreg() {
       setlistEDDEvalPregunta(response)
     );
   }
-  function obtenerEvaluacion() {
-    const url = "pages/auxiliares/listadoEddEvaluacion.php";
-    const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) =>
-      setlistEDDEvaluacion(response)
-    );
-  }
+  // function obtenerEvaluacion() {
+  //   const url = "pages/auxiliares/listadoEddEvaluacion.php";
+  //   const operationUrl = "listados";
+  //   getDataService(url, operationUrl).then((response) =>
+  //     setlistEDDEvaluacion(response)
+  //   );
+  // }
   function insertarEDDEvalRespPreg() {
     setIsActiveInsertEDDEvalRespPreg(!isActiveInsertEDDEvalRespPreg);
   }
@@ -64,15 +65,15 @@ export default function ListadoEDDEvalRespPreg() {
   function desactivar(ID) {
     ConfirmAlert().then((response) => {
       if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
+        var url = "pages/desactivar/edd_desactivarRespuestaPregunta.php";
+        var operationUrl = "edd_desactivarRespuestaPregunta";
         var data = {
-          idRegistro: ID,
+          idEDDEvalRespPreg: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

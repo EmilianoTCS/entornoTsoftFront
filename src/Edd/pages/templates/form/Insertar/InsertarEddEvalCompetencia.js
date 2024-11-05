@@ -49,14 +49,15 @@ const InsertarEddEvalCompetencia = ({
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
         TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarEddEvalCompetencia(datos);
+        cambiarEstado(false)
+        // actualizarEddEvalCompetencia(datos);
       });
     }
   }
 
-  function actualizarEddEvalCompetencia(response) {
-    listEddEvalCompetencia.push(response);
-  }
+  // function actualizarEddEvalCompetencia(response) {
+  //   listEddEvalCompetencia.push(response);
+  // }
 
   // ----------------------RENDER----------------------------
   return (

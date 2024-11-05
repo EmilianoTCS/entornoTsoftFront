@@ -7,12 +7,11 @@ import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 
 import "../TablasStyles.css";
-import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../../templates/alerts/TopAlerts";
 import "../BtnInsertar.css";
 import "../ListadoCompProy/CompProy.css";
 import ExportCSV from "../../../../templates/exports/exportCSV";
 import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
+import TopAlertsError from "../../../../templates/alerts/TopAlerts";
 
 export default function ListadoCompProy() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -53,6 +52,7 @@ export default function ListadoCompProy() {
 
   const [nuevosDatos, setNuevosDatos] = useState([""]);
   const [loadedNuevosDatos, setLodadedNuevosDatos] = useState(false);
+  const [busquedaRealizada, setBusquedaRealizada] = useState(false);
 
   function obtenerCliente() {
     const url = "pages/auxiliares/listadoClienteForms.php";
@@ -75,7 +75,6 @@ export default function ListadoCompProy() {
       }
     });
   }
-
   function obtenerProyecto() {
     if (selectedServicio.length > 0 && !selectedClients.includes("0")) {
       // Verifica si "Ninguno" está seleccionado
@@ -91,7 +90,6 @@ export default function ListadoCompProy() {
       setlistProyecto([]); // Establece la lista de proyectos en vacío
     }
   }
-
   function obtenerServicio() {
     if (selectedClients.length > 0) {
       const url = "pages/auxiliares/listadoServicioForms.php";
@@ -104,25 +102,6 @@ export default function ListadoCompProy() {
       });
     }
   }
-
-  // ELIMINAR
-  function desactivar(ID) {
-    ConfirmAlert().then((response) => {
-      if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
-        var data = {
-          idRegistro: ID,
-          usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
-        };
-        SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
-        });
-      }
-    });
-  }
-  // FIN ELIMINAR
 
   function calcularPromedioCompetenciasPorCiclo(response) {
     const ciclos = {};
@@ -183,40 +162,78 @@ export default function ListadoCompProy() {
   function SendData(data) {
     var url = "pages/listados/listadoCompetenciasGeneralEval.php";
     var operationUrl = "listadoCompetenciasGeneralEval";
-    SendDataService(url, operationUrl, data).then((data) => {
-      setEDDCompProy(data);
-      setNuevosDatos(calcularPromedioCompetenciasPorCiclo(data));
-      setNombreArchivoCSV(
-        "list_comp_proy_" + data[0].nomProyecto.substr(0, 10) + "_" + date
-      );
-      console.log(nombreArchivoCSV);
+    SendDataService(url, operationUrl, data).then((response) => {
+      if (response.length === 0) {
+        TopAlertsError(
+          "01",
+          "No se han encontrado datos con los parámetros ingresados"
+        );
+      } else {
+        setEDDCompProy(response);
+        setNuevosDatos(calcularPromedioCompetenciasPorCiclo(response));
+        setNombreArchivoCSV(
+          "list_comp_proy_" + response[0].nomProyecto.substr(0, 10) + "_" + date
+        );
+      }
     });
   }
 
-  const [busquedaRealizada, setBusquedaRealizada] = useState(false);
   const buscarClick = () => {
-    // Validación de fechas
-    if (new Date(fechaFin) < new Date(fechaIni)) {
-      TopAlerts("FechaFinMayorInicio");
+    if (selectedClientsString === "") {
+      TopAlertsError("01", "El cliente no puede estar vacío");
+      return;
+    }
+    if (selectedServicioString === "") {
+      TopAlertsError("02", "El servicio no puede estar vacío");
       return;
     }
 
-    // EXPRESION
-    if (selectedServicioString === "" && selectedProyString === "") {
-    }
     if (
       selectedProyecto.length < 1 ||
       /^,(.*)/.test(selectedProyecto) ||
       /.*,,.*/.test(selectedProyecto) ||
       /[0]/.test(selectedProyecto)
     ) {
-      TopAlerts("01", "El proyecto no está seleccionado.");
+      TopAlertsError("03", "El proyecto no puede estar vacío");
       return;
     }
 
-    if (!fechaIni || !fechaFin || !tipoComparacion || !tipoCargo) {
-      TopAlerts("02", "Uno o más campos se encuentran vacíos o nulos.");
-      return; // Salir de la función si los campos no están llenos
+    if (cicloEvaluacion === "") {
+      TopAlertsError("04", "El ciclo de evaluación no puede estar vacío");
+      return;
+    }
+    if (fechaIni === "") {
+      TopAlertsError("05", "La fecha de inicio no puede estar vacía");
+      return;
+    }
+    if (fechaFin === "") {
+      TopAlertsError("06", "La fecha término no puede estar vacía");
+      return;
+    }
+    // Validación de fechas
+    if (
+      fechaIni !== "" &&
+      fechaFin !== "" &&
+      new Date(fechaFin) < new Date(fechaIni)
+    ) {
+      TopAlertsError(
+        "07",
+        "La fecha término no puede ser mayor a la de inicio"
+      );
+      return;
+    }
+
+    if (!tipoComparacion || tipoComparacion === "") {
+      TopAlertsError("08", "Seleccione un tipo de comparación (Año o Mes)");
+      return;
+    }
+
+    if (!tipoCargo || tipoCargo === "") {
+      TopAlertsError(
+        "09",
+        "Seleccione un tipo de cargo (Referente o Colaborador)"
+      );
+      return;
     }
 
     // Resetear la tabla
@@ -260,7 +277,7 @@ export default function ListadoCompProy() {
   const resetServices = () => {
     setSelectedServicio([]);
   };
-  
+
   useEffect(() => {
     obtenerCliente();
     obtenerProyecto();

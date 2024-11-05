@@ -133,18 +133,9 @@ const editarEDDEvalPregunta = ({
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
         TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarEDDEvalPregunta(datos);
+        cambiarEstado(false);
       });
     }
-  }
-
-  function actualizarEDDEvalPregunta(EDDEvalPregunta) {
-    const nuevosEDDEvalPregunta = listEDDEvalPregunta.map((c) =>
-      c.idEDDEvalPregunta === EDDEvalPregunta.idEDDEvalPregunta
-        ? EDDEvalPregunta
-        : c
-    );
-    setEDDEvalPregunta(nuevosEDDEvalPregunta);
   }
 
   useEffect(
@@ -233,7 +224,7 @@ const editarEDDEvalPregunta = ({
                 value={tipoResp || ""}
                 onChange={({ target }) => {
                   settipoResp(target.value);
-                  if (target.value === "T") {
+                  if (target.value === "T" || tipoResp === "TEXTO") {
                     setCompetenciaEnabled(false);
                   } else {
                     setCompetenciaEnabled(true);
@@ -254,8 +245,11 @@ const editarEDDEvalPregunta = ({
                 id="input_comp"
                 placeholder="Seleccione la Competencia"
                 onChange={({ target }) => setidEDDEvalCompetencia(target.value)}
-                disabled={!competenciaEnabled}
+                disabled={
+                  tipoResp === "T" || tipoResp === "TEXTO" ? true : false
+                }
               >
+                <option hidden>Desplegar lista</option>
                 {listEDDEvalCompetencia.map((valor) => (
                   <option
                     selected={

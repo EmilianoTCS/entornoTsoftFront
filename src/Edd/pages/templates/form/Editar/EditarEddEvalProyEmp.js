@@ -86,8 +86,11 @@ const EditarEddEvalProyEmp = ({
 
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idEDDEvalProyEmp, nombreTabla: nombreTabla };
+    console.log("data", data);
 
     SendDataService(url, operationUrl, data).then((response) => {
+      console.log("response", response);
+
       setResponseID(response);
       setidProyecto(response[0].idProyecto);
       setidEDDEvaluacion(response[0].idEDDEvaluacion);
@@ -141,12 +144,9 @@ const EditarEddEvalProyEmp = ({
       isActive: true,
     };
     SendDataService(url, operationUrl, data).then((response) => {
-      if (response[0].OUT_CODRESULT !== "00") {
-        TopAlertsError(response[0].OUT_CODRESULT, response[0].OUT_MJERESULT);
-      } else {
-        TopAlerts("successEdited");
-        actualizarEDDEvalProyEmp(EDDEvalProyEmp);
-      }
+      const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+      TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
+      cambiarEstado(false);
     });
   }
 

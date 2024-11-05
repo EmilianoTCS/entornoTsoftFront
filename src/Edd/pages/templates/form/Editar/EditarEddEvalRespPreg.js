@@ -124,7 +124,7 @@ const EditarEDDEvalRespPreg = ({
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
-            <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="input_EvalPregunta">Pregunta: </label>
               <select
                 className="form-control"
@@ -146,7 +146,7 @@ const EditarEDDEvalRespPreg = ({
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             <div>
               <label htmlFor="input_Orden">Orden:</label>
               <input

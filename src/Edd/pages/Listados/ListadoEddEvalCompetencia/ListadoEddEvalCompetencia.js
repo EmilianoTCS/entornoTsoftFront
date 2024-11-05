@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
-import { Navigate, Link } from "react-router-dom";
-import { useRoute } from "wouter";
+import { Table } from "react-bootstrap";
+import { Navigate } from "react-router-dom";
 
-import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
-import { BsFillKeyFill, BsFillTrashFill } from "react-icons/bs";
+import { BsFillTrashFill } from "react-icons/bs";
 
 import "../TablasStyles.css";
 import InsertarEddEvalCompetencia from "../../templates/form/Insertar/InsertarEddEvalCompetencia";
 import EditarEddEvalCompetencia from "../../templates/form/Editar/EditarEddEvalCompetencia";
 import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -43,17 +41,18 @@ export default function ListadoEddEvalCompetencia() {
   }
 
   function desactivar(ID) {
-    ConfirmAlert().then((response) => {
+    let text = "Esta acción no se puede deshacer";
+    ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
+        var url = "pages/desactivar/edd_desactivarCompetencia.php";
+        var operationUrl = "edd_desactivarCompetencia";
         var data = {
-          idRegistro: ID,
+          idCompetencia: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

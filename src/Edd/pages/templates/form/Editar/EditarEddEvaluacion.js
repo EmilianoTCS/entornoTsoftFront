@@ -188,7 +188,6 @@ const EditarEDDEvaluacion = ({
                 className="form-control"
                 name="Descripción"
                 id="Descripción"
-                maxLength="50"
                 onChange={({ target }) => setdescFormulario(target.value)}
                 required
               />

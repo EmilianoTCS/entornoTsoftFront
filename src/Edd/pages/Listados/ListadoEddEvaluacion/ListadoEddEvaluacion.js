@@ -9,6 +9,7 @@ import Header from "../../../../templates/Header/Header";
 import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillBook } from "react-icons/ai";
+import TopAlertsError from "../../../../templates/alerts/TopAlerts";
 
 import "../TablasStyles.css";
 import InsertarEDDEvaluacion from "../../templates/form/Insertar/InsertarEddEvaluacion";
@@ -54,17 +55,18 @@ export default function ListadoEDDEvaluacion() {
   }
 
   function desactivar(ID) {
-    ConfirmAlert().then((response) => {
+    let text = "Esta acción no se puede deshacer";
+    ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
+        var url = "pages/desactivar/edd_desactivarEvaluacion.php";
+        var operationUrl = "edd_desactivarEvaluacion";
         var data = {
-          idRegistro: ID,
+          idEDDEvaluacion: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          console.log(response);
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });

@@ -20,7 +20,7 @@ import EnviarCorreo from "./EnviarCorreo";
 import EnviarCorreoColab from "./EnviarCorreoColab";
 import EditarEddEvalProyEmp from "../../templates/form/Editar/EditarEddEvalProyEmp";
 import ConfirmAlert from "../../../../templates/alerts/ConfirmAlert";
-import TopAlerts from "../../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../../templates/alerts/TopAlerts";
 import Paginador from "../../../../templates/Paginador/Paginador";
 import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
@@ -62,7 +62,6 @@ export default function ListadoEDDEvalProyEmp() {
   const [listcicloEvaluacion, setlistcicloEvaluacion] = useState([""]);
 
   const [loadedData, setloadedData] = useState(false);
-
 
   function obtenerCicloEvaluacion() {
     const url = "pages/auxiliares/listadoCiclosEval.php";
@@ -115,17 +114,18 @@ export default function ListadoEDDEvalProyEmp() {
   }
 
   function desactivar(ID) {
-    ConfirmAlert().then((response) => {
+    let text = "Esta acción no se puede deshacer";
+    ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
+        var url = "pages/desactivar/edd_desactivarEDDEvalProyEmp.php";
+        var operationUrl = "edd_desactivarEDDEvalProyEmp";
         var data = {
-          idRegistro: ID,
+          idEDDEvalProyEmp: ID,
           usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
         };
         SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
+          const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+          TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         });
       }
     });
@@ -633,9 +633,7 @@ export default function ListadoEDDEvalProyEmp() {
                       {userData.nomRol === "administrador" ||
                       userData.nomRol === "people" ||
                       userData.nomRol === "gerencia" ? (
-                        EDDEvalProyEmp.evalRespondida ===
-                        "NO" ? 
-                        null : (
+                        EDDEvalProyEmp.evalRespondida === "NO" ? null : (
                           <Link
                             to={
                               EDDEvalProyEmp.nomEvaluacion !== "empty / vacio"
@@ -724,9 +722,7 @@ export default function ListadoEDDEvalProyEmp() {
                             </button>
                           </Link>
                         )
-                      ) : 
-
-                      null}
+                      ) : null}
 
                       {userData.nomRol === "administrador" ||
                       userData.nomRol === "people" ||
