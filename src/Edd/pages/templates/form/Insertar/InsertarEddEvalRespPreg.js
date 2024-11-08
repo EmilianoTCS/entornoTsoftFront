@@ -4,7 +4,7 @@ import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
 import getDataService from "../../../../../services/GetDataService";
 
-import TopAlerts from "../../../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -83,7 +83,7 @@ const InsertarEDDEvalRespPreg = ({
       };
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         cambiarEstado(false)
         // actualizarEDDEvalRespPreg(datos);
       });

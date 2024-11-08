@@ -172,7 +172,7 @@ export default function ListadoCompProy() {
         setEDDCompProy(response);
         setNuevosDatos(calcularPromedioCompetenciasPorCiclo(response));
         setNombreArchivoCSV(
-          "list_comp_proy_" + response[0].nomProyecto.substr(0, 10) + "_" + date
+          "Comp_proy_" + response[0].nomProyecto.substr(0, 5) + "_" + date
         );
       }
     });

@@ -25,9 +25,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 export default function IHH_ListadoImpugnacionEmp() {
-
   // Permite cargar las horas de un empleado hacia un proyecto
-
 
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
   const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
@@ -132,94 +130,94 @@ export default function IHH_ListadoImpugnacionEmp() {
       field: "nomEmpleado",
       colId: "nomEmpleado",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
-      cellRenderer: function (params) {
-        return (
-          <select
-            onChange={(e) => {
-              params.data.idEmpleado === null
-                ? setSelectInputs({ ...datos, idEmpleado: e.target.value })
-                : // insertarImpugnacionEmp({
-                  //     ...params,
-                  //     idEmpleado: e.target.value,
-                  //   })
-                  editarImpugnacionEmp({
-                    ...params,
-                    idEmpleado: e.target.value,
-                    field: "nomEmpleado",
-                  });
-            }}
-            inputProps={{ "aria-label": "Without label" }}
-            defaultValue={
-              params.data.idEmpleado || selectInputs.idEmpleado || ""
-            }
-            // className="ag-theme-material"
-            className="select-hover-ag-grid"
-            style={{ width: "100%", border: "none" }}
-          >
-            <option value="" disabled>
-              Selecciona un tipo de empleado
-            </option>
-            {auxList.empleados.map((item) => (
-              <option
-                key={item.idEmpleado}
-                selected={
-                  params.data.idEmpleado === item.idEmpleado ? true : false
-                }
-                value={item.idEmpleado}
-              >
-                {item.nomEmpleado}
-              </option>
-            ))}
-          </select>
-        );
-      },
+      // cellRenderer: function (params) {
+      //   return (
+      //     <select
+      //       onChange={(e) => {
+      //         params.data.idEmpleado === null
+      //           ? setSelectInputs({ ...datos, idEmpleado: e.target.value })
+      //           : // insertarImpugnacionEmp({
+      //             //     ...params,
+      //             //     idEmpleado: e.target.value,
+      //             //   })
+      //             editarImpugnacionEmp({
+      //               ...params,
+      //               idEmpleado: e.target.value,
+      //               field: "nomEmpleado",
+      //             });
+      //       }}
+      //       inputProps={{ "aria-label": "Without label" }}
+      //       defaultValue={
+      //         params.data.idEmpleado || selectInputs.idEmpleado || ""
+      //       }
+      //       // className="ag-theme-material"
+      //       className="select-hover-ag-grid"
+      //       style={{ width: "100%", border: "none" }}
+      //     >
+      //       <option value="" disabled>
+      //         Selecciona un tipo de empleado
+      //       </option>
+      //       {auxList.empleados.map((item) => (
+      //         <option
+      //           key={item.idEmpleado}
+      //           selected={
+      //             params.data.idEmpleado === item.idEmpleado ? true : false
+      //           }
+      //           value={item.idEmpleado}
+      //         >
+      //           {item.nomEmpleado}
+      //         </option>
+      //       ))}
+      //     </select>
+      //   );
+      // },
     },
     {
       headerName: "Nombre elemento",
       field: "nomElemento",
       colId: "nomElemento",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
-      cellRenderer: function (params) {
-        return (
-          <select
-            onChange={(e) => {
-              params.data.idElemento === null
-                ? selectInputs({ ...datos, idElemento: e.target.value })
-                : // insertarImpugnacionEmp({
-                  //     ...params,
-                  //     idElemento: e.target.value,
-                  //   })
-                  editarImpugnacionEmp({
-                    ...params,
-                    idElemento: e.target.value,
-                    field: "nomElemento",
-                  });
-            }}
-            inputProps={{ "aria-label": "Without label" }}
-            defaultValue={
-              params.data.idElemento || selectInputs.idElemento || ""
-            }
-            // className="ag-theme-material"
-            className="select-hover-ag-grid"
-            style={{ width: "100%", border: "none" }}
-          >
-            <option value="" disabled>
-              Selecciona un elemento
-            </option>
-            {auxList.elementos.map((item) => (
-              <option
-                key={item.idElementoImp}
-                selected={
-                  params.data.idElemento === item.idElementoImp ? true : false
-                }
-                value={item.idElementoImp}
-              >
-                {item.nomElemento}
-              </option>
-            ))}
-          </select>
-        );
-      },
+      // cellRenderer: function (params) {
+      //   return (
+      //     <select
+      //       onChange={(e) => {
+      //         params.data.idElemento === null
+      //           ? selectInputs({ ...datos, idElemento: e.target.value })
+      //           : // insertarImpugnacionEmp({
+      //             //     ...params,
+      //             //     idElemento: e.target.value,
+      //             //   })
+      //             editarImpugnacionEmp({
+      //               ...params,
+      //               idElemento: e.target.value,
+      //               field: "nomElemento",
+      //             });
+      //       }}
+      //       inputProps={{ "aria-label": "Without label" }}
+      //       defaultValue={
+      //         params.data.idElemento || selectInputs.idElemento || ""
+      //       }
+      //       // className="ag-theme-material"
+      //       className="select-hover-ag-grid"
+      //       style={{ width: "100%", border: "none" }}
+      //     >
+      //       <option value="" disabled>
+      //         Selecciona un elemento
+      //       </option>
+      //       {auxList.elementos.map((item) => (
+      //         <option
+      //           key={item.idElementoImp}
+      //           selected={
+      //             params.data.idElemento === item.idElementoImp ? true : false
+      //           }
+      //           value={item.idElementoImp}
+      //         >
+      //           {item.nomElemento}
+      //         </option>
+      //       ))}
+      //     </select>
+      //   );
+      // },
     },
     {
       headerName: "Nombre período",
@@ -227,45 +225,45 @@ export default function IHH_ListadoImpugnacionEmp() {
       colId: "nomPeriodo",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
       width: 150,
-      cellRenderer: function (params) {
-        return (
-          <select
-            onChange={(e) => {
-              params.data.idPeriodo === null
-                ? setSelectInputs({ ...datos, idPeriodo: e.target.value })
-                : // insertarImpugnacionEmp({
-                  //     ...params,
-                  //     idPeriodo: e.target.value,
-                  //   })
-                  editarImpugnacionEmp({
-                    ...params,
-                    idPeriodo: e.target.value,
-                    field: "nomPeriodo",
-                  });
-            }}
-            inputProps={{ "aria-label": "Without label" }}
-            defaultValue={params.data.idPeriodo || selectInputs.idPeriodo || ""}
-            // className="ag-theme-material"
-            className="select-hover-ag-grid"
-            style={{ width: "100%", border: "none" }}
-          >
-            <option value="" disabled>
-              Selecciona un periodo
-            </option>
-            {auxList.periodos.map((item) => (
-              <option
-                key={item.idPeriodo}
-                selected={
-                  params.data.idPeriodo === item.idPeriodo ? true : false
-                }
-                value={item.idPeriodo}
-              >
-                {item.nomPeriodo}
-              </option>
-            ))}
-          </select>
-        );
-      },
+      // cellRenderer: function (params) {
+      //   return (
+      //     <select
+      //       onChange={(e) => {
+      //         params.data.idPeriodo === null
+      //           ? setSelectInputs({ ...datos, idPeriodo: e.target.value })
+      //           : // insertarImpugnacionEmp({
+      //             //     ...params,
+      //             //     idPeriodo: e.target.value,
+      //             //   })
+      //             editarImpugnacionEmp({
+      //               ...params,
+      //               idPeriodo: e.target.value,
+      //               field: "nomPeriodo",
+      //             });
+      //       }}
+      //       inputProps={{ "aria-label": "Without label" }}
+      //       defaultValue={params.data.idPeriodo || selectInputs.idPeriodo || ""}
+      //       // className="ag-theme-material"
+      //       className="select-hover-ag-grid"
+      //       style={{ width: "100%", border: "none" }}
+      //     >
+      //       <option value="" disabled>
+      //         Selecciona un periodo
+      //       </option>
+      //       {auxList.periodos.map((item) => (
+      //         <option
+      //           key={item.idPeriodo}
+      //           selected={
+      //             params.data.idPeriodo === item.idPeriodo ? true : false
+      //           }
+      //           value={item.idPeriodo}
+      //         >
+      //           {item.nomPeriodo}
+      //         </option>
+      //       ))}
+      //     </select>
+      //   );
+      // },
     },
     {
       headerName: "Cant. horas \n período",
@@ -354,14 +352,14 @@ export default function IHH_ListadoImpugnacionEmp() {
                 <BsFillChatDotsFill id="icons" />
               </Button>
             </Link>
-            <Button
+            {/* <Button
               data-title="Desactivar impugnacion"
               id="OperationBtns"
               onClick={() => desactivar(params.data.idImpugnacionEmp)}
               style={{ color: "black" }}
             >
               <BsFillTrashFill id="icons" />
-            </Button>
+            </Button> */}
           </div>
         );
       },
@@ -380,154 +378,154 @@ export default function IHH_ListadoImpugnacionEmp() {
 
   //----------------------- Operaciones
 
-  function editarImpugnacionEmp(params) {
-    if (
-      params.data.idEmpleado === null ||
-      params.data.idElemento === null ||
-      params.data.idPeriodo === null ||
-      params.data.cantHorasPeriodo === null ||
-      params.data.cantHorasExtra === null
-    ) {
-      TopAlerts(
-        "02",
-        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
-      );
-      location.reload();
-    } else {
-      switch (params.field) {
-        case "nomEmpleado":
-          var data = {
-            idImpugnacionEmp: params.data.idImpugnacionEmp,
-            idEmpleado: params.idEmpleado,
-            idElemento: params.data.idElemento,
-            idPeriodo: params.data.idPeriodo,
-            idAcop: params.data.idAcop,
-            cantHorasPeriodo: params.data.cantHorasPeriodo,
-            cantHorasExtra: params.data.cantHorasExtra,
-            factor: params.data.factor,
-            isActive: 1,
-            usuarioCreacion: userData.usuario,
-          };
-          break;
-        case "nomElemento":
-          var data = {
-            idImpugnacionEmp: params.data.idImpugnacionEmp,
-            idEmpleado: params.data.idEmpleado,
-            idElemento: params.idElemento,
-            idPeriodo: params.data.idPeriodo,
-            idAcop: params.data.idAcop,
-            cantHorasPeriodo: params.data.cantHorasPeriodo,
-            cantHorasExtra: params.data.cantHorasExtra,
-            factor: params.data.factor,
-            isActive: 1,
-            usuarioCreacion: userData.usuario,
-          };
-          break;
-        case "nomPeriodo":
-          var data = {
-            idImpugnacionEmp: params.data.idImpugnacionEmp,
-            idEmpleado: params.data.idEmpleado,
-            idElemento: params.data.idElemento,
-            idPeriodo: params.idPeriodo,
-            idAcop: params.data.idAcop,
-            cantHorasPeriodo: params.data.cantHorasPeriodo,
-            cantHorasExtra: params.data.cantHorasExtra,
-            factor: params.data.factor,
-            isActive: 1,
-            usuarioCreacion: userData.usuario,
-          };
-          break;
-        default:
-          break;
-      }
-      const url = "pages/editar/ihh_editarImpugnacionEmp.php";
-      const operationUrl = "ihh_editarImpugnacionEmp";
-      SendDataService(url, operationUrl, data).then((response) => {
-        const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarRegistros(datos);
-      });
-    }
-  }
+  // function editarImpugnacionEmp(params) {
+  //   if (
+  //     params.data.idEmpleado === null ||
+  //     params.data.idElemento === null ||
+  //     params.data.idPeriodo === null ||
+  //     params.data.cantHorasPeriodo === null ||
+  //     params.data.cantHorasExtra === null
+  //   ) {
+  //     TopAlerts(
+  //       "02",
+  //       "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
+  //     );
+  //     location.reload();
+  //   } else {
+  //     switch (params.field) {
+  //       case "nomEmpleado":
+  //         var data = {
+  //           idImpugnacionEmp: params.data.idImpugnacionEmp,
+  //           idEmpleado: params.idEmpleado,
+  //           idElemento: params.data.idElemento,
+  //           idPeriodo: params.data.idPeriodo,
+  //           idAcop: params.data.idAcop,
+  //           cantHorasPeriodo: params.data.cantHorasPeriodo,
+  //           cantHorasExtra: params.data.cantHorasExtra,
+  //           factor: params.data.factor,
+  //           isActive: 1,
+  //           usuarioCreacion: userData.usuario,
+  //         };
+  //         break;
+  //       case "nomElemento":
+  //         var data = {
+  //           idImpugnacionEmp: params.data.idImpugnacionEmp,
+  //           idEmpleado: params.data.idEmpleado,
+  //           idElemento: params.idElemento,
+  //           idPeriodo: params.data.idPeriodo,
+  //           idAcop: params.data.idAcop,
+  //           cantHorasPeriodo: params.data.cantHorasPeriodo,
+  //           cantHorasExtra: params.data.cantHorasExtra,
+  //           factor: params.data.factor,
+  //           isActive: 1,
+  //           usuarioCreacion: userData.usuario,
+  //         };
+  //         break;
+  //       case "nomPeriodo":
+  //         var data = {
+  //           idImpugnacionEmp: params.data.idImpugnacionEmp,
+  //           idEmpleado: params.data.idEmpleado,
+  //           idElemento: params.data.idElemento,
+  //           idPeriodo: params.idPeriodo,
+  //           idAcop: params.data.idAcop,
+  //           cantHorasPeriodo: params.data.cantHorasPeriodo,
+  //           cantHorasExtra: params.data.cantHorasExtra,
+  //           factor: params.data.factor,
+  //           isActive: 1,
+  //           usuarioCreacion: userData.usuario,
+  //         };
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //     const url = "pages/editar/ihh_editarImpugnacionEmp.php";
+  //     const operationUrl = "ihh_editarImpugnacionEmp";
+  //     SendDataService(url, operationUrl, data).then((response) => {
+  //       const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+  //       TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+  //       actualizarRegistros(datos);
+  //     });
+  //   }
+  // }
 
-  function actualizarRegistros(registro) {
-    const nuevosRegistros = mainList.impugnacionEmp.map((item) => {
-      return item.idImpugnacionEmp === registro.idImpugnacionEmp
-        ? registro
-        : item;
-    });
+  // function actualizarRegistros(registro) {
+  //   const nuevosRegistros = mainList.impugnacionEmp.map((item) => {
+  //     return item.idImpugnacionEmp === registro.idImpugnacionEmp
+  //       ? registro
+  //       : item;
+  //   });
 
-    setMainList({ impugnacionEmp: nuevosRegistros });
-    gridRef.current.api.redrawRows();
-  }
+  //   setMainList({ impugnacionEmp: nuevosRegistros });
+  //   gridRef.current.api.redrawRows();
+  // }
 
-  const addNewRow = () => {
-    const newRow = {
-      idImpugnacionEmp: null,
-      cantHorasPeriodo: 0,
-      cantHorasExtra: 0,
-    }; // Crea una nueva fila vacía
-    setMainList({ impugnacionEmp: [newRow, ...mainList.impugnacionEmp] }); // Agrega la nueva fila al estado
-    setTimeout(() => {
-      gridRef.current.api.ensureIndexVisible(1); // Asegura que la nueva fila sea visible
-    }, 0);
-  };
+  // const addNewRow = () => {
+  //   const newRow = {
+  //     idImpugnacionEmp: null,
+  //     cantHorasPeriodo: 0,
+  //     cantHorasExtra: 0,
+  //   }; // Crea una nueva fila vacía
+  //   setMainList({ impugnacionEmp: [newRow, ...mainList.impugnacionEmp] }); // Agrega la nueva fila al estado
+  //   setTimeout(() => {
+  //     gridRef.current.api.ensureIndexVisible(1); // Asegura que la nueva fila sea visible
+  //   }, 0);
+  // };
 
-  function insertarImpugnacionEmp(params) {
-    const url = "pages/insertar/ihh_insertarElementoImp.php";
-    const operationUrl = "ihh_insertarElementoImp";
-    var data = {
-      idEmpleado: selectInputs.idElemento,
-      idElemento: selectInputs.idElemento,
-      idPeriodo: selectInputs.idPeriodo,
-      idAcop: params.data.idAcop,
-      cantHorasExtra: params.data.cantHorasExtra,
-      cantHorasPeriodo: params.data.cantHorasPeriodo,
-      factor: params.data.factor,
-      isActive: 1,
-      usuarioCreacion: userData.usuario,
-    };
-    if (
-      selectInputs.idEmpleado === null &&
-      selectInputs.idElemento === null &&
-      selectInputs.idPeriodo === null &&
-      idAcop === null &&
-      params.data.cantHorasExtra=== null &&
-      params.data.cantHorasPeriodo === null &&
-      params.data.factor === null
-    ) {
-      TopAlerts(
-        "02",
-        "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
-      );
-    } else {
+  // function insertarImpugnacionEmp(params) {
+  //   const url = "pages/insertar/ihh_insertarElementoImp.php";
+  //   const operationUrl = "ihh_insertarElementoImp";
+  //   var data = {
+  //     idEmpleado: selectInputs.idElemento,
+  //     idElemento: selectInputs.idElemento,
+  //     idPeriodo: selectInputs.idPeriodo,
+  //     idAcop: params.data.idAcop,
+  //     cantHorasExtra: params.data.cantHorasExtra,
+  //     cantHorasPeriodo: params.data.cantHorasPeriodo,
+  //     factor: params.data.factor,
+  //     isActive: 1,
+  //     usuarioCreacion: userData.usuario,
+  //   };
+  //   if (
+  //     selectInputs.idEmpleado === null &&
+  //     selectInputs.idElemento === null &&
+  //     selectInputs.idPeriodo === null &&
+  //     idAcop === null &&
+  //     params.data.cantHorasExtra=== null &&
+  //     params.data.cantHorasPeriodo === null &&
+  //     params.data.factor === null
+  //   ) {
+  //     TopAlerts(
+  //       "02",
+  //       "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
+  //     );
+  //   } else {
 
-      console.log(data);
-      // SendDataService(url, operationUrl, data).then((response) => {
-      //   const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-      //   TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
-      //   actualizarRegistros(datos);
-      //   location.reload();
-      // });
-    }
-  }
+  //     console.log(data);
+  //     // SendDataService(url, operationUrl, data).then((response) => {
+  //     //   const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
+  //     //   TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+  //     //   actualizarRegistros(datos);
+  //     //   location.reload();
+  //     // });
+  //   }
+  // }
 
-  function desactivar(ID) {
-    ConfirmAlert().then((response) => {
-      if (response === true) {
-        var url = "pages/cambiarEstado/cambiarEstado.php";
-        var operationUrl = "cambiarEstado";
-        var data = {
-          idRegistro: ID,
-          usuarioModificacion: userData.usuario,
-          nombreTabla: nombreTabla,
-        };
-        SendDataService(url, operationUrl, data).then((response) => {
-          TopAlerts("successEdited");
-        });
-      }
-    });
-  }
+  // function desactivar(ID) {
+  //   ConfirmAlert().then((response) => {
+  //     if (response === true) {
+  //       var url = "pages/cambiarEstado/cambiarEstado.php";
+  //       var operationUrl = "cambiarEstado";
+  //       var data = {
+  //         idRegistro: ID,
+  //         usuarioModificacion: userData.usuario,
+  //         nombreTabla: nombreTabla,
+  //       };
+  //       SendDataService(url, operationUrl, data).then((response) => {
+  //         TopAlerts("successEdited");
+  //       });
+  //     }
+  //   });
+  // }
 
   //-------------- useEffect y render
 
@@ -558,9 +556,9 @@ export default function IHH_ListadoImpugnacionEmp() {
           <br></br>
 
           <div id="selectPaginador">
-            <Button id="btn" onClick={addNewRow}>
+            {/* <Button id="btn" onClick={addNewRow}>
               Agregar Nueva Fila
-            </Button>
+            </Button> */}
             <div className="form-group" id="btn2">
               <label htmlFor="input_Empleados">Empleado: </label>
               <select
@@ -654,11 +652,11 @@ export default function IHH_ListadoImpugnacionEmp() {
               getRowId={(params) => params.data.idImpugnacionEmp}
               suppressRowClickSelection={true}
               suppressCellSelection={true}
-              onRowValueChanged={(params) => {
-                params.data.idImpugnacionEmp === null
-                  ? insertarImpugnacionEmp(params)
-                  : editarImpugnacionEmp(params);
-              }}
+              // onRowValueChanged={(params) => {
+              //   params.data.idImpugnacionEmp === null
+              //     ? insertarImpugnacionEmp(params)
+              //     : editarImpugnacionEmp(params);
+              // }}
             />
           </div>
         </div>

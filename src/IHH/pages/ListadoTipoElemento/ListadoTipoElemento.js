@@ -144,7 +144,7 @@ export default function IHH_ListadoTipoElemento() {
         "02",
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
-      location.reload();
+      Location.reload();
     } else {
       var data = {
         idTipoElemento: params.data.idTipoElemento,

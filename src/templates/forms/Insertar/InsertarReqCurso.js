@@ -4,7 +4,7 @@ import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
 
-import TopAlerts from "../../alerts/TopAlerts";
+import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
-import getDataService from "../../../../../services/GetDataService";
-
-import TopAlerts from "../../../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -48,7 +46,7 @@ const InsertarEddEvalCompetencia = ({
       };
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         cambiarEstado(false)
         // actualizarEddEvalCompetencia(datos);
       });

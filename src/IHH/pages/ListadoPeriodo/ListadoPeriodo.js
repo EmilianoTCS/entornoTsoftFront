@@ -309,7 +309,6 @@ export default function IHH_ListadoPeriodo() {
   }
 
   function desactivar(params) {
-    console.log(params);
     if (params.data.idPeriodo) {
       let text = "Esta acción no se puede deshacer";
       ConfirmAlert(text).then((response) => {
@@ -317,7 +316,7 @@ export default function IHH_ListadoPeriodo() {
           var url = "pages/desactivar/ihh_desactivarPeriodo.php";
           var operationUrl = "ihh_desactivarPeriodo";
           var data = {
-            idPeriodo: ID,
+            idPeriodo: params.data.idPeriodo,
             usuarioModificacion: userData.usuario,
           };
           SendDataService(url, operationUrl, data).then((response) => {

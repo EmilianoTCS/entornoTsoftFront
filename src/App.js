@@ -11,10 +11,8 @@ import Login from "./pages/login/login";
 import ListadoEmpleados from "./pages/Listados/ListadoEmpleados/ListadoEmpleados";
 import ListadoRamos from "./pages/Listados/ListadoRamos/ListadoRamos";
 import ListadoClientes from "./pages/Listados/ListadoClientes/ListadoClientes";
-import ListadoClientes_test_agGrid from "./pages/Listados/ListadoClientes/ListadoClientes_test_agGrid.js";
 import ListadoSesiones from "./pages/Listados/ListadoSesiones/ListadoSesiones.js";
 import ListadoServicios from "./pages/Listados/ListadoServicios/ListadoServicios";
-// import ListadoAlumnos from "./pages/Listados/ListadoAlumnos/ListadoAlumnos";
 import ListadoCursos from "./pages/Listados/ListadoCursos/ListadoCursos";
 import ListadoContacto from "./pages/Listados/ListadoContacto/ListadoContacto";
 import ListadoCursoAlumnos from "./pages/Listados/ListadoCursoAlumno/ListadoCursoAlumno";
@@ -65,8 +63,6 @@ import IHH_ListadoNotaImpugnacion from "./IHH/pages/ListadoNotaImpugnacion/ihh_L
 import IHH_ListadoPeriodo from "./IHH/pages/ListadoPeriodo/ListadoPeriodo.js";
 import IHH_ListadoTipoElemento from "./IHH/pages/ListadoTipoElemento/ListadoTipoElemento.js";
 import IHH_ListadoTipoPeriodo from "./IHH/pages/ListadoTipoPeriodo/ListadoTipoPeriodo.js";
-import ListadoClientes_test_dataGrid from "./pages/Listados/ListadoClientes/ListadoClientes_test_dataGrid.js";
-import ListadoClientes_test_mui_datagrid from "./pages/Listados/ListadoClientes/ListadoClientes_test_mui_datagrid.js";
 import SimuladorCostos from "./IHH/pages/SimuladorCostos/SimuladorCostos.js";
 import DetalleProyectos from "./IHH/pages/DetalleProyectos/ihh_detalleProyectos.js";
 import ListadoImpEmpProy from "./IHH/pages/ListadoImpEmpProy/ihh_ListadoImpEmpProy.js";
@@ -114,18 +110,6 @@ function App() {
             <Route
               element={<ListadoClientes />}
               path="/listadoClientes/:params"
-            ></Route>
-            <Route
-              element={<ListadoClientes_test_agGrid />}
-              path="/listadoClientes_test_agGrid/:params"
-            ></Route>
-            <Route
-              element={<ListadoClientes_test_dataGrid />}
-              path="/listadoClientes_test_dataGrid/:params"
-            ></Route>
-            <Route
-              element={<ListadoClientes_test_mui_datagrid />}
-              path="/listadoClientes_test_mui_datagrid/:params"
             ></Route>
             <Route
               element={<ListadoSesiones />}

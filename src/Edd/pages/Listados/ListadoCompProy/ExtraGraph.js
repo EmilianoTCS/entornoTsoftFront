@@ -18,9 +18,8 @@ export default function ExtraGraph({
   cicloEvaluacion,
   setActiveGraph,
 }) {
-
   //Resumen: este muestra toda la info de un ciclo de evaluación en específico, mostrando los "radares" y comentarios
-  
+
   const [listResumenEval, setListResumenEval] = useState("");
   const [listCompetencias, setListCompetencias] = useState("");
   const [listConfigCompColorFlechas, setListConfigCompColorFlechas] =
@@ -39,6 +38,8 @@ export default function ExtraGraph({
   const [loadedDataLeyenda, setLoadedDataLeyenda] = useState(false);
   const [loadedDataTiempoPromedio, setLoadedDataTiempoPromedio] =
     useState(false);
+  const ref = useRef();
+  const ref1 = useRef();
 
   const [listComentEval, setListComentEval] = useState("");
   const [loadedDataComentEval, setLoadedDataComentEval] = useState(false);
@@ -370,18 +371,16 @@ export default function ExtraGraph({
 
           tableRows.push(
             <>
-            <br></br>
-            <td style={{whiteSpace: "nowrap"}} > 
+              <br></br>
+              <td style={{ whiteSpace: "nowrap" }}>
+                &nbsp;
+                <b>{matchingLey.datoVisible}</b>
+              </td>
               &nbsp;
-              <b>{matchingLey.datoVisible}</b>
-              
-            </td>
-            &nbsp;
-
-            <td className="linea">
-              <td>{carita_gral}</td>
-            </td>
-          </>
+              <td className="linea">
+                <td>{carita_gral}</td>
+              </td>
+            </>
           );
         }
       });
@@ -497,7 +496,6 @@ export default function ExtraGraph({
         const color = ProgressColorInfo(suma);
 
         // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
-        const ref = useRef();
 
         useEffect(() => {
           if (ref.current) {
@@ -544,7 +542,6 @@ export default function ExtraGraph({
       );
 
       // PODER CAMBIAR DE COLOR LA BARRA DINAMICO
-      const ref1 = useRef();
 
       useEffect(() => {
         if (ref1.current) {
@@ -613,7 +610,7 @@ export default function ExtraGraph({
               width: "300px",
               margin: "5px", // Espacio entre tablas
               border: "1px solid lightgray",
-              borderRadius: "20px"
+              borderRadius: "20px",
             }}
           >
             <thead>
@@ -700,7 +697,7 @@ export default function ExtraGraph({
       render.push(
         <Card className="comentariosExtraGraph" key={index}>
           <Card.Body>
-            <Card.Title style={{fontSize: "10pt"}}>
+            <Card.Title style={{ fontSize: "10pt" }}>
               <table>
                 <tbody>
                   <tr>
@@ -711,7 +708,7 @@ export default function ExtraGraph({
                       {item.respuesta}
                     </td>
                   </tr>
-                  <tr >
+                  <tr>
                     <td className="nomEvaluador">{item.nomEvaluador}</td>
                   </tr>
                 </tbody>
@@ -799,19 +796,19 @@ export default function ExtraGraph({
         <CompetenciasResumen></CompetenciasResumen>
       </div>
       <div>
-      <div
-        style={{
-          backgroundColor: "white",
-          borderRadius: "10px",
-          width: "800px",
-        }}
-      >
-        <strong>
-          <p style={{ textAlign: "left", paddingLeft: "10px" }}>
-            COMENTARIOS ADICIONALES
-          </p>
-        </strong>
-      </div>
+        <div
+          style={{
+            backgroundColor: "white",
+            borderRadius: "10px",
+            width: "800px",
+          }}
+        >
+          <strong>
+            <p style={{ textAlign: "left", paddingLeft: "10px" }}>
+              COMENTARIOS ADICIONALES
+            </p>
+          </strong>
+        </div>
         <ComentariosResumen />
       </div>
       <button

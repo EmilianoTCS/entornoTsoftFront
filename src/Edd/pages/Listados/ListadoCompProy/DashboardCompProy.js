@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
-
+import ExtraGraph from "./ExtraGraph";
+import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
 import { Navigate } from "react-router-dom";
 import { useRoute } from "wouter";
 import "../TablasStyles.css";
 import "../ListadoCompProy/CompProy.css";
 import SendDataService from "../../../../services/SendDataService";
 import Header from "../../../../templates/Header/Header";
-
+import { Bar } from "react-chartjs-2";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 import ExportPDF from "../../../../templates/exports/exportPDF";
 import "../BtnInsertar.css";
 
 import ProgressBar from "react-bootstrap/ProgressBar";
-
-// GRAFICO LINEAS
-import { Bar } from "react-chartjs-2";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -31,8 +27,12 @@ import {
   Filler,
   ArcElement,
 } from "chart.js";
-import ExtraGraph from "./ExtraGraph";
-import AuthorizationError from "../../../../templates/alerts/AuthorizationErrorAlert";
+
+// GRAFICO LINEAS
+
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 
 ChartJS.register(
   CategoryScale,

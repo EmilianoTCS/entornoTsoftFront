@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import "../Insertar/Insertar.css";
 import SendDataService from "../../../../../services/SendDataService";
 import getDataService from "../../../../../services/GetDataService";
-import TopAlerts from "../../../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-const editarEDDEvalPregunta = ({
+const EditarEDDEvalPregunta = ({
   isActiveEditEDDEvalPregunta,
   cambiarEstado,
   idEDDEvalPregunta,
@@ -79,20 +79,30 @@ const editarEDDEvalPregunta = ({
     if (nomPregunta.trim() === "") {
       TopAlertsError("01", "El nombre de la pregunta no debe estar vacío");
       return true;
-    } else if (ordenPregunta.trim() === "") {
-      TopAlertsError("02", "El orden de la pregunta no debe estar vacío");
+    }
+
+    if (tipoResp === "A" && idEDDEvalCompetencia < 1) {
+      TopAlertsError("02", "La competencia no puede estar vacía");
       return true;
-    } else if (tipoResp.trim() === "") {
+    }
+
+    if (ordenPregunta.trim() === "") {
+      TopAlertsError("03", "El orden de la pregunta no debe estar vacío");
+      return true;
+    }
+    if (tipoResp.trim() === "") {
       TopAlertsError(
-        "03",
+        "04",
         "El tipo de respuesta de la pregunta no debe estar vacío"
       );
       return true;
-    } else if (preguntaObligatoria.trim() === "") {
+    }
+    if (preguntaObligatoria.trim() === "") {
       TopAlertsError(
-        "04",
+        "05",
         "El campo pregunta obligatoria no debe no debe estar vacío"
       );
+
       return true;
     } else {
       return false;
@@ -101,16 +111,15 @@ const editarEDDEvalPregunta = ({
   function SendData(e) {
     e.preventDefault();
     const errores = validaciones();
+
+    var url = "pages/editar/editarEddEvalPregunta.php";
+    var operationUrl = "editarEddEvalPregunta";
+
+    // if (tipoResp === "T") {
+    //   setidEDDEvalCompetencia(0);
+    // }
+
     if (!errores) {
-      var url = "pages/editar/editarEddEvalPregunta.php";
-      var operationUrl = "editarEddEvalPregunta";
-
-      let competenciaValue = idEDDEvalCompetencia;
-      if (tipoResp === "T") {
-        // Si el tipo de respuesta es 'TEXTO', establece el valor de competencia en null
-        competenciaValue = "0";
-      }
-
       var data = {
         usuarioModificacion: userData.usuario,
         idEDDEvalPregunta: idEDDEvalPregunta,
@@ -123,16 +132,17 @@ const editarEDDEvalPregunta = ({
           preguntaObligatoria === ""
             ? responseID[0].preguntaObligatoria
             : preguntaObligatoria,
-        idEDDEvalCompetencia: competenciaValue,
+        idEDDEvalCompetencia: tipoResp === "T" ? 0 : idEDDEvalCompetencia,
         idEDDEvaluacion:
           idEDDEvaluacion === ""
             ? responseID[0].idEDDEvaluacion
             : idEDDEvaluacion,
         isActive: true,
       };
+
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         cambiarEstado(false);
       });
     }
@@ -296,4 +306,4 @@ const editarEDDEvalPregunta = ({
   );
 };
 
-export default editarEDDEvalPregunta;
+export default EditarEDDEvalPregunta;

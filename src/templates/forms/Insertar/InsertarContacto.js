@@ -43,7 +43,8 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
     const regexInvalidoNombre = /[^a-zA-Z\sáéíóúÁÉÍÓÚñÑ]/;
     const regexTelefono = /^\+?[\d\s\-\(\)]+$/;
     const regexCorreo =
-      /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  
 
     if (nomContacto.trim() === "") {
       TopAlertsError("01", "El nombre del contacto no puede estar vacío");
@@ -62,7 +63,7 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
       return true;
     }
 
-    if (regexCorreo.test(correoContacto)) {
+    if (!regexCorreo.test(correoContacto)) {
       TopAlertsError("04", "El correo del contacto es inválido");
       return true;
     }

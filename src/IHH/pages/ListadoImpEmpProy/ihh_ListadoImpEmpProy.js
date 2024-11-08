@@ -459,16 +459,16 @@ export default function ListadoImpEmpProy() {
     return totalSum;
   }
 
-  const ErrorMessage = () => {
-    if (datosResumen[0].presupuestoAcumulado - sumTotal() < 0)
-      return (
-        <Alert variant="danger" style={{ fontSize: "12pt", width: "400px" }}>
-          <Alert.Heading>
-            El presupuesto mensual está siendo excedido.
-          </Alert.Heading>
-        </Alert>
-      );
-  };
+  // const ErrorMessage = () => {
+  //   if (datosResumen[0].presupuestoAcumulado - sumTotal() < 0)
+  //     return (
+  //       <Alert variant="danger" style={{ fontSize: "12pt", width: "400px" }}>
+  //         <Alert.Heading>
+  //           El presupuesto mensual está siendo excedido.
+  //         </Alert.Heading>
+  //       </Alert>
+  //     );
+  // };
 
   //Enviar datos
   function SendData() {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Table, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
 import Spinner from "../../../templates/spinner/spinner";
 
@@ -7,13 +7,9 @@ import SendDataService from "../../../services/SendDataService";
 import Header from "../../../templates/Header/Header";
 import Paginador from "../../../templates/Paginador/Paginador";
 import "../../../Edd/pages/Listados/TablasStyles.css";
-import { RiEditBoxFill } from "react-icons/ri";
-import { BsFillTrashFill } from "react-icons/bs";
 import getDataService from "../../../services/GetDataService";
-import InsertarNotaImpugnacion from "../../forms/insertar/insertarNotaImpugnacion";
-import EditarNotaImpugnacion from "../../forms/editar/EditarNotaImpugnacion";
 
-import TopAlerts from "../../../templates/alerts/TopAlerts";
+import TopAlertsError from "../../../templates/alerts/TopAlerts";
 
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
@@ -79,78 +75,78 @@ export default function IHH_ListadoNotaImpugnacion() {
       headerName: "Impugnación - empleado",
       field: "idImpugnacionEmp",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
-      cellRenderer: function (params) {
-        return (
-          <select
-            onChange={(e) => {
-              params.data.idNotaImpugnacion === null
-                ? insertarAcop({ ...params, idImpugnacionEmp: e.target.value })
-                : editarAcop({
-                    ...params,
-                    field: "idImpugnacionEmp",
-                    idImpugnacionEmp: e.target.value,
-                  });
-            }}
-            inputProps={{ "aria-label": "Without label" }}
-            defaultValue={params.data.idImpugnacionEmp || ""}
-            // className="ag-theme-material"
-            className="select-hover-ag-grid"
-            style={{ width: "100%", border: "none" }}
-          >
-            <option value="" disabled>
-              Selecciona la relación impugnación - empleado
-            </option>
-            {auxList.impugnacionEmp.map((item) => (
-              <option
-                key={item.idImpugnacionEmp}
-                selected={
-                  params.data.idImpugnacionEmp === item.idImpugnacionEmp
-                    ? true
-                    : false
-                }
-                value={item.idImpugnacionEmp}
-              >
-                {item.nomImpugnacionEmp}
-              </option>
-            ))}
-          </select>
-        );
-      },
+      // cellRenderer: function (params) {
+      //   return (
+      //     <select
+      //       onChange={(e) => {
+      //         params.data.idNotaImpugnacion === null
+      //           ? insertarAcop({ ...params, idImpugnacionEmp: e.target.value })
+      //           : editarAcop({
+      //               ...params,
+      //               field: "idImpugnacionEmp",
+      //               idImpugnacionEmp: e.target.value,
+      //             });
+      //       }}
+      //       inputProps={{ "aria-label": "Without label" }}
+      //       defaultValue={params.data.idImpugnacionEmp || ""}
+      //       // className="ag-theme-material"
+      //       className="select-hover-ag-grid"
+      //       style={{ width: "100%", border: "none" }}
+      //     >
+      //       <option value="" disabled>
+      //         Selecciona la relación impugnación - empleado
+      //       </option>
+      //       {auxList.impugnacionEmp.map((item) => (
+      //         <option
+      //           key={item.idImpugnacionEmp}
+      //           selected={
+      //             params.data.idImpugnacionEmp === item.idImpugnacionEmp
+      //               ? true
+      //               : false
+      //           }
+      //           value={item.idImpugnacionEmp}
+      //         >
+      //           {item.nomImpugnacionEmp}
+      //         </option>
+      //       ))}
+      //     </select>
+      //   );
+      // },
     },
-    {
-      headerName: "Operaciones",
-      cellRenderer: function (params) {
-        return (
-          <div style={{ color: "black" }}>
-            {/* <Button
-              data-title="Editar cliente"
-              id="OperationBtns"
-              onClick={() => editarCliente(params.data.idCliente)}
-              style={{color: "black"}}
-            >
-              <RiEditBoxFill id="icons" />
-            </Button> */}
-            {/* <Link to={`/listadoServicios/${params.data.idAcop}`}>
-              <Button
-                data-title="Servicios relacionados"
-                id="OperationBtns"
-                style={{ color: "black" }}
-              >
-                <BsFillKeyFill id="icons" />
-              </Button>
-            </Link> */}
-            <Button
-              data-title="Desactivar nota de impugnación"
-              id="OperationBtns"
-              onClick={() => desactivar(params.data.idNotaImpugnacion)}
-              style={{ color: "black" }}
-            >
-              <BsFillTrashFill id="icons" />
-            </Button>
-          </div>
-        );
-      },
-    },
+    // {
+    //   headerName: "Operaciones",
+    //   cellRenderer: function (params) {
+    //     return (
+    //       <div style={{ color: "black" }}>
+    //         {/* <Button
+    //           data-title="Editar cliente"
+    //           id="OperationBtns"
+    //           onClick={() => editarCliente(params.data.idCliente)}
+    //           style={{color: "black"}}
+    //         >
+    //           <RiEditBoxFill id="icons" />
+    //         </Button> */}
+    //         {/* <Link to={`/listadoServicios/${params.data.idAcop}`}>
+    //           <Button
+    //             data-title="Servicios relacionados"
+    //             id="OperationBtns"
+    //             style={{ color: "black" }}
+    //           >
+    //             <BsFillKeyFill id="icons" />
+    //           </Button>
+    //         </Link> */}
+    //         <Button
+    //           data-title="Desactivar nota de impugnación"
+    //           id="OperationBtns"
+    //           onClick={() => desactivar(params.data.idNotaImpugnacion)}
+    //           style={{ color: "black" }}
+    //         >
+    //           <BsFillTrashFill id="icons" />
+    //         </Button>
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
 
   const rowData = mainList.notaImpugnacion.map((nota) => ({
@@ -167,7 +163,7 @@ export default function IHH_ListadoNotaImpugnacion() {
 
   function editarNotaImpugnacion(params) {
     if (params.data.nota === null || params.idImpugnacionEmp === null) {
-      TopAlerts(
+      TopAlertsError(
         "02",
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
@@ -231,14 +227,14 @@ export default function IHH_ListadoNotaImpugnacion() {
       usuarioCreacion: userData.usuario,
     };
     if (params.data.nota === null || params.idImpugnacionEmp === null) {
-      TopAlerts(
+      TopAlertsError(
         "02",
         "Todos los campos deben estar completos, una vez llenos, utiliza tecla ENTER para guardar los cambios"
       );
     } else {
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...datos } = response[0];
-        TopAlerts(OUT_CODRESULT, OUT_MJERESULT);
+        TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
         actualizarRegistros(datos);
         // location.reload();
       });
