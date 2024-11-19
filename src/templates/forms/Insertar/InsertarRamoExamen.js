@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
+import { Temporal } from '@js-temporal/polyfill';
 
-import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import TopAlertsError from "../../alerts/TopAlerts";
@@ -21,8 +21,6 @@ const InsertarRamoExamen = ({
 
   const [listRamo, setlistRamo] = useState([""]);
 
-  const listRamoExamen = ramoExamen;
-
   const show = isActiveRamoExamen;
   const now = new Date();
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -38,17 +36,23 @@ const InsertarRamoExamen = ({
   }
 
   function validaciones() {
+    const chileTimeZone = "America/Santiago";
+    // Obtener la fecha actual en Chile, solo con año, mes y día
+    const nowInChile = Temporal.Now.plainDateISO(chileTimeZone);
+    // Convertir la fecha del examen desde un string en formato "YYYY-MM-DD" a Temporal.PlainDate
+    const examDateInChile = Temporal.PlainDate.from(fechaExamen);
+
     if (nomExamen.trim() === "") {
       TopAlertsError("01", "El nombre del examen no puede estar vacío");
       return true;
-    } else if (new Date(fechaExamen) < now) {
+    } else if (Temporal.PlainDate.compare(examDateInChile, nowInChile) < 0) {
       TopAlertsError(
         "02",
         "La fecha del examen no puede ser menor a la actual"
       );
       return true;
     } else if (idRamo < 0) {
-      TopAlertsError("02", "El nombre del ramo no puede estar vacío");
+      TopAlertsError("03", "El nombre del ramo no puede estar vacío");
       return true;
     } else {
       return false;
@@ -71,14 +75,9 @@ const InsertarRamoExamen = ({
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...ramoExamen } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarRamoExamen(ramoExamen);
         cambiarEstado(false);
       });
     }
-  }
-
-  function actualizarRamoExamen(response) {
-    listRamoExamen.push(response);
   }
 
   useEffect(function () {

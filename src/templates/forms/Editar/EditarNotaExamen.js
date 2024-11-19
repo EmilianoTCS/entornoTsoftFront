@@ -52,7 +52,6 @@ const EditarNotaExamen = ({
     const url = "pages/auxiliares/listadoCursoAlumnoRamoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => {
-      console.log(response);
       setlistCursoAlumno(response);
     });
   }

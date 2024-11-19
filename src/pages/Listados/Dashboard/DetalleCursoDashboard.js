@@ -11,6 +11,7 @@ export default function DetalleCursoDashboard({
   paramsFechaIni,
   paramsFechaFin,
   estadoCurso,
+  setIsActiveDetalleCurso,
 }) {
   const [listDatosCurso, setListDatosCurso] = useState();
   const [listDatosEmpleadoRamo, setListDatosEmpleadoRamo] = useState();
@@ -44,13 +45,12 @@ export default function DetalleCursoDashboard({
     };
 
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
-
       if (response.length === 0) {
         TopAlertsError(
           "01",
           "No se han encontrado cursos con estos parámetros"
         );
+        setIsActiveDetalleCurso(false);
       } else {
         setListDatosCurso(response);
         BarrasPorRamo();
@@ -137,7 +137,19 @@ export default function DetalleCursoDashboard({
             <Card style={{ width: "200px" }}>
               <Card.Title>Cantidad ramos terminados</Card.Title>
               <Card.Body>
-                <h1>{cantRamosTerminados + "/" + cantRamos}</h1>
+                {estadoCurso === "ACTIVO" ? (
+                  <span
+                    style={{
+                      margin: "auto",
+                      fontSize: "17pt",
+                      fontWeight: "700",
+                    }}
+                  >
+                    En progreso...
+                  </span>
+                ) : (
+                  <h1>{cantRamosTerminados + "/" + cantRamos}</h1>
+                )}
               </Card.Body>
             </Card>
             <Card style={{ width: "200px" }}>
@@ -145,7 +157,19 @@ export default function DetalleCursoDashboard({
                 % Ramos <br></br> terminados
               </Card.Title>
               <Card.Body>
-                <h1>{porcRamosTerminados}</h1>
+                {estadoCurso === "ACTIVO" ? (
+                  <span
+                    style={{
+                      margin: "auto",
+                      fontSize: "17pt",
+                      fontWeight: "700",
+                    }}
+                  >
+                    En progreso...
+                  </span>
+                ) : (
+                  <h1>{porcRamosTerminados}</h1>
+                )}
               </Card.Body>
             </Card>
           </div>
@@ -154,64 +178,64 @@ export default function DetalleCursoDashboard({
     }
   }
 
-  function TablaDatosEmpleadoRamo() {
-    if (listDatosEmpleadoRamo) {
-      return (
-        <>
-          <h5>Detalle de colaboradores por ramo</h5>
-          <br></br>
-          <table>
-            <thead>
-              <th style={{ textAlign: "left", width: "250px" }}>
-                Nombre colaborador
-              </th>
-              <th style={{ textAlign: "left", width: "250px" }}>Nombre ramo</th>
-              <th style={{ textAlign: "right", width: "250px" }}>
-                % Aprobación
-              </th>
-              <th style={{ textAlign: "right", width: "250px" }}>
-                % Participación
-              </th>
-              <th style={{ textAlign: "right", width: "250px" }}>
-                % Asistencia
-              </th>
-            </thead>
-            <tbody>
-              {listDatosEmpleadoRamo &&
-                listDatosEmpleadoRamo.map((item) => (
-                  <tr key={item.idCursoAlumnoRamo}>
-                    <td style={{ textAlign: "left", width: "250px" }}>
-                      {item.nomEmpleado}
-                    </td>
-                    <td style={{ textAlign: "left", width: "250px" }}>
-                      {item.nomRamo}
-                    </td>
-                    <td style={{ textAlign: "right" }}>
-                      {item.porcAprobacion}
-                    </td>
-                    <td style={{ textAlign: "right" }}>
-                      {item.porcParticipacion}
-                    </td>
-                    <td style={{ textAlign: "right" }}>
-                      {item.porcAsistencia}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-            <br></br>
-          </table>
+  // function TablaDatosEmpleadoRamo() {
+  //   if (listDatosEmpleadoRamo) {
+  //     return (
+  //       <>
+  //         <h5>Detalle de colaboradores por ramo</h5>
+  //         <br></br>
+  //         <table>
+  //           <thead>
+  //             <th style={{ textAlign: "left", width: "250px" }}>
+  //               Nombre colaborador
+  //             </th>
+  //             <th style={{ textAlign: "left", width: "250px" }}>Nombre ramo</th>
+  //             <th style={{ textAlign: "right", width: "250px" }}>
+  //               % Aprobación
+  //             </th>
+  //             <th style={{ textAlign: "right", width: "250px" }}>
+  //               % Participación
+  //             </th>
+  //             <th style={{ textAlign: "right", width: "250px" }}>
+  //               % Asistencia
+  //             </th>
+  //           </thead>
+  //           <tbody>
+  //             {listDatosEmpleadoRamo &&
+  //               listDatosEmpleadoRamo.map((item) => (
+  //                 <tr key={item.idCursoAlumnoRamo}>
+  //                   <td style={{ textAlign: "left", width: "250px" }}>
+  //                     {item.nomEmpleado}
+  //                   </td>
+  //                   <td style={{ textAlign: "left", width: "250px" }}>
+  //                     {item.nomRamo}
+  //                   </td>
+  //                   <td style={{ textAlign: "right" }}>
+  //                     {item.porcAprobacion}
+  //                   </td>
+  //                   <td style={{ textAlign: "right" }}>
+  //                     {item.porcParticipacion}
+  //                   </td>
+  //                   <td style={{ textAlign: "right" }}>
+  //                     {item.porcAsistencia}
+  //                   </td>
+  //                 </tr>
+  //               ))}
+  //           </tbody>
+  //           <br></br>
+  //         </table>
 
-          <div style={{ marginTop: "-30px" }} data-html2canvas-ignore="true">
-            <Paginador
-              paginas={cantidadPaginas}
-              cambiarNumero={setNumBoton}
-              num_boton={num_boton}
-            ></Paginador>
-          </div>
-        </>
-      );
-    }
-  }
+  //         <div style={{ marginTop: "-30px" }} data-html2canvas-ignore="true">
+  //           <Paginador
+  //             paginas={cantidadPaginas}
+  //             cambiarNumero={setNumBoton}
+  //             num_boton={num_boton}
+  //           ></Paginador>
+  //         </div>
+  //       </>
+  //     );
+  //   }
+  // }
 
   function handlerClickBarras(item) {
     setRamo(item);
@@ -435,6 +459,8 @@ export default function DetalleCursoDashboard({
             estadoCurso={estadoCurso}
             paramsFechaFin={paramsFechaFin}
             paramsFechaIni={paramsFechaIni}
+            fechaIni={transformarFecha(paramsFechaIni)}
+            fechaFin={transformarFecha(paramsFechaFin)}
             ramo={ramo}
             setIsActiveDetalleRamo={setIsActiveDetalleRamo}
           ></DetalleRamoDashboard>

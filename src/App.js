@@ -113,7 +113,7 @@ function App() {
             ></Route>
             <Route
               element={<ListadoSesiones />}
-              path="/listadoSesiones/:params"
+              path="/listadoSesiones/:idCurso/:idRamo"
             ></Route>
             <Route
               element={<ListadoServicios />}

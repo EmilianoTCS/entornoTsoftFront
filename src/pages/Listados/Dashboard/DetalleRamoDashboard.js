@@ -7,6 +7,8 @@ import { Card } from "react-bootstrap";
 export default function DetalleRamoDashboard({
   paramsFechaIni,
   paramsFechaFin,
+  fechaIni,
+  fechaFin,
   estadoCurso,
   ramo,
   setIsActiveDetalleRamo,
@@ -22,6 +24,9 @@ export default function DetalleRamoDashboard({
     var operationUrl = "AF_listadoDetalleRamo";
     const data = {
       idRamo: ramo.idRamo,
+      fechaIni: fechaIni,
+      fechaFin: fechaFin,
+      estado: estadoCurso,
     };
 
     SendDataService(url, operationUrl, data).then((response) => {
@@ -30,8 +35,6 @@ export default function DetalleRamoDashboard({
         setIsActiveDetalleRamo(false);
       } else {
         setDatosRamo(response);
-        console.log(response);
-
         // setListDatosEmpleadoRamo(response);
       }
     });
@@ -76,98 +79,103 @@ export default function DetalleRamoDashboard({
 
   function agruparPorExamen(data) {
     return data
-    .filter((item) => item.nomExamen !== null)
-    .reduce((acc, curr) => {
-      const examenExistente = acc.find(
-        (examen) => examen.nomExamen === curr.nomExamen
-      );
+      .filter((item) => item.nomExamen !== null)
+      .reduce((acc, curr) => {
+        const examenExistente = acc.find(
+          (examen) => examen.nomExamen === curr.nomExamen
+        );
 
-      if (examenExistente) {
-        // Si el examen ya existe, se suman los valores
-        examenExistente.cantAprobados += parseInt(curr.cantAprobados);
-        examenExistente.cantReprobados += parseInt(curr.cantReprobados);
-        examenExistente.cantExamenes += parseInt(curr.cantExamenes);
-      } else {
-        // Si es un examen nuevo, se agrega al array de resultado
-        acc.push({
-          nomExamen: curr.nomExamen,
-          cantAprobados: parseInt(curr.cantAprobados),
-          cantReprobados: parseInt(curr.cantReprobados),
-          cantExamenes: parseInt(curr.cantExamenes),
-        });
-      }
+        if (examenExistente) {
+          // Si el examen ya existe, se suman los valores
+          examenExistente.cantAprobados += parseInt(curr.cantAprobados);
+          examenExistente.cantReprobados += parseInt(curr.cantReprobados);
+          examenExistente.cantExamenes += parseInt(curr.cantExamenes);
+        } else {
+          // Si es un examen nuevo, se agrega al array de resultado
+          acc.push({
+            nomExamen: curr.nomExamen,
+            cantAprobados: parseInt(curr.cantAprobados),
+            cantReprobados: parseInt(curr.cantReprobados),
+            cantExamenes: parseInt(curr.cantExamenes),
+          });
+        }
 
-      return acc;
-    }, []);
+        return acc;
+      }, []);
   }
 
   function resumenRamo() {
-    const cantColab = datosRamo.length;
-    let porcAsistencia = datosRamo.reduce(
-      (total, cursos) => total + parseFloat(cursos.porcAsistencia),
-      0
-    );
-    let cantSesiones = datosRamo.reduce(
-      (total, cursos) => total + parseFloat(cursos.cantSesiones),
-      0
-    );
-    let cantSesionesTerminadas = datosRamo.reduce(
-      (total, cursos) => total + parseFloat(cursos.cantSesionesTerminadas),
-      0
-    );
- 
-    let cantExamenes = datosRamo.reduce(
-      (total, cursos) => total + parseFloat(cursos.cantExamenes),
-      0
-    );
-    return (
-      <>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "20px",
-            width: "90%",
-            margin: "auto",
-            justifyContent: "space-around",
-          }}
-        >
-          <Card style={{ width: "250px" }}>
-            <Card.Title>
-              Total <br></br>colaboradores
-            </Card.Title>
-            <Card.Body>
-              <h1>{cantColab}</h1>
-            </Card.Body>
-          </Card>
-          <Card style={{ width: "250px" }}>
-            <Card.Title>% Asistencia</Card.Title>
-            <br></br>
-            <Card.Body>
-              <h1>{(porcAsistencia / cantColab).toFixed(2)}</h1>
-            </Card.Body>
-          </Card>
-          <Card style={{ width: "250px" }}>
-            <Card.Title>
-              Cantidad sesiones<br></br> terminadas
-            </Card.Title>
-            <Card.Body>
-              <h1>{cantSesionesTerminadas + "/" + cantSesiones}</h1>
-            </Card.Body>
-          </Card>
-          <Card style={{ width: "250px" }}>
-            <Card.Title>
-              Exámenes <br></br>terminados
-            </Card.Title>
-            <Card.Body>
-              <h1>
-                {cantExamenes}
-              </h1>
-            </Card.Body>
-          </Card>
-        </div>
-      </>
-    );
+    if (datosRamo.length > 0) {
+      const cantColab = datosRamo.length;
+      let porcAsistencia = datosRamo.reduce(
+        (total, cursos) => total + parseFloat(cursos.porcAsistencia),
+        0
+      );
+      let cantSesiones = datosRamo.reduce(
+        (total, cursos) => total + parseFloat(cursos.cantSesiones),
+        0
+      );
+      let cantSesionesTerminadas = datosRamo.reduce(
+        (total, cursos) => total + parseFloat(cursos.cantSesionesTerminadas),
+        0
+      );
+
+      let cantExamenes = datosRamo.reduce(
+        (total, cursos) => total + parseFloat(cursos.cantExamenes),
+        0
+      );
+
+      return (
+        <>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "20px",
+              width: "90%",
+              margin: "auto",
+              justifyContent: "space-around",
+            }}
+          >
+            <Card style={{ width: "250px" }}>
+              <Card.Title>
+                Total <br></br>colaboradores
+              </Card.Title>
+              <Card.Body>
+                <h1>{cantColab}</h1>
+              </Card.Body>
+            </Card>
+            <Card style={{ width: "250px" }}>
+              <Card.Title>% Asistencia</Card.Title>
+              <br></br>
+              <Card.Body>
+                <h1>{(porcAsistencia / cantColab).toFixed(2)}</h1>
+              </Card.Body>
+            </Card>
+            <Card style={{ width: "250px" }}>
+              <Card.Title>
+                Cantidad sesiones<br></br> terminadas
+              </Card.Title>
+              <Card.Body>
+                <h1>
+                  {datosRamo[0].cantSesionesTerminadas +
+                    "/" +
+                    datosRamo[0].cantSesiones}
+                </h1>
+              </Card.Body>
+            </Card>
+            <Card style={{ width: "250px" }}>
+              <Card.Title>
+                Exámenes <br></br>terminados
+              </Card.Title>
+              <Card.Body>
+                <h1>{cantExamenes}</h1>
+              </Card.Body>
+            </Card>
+          </div>
+        </>
+      );
+    }
   }
 
   function obtenerColorCara(valor, array) {

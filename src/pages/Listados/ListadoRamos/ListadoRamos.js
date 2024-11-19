@@ -220,7 +220,9 @@ export default function ListadoRamos() {
                         </button>
                       ) : null}
 
-                      <Link to={`/listadoSesiones/${ramos.idRamo}`}>
+                      <Link
+                        to={`/listadoSesiones/${ramos.idCurso}/${ramos.idRamo}`}
+                      >
                         <button
                           data-title="Sesiones relacionados"
                           id="OperationBtns"

@@ -99,6 +99,8 @@ export default function InicioDashboardAF() {
 
   const obtenerDatosProyectos = (e) => {
     e.preventDefault();
+    setIsActiveResumenGralCursos(false);
+
     // setIsActiveResumenGralProy(false);
     const errores = validaciones();
     if (!errores) {

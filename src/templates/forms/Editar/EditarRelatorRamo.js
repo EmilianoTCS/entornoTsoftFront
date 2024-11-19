@@ -109,19 +109,14 @@ const EditarRelatorRamo = ({
         isActive: true,
       };
       SendDataService(url, operationUrl, data).then((response) => {
+        console.log(response);
         const { OUT_CODRESULT, OUT_MJERESULT, ...relatorRamo } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarRelatorRamo(relatorRamo);
         cambiarEstado(false);
       });
     }
   }
-  function actualizarRelatorRamo(relatorRamo) {
-    const nuevosRelatorRamo = listRelatorRamo.map((c) =>
-      c.idRelatorRamo === relatorRamo.idRelatorRamo ? relatorRamo : c
-    );
-    setRelatorRamo(nuevosRelatorRamo);
-  }
+
   useEffect(
     function () {
       if (idRelatorRamo !== null) {
@@ -148,7 +143,7 @@ const EditarRelatorRamo = ({
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
                 value={fechaIni || ""}
-                type="datetime"
+                type="date"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"
@@ -162,7 +157,7 @@ const EditarRelatorRamo = ({
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha fin"
                 value={fechaFin || ""}
-                type="datetime"
+                type="date"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"

@@ -58,13 +58,25 @@ const EditarCursoAlumnoRamoSesion = ({
       setlistSesion(response)
     );
   }
-  function obtenerCursoAlumno() {
-    const url = "pages/auxiliares/listadoCursoAlumnoForms.php";
-    const operationUrl = "listados";
-    getDataService(url, operationUrl).then((response) => {
-      console.log(response);
-      
-      setlistCursoAlumno(response);
+
+  function ObtenerDatos() {
+    var url = "pages/listados/listadoCursoAlumnoRamo.php";
+    var operationUrl = "listadoCursoAlumnoRamo";
+
+    var data = {
+      num_boton: 1,
+      cantidadPorPagina: 999999999,
+      idCurso: 0,
+      idEmpleado: 0,
+    };
+
+    SendDataService(url, operationUrl, data).then((response) => {
+      const { paginador, ...datos } = response;
+      const data = datos.datos.map((dato) => ({
+        nomCursoAlumnoRamo: dato.nomEmpleado + " - " + dato.nomCurso,
+        idCursoAlumnoRamo: dato.idCursoAlumnoRamo,
+      }));
+      setlistCursoAlumno(data);
     });
   }
 
@@ -72,7 +84,6 @@ const EditarCursoAlumnoRamoSesion = ({
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idCursoAlumnoSesion, nombreTabla: nombreTabla };
-    console.log(data);
 
     SendDataService(url, operationUrl, data).then((response) => {
       setResponseID(response);
@@ -136,7 +147,9 @@ const EditarCursoAlumnoRamoSesion = ({
         participacion:
           participacion === "" ? responseID[0].participacion : participacion,
         idCursoAlumnoRamo:
-          idCursoAlumnoRamo === "" ? responseID[0].idCursoAlumnoRamo : idCursoAlumnoRamo,
+          idCursoAlumnoRamo === ""
+            ? responseID[0].idCursoAlumnoRamo
+            : idCursoAlumnoRamo,
         idSesion: idSesion === "" ? responseID[0].idSesion : idSesion,
         isActive: true,
       };
@@ -146,25 +159,17 @@ const EditarCursoAlumnoRamoSesion = ({
         const { OUT_CODRESULT, OUT_MJERESULT, ...cursoAlumnoSesion } =
           response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarCursoAlumnoSesion(cursoAlumnoSesion);
         cambiarEstado(false);
       });
     }
   }
-  function actualizarCursoAlumnoSesion(cursoAlumnoSesion) {
-    const nuevosCursoAlumnoSesion = listCursoAlumnoSesion.map((c) =>
-      c.idCursoAlumnoSesion === cursoAlumnoSesion.idCursoAlumnoSesion
-        ? cursoAlumnoSesion
-        : c
-    );
-    setCursoAlumnoSesion(nuevosCursoAlumnoSesion);
-  }
+
   useEffect(
     function () {
       if (idCursoAlumnoSesion !== null) {
         getData();
-        obtenerCursoAlumno();
         obtenerSesion();
+        ObtenerDatos();
       }
     },
     [idCursoAlumnoSesion]
@@ -246,6 +251,7 @@ const EditarCursoAlumnoRamoSesion = ({
                 name="input_PorcA"
                 id="input_PorcA"
                 maxLength="11"
+                required
                 onChange={({ target }) => setasistencia(target.value)}
               />
             </div>
@@ -259,6 +265,7 @@ const EditarCursoAlumnoRamoSesion = ({
                 className="form-control"
                 name="input_PorcP"
                 id="input_PorcP"
+                required
                 maxLength="11"
                 onChange={({ target }) => setparticipacion(target.value)}
               />
@@ -292,11 +299,13 @@ const EditarCursoAlumnoRamoSesion = ({
                 {listCursoAlumno.map((valor) => (
                   <option
                     selected={
-                      valor.idCursoAlumnoRamo === idCursoAlumnoRamo ? "selected" : ""
+                      valor.idCursoAlumnoRamo === idCursoAlumnoRamo
+                        ? "selected"
+                        : ""
                     }
                     value={valor.idCursoAlumnoRamo}
                   >
-                    {valor.nomCursoAlumno}
+                    {valor.nomCursoAlumnoRamo}
                   </option>
                 ))}
               </select>

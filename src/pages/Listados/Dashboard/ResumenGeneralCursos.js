@@ -67,6 +67,10 @@ export default function ResumenGeneralCursos({
   paramsFechaIni = transformarFecha(paramsFechaIni);
   paramsFechaFin = transformarFecha(paramsFechaFin);
 
+  
+
+
+
   function resumenGeneral() {
     const cantColab = datosCursos.reduce(
       (total, cursos) => total + parseFloat(cursos.cantColaboradores),
@@ -145,11 +149,11 @@ export default function ResumenGeneralCursos({
     });
     setIsActiveDetalleCurso(true);
   }
+
   function GraficoAprobacionCursos() {
     const labels = datosCursos.map((curso) => {
       const words = curso.nomCurso.split(" ");
-
-      // Si el nombre del curso tiene más de 3 palabras, agrupar cada dos palabras
+  
       let label;
       if (words.length > 3) {
         label = [];
@@ -157,26 +161,27 @@ export default function ResumenGeneralCursos({
           label.push(words.slice(i, i + 2).join(" "));
         }
       } else {
-        // Si el nombre es corto, mantenerlo tal cual
         label = [curso.nomCurso];
       }
-
-      // Agregar el porcentaje de aprobación al último elemento del array
+  
       label.push(
         `${curso.cantAprobados}/${curso.cantColaboradores} Aprobado(s)`
       );
       label.push(`${curso.porcAprobacionGeneral}%`);
-
+  
       return label;
     });
-
+  
     const dataAprobacion = {
       data: datosCursos.map((curso) => parseFloat(curso.porcAprobacionGeneral)),
       colores: datosCursos.map((curso) =>
-        obtenerColorCara(parseFloat(curso.porcAprobacionGeneral), colores.coloresGral)
+        obtenerColorCara(
+          parseFloat(curso.porcAprobacionGeneral),
+          colores.coloresGral
+        )
       ),
     };
-    // Datos para Chart.js
+  
     const data = {
       labels: labels,
       datasets: [
@@ -189,17 +194,13 @@ export default function ResumenGeneralCursos({
         },
       ],
     };
-
+  
     const options = {
-      indexAxis: "y", // Barras horizontales
+      indexAxis: "y",
       responsive: true,
       plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          enabled: false, // Desactivar el tooltip
-        },
+        legend: { display: false },
+        tooltip: { enabled: false },
       },
       onClick: (event, elements) => {
         if (elements.length > 0) {
@@ -211,7 +212,7 @@ export default function ResumenGeneralCursos({
       scales: {
         x: {
           beginAtZero: true,
-          max: 100, // El porcentaje máximo es 100
+          max: 100,
           ticks: {
             callback: (value) => `${value}%`,
           },
@@ -223,17 +224,54 @@ export default function ResumenGeneralCursos({
           : "default";
       },
     };
-
+  
     return (
       <div>
         <h5>Aprobación por curso</h5>
-        <p style={{ fontSize: "10pt" }} data-html2canvas-ignore="true">
-          (click para mas información)
-        </p>
+        <br></br>
+        {datosCursos.map((curso, index) => (
+          <div
+            key={index}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "20px",
+              margin: "auto",
+              justifyContent: "center",
+            }}
+          >
+            <span>
+              {curso.nomCurso} - {curso.porcAprobacionGeneral}%
+            </span>
+            <button
+              onClick={() => handlerClickBarras(curso)}
+              style={{
+                marginLeft: "10px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                padding: "5px 10px",
+                cursor: "pointer",
+                borderRadius: "5px"
+              }}
+            >
+              Ver detalle
+            </button>
+          </div>
+        ))}
+        <br></br>
+        <h6>Gráfico de porcentaje aprobación por curso</h6>
+        <span
+          style={{ fontSize: "10pt", padding: 0, opacity: "0.6" }}
+          data-html2canvas-ignore="true"
+        >
+          (click para más información)
+        </span>
         <Bar data={data} options={options} />
       </div>
     );
   }
+  
 
   function graficos() {
     const cantColab = datosCursos.reduce(
@@ -394,6 +432,7 @@ export default function ResumenGeneralCursos({
             paramsFechaFin={paramsFechaFin}
             paramsFechaIni={paramsFechaIni}
             estadoCurso={estadoCurso}
+            setIsActiveDetalleCurso= {setIsActiveDetalleCurso}
           ></DetalleCursoDashboard>
         )}
       </div>

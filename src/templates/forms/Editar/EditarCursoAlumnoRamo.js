@@ -40,7 +40,6 @@ const EditarCursoAlumnoRamo = ({
   const handleClose = () => cambiarEstado(false);
 
   function transformarFecha(fecha) {
-    console.log(fecha);
     const [dia, mes, year] = fecha.split("/");
     return `${year}-${mes}-${dia}`;
   }
@@ -122,8 +121,8 @@ const EditarCursoAlumnoRamo = ({
         porcAprobacion: datosCursoAlumnoRamo.porcAprobacion,
         estadoRamo: datosCursoAlumnoRamo.estadoRamo,
         isActive: true,
-      };
-
+      };      
+      console.log(data)
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
@@ -147,7 +146,7 @@ const EditarCursoAlumnoRamo = ({
     });
   }
   useEffect(
-    function () {
+    function () {      
       if (cursoAlumnoRamo) {
         setCursoAlumnoRamo({
           idCursoAlumnoRamo: cursoAlumnoRamo.idCursoAlumnoRamo,
@@ -164,6 +163,7 @@ const EditarCursoAlumnoRamo = ({
           estadoRamo: cursoAlumnoRamo.estadoRamo,
         });
       }
+
       obtenerCursoAlumno();
       obtenerRamo();
     },
@@ -398,7 +398,7 @@ const EditarCursoAlumnoRamo = ({
                   selected={
                     datosCursoAlumnoRamo.estadoRamo === "ACTIVO" ? true : false
                   }
-                  value="1"
+                  value="ACTIVO"
                 >
                   ACTIVO
                 </option>
@@ -408,7 +408,7 @@ const EditarCursoAlumnoRamo = ({
                       ? true
                       : false
                   }
-                  value="0"
+                  value="INACTIVO"
                 >
                   INACTIVO
                 </option>
@@ -435,8 +435,22 @@ const EditarCursoAlumnoRamo = ({
                 <option hidden value="">
                   Desplegar lista
                 </option>
-                <option value="S">SÍ (Aprobado)</option>
-                <option value="N">NO (Reprobado)</option>
+                <option
+                  value="S"
+                  selected={
+                    datosCursoAlumnoRamo.ramoAprobado === "S" ? true : false
+                  }
+                >
+                  SÍ (Aprobado)
+                </option>
+                <option
+                  value="N"
+                  selected={
+                    datosCursoAlumnoRamo.ramoAprobado === "N" ? true : false
+                  }
+                >
+                  NO (Reprobado)
+                </option>
               </select>
             </div>
 

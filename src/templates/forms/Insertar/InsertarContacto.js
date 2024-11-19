@@ -43,8 +43,7 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
     const regexInvalidoNombre = /[^a-zA-Z\sáéíóúÁÉÍÓÚñÑ]/;
     const regexTelefono = /^\+?[\d\s\-\(\)]+$/;
     const regexCorreo =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (nomContacto.trim() === "") {
       TopAlertsError("01", "El nombre del contacto no puede estar vacío");
@@ -78,6 +77,10 @@ const InsertarContacto = ({ isActiveContacto, cambiarEstado, contacto }) => {
         "06",
         "El teléfono solo puede contener números, el signo '+' y el signo '-'"
       );
+      return true;
+    }
+    if (telefonoContacto.length > 0 && telefonoContacto.length !== 9) {
+      TopAlertsError("07", "El teléfono debe ser de 9 caracteres");
       return true;
     }
 

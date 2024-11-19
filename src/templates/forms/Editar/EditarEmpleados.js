@@ -95,27 +95,31 @@ const EditarEmpleados = ({
   function validaciones() {
     const regexTelefono = /^\+?[\d\s\-\(\)]+$/;
     const regexInvalidoNombre = /[^a-zA-Z\sáéíóúÁÉÍÓÚñÑ]/;
+    const regexCorreo =
+      /^(([^<>()\[\]\\/,:;@”]+(\.[^<>()\[\]\\/,:;@”]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}))$/;
+
     if (nomEmpleado.trim() === "") {
       TopAlertsError("01", "El nombre del colaborador no puede estar vacío");
       return true;
     }
-    const regexCorreo = /^(([^<>()\[\]\\/,:;@”]+(\.[^<>()\[\]\\/,:;@”]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}))$/;
-
     // Validación para evitar números en el nombre del colaborador
     if (regexInvalidoNombre.test(nomEmpleado)) {
       TopAlertsError(
-        "12",
+        "02",
         "El nombre del colaborador no puede contener números ni caracteres especiales"
       );
       return true;
     }
 
     if (correoEmpleado.trim() === "") {
-      TopAlertsError("02", "El correo del colaborador no puede estar vacío");
+      TopAlertsError("03", "El correo del colaborador no puede estar vacío");
       return true;
     }
     if (!regexCorreo.test(correoEmpleado)) {
-      TopAlertsError("15", "El correo ingresado es inválido. Los caracteres '<>()[]/\.,;:' no son permitidos");
+      TopAlertsError(
+        "04",
+        "El correo ingresado es inválido. Los caracteres '<>()[]/.,;:' no son permitidos"
+      );
       return true;
     }
 
@@ -126,24 +130,29 @@ const EditarEmpleados = ({
       !regexTelefono.test(telefonoEmpleado)
     ) {
       TopAlertsError(
-        "14",
+        "05",
         "El teléfono solo puede contener números, el signo '+' y el signo '-'"
       );
       return true;
     }
 
+    if (telefonoEmpleado.length > 0 && telefonoEmpleado !== 9) {
+      TopAlertsError("06", "El teléfono debe set de 9 caracteres");
+      return true;
+    }
+
     if (idPais < 0) {
-      TopAlertsError("05", "El país del colaborador no debe estar vacío");
+      TopAlertsError("07", "El país del colaborador no debe estar vacío");
       return true;
     }
 
     if (idCargo < 0) {
-      TopAlertsError("06", "El cargo del colaborador no debe estar vacío");
+      TopAlertsError("08", "El cargo del colaborador no debe estar vacío");
       return true;
     }
 
     if (idArea < 0) {
-      TopAlertsError("07", "El área del colaborador no debe estar vacía");
+      TopAlertsError("09", "El área del colaborador no debe estar vacía");
       return true;
     }
 

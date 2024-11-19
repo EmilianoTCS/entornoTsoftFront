@@ -107,6 +107,10 @@ const EditarContacto = ({
       );
       return true;
     }
+    if (telefonoContacto.length > 0 && telefonoContacto.length !== 9) {
+      TopAlertsError("07", "El teléfono debe ser de 9 caracteres");
+      return true;
+    }
     return false;
   }
   function SendData(e) {
@@ -131,7 +135,7 @@ const EditarContacto = ({
         idServicio: idServicio === "" ? responseID[0].idServicio : idServicio,
       };
       console.log(data);
-      
+
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...contacto } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);

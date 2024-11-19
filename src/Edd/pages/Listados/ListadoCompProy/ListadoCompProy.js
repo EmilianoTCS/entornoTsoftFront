@@ -483,7 +483,7 @@ export default function ListadoCompProy() {
                   </div>
                 </td>
                 <td id="espacioEntreOpciones">
-                  <label>Fecha inicio desde:</label>
+                  <label>Fecha inicio:</label>
                   <br></br>
                   <input
                     className="form-control"
@@ -494,7 +494,7 @@ export default function ListadoCompProy() {
                   />
                 </td>
                 <td id="espacioEntreOpciones">
-                  <span>Fecha inicio hasta:</span>
+                  <span>Fecha término:</span>
                   <br></br>
                   <input
                     className="form-control"

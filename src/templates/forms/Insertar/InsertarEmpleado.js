@@ -103,21 +103,21 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
     }
     if (regexInvalidoNombre.test(nomEmpleado)) {
       TopAlertsError(
-        "12",
+        "02",
         "El nombre del colaborador no puede contener números ni caracteres especiales"
       );
       return true;
     }
     if (!passwordRegex.test(password)) {
       TopAlertsError(
-        "13",
+        "03",
         "La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial"
       );
       return true;
     }
 
     if (correoEmpleado.trim() === "" && regexCorreo.test(correoEmpleado)) {
-      TopAlertsError("02", "El correo del colaborador no puede estar vacío");
+      TopAlertsError("04", "El correo del colaborador no puede estar vacío");
       return true;
     }
 
@@ -127,44 +127,49 @@ const InsertarEmpleado = ({ isActiveEmpleado, cambiarEstado, empleado }) => {
       !regexTelefono.test(telefonoEmpleado)
     ) {
       TopAlertsError(
-        "14",
+        "05",
         "El teléfono solo puede contener números, el signo '+' y el signo '-'"
       );
       return true;
     }
 
+    if (telefonoEmpleado.length > 0 && telefonoEmpleado !== 9) {
+      TopAlertsError("06", "El teléfono debe set de 9 caracteres");
+      return true;
+    }
+
     if (idPais < 0) {
-      TopAlertsError("05", "El país del colaborador no debe estar vacío");
+      TopAlertsError("07", "El país del colaborador no debe estar vacío");
       return true;
     }
 
     if (idCargo < 0) {
-      TopAlertsError("06", "El cargo del colaborador no debe estar vacío");
+      TopAlertsError("08", "El cargo del colaborador no debe estar vacío");
       return true;
     }
 
     if (idArea < 0) {
-      TopAlertsError("07", "El área del colaborador no debe estar vacía");
+      TopAlertsError("09", "El área del colaborador no debe estar vacía");
       return true;
     }
 
     if (tipoUsuario.trim() === "") {
-      TopAlertsError("08", "El tipo de usuario no debe estar vacío");
+      TopAlertsError("10", "El tipo de usuario no debe estar vacío");
       return true;
     }
 
     if (nomRol < 0) {
-      TopAlertsError("09", "El rol del colaborador no debe estar vacío");
+      TopAlertsError("11", "El rol del colaborador no debe estar vacío");
       return true;
     }
 
     if (idCliente < 0) {
-      TopAlertsError("10", "El cliente del colaborador no debe estar vacío");
+      TopAlertsError("12", "El cliente del colaborador no debe estar vacío");
       return true;
     }
 
     if (valorHH <= 0) {
-      TopAlertsError("11", "El valor HH del colaborador debe ser mayor a cero");
+      TopAlertsError("13", "El valor HH del colaborador debe ser mayor a cero");
       return true;
     }
 

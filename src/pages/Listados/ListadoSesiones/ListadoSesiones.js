@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { Navigate, Link } from "react-router-dom";
 import { useRoute } from "wouter";
 
@@ -19,7 +19,7 @@ import Button from "react-bootstrap/Button";
 import "../BtnInsertar.css";
 import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 export default function ListadoSesion() {
-  const [, params] = useRoute("/listadoSesiones/:params");
+  const [, params] = useRoute("/listadoSesiones/:idCurso/:idRamo");
   const [Sesion, setSesion] = useState([""]);
   const [isActiveInsertSesion, setIsActiveInsertSesion] = useState(false);
   const [isActiveEditSesion, setIsActiveEditSesion] = useState(false);
@@ -29,9 +29,9 @@ export default function ListadoSesion() {
   const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
 
-  const [idCurso, setidCurso] = useState(params.params);
+  const [idCurso, setidCurso] = useState(params.idCurso);
 
-  const [idRamo, setidRamo] = useState(params.params);
+  const [idRamo, setidRamo] = useState(params.idRamo);
 
   const [listCurso, setlistCurso] = useState([""]);
   const [listRamo, setlistRamo] = useState([""]);

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
-import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
 import TopAlertsError from "../../alerts/TopAlerts";
+import { Temporal } from "@js-temporal/polyfill";
 
 const EditarRamoExamen = ({
   isActiveEditRamoExamen,
@@ -44,33 +44,30 @@ const EditarRamoExamen = ({
     getDataService(url, operationUrl).then((response) => setlistRamo(response));
   }
 
-  function transformarFecha(fecha) {
-    // Separar la fecha por el guión "-"
-    const [dia, mes, anio] = fecha.split("-");
-
-    // Retornar la fecha en el formato dd-mm-yyyy
-    return `${anio}-${mes}-${dia}`;
-  }
   // ----------------------FUNCIONES----------------------------
   const getData = useCallback(() => {
     const url = "pages/seleccionar/seleccionarDatos.php";
     const operationUrl = "seleccionarDatos";
     var data = { idRegistro: idRamoExamen, nombreTabla: nombreTabla };
     SendDataService(url, operationUrl, data).then((response) => {
-      console.log(response);
       setResponseID(response);
       setnomExamen(response[0].nomExamen);
-      // setfechaExamen(transformarFecha(response[0].fechaExamen));
       setfechaExamen(response[0].fechaExamen);
       setidRamo(response[0].idRamo);
     });
   }, [idRamoExamen]);
 
   function validaciones() {
+    const chileTimeZone = "America/Santiago";
+    // Obtener la fecha actual en Chile, solo con año, mes y día
+    const nowInChile = Temporal.Now.plainDateISO(chileTimeZone);
+    // Convertir la fecha del examen desde un string en formato "YYYY-MM-DD" a Temporal.PlainDate
+    const examDateInChile = Temporal.PlainDate.from(fechaExamen);
+
     if (nomExamen.trim() === "") {
       TopAlertsError("01", "El nombre del examen no puede estar vacío");
       return true;
-    } else if (new Date(fechaExamen) < now) {
+    } else if (Temporal.PlainDate.compare(examDateInChile, nowInChile) < 0) {
       TopAlertsError(
         "02",
         "La fecha del examen no puede ser menor a la actual"
@@ -154,7 +151,7 @@ const EditarRamoExamen = ({
                 style={{ textTransform: "uppercase" }}
                 placeholder="Fecha inicio"
                 value={fechaExamen || ""}
-                type="datetime-local"
+                type="date"
                 className="form-control"
                 name="input_fechaI"
                 id="input_fechaI"

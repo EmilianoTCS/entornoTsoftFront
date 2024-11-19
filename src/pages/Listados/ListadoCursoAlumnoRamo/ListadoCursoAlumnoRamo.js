@@ -14,6 +14,7 @@ import { useRoute } from "wouter";
 import InsertarCursoAlumnoRamo from "../../../templates/forms/Insertar/InsertarCursoAlumnoRamo";
 import EditarCursoAlumnoRamo from "../../../templates/forms/Editar/EditarCursoAlumnoRamo";
 import getDataService from "../../../services/GetDataService";
+import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
 
 export default function ListadoCursoAlumnoRamo() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
@@ -75,8 +76,7 @@ export default function ListadoCursoAlumnoRamo() {
       const { paginador, ...datos } = response;
       setCantidadPaginas(paginador.cantPaginas);
       setDatosRamo(datos.datos);
-    console.log(datos.datos);
-
+      console.log(datos.datos);
     });
   }
 
@@ -230,7 +230,7 @@ export default function ListadoCursoAlumnoRamo() {
                       <td align="right">{item.porcAsistencia}</td>
                       <td align="right">{item.porcParticipacion}</td>
                       <td align="right">{item.porcAprobacion}</td>
-                      <td>{item.ramoAprobado}</td>
+                      <td>{item.ramoAprobado === "S" ? "SÍ" : "NO"}</td>
                       <td>{item.estadoRamo}</td>
                       <td>
                         {userData.nomRol === "administrador" ? (

@@ -108,6 +108,7 @@ const EditarSesion = ({
 
         isActive: true,
       };
+
       SendDataService(url, operationUrl, data).then((response) => {
         const { OUT_CODRESULT, OUT_MJERESULT, ...sesion } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);

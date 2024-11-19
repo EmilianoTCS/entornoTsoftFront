@@ -4,7 +4,6 @@ import "../../../templates/forms/Insertar.css";
 import SendDataService from "../../../services/SendDataService";
 import getDataService from "../../../services/GetDataService";
 
-import TopAlerts from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import TopAlertsError from "../../alerts/TopAlerts";
@@ -98,16 +97,11 @@ const InsertarSesion = ({ isActiveSesion, cambiarEstado, sesion }) => {
         isActive: true,
       };
       SendDataService(url, operationUrl, data).then((response) => {
-        const { OUT_CODRESULT, OUT_MJERESULT, ...sesion } = response[0];
+        const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarSesion(sesion);
         cambiarEstado(false);
       });
     }
-  }
-
-  function actualizarSesion(response) {
-    listSesion.push(response);
   }
 
   useEffect(function () {

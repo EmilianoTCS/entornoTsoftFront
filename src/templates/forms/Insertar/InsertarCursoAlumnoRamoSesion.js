@@ -49,7 +49,6 @@ const InsertarCursoAlumnoRamoSesion = ({
     const url = "pages/auxiliares/listadoCursoAlumnoRamoForms.php";
     const operationUrl = "listados";
     getDataService(url, operationUrl).then((response) => {
-      console.log(response);
       setlistCursoAlumno(response);
     });
   }
@@ -105,16 +104,12 @@ const InsertarCursoAlumnoRamoSesion = ({
         const { OUT_CODRESULT, OUT_MJERESULT, ...cursoAlumnoSesion } =
           response[0];
         TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
-        actualizarCursoAlumnoSesion(cursoAlumnoSesion);
         console.log(response);
         cambiarEstado(false);
       });
     }
   }
 
-  function actualizarCursoAlumnoSesion(response) {
-    listCursoAlumnoSesion.push(response);
-  }
   useEffect(
     function () {
       obtenerCursoAlumnoRamo();
@@ -194,6 +189,7 @@ const InsertarCursoAlumnoRamoSesion = ({
                 name="input_PorcA"
                 id="input_PorcA"
                 maxLength="11"
+                required
                 onChange={({ target }) => setasistencia(target.value)}
               />
             </div>
@@ -206,6 +202,7 @@ const InsertarCursoAlumnoRamoSesion = ({
                 className="form-control"
                 name="input_PorcP"
                 id="input_PorcP"
+                required
                 maxLength="11"
                 onChange={({ target }) => setparticipacion(target.value)}
               />

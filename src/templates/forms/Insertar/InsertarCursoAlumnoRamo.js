@@ -20,7 +20,7 @@ const InsertarCursoAlumnoRamo = ({ isActiveCursoAlumno, cambiarEstado }) => {
   const [porcParticipacion, setporcParticipacion] = useState(0);
   const [ramoAprobado, setRamoAprobado] = useState("N");
   const [porcAprobacion, setporcAprobacion] = useState(0);
-  const [estadoRamo, setEstadoRamo] = useState(1);
+  const [estadoRamo, setEstadoRamo] = useState('ACTIVO');
 
   const show = isActiveCursoAlumno;
 

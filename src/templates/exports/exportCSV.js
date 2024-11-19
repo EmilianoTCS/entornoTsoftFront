@@ -1,13 +1,13 @@
 import React from "react";
 import * as XLSX from "xlsx";
 import "./export.css";
-import TopAlerts from "../alerts/TopAlerts";
+import TopAlertsError from "../alerts/TopAlerts";
 
 const ExportCSV = ({ inputData, nomTabla }) => {
   const exportData = (format) => {
     if (inputData.length === 0 || inputData[0] === '') {
       console.error("No hay datos para exportar");
-      TopAlerts('01', "No hay datos para exportar")
+      TopAlertsError('01', "No hay datos para exportar")
       return;
     }
 
