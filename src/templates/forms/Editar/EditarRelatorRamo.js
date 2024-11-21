@@ -6,6 +6,7 @@ import TopAlertsError from "../../alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useCallback } from "react";
+import { Temporal } from "@js-temporal/polyfill";
 
 const EditarRelatorRamo = ({
   isActiveEditRelatorRamo,
@@ -72,23 +73,43 @@ const EditarRelatorRamo = ({
   }, [idRelatorRamo]);
 
   function validaciones() {
+    const chileTimeZone = "America/Santiago";
+    // Obtener la fecha actual en Chile, solo con año, mes y día
+    const nowInChile = Temporal.Now.plainDateISO(chileTimeZone);
+    // Convertir la fecha del examen desde un string en formato "YYYY-MM-DD" a Temporal.PlainDate
+    const auxFechaInicio = Temporal.PlainDate.from(fechaIni);
+    const auxFechaFin = Temporal.PlainDate.from(fechaFin);
+
     if (idEmpleado < 0) {
       TopAlertsError("01", "El nombre del relator no puede estar vacío");
       return true;
-    } else if (idRamo < 0) {
+    }
+    if (idRamo < 0) {
       TopAlertsError("02", "El nombre del ramo no debe estar vacío");
       return true;
-    } else if (fechaFin) {
-      if (fechaIni > fechaFin) {
+    }
+    if (Temporal.PlainDate.compare(auxFechaInicio, nowInChile) < 0) {
+      TopAlertsError("02", "La fecha inicio no puede ser menor a la actual");
+      return true;
+    }
+    if (fechaFin) {
+      if (Temporal.PlainDate.compare(auxFechaFin, auxFechaInicio) < 0) {
         TopAlertsError(
           "03",
           "La fecha inicio no puede ser mayor a la fecha término"
         );
         return true;
       }
-    } else {
-      return false;
+      if (Temporal.PlainDate.compare(auxFechaFin, nowInChile) < 0) {
+        TopAlertsError(
+          "02",
+          "La fecha de término no puede ser menor a la actual"
+        );
+        return true;
+      }
     }
+
+    return false;
   }
 
   function SendData(e) {
