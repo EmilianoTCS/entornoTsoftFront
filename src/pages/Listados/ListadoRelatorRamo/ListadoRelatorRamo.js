@@ -7,7 +7,7 @@ import getDataService from "../../../services/GetDataService";
 import SendDataService from "../../../services/SendDataService";
 import Header from "../../../templates/Header/Header";
 import { BsFillTrashFill } from "react-icons/bs";
-import { RiEditBoxFill } from "react-icons/ri";
+// import { RiEditBoxFill } from "react-icons/ri";
 
 import "../TablasStyles.css";
 import InsertarRelatorRamo from "../../../templates/forms/Insertar/InsertarRelatorRamo";
@@ -33,6 +33,7 @@ export default function ListadoRelatorRamo() {
 
   const [idEmpleado, setidEmpleado] = useState(params.idEmpleado);
   const [idRamo, setidRamo] = useState(params.idRamo);
+  const [isActive, setIsActive] = useState(null);
 
   const [listEmpleado, setlistEmpleado] = useState([""]);
   const [listRamo, setlistRamo] = useState([""]);
@@ -84,7 +85,7 @@ export default function ListadoRelatorRamo() {
       obtenerEmpleado();
       obtenerRamo();
     },
-    [num_boton, cantidadPorPagina, idEmpleado, idRamo]
+    [num_boton, cantidadPorPagina, idEmpleado, idRamo, isActive]
   );
 
   //PAGINADOR ---------------------
@@ -98,6 +99,7 @@ export default function ListadoRelatorRamo() {
         cantidadPorPagina: cantidadPorPagina,
         idEmpleado: userData.idEmpleado,
         idRamo: idRamo,
+        isActive: isActive,
       };
     } else {
       var data = {
@@ -105,15 +107,14 @@ export default function ListadoRelatorRamo() {
         cantidadPorPagina: cantidadPorPagina,
         idEmpleado: idEmpleado,
         idRamo: idRamo,
+        isActive: isActive,
       };
     }
 
-    console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
       setRelatorRamo(datos.datos);
-      console.log(data);
     });
   }
   //PAGINADOR ---------------------
@@ -129,7 +130,7 @@ export default function ListadoRelatorRamo() {
         <br></br>
         <div id="fondoTabla">
           <div id="containerTablas">
-          <a id="btnAtras" href="/listadoEmpleados/0">
+            <a id="btnAtras" href="/listadoEmpleados/0">
               Volver
             </a>
             <h1 id="TitlesPages">Listado de relatores ramos</h1>
@@ -217,6 +218,21 @@ export default function ListadoRelatorRamo() {
                       ))}
                     </select>
                   </div>
+                  <div className="form-group" id="btn2">
+                    <label htmlFor="input_CantidadR">Estado: </label>
+                    <select
+                      required
+                      className="form-control"
+                      onChange={({ target }) => {
+                        setIsActive(target.value);
+                        setNumBoton(1);
+                      }}
+                    >
+                      <option value={""}>Todos</option>
+                      <option value={1}>Activos</option>
+                      <option value={0}>Inactivos</option>
+                    </select>
+                  </div>
                 </>
               ) : null}
             </div>
@@ -243,6 +259,7 @@ export default function ListadoRelatorRamo() {
                   <th>Ramo</th>
                   <th>Fecha inicio</th>
                   <th>Fecha fin</th>
+                  <th>Estado</th>
                   {userData.nomRol === "administrador" ? (
                     <th>Operaciones</th>
                   ) : null}
@@ -256,9 +273,12 @@ export default function ListadoRelatorRamo() {
                     <td>{relatorRamo.nomRamo}</td>
                     <td>{relatorRamo.fechaIni}</td>
                     <td>{relatorRamo.fechaFin}</td>
+                    <td>
+                      {relatorRamo.isActive === "1" ? "ACTIVO" : "INACTIVO"}
+                    </td>
                     {userData.nomRol === "administrador" ? (
                       <td>
-                        <button
+                        {/* <button
                           data-title="Editar relatorRamo"
                           id="OperationBtns"
                           onClick={() =>
@@ -266,7 +286,7 @@ export default function ListadoRelatorRamo() {
                           }
                         >
                           <RiEditBoxFill id="icons" />
-                        </button>
+                        </button> */}
                         {/* <button data-title="Examinar relatorRamo" id="OperationBtns">
                                         <HiEye id="icons" />
                                       </button> */}
