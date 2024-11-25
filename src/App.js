@@ -134,7 +134,7 @@ function App() {
             ></Route>
             <Route
               element={<ListadoCursoAlumnoRamoSesion />}
-              path="/listadoCursoAlumnoRamoSesion/:params"
+              path="/listadoCursoAlumnoRamoSesion/:idSesion/:idEmpleado"
             ></Route>
             <Route
               element={<ListadoNotaExamen />}

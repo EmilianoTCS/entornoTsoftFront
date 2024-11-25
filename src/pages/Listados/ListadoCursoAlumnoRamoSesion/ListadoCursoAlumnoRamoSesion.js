@@ -20,7 +20,7 @@ import "../BtnInsertar.css";
 import AuthorizationError from "../../../templates/alerts/AuthorizationErrorAlert";
 
 export default function ListadoCursoAlumnoRamoSesion() {
-  const [, params] = useRoute("/listadoCursoAlumnoRamoSesion/:params");
+  const [, params] = useRoute("/listadoCursoAlumnoRamoSesion/:idSesion/:idEmpleado");
 
   const [cursoAlumnoSesion, setCursoAlumnoSesion] = useState([""]);
   const [isActiveInsertCursoAlumnoSesion, setIsActiveInsertCursoAlumnoSesion] =
@@ -33,8 +33,8 @@ export default function ListadoCursoAlumnoRamoSesion() {
   const [cantidadPorPagina, setcantidadPorPagina] = useState(10);
   const [cantidadPaginas, setCantidadPaginas] = useState([]);
 
-  const [idSesion, setidSesion] = useState(0);
-  const [idEmpleado, setidEmpleado] = useState(params.params);
+  const [idSesion, setidSesion] = useState(params.idSesion);
+  const [idEmpleado, setidEmpleado] = useState(params.idEmpleado);
 
   const [listSesion, setlistSesion] = useState([""]);
   const [listEmpleado, setlistEmpleado] = useState([""]);

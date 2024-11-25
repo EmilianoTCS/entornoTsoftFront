@@ -250,7 +250,7 @@ export default function ListadoSesion() {
                       ) : null}
 
                       <Link
-                        to={`/listadoCursoAlumnoRamoSesion/${Sesion.idSesion}`}
+                        to={`/listadoCursoAlumnoRamoSesion/${Sesion.idSesion}/0`}
                       >
                         <button
                           data-title="Asistencia relacionadas"
