@@ -93,7 +93,7 @@ export default function ListadoImpEmpProy() {
       setListEmpleado(response);
     });
   }
-  //Devuelve un listado de elementos de impugnación
+  //Devuelve un listado de elementos de registros
   function obtenerElementos() {
     var url = "pages/auxiliares/ihh_listadoElementoForms.php";
     var operationUrl = "listados";
@@ -530,7 +530,7 @@ export default function ListadoImpEmpProy() {
             >
               {/* titulos */}
               <h2 style={{ margin: "auto auto", width: "650px" }}>
-                Impugnación de horas - {convertirFecha(fechaActual())}
+                Registros de horas - {convertirFecha(fechaActual())}
               </h2>
               {datosMesLaborables ? (
                 <h4>

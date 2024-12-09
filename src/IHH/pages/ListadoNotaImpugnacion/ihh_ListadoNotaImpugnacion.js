@@ -67,12 +67,12 @@ export default function IHH_ListadoNotaImpugnacion() {
 
   const columnDefs = [
     {
-      headerName: "Nota impugnación",
+      headerName: "Nota registro hora",
       field: "nota",
       editable: true,
     },
     {
-      headerName: "Impugnación - empleado",
+      headerName: "Registro hora - empleado",
       field: "idImpugnacionEmp",
       cellStyle: { padding: "0", verticalAlign: "center", display: "flex" },
       // cellRenderer: function (params) {
@@ -258,9 +258,9 @@ export default function IHH_ListadoNotaImpugnacion() {
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de notas de impugnación</h1>
+          <h1 id="TitlesPages">Listado de notas de registros de horas</h1>
           <h6 style={{ color: "gray" }}>
-            Impugnación de Horas {"->"} Listado de notas de impugnación
+            Registro de Horas {"->"} Listado de notas de registros de notas
           </h6>
           <br></br>
 

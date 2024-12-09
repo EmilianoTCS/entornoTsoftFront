@@ -361,7 +361,7 @@ export default function SideBar() {
                   >
                     <button id="buttonSidebar">
                       <BsHourglassBottom id="icons" />
-                      Impugnación de horas
+                      Registro de horas
                     </button>
                     <ul
                       id="COE_Academia"
@@ -442,7 +442,7 @@ export default function SideBar() {
                       </li>
 
                       {/* --------------------------------------------------- */}
-                      <li
+                      {/* <li
                         id="textLeftSelect"
                         className={
                           userData.nomRol === "administrador" ||
@@ -455,10 +455,10 @@ export default function SideBar() {
                         <Link to="/ihh/listadoImpugnacionEmp">
                           <button id="submenuSidebar">
                             <IoTime id="icons" />
-                            Impugnación
+                            Registro
                           </button>
                         </Link>
-                      </li>
+                      </li> */}
 
                       {/* --------------------------------------------------- */}
                       <li
@@ -474,7 +474,7 @@ export default function SideBar() {
                         <Link to="/ihh/ListadoImpEmpProy">
                           <button id="submenuSidebar">
                             <IoTime id="icons" />
-                            Impugnar horas
+                            Registrar horas
                           </button>
                         </Link>
                       </li>

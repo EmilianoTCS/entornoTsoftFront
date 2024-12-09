@@ -144,7 +144,7 @@ export default function IHH_ListadoAcopProy() {
           </a>
           <h1 id="TitlesPages">Listado de asociaciones PROYECTOS - ACOPS</h1>
           <h6 style={{ color: "gray" }}>
-            Impugnación de Horas {"->"} Listado de asociaciones de proyectos - ACOPS
+            Registro de Horas {"->"} Listado de asociaciones de proyectos - ACOPS
           </h6>
           <br></br>
 

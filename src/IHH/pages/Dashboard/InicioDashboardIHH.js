@@ -201,7 +201,7 @@ export default function InicioDashboardIHH() {
         }}
       >
         <form onSubmit={obtenerDatosProyectos}>
-          <h3>Generador Dashboard Impugnación de Horas</h3>
+          <h3>Generador Dashboard Registro de Horas</h3>
           <div
             style={{
               display: "flex",

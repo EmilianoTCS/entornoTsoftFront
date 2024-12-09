@@ -199,7 +199,7 @@ export default function IHH_ListadoAcop() {
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de ACOPS</h1>
           <h6 style={{ color: "gray" }}>
-            Impugnación de Horas {"->"} Listado de ACOPS
+            Registro de Horas {"->"} Listado de ACOPS
           </h6>
           <br></br>
 

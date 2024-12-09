@@ -160,7 +160,7 @@ export default function IHH_ListadoElementoImp() {
               </Button>
             </Link>
             <Button
-              data-title="Desactivar elemento de impugnación"
+              data-title="Desactivar elemento de registro"
               id="OperationBtns"
               onClick={() => desactivar(params)}
               style={{ color: "black" }}
@@ -315,9 +315,9 @@ export default function IHH_ListadoElementoImp() {
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de elementos de impugnación</h1>
+          <h1 id="TitlesPages">Listado de elementos de registro de horas</h1>
           <h6 style={{ color: "gray" }}>
-            Impugnación de Horas {"->"} Listado de elementos de impugnación
+            Registro de Horas {"->"} Listado de elementos de registros de horas
           </h6>
           <br></br>
 

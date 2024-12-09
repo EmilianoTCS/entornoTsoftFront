@@ -263,7 +263,7 @@ export default function IHH_ListadoTipoPeriodo() {
           </a>
           <h1 id="TitlesPages">Listado de tipos de períodos</h1>
           <h6 style={{ color: "gray" }}>
-            Impugnación de Horas {"->"} Listado de tipos de períodos
+            Registro de Horas {"->"} Listado de tipos de períodos
           </h6>
           <br></br>
 

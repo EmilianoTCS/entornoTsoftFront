@@ -362,7 +362,7 @@ export default function IHH_ListadoPeriodo() {
         <div id="containerTablas">
           <h1 id="TitlesPages">Listado de períodos</h1>
           <h6 style={{ color: "gray" }}>
-            Impugnación de horas {"->"} Listado de períodos
+            Registro de horas {"->"} Listado de períodos
           </h6>
           <br></br>
 

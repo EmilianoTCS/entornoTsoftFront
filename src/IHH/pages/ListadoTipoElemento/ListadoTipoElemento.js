@@ -250,7 +250,7 @@ export default function IHH_ListadoTipoElemento() {
           </a>
           <h1 id="TitlesPages">Listado de tipos de elementos</h1>
           <h6 style={{ color: "gray" }}>
-            Impugnación de Horas {"->"} Listado de tipos de elementos
+            Registro de Horas {"->"} Listado de tipos de elementos
           </h6>
           <br></br>
 
