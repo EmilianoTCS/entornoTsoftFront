@@ -18,7 +18,7 @@ export default function FormularioImportarRegistros_IHH({
   const [resumenRegistros, setResumenRegistros] = useState(null);
 
   const show = isActive;
-  
+
   const handleClose = () => {
     cambiarEstado(false);
     setErrores(null);
@@ -95,8 +95,9 @@ export default function FormularioImportarRegistros_IHH({
       archivoCargaRegistros,
       data
     ).then((response) => {
-      const { errores } = response;
       console.log(response);
+      const { errores, OUT_CODRESULT, OUT_MJERESULT } = response;
+      OUT_CODRESULT && TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
       setResumenRegistros({
         cantExitosos: response.cantExitosos,
         cantFallidos: response.cantFallidos,
@@ -119,7 +120,9 @@ export default function FormularioImportarRegistros_IHH({
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Importación de impugnaciones de horas al sistema</Modal.Title>
+          <Modal.Title>
+            Importación de impugnaciones de horas al sistema
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <section style={section1Plantilla}>
