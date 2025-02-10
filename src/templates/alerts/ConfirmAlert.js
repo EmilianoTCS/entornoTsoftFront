@@ -4,8 +4,8 @@ export default function ConfirmAlert(text) {
   const MySwal = withReactContent(Swal);
   const promise1 = new Promise((resolve, reject) => {
     MySwal.fire({
-      title: "¿Deseas desactivar / eliminar este registro?",
-      html: 'El archivo será eliminado permanentemente, esta acción no se puede deshacer',
+      title: "¿Deseas desactivar este registro?",
+      html: 'El archivo será desactivado permanentemente, para restablecer el archivo deberá contactar a un administrador',
       icon: "warning",
       iconColor: "#e10b1c",
       showConfirmButton: true,

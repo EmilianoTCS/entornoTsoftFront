@@ -73,6 +73,13 @@ import IHH_ListadoMesesAcop from "./IHH/pages/ListadoMesesAcop/ListadoMesesAcop.
 import IHH_ListadoAcopProy from "./IHH/pages/ListadoAcopProy/ListadoAcopProy.js";
 import InicioDashboardIHH from "./IHH/pages/Dashboard/InicioDashboardIHH.js";
 import InicioDashboardAF from "./pages/Listados/Dashboard/InicioDashboardAF.js";
+import OI_listadoOpInternas from "./OI/pages/ListadoOpInternas/ListadoOpInternas.jsx";
+import OI_listadoAsignacionColab from "./OI/pages/ListadoAsignacionColab/ListadoAsignacionColab.jsx";
+import OI_listadoCompetenciaColab from "./OI/pages/ListadoCompetenciaColab/ListadoCompetenciaColab.jsx";
+import OI_listadoMotivosEstandar from "./OI/pages/ListadoMotivosEstandar/ListadoMotivoEstandar.jsx";
+import OI_ListadoMovimientoTsoft from "./OI/pages/ListadoMovimientoTsoft/ListadoMovimientoTsoft.jsx";
+import OI_listadoSeniorityColab from "./OI/pages/ListadoSeniorityColab/ListadoSeniorityColab.jsx";
+import OI_listadoDocColab from "./OI/pages/ListadoDocColab/ListadoDocColab.jsx";
 function App() {
   return (
     <AuthState>
@@ -128,7 +135,7 @@ function App() {
               element={<ListadoCursoAlumnos />}
               path="/listadoCursoAlumnos/:params"
             ></Route>
-                        <Route
+            <Route
               element={<ListadoCursoAlumnoRamo />}
               path="/listadoCursoAlumnoRamo/:params"
             ></Route>
@@ -153,10 +160,7 @@ function App() {
               element={<ListadoReqCurso />}
               path="/listadoReqCurso/:params"
             ></Route>
-             <Route
-              element={<InicioDashboardAF />}
-              path="/Dashboard_AF"
-            ></Route>
+            <Route element={<InicioDashboardAF />} path="/Dashboard_AF"></Route>
             {/* ------------------------------------------------------------------------------------------ */}
 
             {/* DASHBOARD */}
@@ -307,8 +311,36 @@ function App() {
               element={<InicioDashboardIHH />}
               path="/ihh/Dashboard"
             ></Route>
-            
 
+            {/* ------------------------------------- OI */}
+            <Route
+              element={<OI_listadoOpInternas />}
+              path="/oi/listadoOperacionesInternas"
+            ></Route>
+            <Route
+              element={<OI_listadoAsignacionColab />}
+              path="/oi/listadoAsignacionColab"
+            ></Route>
+            <Route
+              element={<OI_listadoCompetenciaColab />}
+              path="/oi/listadoCompetenciaColab"
+            ></Route>
+            <Route
+              element={<OI_listadoMotivosEstandar />}
+              path="/oi/listadoMotivosEstandar"
+            ></Route>
+            <Route
+              element={<OI_ListadoMovimientoTsoft />}
+              path="/oi/listadoMovimientoTsoft"
+            ></Route>
+            <Route
+              element={<OI_listadoSeniorityColab />}
+              path="/oi/listadoSeniority"
+            ></Route>
+            <Route
+              element={<OI_listadoDocColab />}
+              path="/oi/listadoDocColab"
+            ></Route>
             {/* ------------------------------------------------------------------------------------------ */}
 
             <Route

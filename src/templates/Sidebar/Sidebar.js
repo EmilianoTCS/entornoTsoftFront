@@ -30,6 +30,7 @@ export default function SideBar() {
   const [isActiveImportarArchivos_IHH, setIsActiveImportarArchivos_IHH] =
     useState(false);
   const [isToggledIHH, setToggleIHH] = useState(false);
+  const [isToggledOI, setToggleOI] = useState(false);
 
   function handleChangeEvaluaciones() {
     setToggleEvaluaciones(!isToggledEvaluaciones);
@@ -37,7 +38,9 @@ export default function SideBar() {
   function handleChangeIHH() {
     setToggleIHH(!isToggledIHH);
   }
-
+  function handleChangeOI() {
+    setToggleOI(!isToggledOI);
+  }
   function handleChangeAcademia() {
     setToggleAcademia(!isToggledAcademia);
   }
@@ -494,6 +497,160 @@ export default function SideBar() {
                           <button id="submenuSidebar">
                             <IoTime id="icons" />
                             Resúmenes
+                          </button>
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                  {/* -----------------Operaciones internas ------------------------- */}
+
+                  <li
+                    id="li_Academia"
+                    onClick={handleChangeOI}
+                    className={
+                      userData.nomRol === "administrador" ||
+                      userData.nomRol === "people" ||
+                      userData.nomRol === "gerencia" ||
+                      userData.nomRol === "referente" ||
+                      userData.nomRol === "colaborador"
+                        ? ""
+                        : "private"
+                    }
+                  >
+                    <button id="buttonSidebar">
+                      <BsHourglassBottom id="icons" />
+                      Operaciones internas
+                    </button>
+                    <ul
+                      id="COE_Academia"
+                      className={isToggledOI ? "active" : ""}
+                    >
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/oi/listadoOperacionesInternas">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Listado de operaciones
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
+
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/oi/listadoAsignacionColab">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Listado asignaciones - colab
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/oi/listadoCompetenciaColab">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Listado competencias - colab
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/ihh/listadoPeriodo/0">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Listado documentos - colab
+                          </button>
+                        </Link>
+                      </li>
+
+
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/oi/listadoMotivosEstandar">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Listado motivos estándar
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/oi/listadoMovimientoTsoft">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Listado movimientos - colab - TSOFT
+                          </button>
+                        </Link>
+                      </li>
+                      {/* --------------------------------------------------- */}
+                      <li
+                        id="textLeftSelect"
+                        className={
+                          userData.nomRol === "administrador" ||
+                          userData.nomRol === "people" ||
+                          userData.nomRol === "gerencia"
+                            ? ""
+                            : "private"
+                        }
+                      >
+                        <Link to="/oi/listadoSeniority">
+                          <button id="submenuSidebar">
+                            <IoTime id="icons" />
+                            Listado seniority - colab
                           </button>
                         </Link>
                       </li>
