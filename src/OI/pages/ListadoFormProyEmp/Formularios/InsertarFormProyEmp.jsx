@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../ListadoMotivoEstandar.css";
+import "../ListadoFormProyEmp.css";
 
 import getDataService from "../../../../services/GetDataService";
 import SendDataService from "../../../../services/SendDataService";
@@ -7,7 +7,7 @@ import TopAlertsError from "../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-export default function InsertarMotivoEstandar({ isActive, cambiarEstado }) {
+export default function InsertarFormProyEmp({ isActive, cambiarEstado }) {
   const handleClose = () =>
     cambiarEstado((prevDatos) => ({
       ...prevDatos,
@@ -17,56 +17,73 @@ export default function InsertarMotivoEstandar({ isActive, cambiarEstado }) {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
   const [datos, setDatos] = useState({
-    nombreMotivo: "",
-    tipo: "",
-    descripcion: "",
+    idFormulario: "",
+    idEDDProyEmp: "",
     isActive: 1,
     usuarioCreacion: userData.usuario,
   });
 
   const [auxList, setAuxList] = useState({
-    listadoTipoMotivos: [""],
+    listadoFormularios: [""],
+    listadoEddProyEmp: [""],
   });
-
-  const obtenerConfDatos = () => {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
+  const obtenerFormularios = () => {
+    var url = "pages/listados/oi_listadoFormulario.php";
+    var operationUrl = "oi_listadoFormulario";
     var data = {
-      tipoConfDato: "OI",
-      subTipoConfDato: "TIPO_MOTIVO",
+      num_boton: 1,
+      cantidadPorPagina: 99999999999,
     };
+    SendDataService(url, operationUrl, data).then((data) => {
+      const { paginador, ...datos } = data;
+      setAuxList((prev) => ({
+        ...prev,
+        listadoFormularios: datos.datos,
+      }));
+    });
+  };
+  const obtenerProyEmp = () => {
+    var url = "pages/auxiliares/listadoEddProyEmp.php";
+    var operationUrl = "listados";
+    var data = {
+      idProyecto: 0,
+    };
+
     SendDataService(url, operationUrl, data).then((response) => {
-      setAuxList({
-        listadoTipoMotivos: response,
-      });
+      setAuxList((prev) => ({
+        ...prev,
+        listadoEddProyEmp: response,
+      }));
     });
   };
 
   const Validaciones = () => {
-    if (datos.nombreMotivo.trim() === "") {
-      TopAlertsError("01", "El nombre del motivo no puede estar vacío");
+    if (datos.idFormulario < 1 || datos.idFormulario === "") {
+      TopAlertsError("01", "El formulario no puede estar vacío");
       return true;
     }
-    if (datos.tipo.trim() === "") {
-      TopAlertsError("02", "El tipo de motivo no puede estar vacío");
+
+    if (datos.idEDDProyEmp < 1 || datos.idEDDProyEmp === "") {
+      TopAlertsError(
+        "02",
+        "La relación proyecto - colaborador no puede estar vacía"
+      );
       return true;
-    } else {
-      return false;
     }
+
+    return false;
   };
 
   function SendData(e) {
     e.preventDefault();
-    
     if (Validaciones()) {
       return;
     }
-    const url = "pages/insertar/oi_insertarMotivoEstandar.php";
-    const operationUrl = "oi_insertarMotivoEstandar";
+    const url = "pages/insertar/oi_insertarFormProyEmp.php";
+    const operationUrl = "oi_insertarFormProyEmp";
     var data = {
-      nombreMotivo: datos.nombreMotivo,
-      tipo: datos.tipo,
-      descripcion: datos.descripcion,
+      idFormulario: datos.idFormulario,
+      idEDDProyEmp: datos.idEDDProyEmp,
       isActive: datos.isActive,
       usuarioCreacion: userData.usuario,
     };
@@ -78,7 +95,8 @@ export default function InsertarMotivoEstandar({ isActive, cambiarEstado }) {
 
   useEffect(
     function () {
-      obtenerConfDatos();
+      obtenerFormularios();
+      obtenerProyEmp();
     },
     [isActive]
   );
@@ -87,30 +105,35 @@ export default function InsertarMotivoEstandar({ isActive, cambiarEstado }) {
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear motivo estándar</Modal.Title>
+          <Modal.Title>Crear formulario - proyecto - colaborador</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
             <div className="form-group">
-              <label htmlFor="input_Proyecto">
-                Ingrese el nombre del motivo:{" "}
-              </label>
-              <input
-                type="text"
-                className="form-control"
+              <label htmlFor="input_Proyecto">Seleccione un formulario: </label>
+              <select
                 required
-                maxLength={100}
-                onChange={(e) => {
-                  setDatos((prev) => ({
-                    ...prev,
-                    nombreMotivo: e.target.value,
-                  }));
-                }}
-              />
+                className="form-control"
+                onChange={({ target }) =>
+                  setDatos((prevDatos) => ({
+                    ...prevDatos,
+                    idFormulario: target.value,
+                  }))
+                }
+              >
+                <option hidden value="">
+                  Desplegar lista
+                </option>
+                {auxList.listadoFormularios.map((valor) => (
+                  <option value={valor.idFormulario}>
+                    {valor.nomFormulario}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-group">
               <label htmlFor="input_Proyecto">
-                Seleccione el tipo de motivo:{" "}
+                Seleccione una relación proyecto - colaborador:{" "}
               </label>
               <select
                 required
@@ -118,7 +141,7 @@ export default function InsertarMotivoEstandar({ isActive, cambiarEstado }) {
                 onChange={({ target }) =>
                   setDatos((prevDatos) => ({
                     ...prevDatos,
-                    tipo: target.value,
+                    idEDDProyEmp: target.value,
                   }))
                 }
               >
@@ -126,27 +149,11 @@ export default function InsertarMotivoEstandar({ isActive, cambiarEstado }) {
                   Desplegar lista
                 </option>
 
-                {auxList.listadoTipoMotivos.map((valor) => (
-                  <option value={valor.datoVisible}>{valor.datoVisible}</option>
+                {auxList.listadoEddProyEmp.map((valor) => (
+                  <option value={valor.idEDDProyEmp}>{valor.nomProyEmp}</option>
                 ))}
               </select>
             </div>
-            <div className="form-group">
-              <label htmlFor="input_Proyecto">Descripción (opcional): </label>
-              <textarea
-                className="form-control"
-                onChange={({ target }) =>
-                  setDatos((prevDatos) => ({
-                    ...prevDatos,
-                    descripcion: target.value,
-                  }))
-                }
-                maxLength={400}
-                rows={5}
-                style={{ fontSize: "10pt" }}
-              ></textarea>
-            </div>
-
             <Button
               variant="secondary"
               type="submit"

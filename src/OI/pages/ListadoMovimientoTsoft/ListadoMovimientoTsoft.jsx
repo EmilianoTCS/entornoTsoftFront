@@ -144,7 +144,7 @@ export default function OI_ListadoMovimientoTsoft() {
           </h6>
           <br></br>
 
-          <div id="selectPaginador">
+          <div id="selectPaginador" style={{maxWidth: "1300px"}}>
             <Button
               id="btn"
               style={{ whiteSpace: "nowrap", width: "230px" }}
@@ -286,6 +286,7 @@ export default function OI_ListadoMovimientoTsoft() {
                 <th style={{ width: "110px" }} align="right">
                   Fecha fin
                 </th>
+                <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>

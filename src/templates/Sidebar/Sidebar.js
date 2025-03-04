@@ -591,7 +591,7 @@ export default function SideBar() {
                             : "private"
                         }
                       >
-                        <Link to="/ihh/listadoPeriodo/0">
+                        <Link to="/oi/listadoDocColab">
                           <button id="submenuSidebar">
                             <IoTime id="icons" />
                             Listado documentos - colab

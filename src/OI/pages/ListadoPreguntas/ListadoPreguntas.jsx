@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
-import getDataService from "../../../services/GetDataService";
 import SendDataService from "../../../services/SendDataService";
 import Header from "../../../templates/Header/Header";
 import Paginador from "../../../templates/Paginador/Paginador";
@@ -10,15 +9,10 @@ import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
-import InsertarAsignacionColab from "./Formularios/InsertarMotivoEstandar";
-import EditarMotivoEstandar from "./Formularios/EditarMotivoEstandar";
+import InsertarPregunta from "./Formularios/InsertarPregunta";
 
-export default function OI_listadoMotivosEstandar() {
+export default function OI_listadoPreguntas() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-
-  const [filtros, setFiltros] = useState({
-    tipo: "",
-  });
 
   const [booleanos, setBooleanos] = useState({
     isActiveInsertar: false,
@@ -30,39 +24,21 @@ export default function OI_listadoMotivosEstandar() {
   const [datosFila, setDatosFila] = useState([]);
 
   const [mainList, setMainList] = useState({
-    listadoMotivos: [""],
-  });
-  const [auxList, setAuxList] = useState({
-    listadoTipoMotivo: [""],
+    preguntas: [""],
   });
   const [num_boton, setNumBoton] = useState(1);
 
   const obtenerDatos = () => {
-    var url = "pages/listados/oi_listadoMotivosEstandar.php";
-    var operationUrl = "oi_listadoMotivosEstandar";
+    var url = "pages/listados/oi_listadoPreguntas.php";
+    var operationUrl = "oi_listadoPreguntas";
     var data = {
-      tipo: filtros.tipo,
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
-      setMainList({ listadoMotivos: datos.datos });
-    });
-  };
-
-  const obtenerConfDatos = () => {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
-    var data = {
-      tipoConfDato: "OI",
-      subTipoConfDato: "TIPO_MOTIVO",
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      setAuxList({
-        listadoTipoMotivo: response,
-      });
+      setMainList({ preguntas: datos.datos });
     });
   };
 
@@ -70,10 +46,10 @@ export default function OI_listadoMotivosEstandar() {
     let text = "Esta acción no se puede deshacer";
     ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/desactivar/oi_desactivarMotivoEstandar.php";
-        var operationUrl = "oi_desactivarMotivoEstandar";
+        var url = "pages/desactivar/oi_desactivarPregunta.php";
+        var operationUrl = "oi_desactivarPregunta";
         var data = {
-          idMotivo: ID,
+          idPregunta: ID,
           usuarioModificacion: userData.usuario,
         };
         SendDataService(url, operationUrl, data).then((response) => {
@@ -86,43 +62,40 @@ export default function OI_listadoMotivosEstandar() {
   useEffect(
     function () {
       obtenerDatos();
-      obtenerConfDatos();
     },
-    [num_boton, cantidadPorPagina, filtros]
+    [num_boton, cantidadPorPagina]
   );
 
   return userData.statusConected || userData !== null ? (
     <>
       {booleanos.isActiveInsertar && (
-        <InsertarAsignacionColab
+        <InsertarPregunta
           cambiarEstado={setBooleanos}
           isActive={booleanos.isActiveInsertar}
         />
       )}
-      {
-        booleanos.isActiveEditar && (
-          <EditarMotivoEstandar 
+      {/* {booleanos.isActiveEditar && (
+        <EditarAsignacionColab
           cambiarEstado={setBooleanos}
           datosFila={datosFila}
           isActive={booleanos.isActiveEditar}
-          />
-        )
-      }
+        ></EditarAsignacionColab>
+      )} */}
       <Header></Header>
       <br></br>
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de motivos estándar</h1>
+          <h1 id="TitlesPages">Listado de preguntas de formularios</h1>
           <h6 style={{ color: "gray" }}>
-            Operaciones internas {"->"} Listado de motivos estándar
+            Operaciones internas {"->"} Listado de preguntas de formularios
           </h6>
           <br></br>
 
-          <div id="selectPaginador" style={{maxWidth: "1300px"}}>
+          <div id="selectPaginador" style={{ maxWidth: "1300px" }}>
             <Button
               id="btn"
-              style={{ whiteSpace: "nowrap", width: "230px" }}
+              style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setBooleanos((prevDatos) => ({
                   ...prevDatos,
@@ -130,7 +103,7 @@ export default function OI_listadoMotivosEstandar() {
                 }));
               }}
             >
-              Crear motivo estándar
+              Crear pregunta
             </Button>
             <div
               className="form-group"
@@ -160,54 +133,32 @@ export default function OI_listadoMotivosEstandar() {
                 <option value="100">100</option>
               </select>
             </div>
-
-            <div className="cl_slct_acop">
-              <div className="form-group" id="btn2">
-                <label htmlFor="lbl_select_acop">Tipo:</label>
-                <select
-                  value={filtros.tipo || ""}
-                  className="form-control"
-                  name="input_listadoOperacionesInternas"
-                  id="input_listadoOperacionesInternas"
-                  onChange={({ target }) => {
-                    setFiltros((prev) => ({
-                      ...prev,
-                      tipo: target.value,
-                    }));
-                  }}
-                  required
-                >
-                  <option value="">Todos</option>
-                  {auxList.listadoTipoMotivo.map((item) => (
-                    <option key={item.datoVisible} value={item.datoVisible}>
-                      {item.datoVisible}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
           </div>
 
           <Table id="mainTable" hover responsive>
             <thead>
               <tr>
-                <th>Motivo</th>
-                <th>Tipo</th>
-                <th>Descripción</th>
+                <th>Formulario</th>
+                <th>Pregunta</th>
+                <th>Orden</th>
+                <th>Tipo de respuesta</th>
+                <th>Obligatoria</th>
                 <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>
-              {mainList.listadoMotivos.map((item) => (
-                <tr key={item.idMotivo}>
-                  <td title={item.nombreMotivo} className="td_con_hover">
-                    {item.nombreMotivo}
+              {mainList.preguntas.map((item) => (
+                <tr key={item.idPregunta}>
+                  <td>{item.nomFormulario}</td>
+                  <td>{item.nomPregunta}</td>
+                  <td className="text-right">{item.ordenPregunta}</td>
+                  <td>{item.tipoResp}</td>
+                  <td className="text-center">
+                    {item.preguntaObligatoria === "1" ? "SÍ" : "NO"}
                   </td>
-                  <td>{item.tipo}</td>
-                  <td>{item.descripcion}</td>
                   <td>
                     <button
-                      data-title="Editar motivo"
+                      data-title="Editar pregunta"
                       id="OperationBtns"
                       onClick={() => {
                         setDatosFila(item);
@@ -220,8 +171,8 @@ export default function OI_listadoMotivosEstandar() {
                       <RiEditBoxFill id="icons" />
                     </button>
                     <button
-                      data-title="Desactivar motivo"
-                      onClick={() => desactivar(item.idMotivo)}
+                      data-title="Desactivar pregunta"
+                      onClick={() => desactivar(item.idPregunta)}
                       id="OperationBtns"
                     >
                       <BsFillTrashFill id="icons" />

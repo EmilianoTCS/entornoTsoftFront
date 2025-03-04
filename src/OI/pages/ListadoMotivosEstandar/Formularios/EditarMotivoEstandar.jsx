@@ -45,9 +45,23 @@ export default function EditarMotivoEstandar({
       });
     });
   };
-
+  const Validaciones = () => {
+    if (datos.nombreMotivo.trim() === "") {
+      TopAlertsError("01", "El nombre del motivo no puede estar vacío");
+      return true;
+    }
+    if (datos.tipo.trim() === "") {
+      TopAlertsError("02", "El tipo de motivo no puede estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  };
   function SendData(e) {
     e.preventDefault();
+    if (Validaciones()) {
+      return;
+    }
     const url = "pages/editar/oi_editarMotivoEstandar.php";
     const operationUrl = "oi_editarMotivoEstandar";
     var data = {
@@ -72,7 +86,7 @@ export default function EditarMotivoEstandar({
           idMotivo: datosFila.idMotivo,
           nombreMotivo: datosFila.nombreMotivo,
           tipo: datosFila.tipo,
-          descripcion: datos.descripcion,
+          descripcion: datosFila.descripcion,
         });
       }
     },

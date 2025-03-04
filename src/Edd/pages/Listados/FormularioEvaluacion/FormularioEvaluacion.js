@@ -12,11 +12,12 @@ import "../BtnInsertar.css";
 import logo from "./logo/tsoft.png";
 import Swal from "sweetalert2";
 import ConfirmAlertAll from "../../Alerts/ConfirmAlertAll";
-import logoTsoft from "../FormularioEvaluacion/logo/tsoft.png"
-
+import logoTsoft from "../FormularioEvaluacion/logo/tsoft.png";
 
 export default function FormularioEvaluacion() {
-  const [, params] = useRoute("/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion");
+  const [, params] = useRoute(
+    "/listadoRespPregEvaluaciones/:idEvaluacion/:idEDDProyEmpEvaluado/:idEDDProyEmpEvaluador/:cicloEvaluacion"
+  );
 
   const [idEDDEvalPregunta, setidEDDEvalPregunta] = useState([""]); //Recibe la respuesta del backend y la almacena en raw, sin procesar
   const [idEDDEvalNomPregunta, setidEDDEvalNomPregunta] = useState(""); //Almacena el listado de preguntas procesado
@@ -37,7 +38,7 @@ export default function FormularioEvaluacion() {
       idEvaluacion: idEDDEvaluacion,
       idEmpleado: idEDDProyEmpEvaluador,
       idEDDProyEmpEvaluado: idEDDProyEmpEvaluado,
-      cicloEvaluacion:cicloEvaluacion,
+      cicloEvaluacion: cicloEvaluacion,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       setidEDDEvalPregunta(data);
@@ -62,14 +63,13 @@ export default function FormularioEvaluacion() {
         confirmButtonText: "Continuar",
         cancelButtonText: "Cancelar",
         allowOutsideClick: false,
-        allowEscapeKey: false
+        allowEscapeKey: false,
       }).then((result) => {
         if (result.isConfirmed) {
           var fechaIni = new Date();
           setfechaInicioExamen(fechaIni);
-        }
-        else {
-          window.history.back()
+        } else {
+          window.history.back();
         }
       });
     }
@@ -87,7 +87,7 @@ export default function FormularioEvaluacion() {
         confirmButtonText: "Continuar",
       }).then((result) => {
         if (result.isConfirmed) {
-          window.history.back()
+          window.history.back();
         }
       });
     }
@@ -102,8 +102,11 @@ export default function FormularioEvaluacion() {
   }
   function SendData(e) {
     e.preventDefault();
-    ConfirmAlertAll('¿Confirma el envío de los datos?', 'No podrás cambiar los resultados.', 'warning').then((response) => {
-
+    ConfirmAlertAll(
+      "¿Confirma el envío de los datos?",
+      "No podrás cambiar los resultados.",
+      "warning"
+    ).then((response) => {
       const url = "pages/insertar/insertarEddEvalProyResp.php";
       const operationUrl = "insertarEddEvalProyResp";
       e.preventDefault();
@@ -122,7 +125,6 @@ export default function FormularioEvaluacion() {
       SendDataService(url, operationUrl, data).then((response) => {
         console.log("respuestaServer:", response);
         ConfirmAlertEnvio();
-
       });
     });
   }
@@ -134,7 +136,6 @@ export default function FormularioEvaluacion() {
     [idEDDEvaluacion, loadedData]
   );
 
-
   var auxIdPregunta = "0";
   var auxEncabezado = "0";
   var auxDesc = "0";
@@ -144,57 +145,52 @@ export default function FormularioEvaluacion() {
       <Header></Header>
       <form onSubmit={SendData}>
         <a
-          style={{ margin: '10px', marginTop: '15px', marginLeft: '60px' }}
+          style={{ margin: "10px", marginTop: "15px", marginLeft: "60px" }}
           type="submit"
           id="btnAtras"
           value="Registrar"
-          href="javascript: history.go(-1)">Volver
+          href="javascript: history.go(-1)"
+        >
+          Volver
         </a>
         <Container id="textStyle">
-
           <div class="container">
-
             <div class="row">
               <div class="col" id="title">
-
                 {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
-
                   if (auxEncabezado !== idEDDEvalPregunta.nomEvaluacion) {
                     return (
                       <>
-                        <strong><h2>{auxEncabezado = idEDDEvalPregunta.nomEvaluacion}</h2></strong>
+                        <strong>
+                          <h2>
+                            {(auxEncabezado = idEDDEvalPregunta.nomEvaluacion)}
+                          </h2>
+                        </strong>
                       </>
-                    )
+                    );
                   }
                 })}
               </div>
               <div class="col" id="encabezadoRight">
                 <img width="180px" height="100px" src={logoTsoft}></img>
-
               </div>
               {/* src={idEDDEvalPregunta.logoFormulario} */}
             </div>
           </div>
           {idEDDEvalPregunta.map((idEDDEvalPregunta) => {
-
             if (auxDesc !== idEDDEvalPregunta.descFormulario) {
-              auxDesc = idEDDEvalPregunta.descFormulario
+              auxDesc = idEDDEvalPregunta.descFormulario;
               return (
                 <>
-                  <p id="encabezadoEnd" style={{ color: 'white' }}>
-                    {auxDesc = idEDDEvalPregunta.descFormulario}
+                  <p id="encabezadoEnd" style={{ color: "white" }}>
+                    {(auxDesc = idEDDEvalPregunta.descFormulario)}
                   </p>
                 </>
-
-              )
-
+              );
             }
           })}
-
-
         </Container>
         <Container id="fondoTabla1">
-
           <br></br>
           <h1>Formulario de evaluación</h1>
           <Table>
@@ -226,7 +222,6 @@ export default function FormularioEvaluacion() {
                             <tr>
                               <td></td>
                               <td>
-
                                 <textarea
                                   maxLength="500"
                                   type="textarea"
@@ -239,7 +234,10 @@ export default function FormularioEvaluacion() {
                                   className="form-control"
                                   id="idEDDEvalPregunta.idEvalPregunta"
                                   placeholder="Escriba su respuesta"
-                                  required={idEDDEvalPregunta.preguntaObligatoria === "1"}
+                                  required={
+                                    idEDDEvalPregunta.preguntaObligatoria ===
+                                    "1"
+                                  }
                                   onChange={({ target }) => {
                                     let respuestaTexto = target.value;
 
@@ -251,8 +249,7 @@ export default function FormularioEvaluacion() {
                                           idEDDEvalPregunta.idEDDEvalPregunta,
                                         idEDDEvalRespPreg:
                                           idEDDEvalPregunta.idEDDEvalRespPreg,
-                                        tipoResp:
-                                          idEDDEvalPregunta.tipoResp,
+                                        tipoResp: idEDDEvalPregunta.tipoResp,
                                         respuesta: respuestaTexto,
                                         idEDDEvalProyEmp:
                                           idEDDEvalPregunta.idEDDEvalProyEmp,
@@ -295,9 +292,15 @@ export default function FormularioEvaluacion() {
                                   type="radio"
                                   name={idEDDEvalPregunta.nomPregunta}
                                   value={idEDDEvalPregunta.nomRespPreg}
-                                  required={idEDDEvalPregunta.preguntaObligatoria === "1"}
+                                  required={
+                                    idEDDEvalPregunta.preguntaObligatoria ===
+                                    "1"
+                                  }
                                   id="inputNomRespuesta"
-                                  style={{ width: "4em", textTransform: "uppercase" }}
+                                  style={{
+                                    width: "4em",
+                                    textTransform: "uppercase",
+                                  }}
                                   onChange={({ target }) => {
                                     let respuestaTexto = target.value;
 
@@ -309,8 +312,7 @@ export default function FormularioEvaluacion() {
                                           idEDDEvalPregunta.idEDDEvalPregunta,
                                         idEDDEvalRespPreg:
                                           idEDDEvalPregunta.idEDDEvalRespPreg,
-                                        tipoResp:
-                                          idEDDEvalPregunta.tipoResp,
+                                        tipoResp: idEDDEvalPregunta.tipoResp,
                                         respuesta: respuestaTexto,
                                         idEDDEvalProyEmp:
                                           idEDDEvalPregunta.idEDDEvalProyEmp,
@@ -341,9 +343,14 @@ export default function FormularioEvaluacion() {
                                 type="radio"
                                 name={idEDDEvalPregunta.nomPregunta}
                                 value={idEDDEvalPregunta.nomRespPreg}
-                                required={idEDDEvalPregunta.preguntaObligatoria === "1"}
+                                required={
+                                  idEDDEvalPregunta.preguntaObligatoria === "1"
+                                }
                                 id="inputNomRespuesta"
-                                style={{ width: "4em", textTransform: "uppercase" }}
+                                style={{
+                                  width: "4em",
+                                  textTransform: "uppercase",
+                                }}
                                 onChange={({ target }) => {
                                   let respuestaTexto = target.value;
 
@@ -355,8 +362,7 @@ export default function FormularioEvaluacion() {
                                         idEDDEvalPregunta.idEDDEvalPregunta,
                                       idEDDEvalRespPreg:
                                         idEDDEvalPregunta.idEDDEvalRespPreg,
-                                      tipoResp:
-                                        idEDDEvalPregunta.tipoResp,
+                                      tipoResp: idEDDEvalPregunta.tipoResp,
                                       respuesta: respuestaTexto,
                                       idEDDEvalProyEmp:
                                         idEDDEvalPregunta.idEDDEvalProyEmp,
@@ -386,12 +392,10 @@ export default function FormularioEvaluacion() {
               Registrar
             </Button>
           </Table>
-
         </Container>
       </form>
     </>
   ) : (
     <Navigate to="/login"></Navigate>
   );
-
 }

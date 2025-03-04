@@ -63,10 +63,34 @@ export default function EditarMovimientoTsoft({
     });
   };
 
+  const Validaciones = () => {
+    if (datos.idColaborador < 1 || datos.idColaborador === "") {
+      TopAlertsError("01", "El colaborador no puede estar vacío");
+      return true;
+    }
+    if (
+      datos.fechaFin &&
+      new Date(datos.fechaIni).toLocaleString("es-CL") >
+        new Date(datos.fechaFin).toLocaleString("es-CL")
+    ) {
+      TopAlertsError(
+        "02",
+        "La fecha de inicio no puede ser mayor a la fecha de fin"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/oi_insertarMovimientoColab.php";
-    const operationUrl = "oi_insertarMovimientoColab";
+
+    if (Validaciones()) {
+      return;
+    }
+
+    const url = "pages/editar/oi_editarMovimientoColab.php";
+    const operationUrl = "oi_editarMovimientoColab";
     var data = {
       idMovimientoColabTsoft: datos.idMovimientoColabTsoft,
       idEmpleado: datos.idEmpleado,
@@ -89,13 +113,13 @@ export default function EditarMovimientoTsoft({
     function () {
       obtenerEmpleados();
       obtenerMotivos();
-      if (datosFila) {        
+      if (datosFila) {
         setDatos({
           idMovimientoColabTsoft: datosFila.idMovimientoColabTsoft,
           idEmpleado: datosFila.idEmpleado,
           idMotivo: datosFila.idMotivo,
-          fechaIni: formatDate(datosFila.fechaIni),
-          fechaFin: formatDate(datosFila.fechaFin),
+          fechaIni: datosFila.fechaIni && formatDate(datosFila.fechaIni),
+          fechaFin: datosFila.fechaFin && formatDate(datosFila.fechaFin),
           isActive: datosFila.isActive,
           usuarioCreacion: userData.usuario,
         });
@@ -162,7 +186,12 @@ export default function EditarMovimientoTsoft({
                 </option>
 
                 {auxList.listadoMotivos.map((valor) => (
-                  <option selected={datos.idMotivo === valor.idMotivo} value={valor.idMotivo}>{valor.nombreMotivo}</option>
+                  <option
+                    selected={datos.idMotivo === valor.idMotivo}
+                    value={valor.idMotivo}
+                  >
+                    {valor.nombreMotivo}
+                  </option>
                 ))}
               </select>
             </div>
@@ -175,7 +204,7 @@ export default function EditarMovimientoTsoft({
                 margin: "auto",
               }}
             >
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo" className="input_type_date">
                   Fecha inicio:
                 </label>
@@ -192,7 +221,7 @@ export default function EditarMovimientoTsoft({
                   required
                 />
               </div>
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo">Fecha fin:</label>
                 <input
                   type="date"

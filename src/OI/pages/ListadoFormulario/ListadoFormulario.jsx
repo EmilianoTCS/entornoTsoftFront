@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
-import getDataService from "../../../services/GetDataService";
 import SendDataService from "../../../services/SendDataService";
 import Header from "../../../templates/Header/Header";
 import Paginador from "../../../templates/Paginador/Paginador";
@@ -10,15 +9,11 @@ import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
-import InsertarAsignacionColab from "./Formularios/InsertarMotivoEstandar";
-import EditarMotivoEstandar from "./Formularios/EditarMotivoEstandar";
+import InsertarFormulario from "./Formularios/InsertarFormulario";
+import EditarFormulario from "./Formularios/EditarFormulario";
 
-export default function OI_listadoMotivosEstandar() {
+export default function OI_listadoFormulario() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-
-  const [filtros, setFiltros] = useState({
-    tipo: "",
-  });
 
   const [booleanos, setBooleanos] = useState({
     isActiveInsertar: false,
@@ -30,50 +25,30 @@ export default function OI_listadoMotivosEstandar() {
   const [datosFila, setDatosFila] = useState([]);
 
   const [mainList, setMainList] = useState({
-    listadoMotivos: [""],
-  });
-  const [auxList, setAuxList] = useState({
-    listadoTipoMotivo: [""],
+    listadoFormulario: [""],
   });
   const [num_boton, setNumBoton] = useState(1);
-
-  const obtenerDatos = () => {
-    var url = "pages/listados/oi_listadoMotivosEstandar.php";
-    var operationUrl = "oi_listadoMotivosEstandar";
+  const obtenerFormularios = () => {
+    var url = "pages/listados/oi_listadoFormulario.php";
+    var operationUrl = "oi_listadoFormulario";
     var data = {
-      tipo: filtros.tipo,
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
     };
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
-      setMainList({ listadoMotivos: datos.datos });
+      setMainList({ listadoFormulario: datos.datos });
     });
   };
-
-  const obtenerConfDatos = () => {
-    var url = "pages/listados/listadoConfigDatos.php";
-    var operationUrl = "listadoConfigDatos";
-    var data = {
-      tipoConfDato: "OI",
-      subTipoConfDato: "TIPO_MOTIVO",
-    };
-    SendDataService(url, operationUrl, data).then((response) => {
-      setAuxList({
-        listadoTipoMotivo: response,
-      });
-    });
-  };
-
-  function desactivar(ID) {
+  const desactivar = (ID) => {
     let text = "Esta acción no se puede deshacer";
     ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/desactivar/oi_desactivarMotivoEstandar.php";
-        var operationUrl = "oi_desactivarMotivoEstandar";
+        var url = "pages/desactivar/oi_desactivarFormulario.php";
+        var operationUrl = "oi_desactivarFormulario";
         var data = {
-          idMotivo: ID,
+          idFormulario: ID,
           usuarioModificacion: userData.usuario,
         };
         SendDataService(url, operationUrl, data).then((response) => {
@@ -82,47 +57,63 @@ export default function OI_listadoMotivosEstandar() {
         });
       }
     });
-  }
+  };
+
+  const descargarArchivo = (archivoBase64) => {
+    if (!archivoBase64) return;
+
+    const byteCharacters = window.atob(archivoBase64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: "image/png" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "imagen.png";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   useEffect(
     function () {
-      obtenerDatos();
-      obtenerConfDatos();
+      obtenerFormularios();
     },
-    [num_boton, cantidadPorPagina, filtros]
+    [num_boton, cantidadPorPagina]
   );
 
   return userData.statusConected || userData !== null ? (
     <>
       {booleanos.isActiveInsertar && (
-        <InsertarAsignacionColab
+        <InsertarFormulario
           cambiarEstado={setBooleanos}
           isActive={booleanos.isActiveInsertar}
         />
       )}
-      {
-        booleanos.isActiveEditar && (
-          <EditarMotivoEstandar 
+      {booleanos.isActiveEditar && (
+        <EditarFormulario
           cambiarEstado={setBooleanos}
           datosFila={datosFila}
           isActive={booleanos.isActiveEditar}
-          />
-        )
-      }
+        ></EditarFormulario>
+      )}
       <Header></Header>
       <br></br>
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de motivos estándar</h1>
+          <h1 id="TitlesPages">Listado de formularios</h1>
           <h6 style={{ color: "gray" }}>
-            Operaciones internas {"->"} Listado de motivos estándar
+            Operaciones internas {"->"} Listado de formularios
           </h6>
           <br></br>
 
-          <div id="selectPaginador" style={{maxWidth: "1300px"}}>
+          <div id="selectPaginador" style={{ maxWidth: "1300px" }}>
             <Button
               id="btn"
-              style={{ whiteSpace: "nowrap", width: "230px" }}
+              style={{ whiteSpace: "nowrap", height: "60px" }}
               onClick={() => {
                 setBooleanos((prevDatos) => ({
                   ...prevDatos,
@@ -130,7 +121,7 @@ export default function OI_listadoMotivosEstandar() {
                 }));
               }}
             >
-              Crear motivo estándar
+              Crear registro
             </Button>
             <div
               className="form-group"
@@ -160,54 +151,43 @@ export default function OI_listadoMotivosEstandar() {
                 <option value="100">100</option>
               </select>
             </div>
-
-            <div className="cl_slct_acop">
-              <div className="form-group" id="btn2">
-                <label htmlFor="lbl_select_acop">Tipo:</label>
-                <select
-                  value={filtros.tipo || ""}
-                  className="form-control"
-                  name="input_listadoOperacionesInternas"
-                  id="input_listadoOperacionesInternas"
-                  onChange={({ target }) => {
-                    setFiltros((prev) => ({
-                      ...prev,
-                      tipo: target.value,
-                    }));
-                  }}
-                  required
-                >
-                  <option value="">Todos</option>
-                  {auxList.listadoTipoMotivo.map((item) => (
-                    <option key={item.datoVisible} value={item.datoVisible}>
-                      {item.datoVisible}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
           </div>
 
           <Table id="mainTable" hover responsive>
             <thead>
               <tr>
-                <th>Motivo</th>
-                <th>Tipo</th>
+                <th>Nombre</th>
                 <th>Descripción</th>
+                <th>Logo</th>
                 <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>
-              {mainList.listadoMotivos.map((item) => (
-                <tr key={item.idMotivo}>
-                  <td title={item.nombreMotivo} className="td_con_hover">
-                    {item.nombreMotivo}
+              {mainList.listadoFormulario.map((item) => (
+                <tr key={item.idFormulario}>
+                  <td>{item.nomFormulario}</td>
+                  <td>{item.descFormulario}</td>
+                  <td>
+                    {item.logoFormulario ? (
+                      <button
+                        style={{
+                          border: "none",
+                          backgroundColor: "transparent",
+                          textDecoration: "underline",
+                        }}
+                        onClick={() => {
+                          descargarArchivo(item.logoFormulario);
+                        }}
+                      >
+                        Descargar imagen
+                      </button>
+                    ) : (
+                      "SIN LOGO"
+                    )}
                   </td>
-                  <td>{item.tipo}</td>
-                  <td>{item.descripcion}</td>
                   <td>
                     <button
-                      data-title="Editar motivo"
+                      data-title="Editar formulario"
                       id="OperationBtns"
                       onClick={() => {
                         setDatosFila(item);
@@ -220,8 +200,8 @@ export default function OI_listadoMotivosEstandar() {
                       <RiEditBoxFill id="icons" />
                     </button>
                     <button
-                      data-title="Desactivar motivo"
-                      onClick={() => desactivar(item.idMotivo)}
+                      data-title="Desactivar formulario"
+                      onClick={() => desactivar(item.idFormulario)}
                       id="OperationBtns"
                     >
                       <BsFillTrashFill id="icons" />

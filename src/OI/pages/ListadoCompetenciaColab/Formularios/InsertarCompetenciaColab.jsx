@@ -51,9 +51,31 @@ export default function InsertarCompetenciaColab({ isActive, cambiarEstado }) {
       }));
     });
   };
-
+ const Validaciones = () => {
+    if (datos.idEmpleado < 1 || datos.idEmpleado === "") {
+      TopAlertsError("01", "El colaborador no puede estar vacío");
+      return true;
+    }
+    if (datos.idCompetencia < 1 || datos.idCompetencia === "") {
+      TopAlertsError("02", "La competencia no puede estar vacía");
+      return true;
+    }
+    if (
+      datos.porcentaje < 0 ||
+      datos.porcentaje > 100 ||
+      datos.porcentaje === ""
+    ) {
+      TopAlertsError("03", "El porcentaje debe ser entre cero y cien");
+      return true;
+    } else {
+      return false;
+    }
+  };
   function SendData(e) {
     e.preventDefault();
+    if (Validaciones()) {
+      return;
+    }
     const url = "pages/insertar/oi_insertarCompetenciasColab.php";
     const operationUrl = "oi_insertarCompetenciasColab";
     var data = {

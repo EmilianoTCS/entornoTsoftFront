@@ -130,7 +130,7 @@ export default function OI_listadoCompetenciaColab() {
           </h6>
           <br></br>
 
-          <div id="selectPaginador">
+          <div id="selectPaginador" style={{maxWidth: "1300px"}}>
             <Button
               id="btn"
               style={{ whiteSpace: "nowrap" }}
@@ -243,6 +243,7 @@ export default function OI_listadoCompetenciaColab() {
                 <th style={{ width: "110px" }} align="right">
                   Porcentaje
                 </th>
+                <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>

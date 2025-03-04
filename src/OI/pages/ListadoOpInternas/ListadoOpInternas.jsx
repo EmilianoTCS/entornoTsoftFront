@@ -53,6 +53,8 @@ export default function OI_listadoOpInternas() {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
     };
+    console.log(data);
+    
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
@@ -140,7 +142,7 @@ export default function OI_listadoOpInternas() {
           </h6>
           <br></br>
 
-          <div id="selectPaginador">
+          <div id="selectPaginador" style={{maxWidth: "1300px"}}>
             <Button
               id="btn"
               style={{ whiteSpace: "nowrap", width: "230px" }}
@@ -272,7 +274,7 @@ export default function OI_listadoOpInternas() {
                   % EDD
                 </th>
                 <th>Disp</th>
-                <th>Misceláneo</th>
+                <th>Licencia</th>
                 <th style={{ width: "110px" }} align="right">
                   Fecha inicio
                 </th>
@@ -280,6 +282,7 @@ export default function OI_listadoOpInternas() {
                   Fecha fin
                 </th>
                 <th>Observaciones</th>
+                <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>

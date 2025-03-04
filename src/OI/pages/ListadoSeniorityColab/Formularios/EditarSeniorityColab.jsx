@@ -64,9 +64,33 @@ export default function EditarSeniorityColab({
     });
   };
 
+  const Validaciones = () => {
+    if (datos.idColaborador < 1 || datos.idColaborador === "") {
+      TopAlertsError("01", "El colaborador no puede estar vacío");
+      return true;
+    }
+    if (
+      datos.fechaFin &&
+      new Date(datos.fechaIni).toLocaleString("es-CL") >
+        new Date(datos.fechaFin).toLocaleString("es-CL")
+    ) {
+      TopAlertsError(
+        "01",
+        "La fecha de inicio no puede ser mayor a la fecha de fin"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   function SendData(e) {
     e.preventDefault();
-    const url = "pages/insertar/oi_editarSeniority.php";
+
+    if (Validaciones()) {
+      return;
+    }
+    const url = "pages/editar/oi_editarSeniority.php";
     const operationUrl = "oi_editarSeniority";
     var data = {
       idSeniority: datos.idSeniority,
@@ -184,7 +208,7 @@ export default function EditarSeniorityColab({
                 margin: "auto",
               }}
             >
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo" className="input_type_date">
                   Fecha inicio:
                 </label>
@@ -201,7 +225,7 @@ export default function EditarSeniorityColab({
                   required
                 />
               </div>
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo">Fecha fin:</label>
                 <input
                   type="date"

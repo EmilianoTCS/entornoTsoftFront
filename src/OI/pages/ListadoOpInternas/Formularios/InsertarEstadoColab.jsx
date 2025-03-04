@@ -31,6 +31,26 @@ export default function InsertarEstadoColab({ isActive, cambiarEstado }) {
     listadoElementoImp: [""],
   });
 
+  const Validaciones = () => {
+    if (datos.idColaborador < 1 || datos.idColaborador === "") {
+      TopAlertsError("01", "El colaborador no puede estar vacío");
+      return true;
+    }
+    if (
+      datos.fechaFin &&
+      new Date(datos.fechaInicio).toLocaleString("es-CL") >
+        new Date(datos.fechaFin).toLocaleString("es-CL")
+    ) {
+      TopAlertsError(
+        "02",
+        "La fecha de inicio no puede ser mayor a la fecha de fin"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const obtenerEmpleados = () => {
     const url = "pages/auxiliares/listadoEmpleadoForms.php";
     const operationUrl = "listados";
@@ -57,6 +77,11 @@ export default function InsertarEstadoColab({ isActive, cambiarEstado }) {
 
   function SendData(e) {
     e.preventDefault();
+
+    if (Validaciones()) {
+      return;
+    }
+
     const url = "pages/insertar/oi_insertarEstadoColaborador.php";
     const operationUrl = "oi_insertarEstadoColaborador";
     var data = {
@@ -84,7 +109,7 @@ export default function InsertarEstadoColab({ isActive, cambiarEstado }) {
 
   return (
     <>
-      <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true} >
+      <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
           <Modal.Title>Crear estado colaborador</Modal.Title>
         </Modal.Header>
@@ -126,10 +151,10 @@ export default function InsertarEstadoColab({ isActive, cambiarEstado }) {
                   }))
                 }
               >
-                <option hidden value="">
+                <option hidden value={null}>
                   Desplegar lista
                 </option>
-
+                <option value={""}>SIN LICENCIA</option>
                 {auxList.listadoElementoImp.map((valor) => (
                   <option value={valor.idElementoImp}>
                     {valor.nomElemento}
@@ -143,11 +168,13 @@ export default function InsertarEstadoColab({ isActive, cambiarEstado }) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 gap: "10px",
-                margin: "auto"
+                margin: "auto",
               }}
             >
-              <div>
-                <label htmlFor="input_nomPeriodo" className="input_type_date">Fecha inicio:</label>
+              <div style={{width:"50%"}}>
+                <label htmlFor="input_nomPeriodo" className="input_type_date">
+                  Fecha inicio:
+                </label>
                 <input
                   type="date"
                   className="form-control"
@@ -157,10 +184,10 @@ export default function InsertarEstadoColab({ isActive, cambiarEstado }) {
                       fechaInicio: target.value,
                     }))
                   }
-                  required
+                  // required
                 />
               </div>
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo">Fecha fin:</label>
                 <input
                   type="date"
@@ -171,7 +198,7 @@ export default function InsertarEstadoColab({ isActive, cambiarEstado }) {
                       fechaFin: target.value,
                     }))
                   }
-                  required
+                  // required
                 />
               </div>
             </div>
@@ -187,8 +214,7 @@ export default function InsertarEstadoColab({ isActive, cambiarEstado }) {
                 }
                 maxLength={400}
                 rows={5}
-                style={{fontSize: "10pt"}}
-
+                style={{ fontSize: "10pt" }}
               ></textarea>
             </div>
             <Button

@@ -71,10 +71,10 @@ export default function OI_listadoDocColab() {
     let text = "Esta acción no se puede deshacer";
     ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/desactivar/oi_desactivarCompetenciaColab.php";
-        var operationUrl = "oi_desactivarCompetenciaColab";
+        var url = "pages/desactivar/oi_desactivarDocColab.php";
+        var operationUrl = "oi_desactivarDocColab";
         var data = {
-          idCompetenciaColab: ID,
+          idDocumento: ID,
           usuarioModificacion: userData.usuario,
         };
         SendDataService(url, operationUrl, data).then((response) => {
@@ -86,10 +86,6 @@ export default function OI_listadoDocColab() {
   }
 
   const descargarArchivo = (archivo) => {
-    var date = new Date()
-      .toISOString()
-      .replace(/[^0-9]/g, "")
-      .slice(0, -3);
 
     if (!archivo) return;
 
@@ -140,7 +136,7 @@ export default function OI_listadoDocColab() {
           </h6>
           <br></br>
 
-          <div id="selectPaginador">
+          <div id="selectPaginador" style={{maxWidth: "1300px"}}>
             <Button
               id="btn"
               style={{ whiteSpace: "nowrap" }}
@@ -222,6 +218,7 @@ export default function OI_listadoDocColab() {
                 <th>Nombre archivo</th>
                 <th>Tipo archivo</th>
                 <th>Archivo</th>
+                <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>
@@ -232,6 +229,11 @@ export default function OI_listadoDocColab() {
                   <td>{item.tipo}</td>
                   <td>
                     <button
+                      style={{
+                        border: "none",
+                        backgroundColor: "transparent",
+                        textDecoration: "underline",
+                      }}
                       onClick={() => {
                         descargarArchivo(item);
                       }}

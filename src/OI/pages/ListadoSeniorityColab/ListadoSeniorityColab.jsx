@@ -52,6 +52,7 @@ export default function OI_listadoSeniorityColab() {
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
     };
+    console.log(data);
     SendDataService(url, operationUrl, data).then((data) => {
       const { paginador, ...datos } = data;
       setCantidadPaginas(paginador.cantPaginas);
@@ -93,10 +94,10 @@ export default function OI_listadoSeniorityColab() {
     let text = "Esta acción no se puede deshacer";
     ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/desactivar/oi_desactivarAsignacionColab.php";
-        var operationUrl = "oi_desactivarAsignacionColab";
+        var url = "pages/desactivar/oi_desactivarSeniorityColab.php";
+        var operationUrl = "oi_desactivarSeniorityColab";
         var data = {
-          idAsignacionColab: ID,
+          idSeniority: ID,
           usuarioModificacion: userData.usuario,
         };
         SendDataService(url, operationUrl, data).then((response) => {
@@ -141,7 +142,7 @@ export default function OI_listadoSeniorityColab() {
           </h6>
           <br></br>
 
-          <div id="selectPaginador">
+          <div id="selectPaginador" style={{maxWidth: "1300px"}}>
             <Button
               id="btn"
               style={{ whiteSpace: "nowrap", width: "230px" }}
@@ -242,7 +243,7 @@ export default function OI_listadoSeniorityColab() {
             </div>
 
             <div className="form-group" id="btn2">
-              <label htmlFor="lbl_select_acop">Fecha fin:</label>
+              <label htmlFor="lbl_select_acop">Fecha inicio:</label>
               <input
                 type="date"
                 lang="es-CL"
@@ -285,6 +286,7 @@ export default function OI_listadoSeniorityColab() {
                   Fecha fin
                 </th>
                 <th>Observaciones</th>
+                <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>

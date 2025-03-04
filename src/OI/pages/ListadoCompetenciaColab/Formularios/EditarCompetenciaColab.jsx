@@ -57,8 +57,32 @@ export default function EditarCompetenciaColab({
     });
   };
 
+  const Validaciones = () => {
+    if (datos.idEmpleado < 1 || datos.idEmpleado === "") {
+      TopAlertsError("01", "El colaborador no puede estar vacío");
+      return true;
+    }
+    if (datos.idCompetencia < 1 || datos.idCompetencia === "") {
+      TopAlertsError("02", "La competencia no puede estar vacía");
+      return true;
+    }
+    if (
+      datos.porcentaje < 0 ||
+      datos.porcentaje > 100 ||
+      datos.porcentaje === ""
+    ) {
+      TopAlertsError("03", "El porcentaje debe ser entre cero y cien");
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   function SendData(e) {
     e.preventDefault();
+    if (Validaciones()) {
+      return;
+    }
     const url = "pages/editar/oi_editarCompetenciasColab.php";
     const operationUrl = "oi_editarCompetenciasColab";
     var data = {
@@ -69,8 +93,7 @@ export default function EditarCompetenciaColab({
       isActive: 1,
       usuarioCreacion: userData.usuario,
     };
-    console.log(data);
-    
+
     SendDataService(url, operationUrl, data).then((response) => {
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
       TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);

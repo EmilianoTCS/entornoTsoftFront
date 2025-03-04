@@ -10,18 +10,15 @@ import { RiEditBoxFill } from "react-icons/ri";
 import { BsFillTrashFill } from "react-icons/bs";
 import ConfirmAlert from "../../../templates/alerts/ConfirmAlert";
 import TopAlertsError from "../../../templates/alerts/TopAlerts";
-import InsertarAsignacionColab from "./Formularios/InsertarAsignacionColab";
-import EditarAsignacionColab from "./Formularios/EditarAsignacionColab";
+import InsertarFormProyEmp from "./Formularios/InsertarFormProyEmp";
+import EditarFormProyEmp from "./Formularios/EditarFormProyEmp";
 
-export default function OI_listadoAsignacionColab() {
+export default function OI_listadoFormProyEmp() {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
   const [filtros, setFiltros] = useState({
-    idEmpleado: "",
-    idMotivo: "",
-    fechaIni: "",
-    fechaFin: "",
-    idUltimoLider: "",
+    idFormulario: "",
+    idEDDProyEmp: "",
   });
 
   const [booleanos, setBooleanos] = useState({
@@ -34,69 +31,67 @@ export default function OI_listadoAsignacionColab() {
   const [datosFila, setDatosFila] = useState([]);
 
   const [mainList, setMainList] = useState({
-    asignacionesColab: [""],
+    formProyEmp: [""],
   });
   const [auxList, setAuxList] = useState({
-    listadoEmpleados: [""],
-    listadoMotivos: [""],
+    listadoFormularios: [""],
+    listadoEddProyEmp: [""],
   });
   const [num_boton, setNumBoton] = useState(1);
 
   const obtenerDatos = () => {
-    var url = "pages/listados/oi_listadoAsignacionColab.php";
-    var operationUrl = "oi_listadoAsignacionColab";
+    var url = "pages/listados/oi_listadoFormProyEmp.php";
+    var operationUrl = "oi_listadoFormProyEmp";
     var data = {
-      idEmpleado: filtros.idEmpleado,
-      idMotivo: filtros.idMotivo,
-      fechaIni: filtros.fechaIni,
-      fechaFin: filtros.fechaFin,
-      idUltimoLider: filtros.idUltimoLider,
+      idFormulario: filtros.idFormulario,
+      idEDDProyEmp: filtros.idEDDProyEmp,
       num_boton: num_boton,
       cantidadPorPagina: cantidadPorPagina,
     };
-    console.log(data);
-    
-    SendDataService(url, operationUrl, data).then((data) => {
-      const { paginador, ...datos } = data;
-      setCantidadPaginas(paginador.cantPaginas);
-      setMainList({ asignacionesColab: datos.datos });
-    });
-  };
-  const obtenerEmpleados = () => {
-    const url = "pages/auxiliares/listadoEmpleadoForms.php";
-    const operationUrl = "listados";
-
-    getDataService(url, operationUrl).then((data) => {
-      setAuxList((prevDatos) => ({
-        ...prevDatos,
-        listadoEmpleados: data,
-      }));
-    });
-  };
-  const obtenerMotivos = () => {
-    const url = "pages/listados/oi_listadoMotivosEstandar.php";
-    const operationUrl = "oi_listadoMotivosEstandar";
-    let data = {
-      tipo: "",
-      num_boton: 1,
-      cantidadPorPagina: "999999999",
-    };
     SendDataService(url, operationUrl, data).then((response) => {
-      setAuxList((prevDatos) => ({
-        ...prevDatos,
-        listadoMotivos: response.datos,
+      const { paginador, ...datos } = response;
+      setCantidadPaginas(paginador.cantPaginas);      
+      setMainList({ formProyEmp: datos.datos });
+    });
+  };
+  const obtenerFormularios = () => {
+    var url = "pages/listados/oi_listadoFormulario.php";
+    var operationUrl = "oi_listadoFormulario";
+    var data = {
+      num_boton: 1,
+      cantidadPorPagina: 999999999,
+    };
+    SendDataService(url, operationUrl, data).then((response) => {      
+      const { paginador, ...datos } = response;
+      setAuxList((prev) => ({
+        ...prev,
+        listadoFormularios: datos.datos,
+      }));
+    });
+  };
+  const obtenerProyEmp = () => {
+    var url = "pages/auxiliares/listadoEddProyEmp.php";
+    var operationUrl = "listados";
+    var data = {
+      idProyecto: 0,
+    };
+
+    SendDataService(url, operationUrl, data).then((response) => {
+      setAuxList((prev) => ({
+        ...prev,
+        listadoEddProyEmp: response,
       }));
     });
   };
 
-  function desactivar(ID) {
+  const desactivar = (ID) => {
     let text = "Esta acción no se puede deshacer";
     ConfirmAlert(text).then((response) => {
       if (response === true) {
-        var url = "pages/desactivar/oi_desactivarAsignacionColab.php";
-        var operationUrl = "oi_desactivarAsignacionColab";
+        var url = "pages/desactivar/oi_desactivarFormProyEmp.php";
+        var operationUrl = "oi_desactivarFormProyEmp";
         var data = {
-          idAsignacionColab: ID,
+          idFormProyEmp: ID,
           usuarioModificacion: userData.usuario,
         };
         SendDataService(url, operationUrl, data).then((response) => {
@@ -105,12 +100,12 @@ export default function OI_listadoAsignacionColab() {
         });
       }
     });
-  }
+  };
   useEffect(
     function () {
       obtenerDatos();
-      obtenerEmpleados();
-      obtenerMotivos();
+      obtenerFormularios();
+      obtenerProyEmp();
     },
     [num_boton, cantidadPorPagina, filtros]
   );
@@ -118,26 +113,29 @@ export default function OI_listadoAsignacionColab() {
   return userData.statusConected || userData !== null ? (
     <>
       {booleanos.isActiveInsertar && (
-        <InsertarAsignacionColab
+        <InsertarFormProyEmp
           cambiarEstado={setBooleanos}
           isActive={booleanos.isActiveInsertar}
         />
       )}
       {booleanos.isActiveEditar && (
-        <EditarAsignacionColab
+        <EditarFormProyEmp
           cambiarEstado={setBooleanos}
           datosFila={datosFila}
           isActive={booleanos.isActiveEditar}
-        ></EditarAsignacionColab>
+        ></EditarFormProyEmp>
       )}
       <Header></Header>
       <br></br>
       <br></br>
       <div id="fondoTabla">
         <div id="containerTablas">
-          <h1 id="TitlesPages">Listado de asignaciones de colaboradores</h1>
+          <h1 id="TitlesPages">
+            Listado de formularios de colaboradores y proyectos
+          </h1>
           <h6 style={{ color: "gray" }}>
-            Operaciones internas {"->"} Listado de asignaciones de colaboradores
+            Operaciones internas {"->"} Listado de formularios de colaboradores
+            y proyectos
           </h6>
           <br></br>
 
@@ -152,7 +150,7 @@ export default function OI_listadoAsignacionColab() {
                 }));
               }}
             >
-              Crear asignación
+              Crear registro
             </Button>
             <div
               className="form-group"
@@ -185,30 +183,32 @@ export default function OI_listadoAsignacionColab() {
 
             <div className="cl_slct_acop">
               <div className="form-group" id="btn2">
-                <label htmlFor="lbl_select_acop">Colaborador:</label>
+                <label htmlFor="lbl_select_acop">Formulario:</label>
                 <select
-                  value={filtros.idEmpleado || ""}
+                  value={filtros.idFormulario || ""}
                   className="form-control"
                   name="input_listadoOperacionesInternas"
                   id="input_listadoOperacionesInternas"
                   onChange={({ target }) => {
                     setFiltros((prev) => ({
                       ...prev,
-                      idEmpleado: target.value,
+                      idFormulario: target.value,
                     }));
                   }}
                   required
                 >
                   <option value="">Todos</option>
-                  {auxList.listadoEmpleados.map((item) => (
+                  {auxList.listadoFormularios.map((item) => (
                     <option
-                      key={item.idEmpleado}
+                      key={item.idFormulario}
                       selected={
-                        filtros.idEmpleado === item.idEmpleado ? true : false
+                        filtros.idFormulario === item.idFormulario
+                          ? true
+                          : false
                       }
-                      value={item.idEmpleado}
+                      value={item.idFormulario}
                     >
-                      {item.nomEmpleado}
+                      {item.nomFormulario}
                     </option>
                   ))}
                 </select>
@@ -216,126 +216,57 @@ export default function OI_listadoAsignacionColab() {
             </div>
             <div className="cl_slct_acop">
               <div className="form-group" id="btn2">
-                <label htmlFor="input_CantidadRegistros">Motivo:</label>
+                <label htmlFor="input_CantidadRegistros">
+                  Proyecto - Colab:
+                </label>
                 <select
-                  value={filtros.idMotivo || ""}
+                  value={filtros.idEDDProyEmp || ""}
                   className="form-control"
                   onChange={({ target }) => {
-                    setFiltros((prev) => ({ ...prev, idMotivo: target.value }));
+                    setFiltros((prev) => ({
+                      ...prev,
+                      idEDDProyEmp: target.value,
+                    }));
                   }}
                   required
                 >
                   <option value="">Todos</option>
-                  {auxList.listadoMotivos.map((item) => (
+                  {auxList.listadoEddProyEmp.map((item) => (
                     <option
-                      key={item.idMotivo}
+                      key={item.idEDDProyEmp}
                       selected={
-                        filtros.idMotivo === item.idMotivo ? true : false
+                        filtros.idEDDProyEmp === item.idEDDProyEmp
+                          ? true
+                          : false
                       }
-                      value={item.idMotivo}
+                      value={item.idEDDProyEmp}
                     >
-                      {item.nombreMotivo}
+                      {item.nomProyEmp}
                     </option>
                   ))}
                 </select>
               </div>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="lbl_select_acop">Líder:</label>
-              <select
-                value={filtros.idUltimoLider || ""}
-                className="form-control"
-                name="input_listadoOperacionesInternas"
-                id="input_listadoOperacionesInternas"
-                onChange={({ target }) => {
-                  setFiltros((prev) => ({
-                    ...prev,
-                    idUltimoLider: target.value,
-                  }));
-                }}
-                required
-              >
-                <option value="">Todos</option>
-                {auxList.listadoEmpleados.map((item) => (
-                  <option
-                    key={item.idEmpleado}
-                    selected={
-                      filtros.idUltimoLider === item.idEmpleado ? true : false
-                    }
-                    value={item.idEmpleado}
-                  >
-                    {item.nomEmpleado}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="lbl_select_acop">Fecha inicio:</label>
-              <input
-                type="date"
-                lang="es-CL"
-                value={filtros.fechaIni || ""}
-                className="form-control"
-                onChange={(e) => {
-                  setFiltros((prev) => ({
-                    ...prev,
-                    fechaIni: e.target.value,
-                  }));
-                }}
-              />
-            </div>
-            <div className="form-group" id="btn2">
-              <label htmlFor="lbl_select_acop">Fecha fin:</label>
-              <input
-                type="date"
-                lang="es-CL"
-                className="form-control"
-                value={filtros.fechaFin}
-                onChange={(e) => {
-                  setFiltros((prev) => ({
-                    ...prev,
-                    fechaFin: e.target.value,
-                  }));
-                }}
-              />
             </div>
           </div>
 
           <Table id="mainTable" hover responsive>
             <thead>
               <tr>
+                <th>Formulario</th>
+                <th>Proyecto</th>
                 <th>Colaborador</th>
-                <th>Motivo</th>
-                <th style={{ width: "110px" }} align="right">
-                  Fecha inicio
-                </th>
-                <th style={{ width: "110px" }} align="right">
-                  Fecha fin
-                </th>
-                <th>Último líder</th>
-                <th>Observaciones</th>
                 <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>
-              {mainList.asignacionesColab.map((item) => (
-                <tr key={item.idEmpleado}>
+              {mainList.formProyEmp.map((item) => (
+                <tr key={item.idFormProyEmp}>
+                  <td>{item.nomFormulario}</td>
+                  <td>{item.nomProyecto}</td>
                   <td>{item.nomEmpleado}</td>
-                  <td title={item.nombreMotivo} className="td_con_hover">
-                    {item.nombreMotivo}
-                  </td>
-                  <td>{item.fechaIniSinAsig}</td>
-                  <td>{item.fechaFinSinAsig}</td>
-                  <td title={item.nomEmpleadoLider} className="td_con_hover">
-                    {item.nomEmpleadoLider}
-                  </td>
-                  <td title={item.observaciones} className="td_con_hover">
-                    {item.observaciones}
-                  </td>
-
                   <td>
                     <button
-                      data-title="Editar asignación"
+                      data-title="Editar registro"
                       id="OperationBtns"
                       onClick={() => {
                         setDatosFila(item);
@@ -348,8 +279,8 @@ export default function OI_listadoAsignacionColab() {
                       <RiEditBoxFill id="icons" />
                     </button>
                     <button
-                      data-title="Desactivar asignación"
-                      onClick={() => desactivar(item.idAsignacionColaborador)}
+                      data-title="Desactivar registro"
+                      onClick={() => desactivar(item.idFormEddProyEmp)}
                       id="OperationBtns"
                     >
                       <BsFillTrashFill id="icons" />

@@ -96,7 +96,7 @@ export default function ListadoClientes() {
 
             <div id="selectPaginador">
               {userData.nomRol === "administrador" ? (
-                <Button id="btn" onClick={insertarCliente}>
+                <Button id="btn" onClick={insertarCliente} style={{maxHeight: "50px"}}>
                   Crear Cliente
                 </Button>
               ) : null}

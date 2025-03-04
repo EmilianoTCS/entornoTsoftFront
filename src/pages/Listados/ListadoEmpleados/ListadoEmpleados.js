@@ -175,7 +175,7 @@ export default function ListadoEmpleados() {
             <br></br>
             <div id="selectPaginador">
               {userData.nomRol === "administrador" ? (
-                <Button id="btn" onClick={insertarEmpleado}>
+                <Button id="btn" onClick={insertarEmpleado} style={{maxHeight: "70px"}}>
                   Insertar Colaborador
                 </Button>
               ) : null}

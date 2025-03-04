@@ -33,7 +33,7 @@ export default function Header() {
               ></img>
             </Link>
             <h3 id="tituloPaginaHeader">Entorno Tsoft</h3>
-            <img src={logoCoe} alt="logoCoe" id="logoCoe"></img>
+            {/* <img src={logoCoe} alt="logoCoe" id="logoCoe"></img> */}
             <div
               style={{
                 display: "flex",

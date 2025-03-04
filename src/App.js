@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthState from "./context/AuthContext";
 import { PrivateRoute } from "../src/hooks/PrivateRoute";
-
+import "./App.css"
 import HomePage from "./pages/home/Homepage";
 import Login from "./pages/login/login";
 
@@ -80,6 +80,11 @@ import OI_listadoMotivosEstandar from "./OI/pages/ListadoMotivosEstandar/Listado
 import OI_ListadoMovimientoTsoft from "./OI/pages/ListadoMovimientoTsoft/ListadoMovimientoTsoft.jsx";
 import OI_listadoSeniorityColab from "./OI/pages/ListadoSeniorityColab/ListadoSeniorityColab.jsx";
 import OI_listadoDocColab from "./OI/pages/ListadoDocColab/ListadoDocColab.jsx";
+import OI_FormularioLiberacion from "./OI/pages/FormularioLiberacion/FormularioLiberacion.jsx";
+import OI_FormularioLiberacionRespondido from "./OI/pages/FormularioLiberacion/FormularioLiberacionRespondido.jsx";
+import OI_listadoFormProyEmp from "./OI/pages/ListadoFormProyEmp/ListadoFormProyEmp.jsx";
+import OI_listadoFormulario from "./OI/pages/ListadoFormulario/ListadoFormulario.jsx";
+import OI_listadoPreguntas from "./OI/pages/ListadoPreguntas/ListadoPreguntas.jsx";
 function App() {
   return (
     <AuthState>
@@ -340,6 +345,27 @@ function App() {
             <Route
               element={<OI_listadoDocColab />}
               path="/oi/listadoDocColab"
+            ></Route>
+
+            <Route
+              element={<OI_FormularioLiberacion />}
+              path="/oi/FormularioLiberacion/:idFormulario/:idEDDProyEmp"
+            ></Route>
+            <Route
+              element={<OI_FormularioLiberacionRespondido />}
+              path="/oi/FormularioLiberacionRespondido/:idFormulario/:idEDDProyEmp"
+            ></Route>
+            <Route
+              element={<OI_listadoFormProyEmp />}
+              path="/oi/listadoFormProyEmp"
+            ></Route>
+            <Route
+              element={<OI_listadoFormulario />}
+              path="/oi/listadoFormulario"
+            ></Route>
+            <Route
+              element={<OI_listadoPreguntas />}
+              path="/oi/listadoPregunta"
             ></Route>
             {/* ------------------------------------------------------------------------------------------ */}
 

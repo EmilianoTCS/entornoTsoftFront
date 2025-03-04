@@ -57,9 +57,30 @@ export default function InsertarMovimientoTsoft({ isActive, cambiarEstado }) {
       }));
     });
   };
-
+  const Validaciones = () => {
+    if (datos.idColaborador < 1 || datos.idColaborador === "") {
+      TopAlertsError("01", "El colaborador no puede estar vacío");
+      return true;
+    }
+    if (
+      datos.fechaFin &&
+      new Date(datos.fechaIni).toLocaleString("es-CL") >
+        new Date(datos.fechaFin).toLocaleString("es-CL")
+    ) {
+      TopAlertsError(
+        "02",
+        "La fecha de inicio no puede ser mayor a la fecha de fin"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
   function SendData(e) {
     e.preventDefault();
+    if (Validaciones()) {
+      return;
+    }
     const url = "pages/insertar/oi_insertarMovimientoColab.php";
     const operationUrl = "oi_insertarMovimientoColab";
     var data = {
@@ -117,7 +138,9 @@ export default function InsertarMovimientoTsoft({ isActive, cambiarEstado }) {
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="input_Proyecto">Seleccione un motivo de movimiento: </label>
+              <label htmlFor="input_Proyecto">
+                Seleccione un motivo de movimiento:{" "}
+              </label>
               <select
                 required
                 className="form-control"
@@ -133,9 +156,7 @@ export default function InsertarMovimientoTsoft({ isActive, cambiarEstado }) {
                 </option>
 
                 {auxList.listadoMotivos.map((valor) => (
-                  <option value={valor.idMotivo}>
-                    {valor.nombreMotivo}
-                  </option>
+                  <option value={valor.idMotivo}>{valor.nombreMotivo}</option>
                 ))}
               </select>
             </div>
@@ -148,7 +169,7 @@ export default function InsertarMovimientoTsoft({ isActive, cambiarEstado }) {
                 margin: "auto",
               }}
             >
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo" className="input_type_date">
                   Fecha inicio:
                 </label>
@@ -164,7 +185,7 @@ export default function InsertarMovimientoTsoft({ isActive, cambiarEstado }) {
                   required
                 />
               </div>
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo">Fecha fin:</label>
                 <input
                   type="date"

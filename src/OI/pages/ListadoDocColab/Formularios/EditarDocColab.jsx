@@ -39,9 +39,23 @@ export default function EditarDocColab({ isActive, cambiarEstado, datosFila }) {
       }));
     });
   };
-
+  const Validaciones = () => {
+    if (datos.idEmpleado < 1 || datos.idEmpleado === "") {
+      TopAlertsError("01", "El colaborador no puede estar vacío");
+      return true;
+    }
+    if (datos.archivo === "") {
+      TopAlertsError("02", "El documento no puede estar vacío");
+      return true;
+    } else {
+      return false;
+    }
+  };
   function SendData(e) {
     e.preventDefault();
+    if (Validaciones()) {
+      return;
+    }
     var data = {
       idDocumento: datos.idDocumento,
       idEmpleado: datos.idEmpleado,

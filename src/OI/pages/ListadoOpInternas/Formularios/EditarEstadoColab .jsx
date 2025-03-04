@@ -60,8 +60,31 @@ export default function EditarEstadoColab({
     });
   };
 
+  const Validaciones = () => {
+    if (datos.idColaborador < 1 || datos.idColaborador === "") {
+      TopAlertsError("01", "El colaborador no puede estar vacío");
+      return true;
+    }
+    if (
+      datos.fechaFin &&
+      new Date(datos.fechaIni).toLocaleString("es-CL") >
+        new Date(datos.fechaFin).toLocaleString("es-CL")
+    ) {
+      TopAlertsError(
+        "02",
+        "La fecha de inicio no puede ser mayor a la fecha de fin"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   function SendData(e) {
     e.preventDefault();
+    if (Validaciones()) {
+      return;
+    }
     const url = "pages/editar/oi_editarEstadoColaborador.php";
     const operationUrl = "oi_editarEstadoColaborador";
     var data = {
@@ -78,7 +101,9 @@ export default function EditarEstadoColab({
     console.log(data);
 
     SendDataService(url, operationUrl, data).then((response) => {
+      console.log(response);
       const { OUT_CODRESULT, OUT_MJERESULT } = response[0];
+
       TopAlertsError(OUT_CODRESULT, OUT_MJERESULT);
     });
   }
@@ -99,8 +124,8 @@ export default function EditarEstadoColab({
           idEstadoColab: datosFila.idEstadoColaborador,
           idColaborador: datosFila.idEmpleado,
           idElementoImp: datosFila.idElementoImp,
-          fechaFin: formatDate(datosFila.fechaFin),
-          fechaIni: formatDate(datosFila.fechaIni),
+          fechaFin: datosFila.fechaFin && formatDate(datosFila.fechaFin),
+          fechaIni: datosFila.fechaIni && formatDate(datosFila.fechaIni),
           observaciones: datosFila.observaciones,
         });
       }
@@ -151,7 +176,7 @@ export default function EditarEstadoColab({
             <div className="form-group">
               <label htmlFor="input_Proyecto">Seleccione la licencia: </label>
               <select
-                required
+                // required
                 className="form-control"
                 onChange={({ target }) =>
                   setDatos((prevDatos) => ({
@@ -161,10 +186,10 @@ export default function EditarEstadoColab({
                 }
                 value={datos.idElementoImp || ""}
               >
-                <option hidden value="">
+                <option hidden value={null}>
                   Desplegar lista
                 </option>
-
+                <option value={""}>SIN LICENCIA</option>
                 {auxList.listadoElementoImp.map((valor) => (
                   <option
                     selected={
@@ -186,7 +211,7 @@ export default function EditarEstadoColab({
                 margin: "auto",
               }}
             >
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo" className="input_type_date">
                   Fecha inicio:
                 </label>
@@ -203,7 +228,7 @@ export default function EditarEstadoColab({
                   required
                 />
               </div>
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo">Fecha fin:</label>
                 <input
                   type="date"
@@ -215,7 +240,7 @@ export default function EditarEstadoColab({
                     }))
                   }
                   value={datos.fechaFin || ""}
-                  required
+                  // required
                 />
               </div>
             </div>
@@ -232,7 +257,7 @@ export default function EditarEstadoColab({
                 maxLength={400}
                 rows={5}
                 value={datos.observaciones || ""}
-                style={{fontSize: "10pt"}}
+                style={{ fontSize: "10pt" }}
               ></textarea>
             </div>
             <Button

@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "../ListadoDocColab.css";
-
+import "../ListadoFormulario.css";
 import getDataService from "../../../../services/GetDataService";
-import SendDataService from "../../../../services/SendDataService";
 import TopAlertsError from "../../../../templates/alerts/TopAlerts";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SendFilesService from "../../../../services/SendFilesService";
 
-export default function InsertarDocColab({ isActive, cambiarEstado }) {
+export default function InsertarFormulario({ isActive, cambiarEstado }) {
   const handleClose = () =>
     cambiarEstado((prevDatos) => ({
       ...prevDatos,
@@ -18,39 +16,31 @@ export default function InsertarDocColab({ isActive, cambiarEstado }) {
   const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
 
   const [datos, setDatos] = useState({
-    idEmpleado: "",
-    archivo: "",
+    nomFormulario: "",
+    descFormulario: "",
+    logo: "",
     isActive: 1,
     usuarioCreacion: userData.usuario,
   });
 
-  const [auxList, setAuxList] = useState({
-    listadoEmpleados: [""],
-  });
-
-  const obtenerEmpleados = () => {
-    const url = "pages/auxiliares/listadoEmpleadoForms.php";
-    const operationUrl = "listados";
-
-    getDataService(url, operationUrl).then((data) => {
-      setAuxList((prevDatos) => ({
-        ...prevDatos,
-        listadoEmpleados: data,
-      }));
-    });
-  };
-
   const Validaciones = () => {
-    if (datos.idEmpleado < 1 || datos.idEmpleado === "") {
-      TopAlertsError("01", "El colaborador no puede estar vacío");
+    if (datos.nomFormulario === "") {
+      TopAlertsError("01", "El nombre del formulario no puede estar vacío");
       return true;
     }
-    if (datos.archivo === "") {
-      TopAlertsError("02", "El documento no puede estar vacío");
+    if (datos.descFormulario === "") {
+      TopAlertsError(
+        "02",
+        "La descripción del formulario no puede estar vacío"
+      );
       return true;
-    } else {
-      return false;
     }
+    if (datos.logo !== "" && datos.logo.size > 16 * 1024 * 1024) {
+      // 16MB in bytes
+      TopAlertsError("03", "El tamaño del logo no puede ser mayor a 16MB");
+      return true;
+    }
+    return false;
   };
 
   function SendData(e) {
@@ -59,13 +49,14 @@ export default function InsertarDocColab({ isActive, cambiarEstado }) {
       return;
     }
     var data = {
-      idEmpleado: datos.idEmpleado,
+      nomFormulario: datos.nomFormulario,
+      descFormulario: datos.descFormulario,
       isActive: 1,
       usuarioCreacion: userData.usuario,
     };
     SendFilesService(
-      "/pages/insertar/oi_insertarDocColaborador.php",
-      datos.archivo,
+      "/pages/insertar/oi_insertarFormulario.php",
+      datos.logo,
       data
     ).then((response) => {
       console.log(response);
@@ -74,59 +65,64 @@ export default function InsertarDocColab({ isActive, cambiarEstado }) {
     });
   }
 
-  useEffect(
-    function () {
-      obtenerEmpleados();
-    },
-    [isActive]
-  );
-
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={true}>
         <Modal.Header closeButton>
-          <Modal.Title>Insertar documento colaborador</Modal.Title>
+          <Modal.Title>Insertar formulario</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={SendData}>
             <div className="form-group">
               <label htmlFor="input_Proyecto">
-                Seleccione un colaborador:{" "}
+                Ingrese el nombre del formulario:{" "}
               </label>
-              <select
-                required
+              <input
+                type="text"
                 className="form-control"
-                placeholder="Seleccione un colaborador"
-                onChange={({ target }) =>
-                  setDatos((prevDatos) => ({
-                    ...prevDatos,
-                    idEmpleado: target.value,
-                  }))
-                }
-              >
-                <option hidden value="">
-                  Desplegar lista
-                </option>
-
-                {auxList.listadoEmpleados.map((valor) => (
-                  <option value={valor.idEmpleado}>{valor.nomEmpleado}</option>
-                ))}
-              </select>
+                required
+                maxLength={100}
+                onChange={(e) => {
+                  setDatos((prev) => ({
+                    ...prev,
+                    nomFormulario: e.target.value,
+                  }));
+                }}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="input_Proyecto">
+                Ingrese la descripción (opcional):
+              </label>
+              <textarea
+                className="form-control"
+                maxLength={500}
+                rows={5}
+                onChange={(e) => {
+                  setDatos((prev) => ({
+                    ...prev,
+                    descFormulario: e.target.value,
+                  }));
+                }}
+              />
             </div>
 
             <div>
-              <label>Archivo:</label>
+              <label>Ingrese el logo del formulario (opcional):</label>
+              <span style={{ fontSize: "10pt", opacity: "0.9" }}>
+                Imagen menor a 16MB
+              </span>
 
               <input
                 type="file"
+                accept="image/*"
                 className="form-control"
                 onChange={({ target }) =>
                   setDatos((prevDatos) => ({
                     ...prevDatos,
-                    archivo: target.files[0],
+                    logo: target.files[0],
                   }))
                 }
-                required
               />
             </div>
 

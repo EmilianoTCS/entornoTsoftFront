@@ -1,290 +1,291 @@
 h4{
-text-align: center;
-padding-top: 1em;
-}
-
-#staticSidebar{
-  position: fixed;
-  background-color: #ffffff;
-  width: 255px ;
-  list-style: none;
-  border-radius: 30px 0 0 0;
-}
-
-#buttonSidebar {
-  color: black;
-  font-weight: 600;
-  width: 150%;
-  border: none;
-  background-color: white;
-  text-decoration: none;
-  text-align: left;
-  padding-left: 60px;
-  height: 50px;
-  transition: background-color 116ms ease-out, color 300ms ease-out,
+  text-align: center;
+  padding-top: 1em;
+  }
+  
+  #staticSidebar{
+    position: fixed;
+    background-color: #ffffff;
+    width: 255px ;
+    list-style: none;
+    border-radius: 30px 0 0 0;
+  }
+  
+  #buttonSidebar {
+    color: black;
+    font-weight: 600;
+    width: 150%;
+    border: none;
+    background-color: white;
+    text-decoration: none;
+    text-align: left;
+    padding-left: 60px;
+    height: 50px;
+    transition: background-color 116ms ease-out, color 300ms ease-out,
+      box-shadow 300ms ease-out;
+  }
+  #buttonSidebar:hover {
+    color: #ffffff;
+    background-color: #e10b1c;
+    box-shadow: 0px 2px 20px 0px rgba(54, 52, 52, 0.81);
+  }
+  #buttonSidebar:hover > #flechaNormal{
+    visibility: 0;
+    opacity: 0;
+    max-height: 0;
+    transition: all 116ms ease-out;
+  }
+  #buttonSidebar:hover > #flechaWhite{
+    visibility: visible;
+    opacity: 1;
+    max-height: 26px;
+    transition: all 116ms ease-out;
+    position: relative;
+    right: 12px;
+  }
+  #submenuSidebar {
+    color: black;
+    font-weight: 600;
+    width: 180%;
+    border: none;
+    background-color: white;
+    text-decoration: none;
+    text-align: left;
+    padding-left: 60px;
+    margin-top: 3px;
+    height: 45px;
+    transition: background-color 116ms ease-out, color 300ms ease-out,
     box-shadow 300ms ease-out;
-}
-#buttonSidebar:hover {
-  color: #ffffff;
-  background-color: #e10b1c;
-  box-shadow: 0px 2px 20px 0px rgba(54, 52, 52, 0.81);
-}
-#buttonSidebar:hover > #flechaNormal{
-  visibility: 0;
-  opacity: 0;
-  max-height: 0;
-  transition: all 116ms ease-out;
-}
-#buttonSidebar:hover > #flechaWhite{
-  visibility: visible;
-  opacity: 1;
-  max-height: 26px;
-  transition: all 116ms ease-out;
-  position: relative;
-  right: 12px;
-}
-#submenuSidebar {
-  color: black;
-  font-weight: 600;
-  width: 180%;
-  border: none;
-  background-color: white;
-  text-decoration: none;
-  text-align: left;
-  padding-left: 60px;
-  margin-top: 3px;
-  height: 45px;
-  transition: background-color 116ms ease-out, color 300ms ease-out,
-  box-shadow 300ms ease-out;
-
-}
-
-#submenuSidebar:hover {
-  color: #ffffff;
-  background-color: #e10b1c;
-  box-shadow: 0px 2px 20px 0px rgba(54, 52, 52, 0.81);
-}
-
-#User_logo {
-  width: 17%;
-  margin-left: 43%;
-}
-
-#icons {
-  font-size: 22px;
-  margin-right: 13px;
-  margin-bottom: 8px;
-}
-
-#iconSidebar {
-  font-size: 22px;
-  margin-bottom: 2.5px;
-}
-
-#textLeft {
-  margin-top: 1px;
-  margin-left: -80px;
-  font-size: 16px;
-}
-
-#textLeftSelect {
-  margin-left: -20px;
-  font-size: 15px;
-  margin-top: -3px;
-}
-
-ul h4 {
-  font-size: 16pt;
-  color: #000;
-  font-family: "Roboto Slab", serif;
-  text-align: left;
-  margin-left: 52px;
-  padding-top: 10;
-  justify-content: left;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-}
-
-ul li {
-  color: #000(230, 230, 230);
-  list-style: none;
-  padding: 8px 7px;
-  text-align: left;
-  font-family: "Roboto Slab", serif;
-}
-
-ul li a {
-  color: #000;
-  text-decoration: none;
-}
-
-ul li ul li:hover {
-  background-color: #000(230, 230, 230, 0.9);
-  text-decoration: none;
-}
-ul li ul li:hover a {
-  color: black;
-  font-weight: 900;
-}
-
-#logout {
-  font-family: "Roboto Slab", serif;
-  position: relative;
-  margin-left: 55px;
-  top: 10px;
-  font-size: 13pt;
-  background-color: #e10b1c;
-  color: #fff;
-  font-weight: 500;
-  border: solid #e10b1c 1px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-#logout:hover {
-  color: #e10b1c;
-  font-weight: 700;
-  background-color: #fff;
-}
-
-#li_calendario,
-#li_home {
-  color: black;
-  font-weight: 700;
-}
-
-#li_Academia,
-#li_Colaboradores,
-#li_Asistencias {
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.private {
-  display: none;
-}
-
-#COE_Academia,
-#Colaboradores,
-#Asistencias {
-  display: none;
-}
-#Asistencias.active {
-  display: block;
-  transition: all 300ms linear;
-}
-#COE_Academia.active {
-  display: block;
-  transition: all 300ms linear;
-}
-#Colaboradores.active {
-  display: block;
-  transition: all 300ms linear;
-}
-
-/*Scroll*/
-
-#containerElement::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-  background-color: rgb(37, 1, 1);
-}
-
-#containerElement::-webkit-scrollbar:vertical {
-  width: 10px;
-}
-
-#containerElement::-webkit-scrollbar-thumb {
-  background-color: #6d6767;
-  border-radius: 20px;
-}
-
-#containerElement::-webkit-scrollbar-track {
-  border-radius: 10px;
-}
-#containerElement::-webkit-scrollbar-thumb:active {
-  background-color: #afa4a4;
-}
-
-#containerElement {
-  width: 20px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  border-radius: 30px 0 0 30px;
-  height:75% ;
-  margin-top: 119px;
-}
-
-@media screen and (max-width: 1678px) {
-  #containerElement{
-    width: 270px;
+  
+  }
+  
+  #submenuSidebar:hover {
+    color: #ffffff;
+    background-color: #e10b1c;
+    box-shadow: 0px 2px 20px 0px rgba(54, 52, 52, 0.81);
+  }
+  
+  #User_logo {
+    width: 17%;
+    margin-left: 43%;
+  }
+  
+  #icons {
+    font-size: 22px;
+    margin-right: 13px;
+    margin-bottom: 8px;
+  }
+  
+  #iconSidebar {
+    font-size: 22px;
+    margin-bottom: 2.5px;
+  }
+  
+  #textLeft {
+    margin-top: 1px;
+    margin-left: -80px;
+    font-size: 16px;
+  }
+  
+  #textLeftSelect {
+    margin-left: -20px;
+    font-size: 15px;
+    margin-top: -3px;
+  }
+  
+  ul h4 {
+    font-size: 16pt;
+    color: #000;
+    font-family: "Roboto Slab", serif;
+    text-align: left;
+    margin-left: 52px;
+    padding-top: 10;
+    justify-content: left;
+  }
+  
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+  
+  ul li {
+    color: #000(230, 230, 230);
+    list-style: none;
+    padding: 8px 7px;
+    text-align: left;
+    font-family: "Roboto Slab", serif;
+  }
+  
+  ul li a {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  ul li ul li:hover {
+    background-color: #000(230, 230, 230, 0.9);
+    text-decoration: none;
+  }
+  ul li ul li:hover a {
+    color: black;
+    font-weight: 900;
+  }
+  
+  #logout {
+    font-family: "Roboto Slab", serif;
+    position: relative;
+    margin-left: 55px;
+    top: 10px;
+    font-size: 13pt;
+    background-color: #e10b1c;
+    color: #fff;
+    font-weight: 500;
+    border: solid #e10b1c 1px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #logout:hover {
+    color: #e10b1c;
+    font-weight: 700;
+    background-color: #fff;
+  }
+  
+  #li_calendario,
+  #li_home {
+    color: black;
+    font-weight: 700;
+  }
+  
+  #li_Academia,
+  #li_Colaboradores,
+  #li_Asistencias {
+    cursor: pointer;
+    font-weight: 700;
+  }
+  
+  .private {
+    display: none;
+  }
+  
+  #COE_Academia,
+  #Colaboradores,
+  #Asistencias {
+    display: none;
+  }
+  #Asistencias.active {
+    display: block;
+    transition: all 300ms linear;
+  }
+  #COE_Academia.active {
+    display: block;
+    transition: all 300ms linear;
+  }
+  #Colaboradores.active {
+    display: block;
+    transition: all 300ms linear;
+  }
+  
+  /*Scroll*/
+  
+  #containerElement::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: rgb(37, 1, 1);
+  }
+  
+  #containerElement::-webkit-scrollbar:vertical {
+    width: 10px;
+  }
+  
+  #containerElement::-webkit-scrollbar-thumb {
+    background-color: #6d6767;
+    border-radius: 20px;
+  }
+  
+  #containerElement::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+  #containerElement::-webkit-scrollbar-thumb:active {
+    background-color: #afa4a4;
+  }
+  
+  #containerElement {
+    width: 20px;
     overflow-y: scroll;
     overflow-x: hidden;
     border-radius: 30px 0 0 30px;
-    height:85% ;
-    margin-top: 60px;
+    height:75% ;
+    margin-top: 119px;
   }
-}
-
-/* 
-@media screen and (max-width: 1000px) {
-  .buttonStyleOpen{
-    position: relative;
-    right: 0;
-    top: 30px;
+  
+  @media screen and (max-width: 1678px) {
+    #containerElement{
+      width: 270px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      border-radius: 30px 0 0 30px;
+      height:85% ;
+      margin-top: 60px;
+    }
+  }
+  
+  /* 
+  @media screen and (max-width: 1000px) {
+    .buttonStyleOpen{
+      position: relative;
+      right: 0;
+      top: 30px;
+      border: none;
+      background: #e10b1c;
+      color: white;
+      border-radius: 5px;
+      margin: 120px 5px 3px 3px;
+      padding: 7px;
+      border: solid #e10b1c 1px;
+    }
+  } */
+  
+  /*Boton abrir sidebar*/
+  .buttonStyleOpen {
     border: none;
     background: #e10b1c;
     color: white;
     border-radius: 5px;
-    margin: 120px 5px 3px 3px;
-    padding: 7px;
+    margin: 10px 0px 0px 10px;
+    justify-content: flex-end;
+    padding: 8px;
+    border: solid #e10b1c 1px;
+    position: fixed;
+    left: 0;
+  }
+  
+  .buttonStyleOpen:hover {
+    color: #e10b1c;
+    background-color: white;
+    
+  }
+  
+  /*Boton cerrar sidebar*/
+  
+  .buttonStyleClose {
+    border: none;
+    background: #e10b1c;
+    color: white;
+    border-radius: 5px;
+    margin: 7px 1px -40px 253px;
+    padding: 8px;
     border: solid #e10b1c 1px;
   }
-} */
-
-/*Boton abrir sidebar*/
-.buttonStyleOpen {
-  border: none;
-  background: #e10b1c;
-  color: white;
-  border-radius: 5px;
-  margin: 10px 0px 0px 10px;
-  justify-content: flex-end;
-  padding: 8px;
-  border: solid #e10b1c 1px;
-  position: fixed;
-  left: 0;
-}
-
-.buttonStyleOpen:hover {
-  color: #e10b1c;
-  background-color: white;
   
-}
-
-/*Boton cerrar sidebar*/
-
-.buttonStyleClose {
-  border: none;
-  background: #e10b1c;
-  color: white;
-  border-radius: 5px;
-  margin: 7px 1px -40px 253px;
-  padding: 8px;
-  border: solid #e10b1c 1px;
-}
-
-
-.buttonStyleClose:hover {
-  color: #e10b1c;
-  background-color: #fff;
-}
-
-
-.offcanvas-size-xl {
-  --bs-offcanvas-width: min(23vw, 600px) !important;
-}
-
+  
+  .buttonStyleClose:hover {
+    color: #e10b1c;
+    background-color: #fff;
+  }
+  
+  
+  .offcanvas-size-xl {
+    --bs-offcanvas-width: min(23vw, 600px) !important;
+  }
+  
+  

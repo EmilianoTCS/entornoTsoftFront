@@ -65,14 +65,42 @@ export default function EditarAsignacionColab({
     });
   };
 
+  const Validaciones = () => {
+    if (datos.idEmpleado < 1 || datos.idEmpleado === "") {
+      TopAlertsError("01", "El colaborador no puede estar vacío");
+      return true;
+    }
+    if (datos.fechaIni === "") {
+      TopAlertsError("01", "La fecha de inicio no puede estar vacía");
+      return true;
+    }
+    if (
+      datos.fechaFin &&
+      new Date(datos.fechaIni).toLocaleString("es-CL") >
+        new Date(datos.fechaFin).toLocaleString("es-CL")
+    ) {
+      TopAlertsError(
+        "02",
+        "La fecha de inicio no puede ser mayor a la fecha de fin"
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   function SendData(e) {
     e.preventDefault();
     const url = "pages/editar/oi_editarAsignacionColab.php";
     const operationUrl = "oi_editarAsignacionColab";
+    if (Validaciones()) {
+      return;
+    }
     var data = {
+      idAsignacion: datos.idAsignacion,
       idEmpleado: datos.idEmpleado,
       idMotivo: datos.idMotivo,
-      fechaIni: datos.fechaInicio,
+      fechaIni: datos.fechaIni,
       fechaFin: datos.fechaFin,
       idUltimoLider: datos.idUltimoLider,
       observaciones: datos.observaciones,
@@ -93,15 +121,15 @@ export default function EditarAsignacionColab({
       obtenerEmpleados();
       obtenerMotivos();
       if (datosFila) {
-        console.log("datosFila", datosFila);
         setDatos({
-          idAsignacion: datosFila.idAsignacion,
+          idAsignacion: datosFila.idAsignacionColaborador,
           idEmpleado: datosFila.idEmpleado,
           idMotivo: datosFila.idMotivo,
           idUltimoLider: datosFila.idUltimoLider,
-          fechaFin: formatDate(datosFila.fechaFin),
-          fechaIni: formatDate(datosFila.fechaIni),
+          fechaFin: datosFila.fechaFinSinAsig && formatDate(datosFila.fechaFinSinAsig),
+          fechaIni: datosFila.fechaIniSinAsig && formatDate(datosFila.fechaIniSinAsig),
           observaciones: datosFila.observaciones,
+          isActive: datosFila.isActive,
         });
       }
     },
@@ -184,7 +212,7 @@ export default function EditarAsignacionColab({
                 margin: "auto",
               }}
             >
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo" className="input_type_date">
                   Fecha inicio:
                 </label>
@@ -195,13 +223,13 @@ export default function EditarAsignacionColab({
                   onChange={({ target }) =>
                     setDatos((prevDatos) => ({
                       ...prevDatos,
-                      fechaInicio: target.value,
+                      fechaIni: target.value,
                     }))
                   }
                   required
                 />
               </div>
-              <div>
+              <div style={{width:"50%"}}>
                 <label htmlFor="input_nomPeriodo">Fecha fin:</label>
                 <input
                   type="date"
